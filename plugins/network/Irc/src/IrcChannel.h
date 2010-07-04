@@ -27,7 +27,6 @@
 #ifndef IRCCHANNEL_H
 #define IRCCHANNEL_H
 
-#include <fresh.h>
 #include <pWorkspace.h>
 #include <MonkeyCore.h>
 
@@ -39,6 +38,8 @@
 #include <QListWidget>
 #include <QHBoxLayout>
 #include <QSplitter>
+
+class QLabel;
 
 /*!
 	\brief This class contains only irc channel

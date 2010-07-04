@@ -38,7 +38,7 @@
 #include "../../consolemanager/pConsoleManager.h"
 #include "../../consolemanager/EnvironmentVariablesManager.h"
 
-#include <qscintilla.h>
+#include <qscilexerpython.h>
 
 #include <QButtonGroup>
 #include <QFileDialog>

@@ -14,6 +14,7 @@
 #include <pChild.h>
 #include <pEditor.h>
 #include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
 
 #include <QTextCodec>
 #include <QFileDialog>
@@ -22,6 +23,9 @@
 #include <QPainter>
 #include <QStatusBar>
 #include <QProgressBar>
+#include <QLineEdit>
+#include <QToolButton>
+#include <QKeyEvent>
 
 SearchWidget::SearchWidget( SearchAndReplace* plugin, QWidget* parent )
 	: QFrame( parent )

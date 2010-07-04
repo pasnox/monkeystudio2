@@ -1,10 +1,13 @@
 # Monkey Studio 2 qCtagsSense library
 
-#include qCtagsSense project settings
-include( qCtagsSense.pri )
+# include functions file
+include( ../functions.pri )
 
 # include config file
 include( ../config.pri )
+
+# needed dependencies
+include( ../ctags/ctags.pri )
 
 TEMPLATE	= lib
 CONFIG	*= staticlib
@@ -12,22 +15,15 @@ QT	*= sql
 DEFINES	*= QCTAGSSENSE_EXPORT_BUILD
 DESTDIR	= $${PACKAGE_BUILD_PATH}
 
-PRE_TARGETDEPS	*= ../ctags
-LIBS	*= -L$${PACKAGE_BUILD_PATH}
-CONFIG(debug, debug|release) {
-	#Debug
-	unix:LIBS	*= -lctags_debug
-	else:LIBS	*= -lctagsd
-} else {
-	#Release
-	LIBS	*= -lctags
-}
+QCTAGSSENSE_SOURCES_PATHS = $$getFolders( ./src, resources )
+INCLUDEPATH	*= $${QCTAGSSENSE_SOURCES_PATHS}
+DEPENDPATH	*= $${QCTAGSSENSE_SOURCES_PATHS}
 
-RESOURCES	= src/resources/qCtagsSense.qrc
+RESOURCES	*= src/resources/qCtagsSense.qrc
 
-FORMS	= src/qCtagsSenseBrowser.ui
+FORMS	*= src/qCtagsSenseBrowser.ui
 
-HEADERS	= src/qCtagsSense.h \
+HEADERS	*= src/qCtagsSense.h \
 	src/qCtagsSenseIndexer.h \
 	src/qCtagsSenseBrowser.h \
 	src/qCtagsSenseMembersModel.h \
@@ -39,7 +35,7 @@ HEADERS	= src/qCtagsSense.h \
 	src/qCtagsSenseExport.h \
 	src/qCtagsSenseSearchModel.h
 
-SOURCES	= src/qCtagsSense.cpp \
+SOURCES	*= src/qCtagsSense.cpp \
 	src/qCtagsSenseIndexer.cpp \
 	src/qCtagsSenseBrowser.cpp \
 	src/qCtagsSenseMembersModel.cpp \

@@ -25,6 +25,45 @@
 
 #include <pQueuedMessageToolBar.h>
 
+#include <qsciapis.h>
+#include <qsciglobal.h>
+#include "qscilexerbash.h"
+#include "qscilexerbatch.h"
+#include "qscilexercmake.h"
+#include "qscilexercpp.h"
+#include "qscilexercsharp.h"
+#include "qscilexercss.h"
+#include "qscilexerd.h"
+#include "qscilexerdiff.h"
+#include "qscilexer.h"
+#include "qscilexerhtml.h"
+#include "qscilexeridl.h"
+#include "qscilexerjava.h"
+#include "qscilexerjavascript.h"
+#include "qscilexerlua.h"
+#include "qscilexermakefile.h"
+#include "qscilexerperl.h"
+#include "qscilexerpov.h"
+#include "qscilexerproperties.h"
+#include "qscilexerpython.h"
+#include "qscilexerruby.h"
+#include "qscilexersql.h"
+#include "qscilexertex.h"
+#include "qscilexervhdl.h"
+#if QSCINTILLA_VERSION >= 0x020300
+#include "qscilexertcl.h"
+#include "qscilexerfortran.h"
+#include "qscilexerfortran77.h"
+#include "qscilexerpascal.h"
+#include "qscilexerpostscript.h"
+#include "qscilexerxml.h"
+#include "qscilexeryaml.h"
+#endif
+#if QSCINTILLA_VERSION > 0x020400
+#include "qscilexerverilog.h"
+#include "qscilexerspice.h"
+#endif
+
 #include <QTextCodec>
 #include <QImageReader>
 #include <QFileDialog>
@@ -962,14 +1001,14 @@ void pMonkeyStudio::setEditorProperties( pEditor* editor )
 void pMonkeyStudio::showMacFocusRect( QWidget* widget, bool show, bool recursive )
 {
 	QList<QWidget*> widgets;
-	
+
 	widgets << widget;
-	
+
 	if ( recursive )
 	{
 		widgets << widget->findChildren<QWidget*>();
 	}
-	
+
 	foreach ( QWidget* w, widgets )
 	{
 		w->setAttribute( Qt::WA_MacShowFocusRect, show );
@@ -985,14 +1024,14 @@ void pMonkeyStudio::showMacFocusRect( QWidget* widget, bool show, bool recursive
 void pMonkeyStudio::setMacSmallSize( QWidget* widget, bool small, bool recursive )
 {
 	QList<QWidget*> widgets;
-	
+
 	widgets << widget;
-	
+
 	if ( recursive )
 	{
 		widgets << widget->findChildren<QWidget*>();
 	}
-	
+
 	foreach ( QWidget* w, widgets )
 	{
 		w->setAttribute( Qt::WA_MacSmallSize, small );
@@ -1309,7 +1348,7 @@ QFont pMonkeyStudio::defaultDocumentFont()
 #else
 	font = QFont( "Monospace", 9 );
 #endif
-	
+
 	return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentFont", font ).value<QFont>();
 }
 
@@ -1736,7 +1775,7 @@ void pMonkeyStudio::setEolMode( QsciScintilla::EolMode e )
 QsciScintilla::EolMode pMonkeyStudio::eolMode( pMonkeyStudio::OSVariant os )
 {
 	int i = QsciScintilla::EolUnix;
-	
+
 	switch ( os )
 	{
 		case pMonkeyStudio::UnixOS:
@@ -1749,7 +1788,7 @@ QsciScintilla::EolMode pMonkeyStudio::eolMode( pMonkeyStudio::OSVariant os )
 			i = QsciScintilla::EolWindows;
 			break;
 	}
-	
+
 	return (QsciScintilla::EolMode)MonkeyCore::settings()->value( settingsPath() +"/EolMode", i ).toInt();
 }
 

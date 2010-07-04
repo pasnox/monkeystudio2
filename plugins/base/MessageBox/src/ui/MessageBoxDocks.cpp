@@ -25,6 +25,7 @@
 #include "MessageBoxDocks.h"
 
 #include <QScrollBar>
+#include <QLineEdit>
 
 #include <MonkeyCore.h>
 #include <pWorkspace.h>

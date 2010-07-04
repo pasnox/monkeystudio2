@@ -29,7 +29,7 @@
 #ifndef DEBUGGERPLUGIN_H
 #define DEBUGGERPLUGIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "BasePlugin.h"
 

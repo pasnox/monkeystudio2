@@ -1,10 +1,25 @@
 # Monkey Studio 2 Ctags project include file
 
-# ctags version
-CTAGS_VERSION	= ctags
+# include shared ctags project file
+include( $${PWD}/ctags_shared.pri )
 
 # include path
-INCLUDEPATH	*= $$PWD/sdk
+INCLUDEPATH	*= $$getFolders( $${PWD}/$${CTAGS_VERSION} )
 
-# For correctly include ctags headers
-unix:DEFINES *=HAVE_FGETPOS
+# dependency
+PRE_TARGETDEPS	*= $${PWD}
+
+# library integration
+CTAGS_TARGET	= ctags
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
+
+contains( TEMPLATE, .*app ) {
+	CONFIG(debug, debug|release) {
+		#Debug
+		unix:LIBS	*= -l$${CTAGS_TARGET}_debug
+		else:LIBS	*= -l$${CTAGS_TARGET}d
+	} else {
+		#Release
+		LIBS	*= -l$${CTAGS_TARGET}
+	}
+}

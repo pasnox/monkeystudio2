@@ -26,10 +26,10 @@
 #ifndef IRCDOCKS_H
 #define IRCDOCKS_H
 
-
-#include <fresh.h>
 #include <pWorkspace.h>
 #include <MonkeyCore.h>
+#include <pDockWidget.h>
+#include <QSingleton.h>
 
 #include <QHBoxLayout>
 #include <QTabWidget>

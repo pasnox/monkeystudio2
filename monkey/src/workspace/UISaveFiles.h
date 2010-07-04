@@ -29,9 +29,9 @@
 #ifndef UISAVEFILES_H
 #define UISAVEFILES_H
 
-#include <QDialog>
+#include <MonkeyExport.h>
 
-#include <fresh.h>
+#include <QDialog>
 
 class pAbstractChild;
 class QListWidget;

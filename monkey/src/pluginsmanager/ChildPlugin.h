@@ -29,7 +29,7 @@
 #ifndef CHILDPLUGIN_H
 #define CHILDPLUGIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "BasePlugin.h"
 

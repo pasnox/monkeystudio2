@@ -1,33 +1,20 @@
-# Monkey Studio 2 project file - 2005 - 2009
+# Monkey Studio 2 project file - 2005 - 2010
 
-# include qscintilla framework
-include( ../qscintilla/qscintilla.pri )
-
-# include fresh framework
-include( ../fresh/fresh.pri )
-
-# include ctags framework
-include( ../ctags/ctags.pri )
-
-# include qCtagsSense framework
-include( ../qCtagsSense/qCtagsSense.pri )
-
-# include monkey framework
-include( monkey.pri )
+# include functions file
+include( ../functions.pri )
 
 # include config file
 include( ../config.pri )
 
 TEMPLATE	= app
 TARGET	= $$PACKAGE_TARGET
+DEFINES	*= MONKEY_CORE_BUILD
 DESTDIR	= $$PACKAGE_DESTDIR
 
-mac:ICON	= src/resources/icons/application/monkey2.icns
-
-win32:RC_FILE	*= monkey.rc
-RESOURCES	*= src/resources/resources.qrc
-
-DEFINES	*= MONKEY_CORE_BUILD
+# monkey sources paths // added at first to avoid conflict with possible same name files in subprojects (like main.h from ctags)
+MONKEY_SOURCES_PATHS = $$getFolders( ./src, resources )
+INCLUDEPATH	*= $${MONKEY_SOURCES_PATHS}
+DEPENDPATH	*= $${MONKEY_SOURCES_PATHS}
 
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 mac:*-g++*:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
@@ -35,29 +22,32 @@ else:*-g++*:LIBS	*= -Wl,--whole-archive # import all symbols as the not used one
 mac:*-g++*:LIBS	*= -dynamic
 else:unix:*-g++*:LIBS	*= -rdynamic
 
-isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= ../qscintilla
-PRE_TARGETDEPS	*= ../fresh ../ctags ../qCtagsSense
+# include qscintilla framework
+include( ../qscintilla/qscintilla.pri )
+
+# include fresh framework
+include( ../fresh/fresh.pri )
+
+# include qCtagsSense framework
+include( ../qCtagsSense/qCtagsSense.pri )
 
 CONFIG( debug, debug|release ) {
 	#Debug
-	!isEqual( SYSTEM_QSCINTILLA, 1 ) {
-		unix:	LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug -lqCtagsSense_debug
-		else:	LIBS	*= -lqscintilla2d -lfreshd -lctagsd -lqCtagsSensed
-	} else {
-		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug -lqCtagsSense_debug
-		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd -lqCtagsSensed
-	}
 	win32-*g++*:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
-	LIBS	*= -lqscintilla2 -lctags -lfresh -lqCtagsSense
 	win32-*g++*:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 
 mac:*-g++*:LIBS	*= -Wl,-noall_load # stop importing all symbols
 else:*-g++*:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
+
+mac:ICON	= src/resources/icons/application/monkey2.icns
+win32:RC_FILE	*= monkey.rc
+
+RESOURCES	*= src/resources/resources.qrc
 
 FORMS	*= src/maininterface/ui/UIAbout.ui \
 	src/maininterface/ui/UISettings.ui \

@@ -18,7 +18,7 @@
 #ifndef UIINTERPRETERSETTINGS_H
 #define UIINTERPRETERSETTINGS_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 #include <pCommand.h>
 
 #include "ui_UIInterpreterSettings.h"

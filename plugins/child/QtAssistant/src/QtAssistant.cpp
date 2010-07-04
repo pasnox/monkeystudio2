@@ -6,6 +6,7 @@
 
 #include <UIMain.h>
 #include <pWorkspace.h>
+#include <pDockToolBar.h>
 
 #include <QHelpEngine>
 

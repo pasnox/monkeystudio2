@@ -9,9 +9,8 @@
 
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QMenu>
 #include <QDebug>
-
-//leCustomConfig
 
 UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* parent )
 	: QDialog( parent )

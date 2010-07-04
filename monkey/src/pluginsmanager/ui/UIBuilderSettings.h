@@ -29,7 +29,7 @@
 #ifndef UIBUILDERSETTINGS_H
 #define UIBUILDERSETTINGS_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "ui_UIBuilderSettings.h"
 #include "../../consolemanager/pCommand.h"

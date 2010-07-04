@@ -11,6 +11,7 @@
 
 #include <MonkeyCore.h>
 #include <pEditor.h>
+#include <pMenuBar.h>
 
 #include <QHelpEngine>
 #include <QHelpContentWidget>
@@ -25,6 +26,7 @@
 #include <QProgressBar>
 #include <QTextBrowser>
 #include <QClipboard>
+#include <QKeyEvent>
 #include <QDebug>
 
 QtAssistantDock::QtAssistantDock( QWidget* parent )

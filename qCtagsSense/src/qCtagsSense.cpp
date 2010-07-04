@@ -20,7 +20,9 @@
 #include "qCtagsSenseSQL.h"
 #include "qCtagsSenseIndexer.h"
 
-#include <ctags.h>
+extern "C" {
+	#include <exuberantCtags.h>
+}
 
 #include <QMetaType>
 #include <QDebug>

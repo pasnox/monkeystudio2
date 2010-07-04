@@ -32,6 +32,7 @@
 #include "../coremanager/MonkeyCore.h"
 
 #include <pQueuedMessageToolBar.h>
+#include <qsciprinter.h>
 
 #include <QKeyEvent>
 #include <QApplication>

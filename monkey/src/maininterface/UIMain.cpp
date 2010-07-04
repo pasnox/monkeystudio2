@@ -40,6 +40,10 @@
 #include "../workspace/pOpenedFileExplorer.h"
 
 #include <pQueuedMessageToolBar.h>
+#include <pDockToolBar.h>
+#include <pMultiToolBar.h>
+#include <pMenuBar.h>
+#include <pStylesActionGroup.h>
 
 #include <QCloseEvent>
 #include <QMenu>

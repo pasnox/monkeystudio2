@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include <QHelpEngine>
 #include <QToolButton>
+#include <QPrinter>
 #include <QDebug>
 
 QtAssistantChild* QtAssistantChild::instance( QHelpEngine* engine, QWidget* parent, bool create )

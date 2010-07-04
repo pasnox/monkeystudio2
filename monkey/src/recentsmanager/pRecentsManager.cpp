@@ -31,6 +31,8 @@
 #include "../settingsmanager/Settings.h"
 #include "pMonkeyStudio.h"
 
+#include <pMenuBar.h>
+
 #include <QAction>
 #include <QFileInfo>
 #include <QTimer>

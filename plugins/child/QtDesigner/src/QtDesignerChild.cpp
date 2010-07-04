@@ -36,6 +36,7 @@
 #include <QPrintDialog>
 #include <QInputDialog>
 #include <QStyleFactory>
+#include <QPrinter>
 
 QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	: pAbstractChild()
