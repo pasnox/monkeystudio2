@@ -1,1 +1,0 @@
-#include <../objects/QSingleton.h>
