@@ -33,7 +33,7 @@
 #include "../shellmanager/MkSShellInterpreter.h"
 
 #include <pQueuedMessageToolBar.h>
-#include <qscintilla.h>
+#include <qscilexer.h>
 
 #include <QFile>
 #include <QDir>

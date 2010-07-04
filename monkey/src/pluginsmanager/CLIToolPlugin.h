@@ -29,7 +29,7 @@
 #ifndef CLITOOLPLUGIN_H
 #define CLITOOLPLUGIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "../consolemanager/pCommand.h"
 #include "BasePlugin.h"

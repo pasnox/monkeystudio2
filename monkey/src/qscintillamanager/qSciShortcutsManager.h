@@ -29,9 +29,11 @@
 #ifndef QSCISHORTCUTSMANAGER
 #define QSCISHORTCUTSMANAGER
 
-#include <QApplication>
+#include <MonkeyExport.h>
+#include <QSingleton.h>
 
-#include <fresh.h>
+#include <QApplication>
+#include <QIcon>
 
 /*QScintilla using set of shorctuts. Class clearing this shortcuts, and, if need
 to do QSintilla's action, sending to it message. It's need for replacing 

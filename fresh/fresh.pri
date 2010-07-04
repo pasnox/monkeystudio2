@@ -7,13 +7,14 @@ INCLUDEPATH	*= $$getFolders( $${PWD}/objects $${PWD}/widgets )
 PRE_TARGETDEPS	*= $${PWD}
 
 # library integration
+FRESH_TARGET	= fresh
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 
 CONFIG(debug, debug|release) {
 	#Debug
-	unix:LIBS	*= -l$${TARGET}_debug
-	else:LIBS	*= -l$${TARGET}d
+	unix:LIBS	*= -l$${FRESH_TARGET}_debug
+	else:LIBS	*= -l$${FRESH_TARGET}d
 } else {
 	#Release
-	LIBS	*= -l$${TARGET}
+	LIBS	*= -l$${FRESH_TARGET}
 }

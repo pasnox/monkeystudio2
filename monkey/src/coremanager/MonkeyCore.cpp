@@ -47,6 +47,9 @@
 #include <pMultiToolBar.h>
 #include <pQueuedMessageToolBar.h>
 #include <TranslationManager.h>
+#include <TranslationDialog.h>
+#include <pActionsManager.h>
+#include <pMenuBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>

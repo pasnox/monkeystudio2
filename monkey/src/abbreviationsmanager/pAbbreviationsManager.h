@@ -29,8 +29,9 @@
 #ifndef PABBREVIATIONSMANAGER_H
 #define PABBREVIATIONSMANAGER_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
+#include <QObject>
 #include <QString>
 #include <QList>
 

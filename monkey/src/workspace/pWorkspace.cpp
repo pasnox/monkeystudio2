@@ -62,6 +62,10 @@
 #include "../qscintillamanager/pEditor.h"
 
 #include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
+#include <pMultiToolBar.h>
+#include <TranslationDialog.h>
+#include <TranslationManager.h>
 
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
 QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );

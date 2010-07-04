@@ -10,13 +10,14 @@ INCLUDEPATH	*= $$getFolders( $${PWD}/$${CTAGS_VERSION} )
 PRE_TARGETDEPS	*= $${PWD}
 
 # library integration
+CTAGS_TARGET	= ctags
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 
 CONFIG(debug, debug|release) {
 	#Debug
-	unix:LIBS	*= -l$${TARGET}_debug
-	else:LIBS	*= -l$${TARGET}d
+	unix:LIBS	*= -l$${CTAGS_TARGET}_debug
+	else:LIBS	*= -l$${CTAGS_TARGET}d
 } else {
 	#Release
-	LIBS	*= -l$${TARGET}
+	LIBS	*= -l$${CTAGS_TARGET}
 }

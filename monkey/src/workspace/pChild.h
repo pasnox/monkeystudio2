@@ -29,7 +29,7 @@
 #ifndef PCHILD_H
 #define PCHILD_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "pAbstractChild.h"
 

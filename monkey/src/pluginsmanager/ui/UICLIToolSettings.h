@@ -29,7 +29,7 @@
 #ifndef UICLITOOLSETTINGS_H
 #define UICLITOOLSETTINGS_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "ui_UICLIToolSettings.h"
 #include "../../consolemanager/pCommand.h"

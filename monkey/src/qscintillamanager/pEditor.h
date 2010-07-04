@@ -29,8 +29,8 @@
 #ifndef PEDITOR_H
 #define PEDITOR_H
 
-#include <qscintilla.h>
-#include <fresh.h>
+#include <MonkeyExport.h>
+#include <qsciscintilla.h>
 
 class Q_MONKEY_EXPORT pEditor : public QsciScintilla
 {

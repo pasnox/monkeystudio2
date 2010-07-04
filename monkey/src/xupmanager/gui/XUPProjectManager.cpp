@@ -14,6 +14,7 @@
 
 #include <pDockWidgetTitleBar.h>
 #include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
 
 #include <QTextCodec>
 #include <QMenu>

@@ -32,6 +32,8 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../workspace/pWorkspace.h"
 
+#include <pMenuBar.h>
+
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {
 	//Fill with all availible QScintila actions

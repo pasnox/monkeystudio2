@@ -31,7 +31,7 @@
 #include "../coremanager/MonkeyCore.h"
 
 #include <pIconManager.h>
-#include <qscintilla.h>
+#include <qscilexer.h>
 
 #include <QFileInfo>
 #include <QTextStream>

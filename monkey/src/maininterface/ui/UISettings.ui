@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>765</height>
+    <width>666</width>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2845,7 +2845,7 @@ You can quickly change it using the dock context menu.</string>
   <customwidget>
    <class>pPathListEditor</class>
    <extends>QGroupBox</extends>
-   <header location="global">fresh.h</header>
+   <header location="global">pPathListEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

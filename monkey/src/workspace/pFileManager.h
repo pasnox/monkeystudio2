@@ -29,10 +29,12 @@
 #ifndef PFILEMANAGER_H
 #define PFILEMANAGER_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include <QObject>
 #include <QPoint>
+#include <QMap>
+#include <QStringList>
 
 class pAbstractChild;
 class XUPProjectItem;

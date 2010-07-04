@@ -23,7 +23,9 @@
 #include "qCtagsSenseKindFinder.h"
 #include "qCtagsSenseSearchModel.h"
 
-#include <ctags.h>
+extern "C" {
+	#include <exuberantCtags.h>
+}
 
 #include <QMenu>
 #include <QFileInfo>

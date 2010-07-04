@@ -1,3 +1,6 @@
+#ifndef _EXUBERANT_CTAGS_H
+#define _EXUBERANT_CTAGS_H
+
 #include "entry.h"
 #include "parse.h"
 
@@ -16,3 +19,5 @@ extern const char* getFileNameLanguageName( const char* fileName );
 extern langType getFileLanguage (const char *const fileName)
 extern const char *getLanguageName (const langType language)
 */
+
+#endif // _EXUBERANT_CTAGS_H

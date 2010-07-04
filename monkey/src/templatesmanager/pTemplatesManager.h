@@ -24,7 +24,7 @@
 #ifndef PTEMPLATESMANAGER_H
 #define PTEMPLATESMANAGER_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 #include <VariablesManager.h>
 
 #include <QApplication>

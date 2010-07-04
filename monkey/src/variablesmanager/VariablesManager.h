@@ -25,7 +25,8 @@
 #ifndef VARIABLESMANAGER_H
 #define VARIABLESMANAGER_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
+#include <QSingleton.h>
 
 #include <QApplication>
 #include <QHash>

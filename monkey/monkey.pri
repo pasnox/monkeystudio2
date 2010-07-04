@@ -1,5 +1,4 @@
 # monkey includes path to include in plugins/core project
 
 # include path
-INCLUDEPATH	*= $$PWD/sdk
-DEPENDPATH	*= $$PWD/src
+INCLUDEPATH	*= $$getFolders( $${PWD}/src, resources )

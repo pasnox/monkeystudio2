@@ -32,6 +32,7 @@
 #include "../pMonkeyStudio.h"
 
 #include <pQueuedMessageToolBar.h>
+#include <qscilexer.h>
 
 #include <QApplication>
 #include <QStringList>

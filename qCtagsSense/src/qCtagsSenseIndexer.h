@@ -25,7 +25,9 @@
 #include <QMap>
 #include <QStringList>
 
-#include <exuberantCtags.h>
+extern "C" {
+	#include <exuberantCtags.h>
+}
 
 class qCtagsSenseSQL;
 

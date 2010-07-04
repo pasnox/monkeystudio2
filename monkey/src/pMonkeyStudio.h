@@ -24,15 +24,16 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
-#include <qscintilla.h>
-
 #include "workspace/pWorkspace.h"
 #include "workspace/pOpenedFileModel.h"
+
+#include <qsciscintilla.h>
 
 #include <QApplication>
 #include <QDir>
 
 class pEditor;
+class QsciAPIs;
 
 namespace pMonkeyStudio
 {
