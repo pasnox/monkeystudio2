@@ -1,11 +1,7 @@
 # Monkey Studio 2.0.0 QScintilla Project file
 include( qscintilla_check.pri )
 
-QSCINTILLA_PWD	= $$PWD
-
-# include sdk path
-INCLUDEPATH	*= $${QSCINTILLA_PWD}/sdk
-
+# include path
 isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	# include path
 	INCLUDEPATH	*= $$[QT_INSTALL_HEADERS]/Qsci
@@ -13,5 +9,20 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	# define where is the official qscintilla folder
 	QSCINTILLAVERSION	= QScintilla-gpl-snapshot
 	# include path
-	INCLUDEPATH	*= $${QSCINTILLA_PWD}/$$QSCINTILLAVERSION/Qt4 $${QSCINTILLA_PWD}/$$QSCINTILLAVERSION/Qt4/Qsci
+	INCLUDEPATH	*= $$getFolders( $${PWD}/$${QSCINTILLAVERSION} )
+}
+
+# dependency
+PRE_TARGETDEPS	*= $${PWD}
+
+# library integration
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
+
+CONFIG(debug, debug|release) {
+	#Debug
+	unix:LIBS	*= -l$${TARGET}_debug
+	else:LIBS	*= -l$${TARGET}d
+} else {
+	#Release
+	LIBS	*= -l$${TARGET}
 }
