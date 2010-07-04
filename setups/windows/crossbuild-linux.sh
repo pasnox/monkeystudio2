@@ -12,5 +12,5 @@ export QT_WIN32_VERSION
 echo "Using Qt Version: $QT_WIN32_VERSION"
 
 qmake-qt4 -spec $HOME/.qt/win32-x11-g++ -win32 -r
-make -j3
+make -j4
 wine "$HOME/Disk Wine/Program Files/Inno Setup 5/ISCC.exe" setups/windows/monkeystudio.iss
