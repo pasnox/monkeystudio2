@@ -1,6 +1,5 @@
 TARGET	= XUP
 include( ../../plugins.pri )
-message( "include: $$INCLUDEPATH" )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 
 INCLUDEPATH	*= src
