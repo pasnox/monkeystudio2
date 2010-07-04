@@ -10,11 +10,13 @@ PRE_TARGETDEPS	*= $${PWD}
 FRESH_TARGET	= fresh
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 
-CONFIG(debug, debug|release) {
-	#Debug
-	unix:LIBS	*= -l$${FRESH_TARGET}_debug
-	else:LIBS	*= -l$${FRESH_TARGET}d
-} else {
-	#Release
-	LIBS	*= -l$${FRESH_TARGET}
+contains( TEMPLATE, .*app ) {
+	CONFIG(debug, debug|release) {
+		#Debug
+		unix:LIBS	*= -l$${FRESH_TARGET}_debug
+		else:LIBS	*= -l$${FRESH_TARGET}d
+	} else {
+		#Release
+		LIBS	*= -l$${FRESH_TARGET}
+	}
 }

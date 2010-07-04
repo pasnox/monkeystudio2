@@ -13,11 +13,13 @@ PRE_TARGETDEPS	*= $${PWD}
 QCTAGSSENSE_TARGET	= qCtagsSense
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 
-CONFIG(debug, debug|release) {
-	#Debug
-	unix:LIBS	*= -l$${QCTAGSSENSE_TARGET}_debug
-	else:LIBS	*= -l$${QCTAGSSENSE_TARGET}d
-} else {
-	#Release
-	LIBS	*= -l$${QCTAGSSENSE_TARGET}
+contains( TEMPLATE, .*app ) {
+	CONFIG(debug, debug|release) {
+		#Debug
+		unix:LIBS	*= -l$${QCTAGSSENSE_TARGET}_debug
+		else:LIBS	*= -l$${QCTAGSSENSE_TARGET}d
+	} else {
+		#Release
+		LIBS	*= -l$${QCTAGSSENSE_TARGET}
+	}
 }

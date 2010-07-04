@@ -1,5 +1,8 @@
 #This is the include file to add to your plugins project
 
+TEMPLATE	= lib
+CONFIG	*= dll plugin
+
 # set plugin name define
 !isEmpty( TARGET ):DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
@@ -20,9 +23,6 @@ include( $${PACKAGE_PWD}/fresh/fresh.pri )
 
 # include qCtagsSense framework
 include( $${PACKAGE_PWD}/qCtagsSense/qCtagsSense.pri )
-
-TEMPLATE	= lib
-CONFIG	*= dll plugin
 
 mac:MONKEY_PLUGINS_DIR	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents/plugins
 else:unix|win32:MONKEY_PLUGINS_DIR	= $${PACKAGE_DESTDIR}/plugins

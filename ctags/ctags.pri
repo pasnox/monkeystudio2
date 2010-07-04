@@ -13,11 +13,13 @@ PRE_TARGETDEPS	*= $${PWD}
 CTAGS_TARGET	= ctags
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
 
-CONFIG(debug, debug|release) {
-	#Debug
-	unix:LIBS	*= -l$${CTAGS_TARGET}_debug
-	else:LIBS	*= -l$${CTAGS_TARGET}d
-} else {
-	#Release
-	LIBS	*= -l$${CTAGS_TARGET}
+contains( TEMPLATE, .*app ) {
+	CONFIG(debug, debug|release) {
+		#Debug
+		unix:LIBS	*= -l$${CTAGS_TARGET}_debug
+		else:LIBS	*= -l$${CTAGS_TARGET}d
+	} else {
+		#Release
+		LIBS	*= -l$${CTAGS_TARGET}
+	}
 }
