@@ -10,6 +10,7 @@ defineReplace( getFolders ) {
 		win32:command	= "for /D /R \"$$q_path\" %i in (*) do @echo \"%i\""
 		else:command	= "ls -RQ1 \"$$q_path\" | grep \":\" | sed \"s/://g\" | sed \"s/'/\\\\\\'/g\""
 		_q_folders	= $$system( $$command )
+		win32:_q_folders *= $$1
 
 		#message( "Scanning: $$q_path" )
 		#message( "Command: $$command" )
