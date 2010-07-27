@@ -12,6 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
+CONFIG	-= debug_and_release release debug
 CONFIG	+= qt warn_on thread x11 windows debug
 QT	+= xml sql
 
