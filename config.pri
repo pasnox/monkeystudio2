@@ -26,7 +26,7 @@ mac {
 # define config mode paths
 CONFIG( debug, debug|release ) {
 	#Debug
-	message( Building in DEBUG for architecture $$QT_ARCH )
+	message( Building in DEBUG for $$QMAKE_HOST.os $$QMAKE_HOST.arch )
 	CONFIG	+= console
 	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
 	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
