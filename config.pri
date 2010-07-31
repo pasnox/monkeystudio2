@@ -40,7 +40,7 @@ CONFIG( debug, debug|release ) {
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/debug/.rcc
 } else {
 	#Release
-	message( Building in RELEASE for architecture $$QT_ARCH )
+	message( Building in RELEASE for $$QMAKE_HOST.os $$QMAKE_HOST.arch )
 	mac:TARGET	= $$quote($$TARGET)
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/win32
