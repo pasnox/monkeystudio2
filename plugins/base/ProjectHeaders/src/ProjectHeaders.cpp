@@ -30,7 +30,7 @@
 #include "UIProjectHeaders.h"
 
 #include <pMonkeyStudio.h>
-#include <pMenuBar.h>
+#include <widgets/pMenuBar.h>
 
 using namespace pMonkeyStudio;
 

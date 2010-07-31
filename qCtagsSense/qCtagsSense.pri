@@ -4,7 +4,7 @@
 include( $${PWD}/../ctags/ctags.pri )
 
 # include path
-INCLUDEPATH	*= $$getFolders( $${PWD}/src, resources )
+INCLUDEPATH	*= $${PWD}/src #$$getFolders( $${PWD}/src, resources )
 
 # dependency
 PRE_TARGETDEPS	*= $${PWD}

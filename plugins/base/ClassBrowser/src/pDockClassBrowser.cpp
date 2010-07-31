@@ -19,9 +19,9 @@
 #include "ClassBrowser.h"
 
 #include <qCtagsSenseBrowser.h>
-#include <pDockWidgetTitleBar.h>
-#include <MonkeyCore.h>
-#include <pActionsManager.h>
+#include <widgets/pDockWidgetTitleBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <widgets/pActionsManager.h>
 
 pDockClassBrowser::pDockClassBrowser( ClassBrowser* plugin, QWidget* w )
 	: pDockWidget( w )

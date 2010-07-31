@@ -4,8 +4,9 @@
 #include "MkSQtDocInstaller.h"
 #include "3rdparty/preferencesdialog.h"
 
-#include <UIMain.h>
-#include <pWorkspace.h>
+#include <maininterface/UIMain.h>
+#include <workspace/pWorkspace.h>
+#include <widgets/pDockToolBar.h>
 #include <pDockToolBar.h>
 
 #include <QHelpEngine>

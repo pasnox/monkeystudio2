@@ -1,7 +1,7 @@
 #ifndef POPENEDFILEEXPLORER_H
 #define POPENEDFILEEXPLORER_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_pOpenedFileExplorer.h"
 #include "pOpenedFileModel.h"

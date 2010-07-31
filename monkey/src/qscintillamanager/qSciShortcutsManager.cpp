@@ -28,9 +28,11 @@
 ****************************************************************************/
 #include "qSciShortcutsManager.h"
 #include "pEditor.h"
-#include "../workspace/pAbstractChild.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../workspace/pWorkspace.h"
+#include "workspace/pAbstractChild.h"
+#include "coremanager/MonkeyCore.h"
+#include "workspace/pWorkspace.h"
+
+#include <widgets/pMenuBar.h>
 
 #include <pMenuBar.h>
 

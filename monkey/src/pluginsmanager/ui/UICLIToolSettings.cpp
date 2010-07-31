@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 #include "UICLIToolSettings.h"
-#include  "../../consolemanager/pConsoleManager.h"
-#include "../../pMonkeyStudio.h"
-#include "../CLIToolPlugin.h"
-#include "../../coremanager/MonkeyCore.h"
+#include  "consolemanager/pConsoleManager.h"
+#include "pMonkeyStudio.h"
+#include "pluginsmanager/CLIToolPlugin.h"
+#include "coremanager/MonkeyCore.h"
 
 #include <QInputDialog>
 

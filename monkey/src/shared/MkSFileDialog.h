@@ -1,7 +1,7 @@
 #ifndef MKSFILEDIALOG_H
 #define MKSFILEDIALOG_H
 
-#include "pFileDialog.h"
+#include "widgets/pFileDialog.h"
 
 class XUPAddFiles;
 class XUPItem;

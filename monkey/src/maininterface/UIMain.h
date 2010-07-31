@@ -29,8 +29,8 @@
 #ifndef UIMAIN_H
 #define UIMAIN_H
 
-#include <MonkeyExport.h>
-#include <pMainWindow.h>
+#include <objects/MonkeyExport.h>
+#include <widgets/pMainWindow.h>
 
 #include <QUrl>
 

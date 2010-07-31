@@ -26,8 +26,10 @@
 #ifndef IRCDOCKS_H
 #define IRCDOCKS_H
 
-#include <pWorkspace.h>
-#include <MonkeyCore.h>
+#include <workspace/pWorkspace.h>
+#include <coremanager/MonkeyCore.h>
+#include <widgets/pDockWidget.h>
+#include <objects/QSingleton.h>
 #include <pDockWidget.h>
 #include <QSingleton.h>
 

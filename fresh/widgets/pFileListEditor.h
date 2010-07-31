@@ -24,7 +24,7 @@
 #ifndef PFILELISTEDITOR_H
 #define PFILELISTEDITOR_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 #include "pStringListEditor.h"
 
 /*!

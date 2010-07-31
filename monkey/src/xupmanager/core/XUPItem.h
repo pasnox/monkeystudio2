@@ -1,7 +1,7 @@
 #ifndef XUPITEM_H
 #define XUPITEM_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
 
 #include <QDomElement>
 #include <QMap>

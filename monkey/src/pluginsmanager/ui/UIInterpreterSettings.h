@@ -18,9 +18,9 @@
 #ifndef UIINTERPRETERSETTINGS_H
 #define UIINTERPRETERSETTINGS_H
 
-#include <MonkeyExport.h>
-#include <pCommand.h>
+#include <objects/MonkeyExport.h>
 
+#include "consolemanager/pCommand.h"
 #include "ui_UIInterpreterSettings.h"
 
 #include <QWidget>

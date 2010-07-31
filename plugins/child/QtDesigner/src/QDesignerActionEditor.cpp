@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerActionEditor.h"
 
-#include <pIconManager.h>
+#include <objects/pIconManager.h>
 
 #include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>

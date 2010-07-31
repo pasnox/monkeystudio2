@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>638</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -228,6 +228,9 @@
       </property>
       <item>
        <widget class="QScrollArea" name="saWidgets">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -399,7 +402,7 @@ In non expert mode, only projects and scopes will be shown.</string>
   <customwidget>
    <class>pTreeComboBox</class>
    <extends>QComboBox</extends>
-   <header>pTreeComboBox.h</header>
+   <header>widgets/pTreeComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

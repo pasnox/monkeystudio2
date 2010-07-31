@@ -1,6 +1,6 @@
 #include "UISettingsQMake.h"
-#include "../QMake.h"
-#include "../QtVersionManager.h"
+#include "QMake.h"
+#include "QtVersionManager.h"
 
 #include <pMonkeyStudio.h>
 

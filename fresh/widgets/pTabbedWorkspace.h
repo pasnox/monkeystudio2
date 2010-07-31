@@ -25,7 +25,7 @@
 #ifndef PTABBEDWORKSPACE_H
 #define PTABBEDWORKSPACE_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QWidget>
 #include "pTabBar.h"

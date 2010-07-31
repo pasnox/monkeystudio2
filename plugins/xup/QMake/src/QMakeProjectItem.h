@@ -1,7 +1,7 @@
 #ifndef QMAKEPROJECTITEM_H
 #define QMAKEPROJECTITEM_H
 
-#include "XUPProjectItem.h"
+#include <xupmanager/core/XUPProjectItem.h>
 
 class QMakeProjectItem : public XUPProjectItem
 {

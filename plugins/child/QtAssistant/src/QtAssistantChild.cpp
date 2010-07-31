@@ -2,9 +2,9 @@
 #include "QtAssistantViewer.h"
 #include "QtAssistantInlineSearch.h"
 
-#include <pIconManager.h>
-#include <MonkeyCore.h>
-#include <pQueuedMessageToolBar.h>
+#include <objects/pIconManager.h>
+#include <coremanager/MonkeyCore.h>
+#include <widgets/pQueuedMessageToolBar.h>
 
 #include <QVBoxLayout>
 #include <QTabWidget>

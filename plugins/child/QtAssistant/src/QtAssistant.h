@@ -1,7 +1,7 @@
 #ifndef QTASSISTANT_H
 #define QTASSISTANT_H
 
-#include <ChildPlugin.h>
+#include <pluginsmanager/ChildPlugin.h>
 
 #include <QPointer>
 

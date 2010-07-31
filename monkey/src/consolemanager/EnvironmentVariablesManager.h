@@ -1,7 +1,7 @@
 #ifndef ENVIRONMENTVARIABLESMANAGER_H
 #define ENVIRONMENTVARIABLESMANAGER_H
 
-#include <pEnvironmentVariablesManager.h>
+#include <widgets/pEnvironmentVariablesManager.h>
 
 class MkSShellInterpreter;
 

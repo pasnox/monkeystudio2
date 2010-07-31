@@ -1,7 +1,7 @@
 #ifndef PYQTPROJECTITEM_H
 #define PYQTPROJECTITEM_H
 
-#include "XUPProjectItem.h"
+#include <xupmanager/core/XUPProjectItem.h>
 
 class PyQtProjectItem : public XUPProjectItem
 {

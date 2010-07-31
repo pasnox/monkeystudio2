@@ -35,7 +35,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 #include <QPointer>
 

@@ -40,10 +40,10 @@
 #include "pConsoleManager.h"
 #include "CommandParser.h"
 #include "AbstractCommandParser.h"
+#include "coremanager/MonkeyCore.h"
+#include "variablesmanager/VariablesManager.h"
 
-#include <MonkeyCore.h>
-#include <pActionsManager.h>
-#include <VariablesManager.h>
+#include <widgets/pActionsManager.h>
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing

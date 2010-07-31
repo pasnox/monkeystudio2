@@ -1,7 +1,7 @@
 #ifndef PACTIONSMANAGER_H
 #define PACTIONSMANAGER_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QObject>
 #include <QList>

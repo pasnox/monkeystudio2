@@ -29,8 +29,8 @@
 #ifndef UISETTINGS_H
 #define UISETTINGS_H
 
-#include <MonkeyExport.h>
-#include <QSingleton.h>
+#include <objects/MonkeyExport.h>
+#include <objects/QSingleton.h>
 
 #include "ui_UISettings.h"
 

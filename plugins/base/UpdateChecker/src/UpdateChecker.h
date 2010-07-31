@@ -29,7 +29,7 @@
 #ifndef UPDATECHECKER_H
 #define UPDATECHECKER_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 class UpdateChecker : public BasePlugin
 {

@@ -1,7 +1,7 @@
 #ifndef SEARCHRESULTSDOCK_H
 #define SEARCHRESULTSDOCK_H
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 #include <QModelIndex>
 

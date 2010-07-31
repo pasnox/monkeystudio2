@@ -24,7 +24,7 @@
 #ifndef PDOCKTOOLBAR_H
 #define PDOCKTOOLBAR_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QToolBar>
 #include <QIcon>

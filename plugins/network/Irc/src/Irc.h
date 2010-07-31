@@ -4,7 +4,7 @@
 #ifndef IRC_H
 #define IRC_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 #include "IrcDock.h"
 
 

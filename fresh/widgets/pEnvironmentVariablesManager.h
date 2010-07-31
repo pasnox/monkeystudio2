@@ -1,9 +1,10 @@
 #ifndef PENVIRONMENTVARIABLESMANAGER_H
 #define PENVIRONMENTVARIABLESMANAGER_H
 
+#include "objects/MonkeyExport.h"
 #include "pEnvironmentVariablesModel.h"
 
-class pEnvironmentVariablesManager
+class Q_MONKEY_EXPORT pEnvironmentVariablesManager
 {	
 public:
 	virtual ~pEnvironmentVariablesManager();

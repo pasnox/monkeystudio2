@@ -1,7 +1,7 @@
 # fresh includes path to include in plugins/core project
 
 # include path
-INCLUDEPATH	*= $$getFolders( $${PWD}/objects $${PWD}/widgets )
+INCLUDEPATH	*= $${PWD} #$$getFolders( $${PWD}/objects $${PWD}/widgets )
 
 # dependency
 PRE_TARGETDEPS	*= $${PWD}

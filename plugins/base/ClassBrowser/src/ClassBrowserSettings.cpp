@@ -24,8 +24,8 @@
 #include "ClassBrowserSettings.h"
 #include "ClassBrowser.h"
 
-#include <pIconManager.h>
-#include <pPathListEditor.h>
+#include <objects/pIconManager.h>
+#include <widgets/pPathListEditor.h>
 
 #include <QBoxLayout>
 #include <QLabel>

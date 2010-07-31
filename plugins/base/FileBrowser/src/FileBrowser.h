@@ -35,7 +35,7 @@
 #ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 #include <QPointer>
 

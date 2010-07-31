@@ -18,7 +18,7 @@
 #ifndef XUP_H
 #define XUP_H
 
-#include <XUPPlugin.h>
+#include <pluginsmanager/XUPPlugin.h>
 
 class XUP : public XUPPlugin
 {

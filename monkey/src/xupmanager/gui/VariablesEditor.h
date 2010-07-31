@@ -1,7 +1,8 @@
 #ifndef VARIABLESEDITOR_H
 #define VARIABLESEDITOR_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "ui_VariablesEditor.h"
 
 class XUPProjectItem;

@@ -27,16 +27,16 @@
 **
 ****************************************************************************/
 #include "UISettings.h"
-#include "../../abbreviationsmanager/ui/UIAddAbbreviation.h"
-#include "../../workspace/pFileManager.h"
-#include "../../templatesmanager/pTemplatesManager.h"
-#include "../../abbreviationsmanager/pAbbreviationsManager.h"
-#include "../../pMonkeyStudio.h"
-#include "../../workspace/pWorkspace.h"
-#include "../../coremanager/MonkeyCore.h"
-#include "../../settingsmanager/Settings.h"
-#include "../../consolemanager/pConsoleManager.h"
-#include "../../consolemanager/EnvironmentVariablesManager.h"
+#include "abbreviationsmanager/ui/UIAddAbbreviation.h"
+#include "workspace/pFileManager.h"
+#include "templatesmanager/pTemplatesManager.h"
+#include "abbreviationsmanager/pAbbreviationsManager.h"
+#include "pMonkeyStudio.h"
+#include "workspace/pWorkspace.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
+#include "consolemanager/pConsoleManager.h"
+#include "consolemanager/EnvironmentVariablesManager.h"
 
 #include <qscilexerpython.h>
 

@@ -18,7 +18,7 @@
 #ifndef PCONSOLECOMMAND_H
 #define PCONSOLECOMMAND_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QStringList>
 #include <QMetaType>

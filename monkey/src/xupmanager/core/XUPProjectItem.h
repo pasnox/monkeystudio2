@@ -4,10 +4,11 @@
 #include <QObject>
 #include <QFileInfo>
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "XUPItem.h"
 #include "XUPProjectItemInfos.h"
-#include "pCommand.h"
+#include "consolemanager/pCommand.h"
 
 class BuilderPlugin;
 class DebuggerPlugin;

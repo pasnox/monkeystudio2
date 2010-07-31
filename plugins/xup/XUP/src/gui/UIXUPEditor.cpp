@@ -1,11 +1,11 @@
 #include "UIXUPEditor.h"
-#include "XUPProjectItem.h"
 
-#include <MkSFileDialog.h>
+#include <xupmanager/core/XUPProjectItem.h>
+#include <shared/MkSFileDialog.h>
 #include <pMonkeyStudio.h>
-#include <MonkeyCore.h>
-#include <PluginsManager.h>
-#include <XUPProjectItemHelper.h>
+#include <coremanager/MonkeyCore.h>
+#include <pluginsmanager/PluginsManager.h>
+#include <xupmanager/core/XUPProjectItemHelper.h>
 
 #include <QInputDialog>
 #include <QMessageBox>

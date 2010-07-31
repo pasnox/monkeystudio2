@@ -1,7 +1,7 @@
 #ifndef PMULTITOOLBAR_H
 #define PMULTITOOLBAR_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QStackedWidget>
 #include <QMap>

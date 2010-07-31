@@ -1,11 +1,11 @@
 #include "pOpenedFileExplorer.h"
 #include "pWorkspace.h"
+#include "coremanager/MonkeyCore.h"
+#include "maininterface/UIMain.h"
 
-#include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pIconManager.h>
-#include <pDockWidgetTitleBar.h>
-#include <pMenuBar.h>
+#include <objects/pIconManager.h>
+#include <widgets/pDockWidgetTitleBar.h>
+#include <widgets/pMenuBar.h>
 
 #include <QWidgetAction>
 #include <QComboBox>

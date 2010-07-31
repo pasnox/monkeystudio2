@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
-#include "../objects/pSettings.h"
+#include "objects/pSettings.h"
 
 #include <QMainWindow>
 #include <QDockWidget>

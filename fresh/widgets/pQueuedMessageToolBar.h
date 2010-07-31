@@ -1,7 +1,7 @@
 #ifndef PQUEUEDMESSAGETOOLBAR_H
 #define PQUEUEDMESSAGETOOLBAR_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 #include "pQueuedMessageWidget.h"
 
 #include <QToolBar>

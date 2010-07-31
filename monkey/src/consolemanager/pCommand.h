@@ -35,7 +35,7 @@
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include <QStringList>
 #include <QVariant>

@@ -3,7 +3,7 @@
 #ifndef REGEXPEDITOR_H
 #define REGEXPEDITOR_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 class UIRegExpEditor;
 

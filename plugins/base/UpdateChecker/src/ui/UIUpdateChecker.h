@@ -31,7 +31,7 @@
 
 #include "ui_UIUpdateChecker.h"
 
-#include <pVersion.h>
+#include <objects/pVersion.h>
 
 #include <QDomDocument>
 #include <QDateTime>

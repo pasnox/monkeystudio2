@@ -1,7 +1,7 @@
 #ifndef PGROUPPATH_H
 #define PGROUPPATH_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QString>
 

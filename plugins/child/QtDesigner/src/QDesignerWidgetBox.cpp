@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerWidgetBox.h"
 
-#include <pIconManager.h>
+#include <objects/pIconManager.h>
 
 #include <QDir>
 

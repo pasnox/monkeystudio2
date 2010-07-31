@@ -1,6 +1,8 @@
 #ifndef TRANSLATIONDIALOG_H
 #define TRANSLATIONDIALOG_H
 
+#include "objects/MonkeyExport.h"
+
 #include <QDialog>
 #include <QHash>
 
@@ -11,7 +13,7 @@ namespace Ui {
 	class TranslationDialog;
 };
 
-class TranslationDialog : public QDialog
+class Q_MONKEY_EXPORT TranslationDialog : public QDialog
 {
 	Q_OBJECT
 

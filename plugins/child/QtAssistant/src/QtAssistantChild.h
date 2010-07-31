@@ -1,7 +1,7 @@
 #ifndef QTASSISTANTCHILD_H
 #define QTASSISTANTCHILD_H
 
-#include <pAbstractChild.h>
+#include <workspace/pAbstractChild.h>
 
 class QHelpEngine;
 class QtAssistantInlineSearch;

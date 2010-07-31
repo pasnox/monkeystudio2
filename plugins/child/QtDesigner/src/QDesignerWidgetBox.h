@@ -18,7 +18,7 @@
 #ifndef QDESIGNERWIDGETBOX_H
 #define QDESIGNERWIDGETBOX_H
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 class QDesignerWidgetBoxInterface;

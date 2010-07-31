@@ -1,7 +1,7 @@
 #ifndef PHPQTPROJECTITEM_H
 #define PHPQTPROJECTITEM_H
 
-#include "XUPProjectItem.h"
+#include <xupmanager/core/XUPProjectItem.h>
 
 class PHPQtProjectItem : public XUPProjectItem
 {

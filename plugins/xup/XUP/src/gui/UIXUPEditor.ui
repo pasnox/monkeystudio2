@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>636</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -390,19 +390,19 @@
   <customwidget>
    <class>pStringListEditor</class>
    <extends>QGroupBox</extends>
-   <header location="global">pStringListEditor.h</header>
+   <header location="global">widgets/pStringListEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CommandsEditor</class>
    <extends>QFrame</extends>
-   <header location="global">CommandsEditor.h</header>
+   <header location="global">xupmanager/gui/CommandsEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>VariablesEditor</class>
    <extends>QFrame</extends>
-   <header location="global">VariablesEditor.h</header>
+   <header location="global">xupmanager/gui/VariablesEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

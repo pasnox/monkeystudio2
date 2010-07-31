@@ -34,7 +34,7 @@
 #ifndef BEAVER_DEBUGGER
 #define BEAVER_DEBUGGER
 
-#include <DebuggerPlugin.h>
+#include <pluginsmanager/DebuggerPlugin.h>
 
 #include <QPointer>
 #include <QProcess>

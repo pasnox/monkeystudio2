@@ -1,7 +1,7 @@
 #ifndef PVERSION_H
 #define PVERSION_H
 
-#include <MonkeyExport.h>
+#include "MonkeyExport.h"
 
 #include <QString>
 

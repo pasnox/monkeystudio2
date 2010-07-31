@@ -1,9 +1,9 @@
 #include "PyQtProjectItem.h"
 
-#include <XUPProjectItemInfos.h>
+#include <xupmanager/core/XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
-#include <BuilderPlugin.h>
-#include <InterpreterPlugin.h>
+#include <pluginsmanager/BuilderPlugin.h>
+#include <pluginsmanager/InterpreterPlugin.h>
 
 #include <QApplication>
 #include <QTextCodec>

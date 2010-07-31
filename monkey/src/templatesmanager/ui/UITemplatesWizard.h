@@ -29,10 +29,10 @@
 #ifndef UITEMPLATESWIZARD
 #define UITEMPLATESWIZARD
 
-#include <MonkeyExport.h>
-#include <pTemplatesManager.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_UITemplatesWizard.h"
+#include "templatesmanager/pTemplatesManager.h"
 
 class XUPProjectModelProxy;
 class XUPProjectModel;

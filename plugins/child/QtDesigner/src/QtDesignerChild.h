@@ -18,7 +18,7 @@
 #ifndef QTDESIGNERCHILD_H
 #define QTDESIGNERCHILD_H
 
-#include <pAbstractChild.h>
+#include <workspace/pAbstractChild.h>
 
 namespace SharedTools {
 	class WidgetHost;

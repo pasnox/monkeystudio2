@@ -1,11 +1,11 @@
 #include "UISimpleQMakeEditor.h"
-#include "XUPProjectItem.h"
-#include "../QMake.h"
+#include <xupmanager/core/XUPProjectItem.h>
+#include "QMake.h"
 
-#include <MkSFileDialog.h>
+#include <shared/MkSFileDialog.h>
 #include <pMonkeyStudio.h>
-#include <MonkeyCore.h>
-#include <PluginsManager.h>
+#include <coremanager/MonkeyCore.h>
+#include <pluginsmanager/PluginsManager.h>
 
 #include <QInputDialog>
 #include <QMessageBox>

@@ -24,7 +24,7 @@
 #ifndef PQUEUEDMESSAGEWIDGET_H
 #define PQUEUEDMESSAGEWIDGET_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QWidget>
 #include <QHash>

@@ -29,7 +29,7 @@
 #ifndef UIABOUT_H
 #define UIABOUT_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include <QDialog>
 #include <QUrl>

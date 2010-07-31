@@ -29,7 +29,7 @@
 #ifndef UIPLUGINSSETTINGS_H
 #define UIPLUGINSSETTINGS_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_UIPluginsSettings.h"
 

@@ -22,14 +22,14 @@
 	\brief Implementation of pTemplatesManager class
 */
 
-#include <pTemplatesManager.h>
-#include <pMonkeyStudio.h>
-#include <pFileManager.h>
-#include <XUPItem.h>
-#include <XUPProjectItem.h>
-#include <MonkeyCore.h>
-#include <XUPProjectManager.h>
-#include <Settings.h>
+#include "pTemplatesManager.h"
+#include "pMonkeyStudio.h"
+#include "workspace/pFileManager.h"
+#include "xupmanager/core/XUPItem.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "coremanager/MonkeyCore.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+#include "settingsmanager/Settings.h"
 
 #include <QTextCodec>
 #include <QMessageBox>

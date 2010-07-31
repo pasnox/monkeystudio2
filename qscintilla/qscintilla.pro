@@ -22,13 +22,12 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	INCLUDEPATH	-= .
 	INCLUDEPATH	-= ../include
 	INCLUDEPATH	-= ../src
-	INCLUDEPATH	*= $${QSCINTILLA_SOURCES_PATHS}
+	INCLUDEPATH	*= $${QSCINTILLAVERSION}/Qt4 $${QSCINTILLAVERSION}/include $${QSCINTILLAVERSION}/src #$${QSCINTILLA_SOURCES_PATHS}
 	DEPENDPATH	*= $${QSCINTILLA_SOURCES_PATHS}
 
 	# overwrite some values to made no lib
 	CONFIG	-= dll
-	CONFIG	-= release
-	CONFIG	+= staticlib
+	CONFIG	*= staticlib
 
 	# remove install script of qscintilla
 	INSTALLS	-= header trans qsci target
@@ -36,5 +35,8 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 
 # include config file
 include( ../config.pri )
+
+CONFIG	-= warn_on
+CONFIG	*= warn_off
 
 DESTDIR	= $${PACKAGE_BUILD_PATH}

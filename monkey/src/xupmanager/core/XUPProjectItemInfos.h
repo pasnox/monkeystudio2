@@ -1,7 +1,7 @@
 #ifndef XUPPROJECTITEMINFOS_H
 #define XUPPROJECTITEMINFOS_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
 
 #include <QStringList>
 #include <QPair>

@@ -1,7 +1,7 @@
 #ifndef XUPPROJECTMODEL_H
 #define XUPPROJECTMODEL_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
 
 #include <QAbstractItemModel>
 

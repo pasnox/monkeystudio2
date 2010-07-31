@@ -29,7 +29,7 @@
 #ifndef MONKEYCORE_H
 #define MONKEYCORE_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include <QObject>
 #include <QHash>

@@ -12,21 +12,22 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows release
-QT	+= xml sql
+CONFIG	-= debug_and_release release debug warn_off warn_on
+CONFIG	*= qt warn_on thread x11 windows debug
+QT	*= xml sql
 
 # Mac universal build from 10.3 to up to 10.5
 mac {
 	QMAKE_MACOSX_DEPLOYMENT_TARGET	= 10.3
 	QMAKE_MAC_SDK	= /Developer/SDKs/MacOSX10.4u.sdk
-	CONFIG	+= x86 ppc
+	CONFIG	*= x86 ppc
 }
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
 	#Debug
-	message( Building in DEBUG for architecture $$QT_ARCH )
-	CONFIG	+= console
+	message( Building in DEBUG for $$QMAKE_HOST.os $$QMAKE_HOST.arch )
+	CONFIG	*= console
 	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
 	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
 	unix:TARGET	= $$quote($$join(TARGET,,,_debug))
@@ -49,7 +50,7 @@ CONFIG( debug, debug|release ) {
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/release/.rcc
 }
 
-INCLUDEPATH	*= $${UI_DIR} # some qmake versions has bug and do not do it automatically
+INCLUDEPATH	*= $${UI_DIR} # force projects with no ui files to include this folder
 
 # define some usefull values
 QMAKE_TARGET_COMPANY	= "The MkS Team"

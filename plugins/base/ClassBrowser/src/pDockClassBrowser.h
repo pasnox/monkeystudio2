@@ -25,7 +25,7 @@
 #ifndef PDOCKCLASSBROWSER
 #define PDOCKCLASSBROWSER
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 class ClassBrowser;
 class qCtagsSenseBrowser;

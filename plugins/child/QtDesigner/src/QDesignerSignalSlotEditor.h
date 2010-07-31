@@ -18,7 +18,7 @@
 #ifndef QDESIGNERSIGNALSLOTEDITOR_H
 #define QDESIGNERSIGNALSLOTEDITOR_H
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 
