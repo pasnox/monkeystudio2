@@ -24,6 +24,7 @@
 #ifndef PDOCKWIDGETTITLEBAR_H
 #define PDOCKWIDGETTITLEBAR_H
 
+#include "objects/MonkeyExport.h"
 #include "pDockWidget.h"
 
 #include <QToolBar>

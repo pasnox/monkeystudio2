@@ -24,6 +24,7 @@
 #ifndef PFILESLISTWIDGET_H
 #define PFILESLISTWIDGET_H
 
+#include "objects/MonkeyExport.h"
 #include "pDockWidget.h"
 
 #include <QUrl>
@@ -40,7 +41,7 @@ class QDropEvent;
 	\details The list is showing all workspace document windowTitle,
 	\details you can activated a document by clicking its corresponding item in the list.
 */
-class pFilesListWidget : public pDockWidget
+class Q_MONKEY_EXPORT pFilesListWidget : public pDockWidget
 {
 	Q_OBJECT
 	friend class FilesComboAction;
