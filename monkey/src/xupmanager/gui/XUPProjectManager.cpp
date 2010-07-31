@@ -15,7 +15,6 @@
 #include <widgets/pQueuedMessageToolBar.h>
 #include <widgets/pMenuBar.h>
 #include <objects/pIconManager.h>
-#include <pMenuBar.h>
 
 #include <QTextCodec>
 #include <QMenu>

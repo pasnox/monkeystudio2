@@ -44,10 +44,6 @@
 #include <widgets/pMultiToolBar.h>
 #include <widgets/pMenuBar.h>
 #include <objects/pStylesActionGroup.h>
-#include <pDockToolBar.h>
-#include <pMultiToolBar.h>
-#include <pMenuBar.h>
-#include <pStylesActionGroup.h>
 
 #include <QCloseEvent>
 #include <QMenu>

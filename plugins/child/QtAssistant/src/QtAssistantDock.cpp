@@ -12,7 +12,6 @@
 #include <coremanager/MonkeyCore.h>
 #include <qscintillamanager/pEditor.h>
 #include <widgets/pMenuBar.h>
-#include <pMenuBar.h>
 
 #include <QHelpEngine>
 #include <QHelpContentWidget>

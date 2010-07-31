@@ -33,8 +33,6 @@
 
 #include <widgets/pMenuBar.h>
 
-#include <pMenuBar.h>
-
 #include <QAction>
 #include <QFileInfo>
 #include <QTimer>

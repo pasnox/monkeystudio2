@@ -15,7 +15,6 @@
 #include <qscintillamanager/pEditor.h>
 #include <widgets/pQueuedMessageToolBar.h>
 #include <widgets/pMenuBar.h>
-#include <pMenuBar.h>
 
 #include <QTextCodec>
 #include <QFileDialog>

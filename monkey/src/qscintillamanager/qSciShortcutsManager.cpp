@@ -34,8 +34,6 @@
 
 #include <widgets/pMenuBar.h>
 
-#include <pMenuBar.h>
-
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {
 	//Fill with all availible QScintila actions

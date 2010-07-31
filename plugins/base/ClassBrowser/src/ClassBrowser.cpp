@@ -30,8 +30,6 @@
 #include <workspace/pAbstractChild.h>
 #include <widgets/pActionsManager.h>
 #include <widgets/pDockToolBar.h>
-#include <pActionsManager.h>
-#include <pDockToolBar.h>
 
 #include <QDesktopServices>
 #include <QDebug>

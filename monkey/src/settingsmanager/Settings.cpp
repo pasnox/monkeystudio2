@@ -33,7 +33,6 @@
 
 #include <widgets/pQueuedMessageToolBar.h>
 #include <qscilexer.h>
-#include <qscilexer.h>
 
 #include <QApplication>
 #include <QStringList>

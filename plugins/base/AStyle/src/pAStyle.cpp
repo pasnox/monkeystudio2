@@ -37,7 +37,6 @@
 #include <workspace/pAbstractChild.h>
 #include <qscintillamanager/pEditor.h>
 #include <widgets/pMenuBar.h>
-#include <pMenuBar.h>
 
 void pAStyle::fillPluginInfos()
 {

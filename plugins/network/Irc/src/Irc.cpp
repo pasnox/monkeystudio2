@@ -6,7 +6,6 @@
 #include <maininterface/UIMain.h>
 #include <consolemanager/pConsoleManager.h>
 #include <widgets/pDockToolBar.h>
-#include <pDockToolBar.h>
 
 #include <QIcon>
 #include <QTabWidget>

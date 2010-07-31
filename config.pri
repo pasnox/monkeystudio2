@@ -13,7 +13,7 @@ PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
 CONFIG	-= debug_and_release release debug warn_off warn_on
-CONFIG	*= qt warn_on thread x11 windows debug
+CONFIG	*= qt warn_on thread x11 windows release
 QT	*= xml sql
 
 # Mac universal build from 10.3 to up to 10.5
