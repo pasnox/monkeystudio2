@@ -1,7 +1,7 @@
 #ifndef SEARCHANDREPLACE_H
 #define SEARCHANDREPLACE_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 class SearchWidget;
 class SearchResultsDock;

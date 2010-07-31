@@ -2,7 +2,7 @@
 #define UISIMPLEQMAKEEDITOR_H
 
 #include "ui_UISimpleQMakeEditor.h"
-#include "../QtVersionManager.h"
+#include "QtVersionManager.h"
 
 #include <QMap>
 

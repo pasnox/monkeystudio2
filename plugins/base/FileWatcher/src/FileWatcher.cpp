@@ -24,11 +24,11 @@
 
 #include "FileWatcher.h"
 
-#include <pIconManager.h>
-#include <MonkeyCore.h>
-#include <pFileManager.h>
-#include <pAbstractChild.h>
-#include <pOpenedFileExplorer.h>
+#include <objects/pIconManager.h>
+#include <coremanager/MonkeyCore.h>
+#include <workspace/pFileManager.h>
+#include <workspace/pAbstractChild.h>
+#include <workspace/pOpenedFileExplorer.h>
 
 #include <QFileSystemWatcher>
 #include <QDebug>

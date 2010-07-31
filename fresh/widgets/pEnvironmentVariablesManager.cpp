@@ -1,6 +1,5 @@
 #include "pEnvironmentVariablesManager.h"
-
-#include "pSettings.h"
+#include "objects/pSettings.h"
 
 #include <QProcess>
 #include <QCoreApplication>

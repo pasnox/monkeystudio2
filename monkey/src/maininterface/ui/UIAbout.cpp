@@ -30,7 +30,7 @@
 #include "ui_UIAbout.h"
 #include "main.h"
 
-#include <pIconManager.h>
+#include <objects/pIconManager.h>
 
 #include <QDate>
 

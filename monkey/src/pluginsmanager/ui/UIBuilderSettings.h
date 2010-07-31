@@ -29,10 +29,10 @@
 #ifndef UIBUILDERSETTINGS_H
 #define UIBUILDERSETTINGS_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_UIBuilderSettings.h"
-#include "../../consolemanager/pCommand.h"
+#include "consolemanager/pCommand.h"
 
 #include <QWidget>
 

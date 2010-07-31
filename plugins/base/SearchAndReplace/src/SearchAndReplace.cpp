@@ -3,13 +3,13 @@
 #include "SearchWidget.h"
 #include "SearchResultsDock.h"
 
-#include <MonkeyCore.h>
-#include <pWorkspace.h>
-#include <pAbstractChild.h>
-#include <UIMain.h>
-#include <pIconManager.h>
-#include <pDockToolBar.h>
-#include <pMenuBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <workspace/pWorkspace.h>
+#include <workspace/pAbstractChild.h>
+#include <maininterface/UIMain.h>
+#include <objects/pIconManager.h>
+#include <widgets/pDockToolBar.h>
+#include <widgets/pMenuBar.h>
 
 QWidget* SearchAndReplace::settingsWidget()
 {

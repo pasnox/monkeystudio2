@@ -1,7 +1,7 @@
 # monkey includes path to include in plugins/core project
 
 # include path
-INCLUDEPATH	*= $$getFolders( $${PWD}/src, resources )
+INCLUDEPATH	*= $${PWD}/src #$$getFolders( $${PWD}/src, resources )
 
 # dependency
 PRE_TARGETDEPS	*= $${PWD}

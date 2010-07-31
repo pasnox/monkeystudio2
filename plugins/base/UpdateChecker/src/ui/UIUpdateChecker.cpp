@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 #include "UIUpdateChecker.h"
-#include "../UpdateChecker.h"
+#include "UpdateChecker.h"
 
 #include <main.h>
 

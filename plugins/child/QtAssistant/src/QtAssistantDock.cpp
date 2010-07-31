@@ -5,13 +5,13 @@
 #include "topicchooser.h"
 #include "bookmarkmanager.h"
 
-#include <pIconManager.h>
-#include <pDockWidgetTitleBar.h>
-#include <pQueuedMessageToolBar.h>
+#include <objects/pIconManager.h>
+#include <widgets/pDockWidgetTitleBar.h>
+#include <widgets/pQueuedMessageToolBar.h>
 
-#include <MonkeyCore.h>
-#include <pEditor.h>
-#include <pMenuBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <qscintillamanager/pEditor.h>
+#include <widgets/pMenuBar.h>
 
 #include <QHelpEngine>
 #include <QHelpContentWidget>

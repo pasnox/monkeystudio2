@@ -35,8 +35,8 @@
 
 #include <QDebug>
 
-#include "MkSShellInterpreter.h"
-#include "MonkeyCore.h"
+#include "shellmanager/MkSShellInterpreter.h"
+#include "coremanager/MonkeyCore.h"
 #include "CommandParser.h"
 
 /*!

@@ -1,7 +1,7 @@
 #include "EnvironmentVariablesManager.h"
-#include "MkSShellInterpreter.h"
-#include "MonkeyCore.h"
-#include "Settings.h"
+#include "shellmanager/MkSShellInterpreter.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
 
 #include <QCoreApplication>
 #include <QFile>

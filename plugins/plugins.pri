@@ -47,3 +47,5 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	mac:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.obj/mac/$${TARGET}
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.moc
 }
+
+INCLUDEPATH	*= src

@@ -36,7 +36,7 @@
 #include <QMenu>
 #include <QDebug>
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "pMonkeyStudio.h"
 

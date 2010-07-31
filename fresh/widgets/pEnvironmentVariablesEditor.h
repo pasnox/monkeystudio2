@@ -1,7 +1,7 @@
 #ifndef PENVIRONMENTVARIABLESEDITOR_H
 #define PENVIRONMENTVARIABLESEDITOR_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 #include "ui_pEnvironmentVariablesEditor.h"
 #include "pEnvironmentVariablesModel.h"
 

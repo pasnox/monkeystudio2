@@ -1,9 +1,10 @@
 #ifndef COMMANDSEDITOR_H
 #define COMMANDSEDITOR_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "ui_CommandsEditor.h"
-#include "XUPProjectItemHelper.h"
+#include "xupmanager/core/XUPProjectItemHelper.h"
 
 class Q_MONKEY_EXPORT CommandsEditor : public QFrame, public Ui::CommandsEditor
 {

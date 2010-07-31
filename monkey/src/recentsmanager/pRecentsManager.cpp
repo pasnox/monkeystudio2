@@ -27,11 +27,11 @@
 **
 ****************************************************************************/
 #include "pRecentsManager.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../settingsmanager/Settings.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
 #include "pMonkeyStudio.h"
 
-#include <pMenuBar.h>
+#include <widgets/pMenuBar.h>
 
 #include <QAction>
 #include <QFileInfo>

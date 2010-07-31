@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
-    <height>763</height>
+    <width>664</width>
+    <height>761</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2845,18 +2845,18 @@ You can quickly change it using the dock context menu.</string>
   <customwidget>
    <class>pPathListEditor</class>
    <extends>QGroupBox</extends>
-   <header location="global">pPathListEditor.h</header>
+   <header location="global">widgets/pPathListEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>pColorButton</class>
    <extends>QPushButton</extends>
-   <header location="global">pColorButton.h</header>
+   <header location="global">widgets/pColorButton.h</header>
   </customwidget>
   <customwidget>
    <class>pEnvironmentVariablesEditor</class>
    <extends>QWidget</extends>
-   <header location="global">pEnvironmentVariablesEditor.h</header>
+   <header location="global">widgets/pEnvironmentVariablesEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

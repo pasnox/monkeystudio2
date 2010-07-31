@@ -4,17 +4,17 @@
 #include "ReplaceThread.h"
 #include "SearchResultsDock.h"
 
-#include <MonkeyCore.h>
-#include <pIconManager.h>
-#include <UIMain.h>
-#include <pFileManager.h>
-#include <XUPProjectItem.h>
-#include <pWorkspace.h>
-#include <pAbstractChild.h>
-#include <pChild.h>
-#include <pEditor.h>
-#include <pQueuedMessageToolBar.h>
-#include <pMenuBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <objects/pIconManager.h>
+#include <maininterface/UIMain.h>
+#include <workspace/pFileManager.h>
+#include <xupmanager/core/XUPProjectItem.h>
+#include <workspace/pWorkspace.h>
+#include <workspace/pAbstractChild.h>
+#include <workspace/pChild.h>
+#include <qscintillamanager/pEditor.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <widgets/pMenuBar.h>
 
 #include <QTextCodec>
 #include <QFileDialog>

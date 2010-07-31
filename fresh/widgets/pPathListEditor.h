@@ -24,7 +24,7 @@
 #ifndef PPATHLISTEDITOR_H
 #define PPATHLISTEDITOR_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 #include "pFileListEditor.h"
 
 /*!

@@ -1,7 +1,7 @@
 #ifndef PCOLORBUTTON_H
 #define PCOLORBUTTON_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QPushButton>
 

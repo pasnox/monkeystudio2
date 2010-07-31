@@ -1,10 +1,10 @@
 #include "PluginsMenu.h"
 #include "PluginsManager.h"
-#include "UIPluginsSettingsAbout.h"
+#include "ui/UIPluginsSettingsAbout.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
 
-#include <pIconManager.h>
-#include <MonkeyCore.h>
-#include <Settings.h>
+#include <objects/pIconManager.h>
 
 #include <QDesktopWidget>
 

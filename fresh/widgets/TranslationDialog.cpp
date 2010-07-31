@@ -1,9 +1,8 @@
 #include "TranslationDialog.h"
 #include "ui_TranslationDialog.h"
-#include "TranslationManager.h"
-#include "pIconManager.h"
-
-#include <pPathListEditor.h>
+#include "objects/TranslationManager.h"
+#include "objects/pIconManager.h"
+#include "pPathListEditor.h"
 
 #include <QFileDialog>
 #include <QDebug>

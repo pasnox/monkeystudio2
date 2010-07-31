@@ -1,7 +1,7 @@
 #ifndef PCONSOLEMANAGERSTEP_H
 #define PCONSOLEMANAGERSTEP_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include <QString>
 #include <QPoint>

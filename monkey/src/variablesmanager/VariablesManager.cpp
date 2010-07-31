@@ -17,9 +17,8 @@
 ****************************************************************************/
 #include "VariablesManager.h"
 #include "main.h"
-
-#include <pFileManager.h>
-#include <MonkeyCore.h>
+#include "workspace/pFileManager.h"
+#include "coremanager/MonkeyCore.h"
 
 #include <QStringList>
 #include <QList>

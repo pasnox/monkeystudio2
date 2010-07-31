@@ -24,7 +24,7 @@
 #ifndef PTREECOMBOBOX_H
 #define PTREECOMBOBOX_H
 
-#include "../objects/MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 
 #include <QWidget>
 #include <QModelIndex>

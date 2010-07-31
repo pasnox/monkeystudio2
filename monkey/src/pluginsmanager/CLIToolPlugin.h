@@ -29,11 +29,11 @@
 #ifndef CLITOOLPLUGIN_H
 #define CLITOOLPLUGIN_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
-#include "../consolemanager/pCommand.h"
+#include "consolemanager/pCommand.h"
 #include "BasePlugin.h"
-#include "../consolemanager/AbstractCommandParser.h"
+#include "consolemanager/AbstractCommandParser.h"
 
 class Q_MONKEY_EXPORT CLIToolPlugin
 {

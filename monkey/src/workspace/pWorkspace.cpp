@@ -41,31 +41,31 @@
 #include "pWorkspace.h"
 #include "pOpenedFileExplorer.h"
 #include "pAbstractChild.h"
-#include "../recentsmanager/pRecentsManager.h"
+#include "recentsmanager/pRecentsManager.h"
 #include "pFileManager.h"
-#include "../maininterface/ui/UISettings.h"
+#include "maininterface/ui/UISettings.h"
 #include "UISaveFiles.h"
-#include "../maininterface/ui/UIAbout.h"
-#include "../templatesmanager/ui/UITemplatesWizard.h"
-#include "../abbreviationsmanager/pAbbreviationsManager.h"
-#include "../pMonkeyStudio.h"
-#include "../templatesmanager/pTemplatesManager.h"
-#include "../xupmanager/gui/XUPProjectManager.h"
-#include "../xupmanager/core/XUPProjectItem.h"
-#include "../pluginsmanager/PluginsManager.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../maininterface/UIMain.h"
-#include "../statusbar/StatusBar.h"
-#include "MkSFileDialog.h"
+#include "maininterface/ui/UIAbout.h"
+#include "templatesmanager/ui/UITemplatesWizard.h"
+#include "abbreviationsmanager/pAbbreviationsManager.h"
+#include "pMonkeyStudio.h"
+#include "templatesmanager/pTemplatesManager.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "coremanager/MonkeyCore.h"
+#include "maininterface/UIMain.h"
+#include "statusbar/StatusBar.h"
+#include "shared/MkSFileDialog.h"
 
 #include "pChild.h"
-#include "../qscintillamanager/pEditor.h"
+#include "qscintillamanager/pEditor.h"
 
-#include <pQueuedMessageToolBar.h>
-#include <pMenuBar.h>
-#include <pMultiToolBar.h>
-#include <TranslationDialog.h>
-#include <TranslationManager.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <widgets/pMenuBar.h>
+#include <widgets/pMultiToolBar.h>
+#include <widgets/TranslationDialog.h>
+#include <objects/TranslationManager.h>
 
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
 QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );

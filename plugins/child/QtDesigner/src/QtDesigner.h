@@ -18,7 +18,7 @@
 #ifndef QTDESIGNER_H
 #define QTDESIGNER_H
 
-#include <ChildPlugin.h>
+#include <pluginsmanager/ChildPlugin.h>
 
 #include <QPointer>
 

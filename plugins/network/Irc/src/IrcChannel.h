@@ -27,8 +27,8 @@
 #ifndef IRCCHANNEL_H
 #define IRCCHANNEL_H
 
-#include <pWorkspace.h>
-#include <MonkeyCore.h>
+#include <workspace/pWorkspace.h>
+#include <coremanager/MonkeyCore.h>
 
 #include <QWidget>
 #include <QKeyEvent>

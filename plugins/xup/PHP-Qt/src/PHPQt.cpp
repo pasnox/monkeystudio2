@@ -20,8 +20,8 @@
 //#include "UISettingsPHPQt.h"
 #include "../XUP/src/gui/UIXUPEditor.h"
 
-#include <MonkeyCore.h>
-#include <UIMain.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
 
 #include <QDir>
 

@@ -28,10 +28,10 @@
 ****************************************************************************/
 #include "Settings.h"
 #include "main.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../pMonkeyStudio.h"
+#include "coremanager/MonkeyCore.h"
+#include "pMonkeyStudio.h"
 
-#include <pQueuedMessageToolBar.h>
+#include <widgets/pQueuedMessageToolBar.h>
 #include <qscilexer.h>
 
 #include <QApplication>

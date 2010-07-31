@@ -1,7 +1,8 @@
 #ifndef UIXUPFINDFILES_H
 #define UIXUPFINDFILES_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "ui_UIXUPFindFiles.h"
 
 #include <QFileInfo>

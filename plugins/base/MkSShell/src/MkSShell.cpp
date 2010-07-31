@@ -1,11 +1,11 @@
 #include "MkSShell.h"
 
-#include <pDockWidget.h>
-#include <pDockToolBar.h>
-#include <MkSShellConsole.h>
-#include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pActionsManager.h>
+#include <widgets/pDockWidget.h>
+#include <widgets/pDockToolBar.h>
+#include <shellmanager/MkSShellConsole.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
+#include <widgets/pActionsManager.h>
 
 class MkSShellDock : public pDockWidget
 {

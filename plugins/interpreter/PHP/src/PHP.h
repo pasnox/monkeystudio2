@@ -18,7 +18,7 @@
 #ifndef PHP_H
 #define PHP_H
 
-#include <InterpreterPlugin.h>
+#include <pluginsmanager/InterpreterPlugin.h>
 
 class PHP : public InterpreterPlugin
 {

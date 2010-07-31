@@ -28,8 +28,8 @@
 ****************************************************************************/
 #include "pFormatterSettings.h"
 
-#include <MonkeyCore.h>
-#include <Settings.h>
+#include <coremanager/MonkeyCore.h>
+#include <settingsmanager/Settings.h>
 
 void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 {

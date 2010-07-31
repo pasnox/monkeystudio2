@@ -36,10 +36,10 @@
 #include "ui/MessageBoxDocks.h"
 #include "ui/UIMessageBoxSettings.h"
 
-#include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pConsoleManager.h>
-#include <pDockToolBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
+#include <consolemanager/pConsoleManager.h>
+#include <widgets/pDockToolBar.h>
 
 #include <QIcon>
 #include <QTabWidget>

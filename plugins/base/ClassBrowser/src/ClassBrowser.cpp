@@ -19,17 +19,17 @@
 #include "pDockClassBrowser.h"
 #include "ClassBrowserSettings.h"
 
-#include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pFileManager.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
+#include <workspace/pFileManager.h>
 #include <qCtagsSenseBrowser.h>
-#include <XUPProjectItem.h>
+#include <xupmanager/core/XUPProjectItem.h>
 #include <pMonkeyStudio.h>
 #include <qCtagsSense.h>
-#include <pMultiToolBar.h>
-#include <pAbstractChild.h>
-#include <pActionsManager.h>
-#include <pDockToolBar.h>
+#include <widgets/pMultiToolBar.h>
+#include <workspace/pAbstractChild.h>
+#include <widgets/pActionsManager.h>
+#include <widgets/pDockToolBar.h>
 
 #include <QDesktopServices>
 #include <QDebug>

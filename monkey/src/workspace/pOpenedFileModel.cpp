@@ -2,7 +2,7 @@
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
 
-#include <pIconManager.h>
+#include <objects/pIconManager.h>
 
 #include <QMimeData>
 #include <QDebug>

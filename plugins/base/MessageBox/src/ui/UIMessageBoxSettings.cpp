@@ -35,7 +35,7 @@
 */
 
 #include "UIMessageBoxSettings.h"
-#include "../MessageBox.h"
+#include "MessageBox.h"
 
 #include <QWhatsThis>
 #include <QPushButton>

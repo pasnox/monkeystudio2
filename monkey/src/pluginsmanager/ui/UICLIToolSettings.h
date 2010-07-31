@@ -29,10 +29,10 @@
 #ifndef UICLITOOLSETTINGS_H
 #define UICLITOOLSETTINGS_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_UICLIToolSettings.h"
-#include "../../consolemanager/pCommand.h"
+#include "consolemanager/pCommand.h"
 
 #include <QWidget>
 

@@ -36,7 +36,7 @@
 #ifndef GCCPARSER_H
 #define GCCPARSER_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 /*!
 	\brief Gcc parser plugin

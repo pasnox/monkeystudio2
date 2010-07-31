@@ -18,7 +18,7 @@
 #ifndef QMAKE_H
 #define QMAKE_H
 
-#include <XUPPlugin.h>
+#include <pluginsmanager/XUPPlugin.h>
 
 #include <QPointer>
 

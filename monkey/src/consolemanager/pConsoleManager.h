@@ -36,7 +36,7 @@
 #ifndef PCONSOLEMANAGER_H
 #define PCONSOLEMANAGER_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "pCommand.h"
 #include "pConsoleManagerStep.h"

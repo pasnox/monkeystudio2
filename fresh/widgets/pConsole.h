@@ -18,7 +18,7 @@
 #ifndef PCONSOLE_H
 #define PCONSOLE_H
 
-#include "MonkeyExport.h"
+#include "objects/MonkeyExport.h"
 #include "pConsoleCommand.h"
 
 #include <QPlainTextEdit>

@@ -1,7 +1,8 @@
 #ifndef XUPFILTEREDPROJECTMODEL_H
 #define XUPFILTEREDPROJECTMODEL_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "XUPProjectModel.h"
 #include "XUPItem.h"
 

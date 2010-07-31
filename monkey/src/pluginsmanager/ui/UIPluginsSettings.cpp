@@ -28,8 +28,8 @@
 ****************************************************************************/
 #include "UIPluginsSettings.h"
 #include "UIPluginsSettingsElement.h"
-#include "../../coremanager/MonkeyCore.h"
-#include "../PluginsManager.h"
+#include "coremanager/MonkeyCore.h"
+#include "pluginsmanager/PluginsManager.h"
 
 UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	: QDialog( p, Qt::Dialog )

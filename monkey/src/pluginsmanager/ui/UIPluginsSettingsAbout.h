@@ -1,7 +1,7 @@
 #ifndef UIPLUGINSSETTINGSABOUT_H
 #define UIPLUGINSSETTINGSABOUT_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "ui_UIPluginsSettingsAbout.h"
 

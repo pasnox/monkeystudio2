@@ -37,7 +37,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <pConsoleManager.h>
+#include <consolemanager/pConsoleManager.h>
 #include <../../../monkey/src/consolemanager/CommandParser.h>
 
 /*!

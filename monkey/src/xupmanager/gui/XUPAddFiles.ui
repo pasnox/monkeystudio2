@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>145</height>
+    <width>439</width>
+    <height>143</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
   <customwidget>
    <class>pTreeComboBox</class>
    <extends>QComboBox</extends>
-   <header>pTreeComboBox.h</header>
+   <header>widgets/pTreeComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

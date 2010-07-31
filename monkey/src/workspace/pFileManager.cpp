@@ -28,15 +28,15 @@
 ****************************************************************************/
 #include "pFileManager.h"
 #include "pWorkspace.h"
-#include "../xupmanager/gui/XUPProjectManager.h"
-#include "../xupmanager/core/XUPProjectItem.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+#include "xupmanager/core/XUPProjectItem.h"
 #include "pAbstractChild.h"
-#include "../coremanager/MonkeyCore.h"
+#include "coremanager/MonkeyCore.h"
 #include "pMonkeyStudio.h"
-#include "../settingsmanager/Settings.h"
-#include "../shellmanager/MkSShellInterpreter.h"
+#include "settingsmanager/Settings.h"
+#include "shellmanager/MkSShellInterpreter.h"
 
-#include <pQueuedMessageToolBar.h>
+#include <widgets/pQueuedMessageToolBar.h>
 
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )

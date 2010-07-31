@@ -3,7 +3,7 @@
 
 #include <QAbstractItemModel>
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
 #include "pConsoleManagerStep.h"
 

@@ -18,7 +18,7 @@
 #ifndef CLASSBROWSER_H
 #define CLASSBROWSER_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 #include <qCtagsSense.h>
 
 #include <QPointer>

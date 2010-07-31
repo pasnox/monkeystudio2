@@ -1,6 +1,7 @@
 #include "XUPProjectItemInfos.h"
 #include "XUPProjectItem.h"
-#include "pIconManager.h"
+
+#include <objects/pIconManager.h>
 
 #include <QDir>
 

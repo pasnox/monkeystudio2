@@ -18,7 +18,7 @@
 #ifndef PYTHON_H
 #define PYTHON_H
 
-#include <InterpreterPlugin.h>
+#include <pluginsmanager/InterpreterPlugin.h>
 
 class Python : public InterpreterPlugin
 {

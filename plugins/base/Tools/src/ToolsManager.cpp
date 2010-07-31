@@ -19,12 +19,12 @@
 #include "ui/UIToolsEdit.h"
 #include "ui/UIDesktopTools.h"
 
-#include <MonkeyCore.h>
-#include <pConsoleManager.h>
-#include <pQueuedMessageToolBar.h>
-#include <Settings.h>
-#include <MkSShellInterpreter.h>
-#include <pMenuBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <consolemanager/pConsoleManager.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <settingsmanager/Settings.h>
+#include <shellmanager/MkSShellInterpreter.h>
+#include <widgets/pMenuBar.h>
 
 #include <QFileIconProvider>
 #include <QDesktopServices>

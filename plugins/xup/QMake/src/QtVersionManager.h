@@ -1,7 +1,7 @@
 #ifndef QTVERSIONMANAGER_H
 #define QTVERSIONMANAGER_H
 
-#include <pSettings.h>
+#include <objects/pSettings.h>
 
 #include <QFile>
 #include <QDomDocument>

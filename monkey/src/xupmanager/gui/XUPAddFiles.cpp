@@ -1,8 +1,8 @@
 #include "XUPAddFiles.h"
-#include "XUPProjectModelProxy.h"
-#include "XUPProjectModel.h"
-#include "XUPItem.h"
-#include "XUPProjectItem.h"
+#include "xupmanager/core/XUPProjectModelProxy.h"
+#include "xupmanager/core/XUPProjectModel.h"
+#include "xupmanager/core/XUPItem.h"
+#include "xupmanager/core/XUPProjectItem.h"
 #include "pMonkeyStudio.h"
 
 XUPAddFiles::XUPAddFiles( QWidget* parent )

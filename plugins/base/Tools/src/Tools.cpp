@@ -3,10 +3,10 @@
 #include "ui/UIToolsEdit.h"
 #include "ui/UIDesktopTools.h"
 
-#include <MonkeyCore.h>
-#include <MkSShellInterpreter.h>
-#include <pQueuedMessageToolBar.h>
-#include <pMenuBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <shellmanager/MkSShellInterpreter.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <widgets/pMenuBar.h>
 
 #include <QFileInfo>
 

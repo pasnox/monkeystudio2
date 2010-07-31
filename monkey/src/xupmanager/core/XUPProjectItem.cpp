@@ -1,15 +1,16 @@
 #include "XUPProjectItem.h"
 #include "XUPProjectItemHelper.h"
 #include "XUPProjectModel.h"
-#include "pIconManager.h"
-#include "BuilderPlugin.h"
-#include "DebuggerPlugin.h"
-#include "InterpreterPlugin.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
-#include "PluginsManager.h"
+#include "pluginsmanager/BuilderPlugin.h"
+#include "pluginsmanager/DebuggerPlugin.h"
+#include "pluginsmanager/InterpreterPlugin.h"
+#include "coremanager/MonkeyCore.h"
+#include "pluginsmanager/PluginsManager.h"
 #include "pMonkeyStudio.h"
-#include "UIMain.h"
+#include "maininterface/UIMain.h"
+
+#include <objects/pIconManager.h>
+#include <widgets/pMenuBar.h>
 
 #include <QTextCodec>
 #include <QDir>

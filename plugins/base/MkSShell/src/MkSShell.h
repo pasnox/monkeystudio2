@@ -1,7 +1,7 @@
 #ifndef MKSSHELL_H
 #define MKSSHELL_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 class MkSShellDock;
 

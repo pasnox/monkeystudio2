@@ -1,9 +1,10 @@
 #ifndef XUPPROJECTMANAGER_H
 #define XUPPROJECTMANAGER_H
 
-#include "MonkeyExport.h"
+#include <objects/MonkeyExport.h>
+
 #include "ui_XUPProjectManager.h"
-#include "XUPProjectItem.h"
+#include "xupmanager/core/XUPProjectItem.h"
 
 #include <QMap>
 

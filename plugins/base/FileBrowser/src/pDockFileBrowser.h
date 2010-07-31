@@ -36,7 +36,7 @@
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>

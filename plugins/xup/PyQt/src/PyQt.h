@@ -18,7 +18,7 @@
 #ifndef PYQT_H
 #define PYQT_H
 
-#include <XUPPlugin.h>
+#include <pluginsmanager/XUPPlugin.h>
 
 #include <QPointer>
 

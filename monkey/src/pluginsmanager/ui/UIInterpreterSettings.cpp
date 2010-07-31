@@ -16,10 +16,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "UIInterpreterSettings.h"
-#include "../InterpreterPlugin.h"
-#include  "../../consolemanager/pConsoleManager.h"
-#include "../../pMonkeyStudio.h"
-#include "../../coremanager/MonkeyCore.h"
+#include "pluginsmanager/InterpreterPlugin.h"
+#include  "consolemanager/pConsoleManager.h"
+#include "pMonkeyStudio.h"
+#include "coremanager/MonkeyCore.h"
 
 #include <QInputDialog>
 #include <QPushButton>

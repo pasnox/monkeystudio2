@@ -23,7 +23,7 @@
 #include "workspace/pAbstractChild.h"
 #include "qscintillamanager/pEditor.h"
 
-#include <pQueuedMessageToolBar.h>
+#include <widgets/pQueuedMessageToolBar.h>
 
 #include <qsciapis.h>
 #include <qsciglobal.h>

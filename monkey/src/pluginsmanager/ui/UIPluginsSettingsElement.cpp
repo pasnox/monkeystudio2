@@ -1,8 +1,8 @@
 #include "UIPluginsSettingsElement.h"
 #include "UIPluginsSettingsAbout.h"
-#include "../BasePlugin.h"
-#include "../../coremanager/MonkeyCore.h"
-#include "../../settingsmanager/Settings.h"
+#include "pluginsmanager/BasePlugin.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
 
 #include <QDesktopWidget>
 

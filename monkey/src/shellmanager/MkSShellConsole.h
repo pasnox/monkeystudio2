@@ -1,9 +1,8 @@
 #ifndef MKSSHELLCONSOLE_H
 #define MKSSHELLCONSOLE_H
 
-#include <MonkeyExport.h>
-
-#include "pConsole.h"
+#include <objects/MonkeyExport.h>
+#include <widgets/pConsole.h>
 
 class Q_MONKEY_EXPORT MkSShellConsole : public pConsole
 {

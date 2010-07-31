@@ -28,12 +28,12 @@
 ****************************************************************************/
 #include "PluginsManager.h"
 #include "PluginsMenu.h"
-#include "../pMonkeyStudio.h"
+#include "pMonkeyStudio.h"
 #include "ui/UIPluginsSettings.h"
-#include "../coremanager/MonkeyCore.h"
+#include "coremanager/MonkeyCore.h"
 #include "main.h"
 
-#include <pVersion.h>
+#include <objects/pVersion.h>
 
 #include <QPluginLoader>
 

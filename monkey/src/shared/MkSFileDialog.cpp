@@ -1,11 +1,12 @@
 #include "MkSFileDialog.h"
-#include "XUPProjectItem.h"
-#include "XUPProjectItemInfos.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "xupmanager/core/XUPProjectItemInfos.h"
 #include "pMonkeyStudio.h"
-#include "pTreeComboBox.h"
-#include "XUPAddFiles.h"
-#include "MonkeyCore.h"
-#include "XUPProjectManager.h"
+#include "xupmanager/gui/XUPAddFiles.h"
+#include "coremanager/MonkeyCore.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+
+#include <widgets/pTreeComboBox.h>
 
 #include <QComboBox>
 

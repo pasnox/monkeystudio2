@@ -16,12 +16,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "UIDesktopTools.h"
-#include "../ToolsManager.h"
-#include "../DesktopApplications.h"
+#include "ToolsManager.h"
+#include "DesktopApplications.h"
 
 #include <pMonkeyStudio.h>
-#include <MonkeyCore.h>
-#include <Settings.h>
+#include <coremanager/MonkeyCore.h>
+#include <settingsmanager/Settings.h>
 
 #include <QTimer>
 #include <QCloseEvent>

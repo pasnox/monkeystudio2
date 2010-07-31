@@ -28,28 +28,27 @@
 ****************************************************************************/
 #include "MonkeyCore.h"
 #include "main.h"
-#include "../pMonkeyStudio.h"
-#include "../settingsmanager/Settings.h"
-#include "../pluginsmanager/PluginsManager.h"
-#include "../maininterface/UIMain.h"
-#include "../recentsmanager/pRecentsManager.h"
-#include "../xupmanager/gui/XUPProjectManager.h"
-#include "../workspace/pFileManager.h"
-#include "../workspace/pWorkspace.h"
-#include "../consolemanager/pConsoleManager.h"
-#include "../statusbar/StatusBar.h"
-#include "../shellmanager/MkSShellInterpreter.h"
-#include "../abbreviationsmanager/pAbbreviationsManager.h"
+#include "pMonkeyStudio.h"
+#include "settingsmanager/Settings.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "maininterface/UIMain.h"
+#include "recentsmanager/pRecentsManager.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+#include "workspace/pFileManager.h"
+#include "workspace/pWorkspace.h"
+#include "consolemanager/pConsoleManager.h"
+#include "statusbar/StatusBar.h"
+#include "shellmanager/MkSShellInterpreter.h"
+#include "abbreviationsmanager/pAbbreviationsManager.h"
+#include "maininterface/ui/UISettings.h"
 
-#include "../maininterface/ui/UISettings.h"
-
-#include <pIconManager.h>
-#include <pMultiToolBar.h>
-#include <pQueuedMessageToolBar.h>
-#include <TranslationManager.h>
-#include <TranslationDialog.h>
-#include <pActionsManager.h>
-#include <pMenuBar.h>
+#include <objects/pIconManager.h>
+#include <widgets/pMultiToolBar.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <objects/TranslationManager.h>
+#include <widgets/TranslationDialog.h>
+#include <widgets/pActionsManager.h>
+#include <widgets/pMenuBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>

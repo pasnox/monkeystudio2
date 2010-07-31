@@ -13,7 +13,7 @@ DESTDIR	= $$PACKAGE_DESTDIR
 
 # monkey sources paths // added at first to avoid conflict with possible same name files in subprojects (like main.h from ctags)
 MONKEY_SOURCES_PATHS = $$getFolders( ./src, resources )
-INCLUDEPATH	*= $${MONKEY_SOURCES_PATHS}
+INCLUDEPATH	*= ./src #$${MONKEY_SOURCES_PATHS}
 DEPENDPATH	*= $${MONKEY_SOURCES_PATHS}
 
 LIBS	*= -L$${PACKAGE_BUILD_PATH}

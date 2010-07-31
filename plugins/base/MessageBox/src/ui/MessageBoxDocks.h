@@ -45,11 +45,11 @@
 #include "ui_UIOutput.h"
 #include "ui_UICommand.h"
 
-#include <pIconManager.h>
-#include <pConsoleManager.h>
-#include <pDockWidgetTitleBar.h>
-#include <MonkeyCore.h>
-#include <pMenuBar.h>
+#include <objects/pIconManager.h>
+#include <consolemanager/pConsoleManager.h>
+#include <widgets/pDockWidgetTitleBar.h>
+#include <coremanager/MonkeyCore.h>
+#include <widgets/pMenuBar.h>
 
 class pConsoleManagerStepModel;
 

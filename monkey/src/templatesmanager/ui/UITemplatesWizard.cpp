@@ -26,17 +26,17 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include <UITemplatesWizard.h>
-#include <pFileManager.h>
-#include <pMonkeyStudio.h>
-#include <MonkeyCore.h>
-#include <Settings.h>
-#include <XUPProjectModelProxy.h>
-#include <XUPProjectModel.h>
-#include <XUPItem.h>
-#include <XUPProjectItem.h>
-#include <XUPProjectManager.h>
-#include <VariablesManager.h>
+#include "UITemplatesWizard.h"
+#include "workspace/pFileManager.h"
+#include "pMonkeyStudio.h"
+#include "coremanager/MonkeyCore.h"
+#include "settingsmanager/Settings.h"
+#include "xupmanager/core/XUPProjectModelProxy.h"
+#include "xupmanager/core/XUPProjectModel.h"
+#include "xupmanager/core/XUPItem.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "xupmanager/gui/XUPProjectManager.h"
+#include "variablesmanager/VariablesManager.h"
 
 #include <QDir>
 #include <QMessageBox>

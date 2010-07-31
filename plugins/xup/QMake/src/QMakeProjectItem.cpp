@@ -3,10 +3,10 @@
 #include "QMake.h"
 #include "QtVersionManager.h"
 
-#include <XUPProjectItemInfos.h>
+#include <xupmanager/core/XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
-#include <pQueuedMessageToolBar.h>
-#include <BuilderPlugin.h>
+#include <widgets/pQueuedMessageToolBar.h>
+#include <pluginsmanager/BuilderPlugin.h>
 
 #include <QApplication>
 #include <QTextCodec>

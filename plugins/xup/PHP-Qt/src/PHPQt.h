@@ -18,7 +18,7 @@
 #ifndef PHPQT_H
 #define PHPQT_H
 
-#include <XUPPlugin.h>
+#include <pluginsmanager/XUPPlugin.h>
 
 #include <QPointer>
 

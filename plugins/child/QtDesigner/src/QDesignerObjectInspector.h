@@ -18,7 +18,7 @@
 #ifndef QDESIGNEROBJECTINSPECTOR_H
 #define QDESIGNEROBJECTINSPECTOR_H
 
-#include <pDockWidget.h>
+#include <widgets/pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 class QDesignerObjectInspectorInterface;

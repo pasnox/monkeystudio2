@@ -1,9 +1,10 @@
 #ifndef XUPPROJECTITEMHELPER_H
 #define XUPPROJECTITEMHELPER_H
 
-#include "MonkeyExport.h"
-#include "BasePlugin.h"
-#include "pCommand.h"
+#include <objects/MonkeyExport.h>
+
+#include "pluginsmanager/BasePlugin.h"
+#include "consolemanager/pCommand.h"
 
 #include <QDomDocument>
 

@@ -10,7 +10,7 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	QSCINTILLAVERSION	= QScintilla-gpl-snapshot
 
 	# include path
-	INCLUDEPATH	*= $$getFolders( $${PWD}/$${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
+	INCLUDEPATH	*= $${PWD}/$${QSCINTILLAVERSION}/Qt4 $${PWD}/$${QSCINTILLAVERSION}/Qt4/Qsci #$$getFolders( $${PWD}/$${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
 
 	# dependency
 	PRE_TARGETDEPS	*= $${PWD}

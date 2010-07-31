@@ -29,9 +29,9 @@
 #ifndef PWORKSPACE_H
 #define PWORKSPACE_H
 
-#include <MonkeyExport.h>
+#include <objects/MonkeyExport.h>
 
-#include "../consolemanager/pConsoleManager.h"
+#include "consolemanager/pConsoleManager.h"
 
 #include <QFrame>
 #include <QMdiArea>
