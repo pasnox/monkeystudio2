@@ -37,6 +37,6 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 include( ../config.pri )
 
 CONFIG	-= warn_on
-CONFIG	+= warn_off
+CONFIG	*= warn_off
 
 DESTDIR	= $${PACKAGE_BUILD_PATH}

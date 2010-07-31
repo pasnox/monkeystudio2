@@ -13,7 +13,7 @@ include( installs.pri )
 
 TEMPLATE	= subdirs
 
-CONFIG	+= ordered
+CONFIG	*= ordered
 
 SUBDIRS	= fresh \
 	ctags \

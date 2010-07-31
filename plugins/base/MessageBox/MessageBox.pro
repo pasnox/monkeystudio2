@@ -1,7 +1,9 @@
 TARGET	= MessageBox
+
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 QT	*= xml
+DESTDIR	= $$MONKEY_PLUGINS_DIR/base
+
 RESOURCES	*= src/resources/MessageBox.qrc
 
 FORMS	*= src/ui/UIBuildStep.ui \

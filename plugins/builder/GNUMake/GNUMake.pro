@@ -1,7 +1,8 @@
 TARGET	= GNUMake
+
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/builder
 
-HEADERS	= src/GNUMake.h
+HEADERS	*= src/GNUMake.h
 
-SOURCES	= src/GNUMake.cpp
+SOURCES	*= src/GNUMake.cpp
