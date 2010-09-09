@@ -4655,11 +4655,6 @@ p, li { white-space: pre-wrap; }
         <translation>Pestañas</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="543"/>
-        <source>Select default projects directory</source>
-        <translation>Seleccione la carpeta de proyectos por defecto</translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="553"/>
         <source>Choose the default document font</source>
         <translation type="unfinished"></translation>
@@ -4766,11 +4761,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="234"/>
         <source>&amp;Project Settings</source>
         <translation>&amp;Parámetros de proyecto</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="246"/>
-        <source>Default projects directory :</source>
-        <translation>Carpeta de proyectos por defecto :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="253"/>

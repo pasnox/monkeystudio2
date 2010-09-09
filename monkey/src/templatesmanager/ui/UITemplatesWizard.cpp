@@ -77,7 +77,7 @@ UITemplatesWizard::UITemplatesWizard( QWidget* parent )
 	pSettings* s = MonkeyCore::settings();
 	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
 	cbExpert->setChecked( s->value( "Recents/FileWizard/Expert", false ).toBool() );
-	leDestination->setText( s->value( "Recents/FileWizard/Destination", pMonkeyStudio::defaultProjectsDirectory() ).toString() );
+	leDestination->setText( s->value( "Recents/FileWizard/Destination", QDir::currentPath() ).toString() );
 	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
 	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
 

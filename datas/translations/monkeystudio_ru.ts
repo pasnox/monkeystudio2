@@ -4655,11 +4655,6 @@ p, li { white-space: pre-wrap; }
         <translation>Вкладки</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="543"/>
-        <source>Select default projects directory</source>
-        <translation>Задать какталог по умолчанию для проектов</translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="553"/>
         <source>Choose the default document font</source>
         <translation type="unfinished"></translation>
@@ -4766,11 +4761,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="234"/>
         <source>&amp;Project Settings</source>
         <translation>Настройки проекта</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="246"/>
-        <source>Default projects directory :</source>
-        <translation>Каталог для проектов по умолчанию :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="253"/>

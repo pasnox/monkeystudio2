@@ -4668,11 +4668,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="246"/>
-        <source>Default projects directory :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="253"/>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2284"/>
         <source>...</source>
@@ -5531,11 +5526,6 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="167"/>
         <source>Tabs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="543"/>
-        <source>Select default projects directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
