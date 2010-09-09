@@ -64,14 +64,14 @@ error.test(	text,
 					text = text[:-1],
 					hint = text[:-1])
 
-## Warning
-regEx = Template("^($file_name):($number): warning: [^\\n]+")
+## Warning or Note
+regEx = Template("^($file_name):($number): (warning|note): [^\\n]+")
 warning =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'warning',
 								   file = "%1",
 								   line = "%2")
 
-warning.setComment('Warning')
+warning.setComment('Warning or Note')
 
 warning.test("src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
 				type = 'warning',
@@ -79,6 +79,13 @@ warning.test("src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
 				line = '122',
 				text = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’",
 				hint = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’")
+
+warning.test("qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)\n",
+				type = 'warning',
+				file = 'qnetworkrequest.h',
+				line = '93',
+				text = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
+				hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)")
 
 # windows specific
 warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
@@ -158,7 +165,7 @@ compiling.test(	text,
 						text = 'Compiling src\main.cpp...',
 						file = 'src\main.cpp',
 						hint = text[:-1])
-# Mac
+# Mac, compiling file
 text = 'g++-4.0 -c -pipe -g -gdwarf-2 -arch i386 -Wall -W -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/local/Trolltech/Qt-4.6.0-universal/mkspecs/macx-g++ -I. -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtCore.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtCore -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtGui.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtGui -I/usr/local/Trolltech/Qt-4.6.0-universal/include -Ibuild/debug/.moc -Ibuild/debug/.ui -F/usr/local/Trolltech/Qt-4.6.0-universal/lib -o build/debug/.obj/mac/UIMarketOptions.o src/UIMarketOptions.cpp'
 compiling.test(	text,
 						type = 'compiling',
