@@ -123,7 +123,7 @@ void FileBrowser::setFilters( const QStringList& filters, bool updateDock )
 
 QStringList FileBrowser::bookmarks() const
 {
-	return settingsValue( "Bookmarks", QStringList() << QDir::homePath() << pMonkeyStudio::defaultProjectsDirectory() ).toStringList();
+	return settingsValue( "Bookmarks", QStringList() << QDir::homePath() ).toStringList();
 }
 
 void FileBrowser::setBookmarks( const QStringList& bookmarks, bool updateDock )

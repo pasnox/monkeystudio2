@@ -1052,19 +1052,6 @@ bool pMonkeyStudio::saveFilesOnCustomAction()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
 
 /*!
-	\details Set the default project path
-	\param path The default path
-*/
-void pMonkeyStudio::setDefaultProjectsDirectory( const QString& path )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", tokenizeHome( path ) ); }
-
-/*!
-	\details Return the default project path
-*/
-QString pMonkeyStudio::defaultProjectsDirectory()
-{ return unTokenizeHome( MonkeyCore::settings()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/Documents/Monkey Studio/Projects" ).toString() ); }
-
-/*!
 	\details Set if tabs have close button
 	\param have True to have button, else false
 */

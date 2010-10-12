@@ -98,8 +98,6 @@ namespace pMonkeyStudio
 	/***** GENERAL *****/
 	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool save );
 	Q_MONKEY_EXPORT bool saveFilesOnCustomAction();
-	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& dirName );
-	Q_MONKEY_EXPORT QString defaultProjectsDirectory();
 	Q_MONKEY_EXPORT void setTabsHaveCloseButton( bool have );
 	Q_MONKEY_EXPORT bool tabsHaveCloseButton();
 	Q_MONKEY_EXPORT void setTabsHaveShortcut( bool have );

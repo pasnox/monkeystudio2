@@ -266,7 +266,8 @@ void pWorkspace::updateGuiState( pAbstractChild* document )
 	MonkeyCore::statusBar()->setCursorPosition( document ? document->cursorPosition() : QPoint( -1, -1 ) );
 	
 	// internal update
-	QDir::setCurrent( hasDocument ? document->path() : pMonkeyStudio::defaultProjectsDirectory() );
+	if ( hasDocument )
+		QDir::setCurrent( document->path() );
 }
 
 QString pWorkspace::defaultContext()
@@ -1039,16 +1040,9 @@ void pWorkspace::fileNew_triggered()
 void pWorkspace::fileOpen_triggered()
 {
 	const QString mFilters = pMonkeyStudio::availableFilesFilters(); // get available filters
-	QString path = MonkeyCore::fileManager()->currentDocumentFile(); // path to show
-	
-	if ( path.isEmpty() )
-	{
-		XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
-		path = curProject ? curProject->path() : pMonkeyStudio::defaultProjectsDirectory();
-	}
 	
 	// show filedialog to user
-	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), path, mFilters, true, false );
+	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::currentPath(), mFilters, true, false );
 
 	// open open file dialog
 	const QStringList fileNames = result[ "filenames" ].toStringList();

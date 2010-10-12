@@ -105,13 +105,12 @@ pFileDialogResult MkSFileDialog::getOpenProjects( QWidget* parent )
 {
 	pFileDialogResult result;
 	QString caption = tr( "Choose project(s) to open" );
-	QString dir = pMonkeyStudio::defaultProjectsDirectory();
 	QString filter = XUPProjectItem::projectInfos()->projectsFilter();
 	bool enabledTextCodec = true;
 	bool enabledOpenReadOnly = false;
 	
 	MkSFileDialog fd( parent );
-	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
+	setOpenFileNamesDialog( &fd, caption, QDir::currentPath() , filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	fd.mAddFiles->setVisible( false );
 	
@@ -135,13 +134,12 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent, bool allow
 		XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
 		QStringList operators = curProject->projectInfos()->operators( curProject->projectType() );
 		QString caption = tr( "Choose file(s) to add to your project" );
-		QString dir = pMonkeyStudio::defaultProjectsDirectory();
 		QString filter = XUPProjectItem::projectInfos()->variableSuffixesFilter( curProject->projectType() );
 		bool enabledTextCodec = false;
 		bool enabledOpenReadOnly = false;
 		
 		MkSFileDialog fd( parent );
-		setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
+		setOpenFileNamesDialog( &fd, caption, QDir::currentPath(), filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
 		fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 		fd.mAddFiles->setModel( model );
 		fd.mAddFiles->setCurrentScope( curProject );
@@ -167,12 +165,11 @@ pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 	XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
 	QStringList operators = curProject ? curProject->projectInfos()->operators( curProject->projectType() ) : QStringList();
 	QString caption = tr( "New File Name..." );
-	QString dir = pMonkeyStudio::defaultProjectsDirectory();
 	QString filter = curProject ? XUPProjectItem::projectInfos()->variableSuffixesFilter( curProject->projectType() ) : pMonkeyStudio::availableFilesFilters();
 	bool enabledTextCodec = true;
 	
 	MkSFileDialog fd( parent );
-	setSaveFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, 0, 0 );
+	setSaveFileNameDialog( &fd, caption, QDir::currentPath(), filter, enabledTextCodec, 0, 0 );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	
 	if ( curProject )
