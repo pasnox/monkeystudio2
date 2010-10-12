@@ -47,23 +47,23 @@ UITemplatesWizard::UITemplatesWizard( QWidget* parent )
 	// init dialog
 	setupUi( this );
 	saWidgets->setWidgetResizable( true );
-	
+
 	// create scrollarea widget
 	QWidget* cw = new QWidget;
 	gridLayout = new QGridLayout( cw );
 	gridLayout->setMargin( 5 );
 	gridLayout->setSpacing( 3 );
 	saWidgets->setWidget( cw );
-	
+
 	// get templates
 	mTemplates = pTemplatesManager::instance()->getTemplates();
-	
+
 	// set default language/type
 	cbLanguages->addItem( tr( "All" ), "All" );
 	cbTypes->addItem( tr( "All" ), "All" );
-	
+
 	cbCodec->addItems( pMonkeyStudio::availableTextCodecs() );
-	
+
 	// languages/types
 	foreach( pTemplate tp, mTemplates )
 	{
@@ -72,7 +72,7 @@ UITemplatesWizard::UITemplatesWizard( QWidget* parent )
 		if ( cbTypes->findData( tp.Type, Qt::UserRole, Qt::MatchFixedString ) == -1 )
 			cbTypes->addItem( tr( tp.Type.toLocal8Bit().constData() ), tp.Type );
 	}
-	
+
 	// restore infos
 	pSettings* s = MonkeyCore::settings();
 	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
@@ -86,17 +86,17 @@ UITemplatesWizard::UITemplatesWizard( QWidget* parent )
 	mProxy = new XUPProjectModelProxy( this, cbExpert->isChecked() );
 	XUPProjectItem* project = MonkeyCore::projectsManager()->currentProject();
 	QModelIndex index = project ? project->index() : QModelIndex();
-	
+
 	mProxy->setSourceModel( mModel );
 	cbProjects->setModel( mProxy );
 	cbProjects->setCurrentIndex( mProxy->mapFromSource( index ) );
-	
+
 	gbAddToProject->setEnabled( mModel && mModel->rowCount() > 0 );
-	
+
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
 	connect( cbTypes, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
-	
+
 	// init template
 	onFiltersChanged();
 }
@@ -138,7 +138,7 @@ void UITemplatesWizard::onFiltersChanged()
 
 	// disable groupbox
 	lInformations->setText( "No Template Selected" );
-	gbInformations->setEnabled( false );
+	saWidgets->setEnabled( false );
 }
 
 void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
@@ -148,14 +148,14 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	mLabels.clear();
 	qDeleteAll( mCombos );
 	mCombos.clear();
-	
+
 	// get template
 	pTemplate t = mTemplates.value( it->data( Qt::UserRole +1 ).toInt() );
 	int r = 1;
-	
+
 	// set template informations
 	lInformations->setText( t.Description );
-	
+
 	// create labels/combos
 	foreach( QString v, t.Variables.keys() )
 	{
@@ -163,21 +163,21 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 		c->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLength );
 		c->setEditable( true );
 		c->addItems( t.Variables.value( v ) );
-		
+
 		QLabel* l = new QLabel( v +" :" );
 		l->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Preferred ) );
 		l->setToolTip( v );
 		l->setBuddy( c );
-		
+
 		gridLayout->addWidget( l, r, 0 );
 		mLabels << l;
-		
+
 		gridLayout->addWidget( c, r++, 1 );
 		mCombos << c;
 	}
-	
+
 	// enable groupbox
-	gbInformations->setEnabled( true );
+	saWidgets->setEnabled( true );
 }
 
 void UITemplatesWizard::on_gbAddToProject_toggled( bool toggled )
@@ -185,7 +185,7 @@ void UITemplatesWizard::on_gbAddToProject_toggled( bool toggled )
 	const QModelIndex idx = mProxy->mapToSource( cbProjects->currentIndex() );
 	XUPItem* item = mModel->itemFromIndex( idx );
 	XUPProjectItem* project = item ? item->project() : 0;
-	
+
 	if ( toggled && project )
 	{
 		QString codec = project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
@@ -197,16 +197,16 @@ void UITemplatesWizard::on_cbExpert_clicked( bool checked )
 {
 	const QModelIndex idx = mProxy->mapToSource( cbProjects->currentIndex() );
 	XUPItem* item = mModel->itemFromIndex( idx );
-	
+
 	bool blocked = cbProjects->blockSignals( true );
 	mProxy->setShowDisabled( checked );
-	
+
 	QModelIndex proxyIndex = mProxy->mapFromSource( item->index() );
 	if ( !proxyIndex.isValid() )
 	{
 		proxyIndex = mProxy->mapFromSource( item->project()->index() );
 	}
-	
+
 	cbProjects->setCurrentIndex( proxyIndex );
 	cbProjects->blockSignals( blocked );
 }
@@ -216,16 +216,16 @@ void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 	const QModelIndex idx = mProxy->mapToSource( index );
 	XUPItem* item = mModel->itemFromIndex( idx );
 	XUPProjectItem* project = item ? item->project() : 0;
-	
+
 	if ( project )
 	{
 		const QString path = project->path();
-		
+
 		if ( !leDestination->text().startsWith( path ) )
 		{
 			leDestination->setText( project->path() );
 		}
-		
+
 		if ( gbAddToProject->isChecked() )
 		{
 			QString codec = project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
@@ -249,7 +249,7 @@ bool UITemplatesWizard::checkTemplate()
 		QMessageBox::information( window(), tr( "Template..." ), tr( "You need to select a template." ) );
 		return false;
 	}
-	
+
 	// return default value
 	return true;
 }
@@ -259,49 +259,49 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	// check if we can go later
 	if ( !checkTemplate() )
 		return;
-	
+
 	// get variables
 	VariablesManager::Dictionary v;
 	v[ "Destination" ] = leDestination->text();
-	
+
 	// iterate each labels
 	foreach ( QLabel* l, mLabels )
 		v[l->toolTip()] = qobject_cast<QComboBox*>( l->buddy() )->currentText();
-	
+
 	// get template
 	pTemplate t = mTemplates.value( lwTemplates->selectedItems().value( 0 )->data( Qt::UserRole +1 ).toInt() );
-	
+
 	// check if need open files
 	if ( !cbOpen->isChecked() )
 	{
 		t.FilesToOpen.clear();
 		t.ProjectsToOpen.clear();
 	}
-	
+
 	// check if need add files
 	if ( !gbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
 		t.FilesToAdd.clear();
-	
+
 	// don t open project, because adding it to a parent will automatically open it
 	if ( !t.FilesToAdd.isEmpty() )
 		t.ProjectsToOpen.clear();
-	
+
 	// get proejct to add
 	QModelIndex proxyIndex = cbProjects->currentIndex();
 	QModelIndex index = mProxy->mapToSource( proxyIndex );
 	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mModel->itemFromIndex( index );
-	
+
 	// process templates
 	if ( !pTemplatesManager::instance()->realiseTemplate( si, t, cbCodec->currentText(), v ) )
 		return;
-	
+
 	// remember some infos
 	pSettings* s = MonkeyCore::settings();
 	s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
 	s->setValue( "Recents/FileWizard/Expert", cbExpert->isChecked() );
 	s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
 	s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
-	
+
 	// close dialog
-	QDialog::accept();	
+	QDialog::accept();
 }
