@@ -1,7 +1,7 @@
 # It is a machine generated file. Do not edit it manualy!
 
 # Error (usualy syntax)
-parser add "GCC" "^([\w\d\./\\\-]+):(\d+):[\d:]* (error:|undefined reference) [^\n]+" "%1" "-1" "%2" "error" "%0" "%0"
+parser add "GCC" "^([\w\d\./\\\-]+):(\d+):[\d:]* ((fatal )?error:|undefined reference) [^\n]+" "%1" "-1" "%2" "error" "%0" "%0"
 		
 # Warning or Note
 parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (warning|note): [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"

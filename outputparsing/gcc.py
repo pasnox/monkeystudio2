@@ -12,7 +12,7 @@ compiler = Template("($file_name)?(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*
 source_file = file_name + "\.[cpmh]{1,3}" # .cpp .c .h .m .mm
 
 ## Error
-regEx = Template("^($file_name):($number):[\d:]* (error:|undefined reference) [^\\n]+")
+regEx = Template("^($file_name):($number):[\d:]* ((fatal )?error:|undefined reference) [^\\n]+")
 error =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'error',
 								   file = "%1",
@@ -62,6 +62,14 @@ error.test(	text,
 					type = 'error',
 					file = 'src/SearchWidgetModel.h',
 					line = '6',
+					text = text[:-1],
+					hint = text[:-1])
+
+text = "src/gui/pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory\n"
+error.test(	text,
+					type = 'error',
+					file = 'src/gui/pIconManager.cpp',
+					line = '2',
 					text = text[:-1],
 					hint = text[:-1])
 
