@@ -364,6 +364,7 @@ public slots:
     virtual void setEolMode(EolMode mode);
     virtual void setEolVisibility(bool visible);
     virtual void setFolding(FoldStyle fold, int margin=2);
+    void clearFolds();
 
     virtual void setIndentation(int line, int indentation);
     virtual void setIndentationGuides(bool enable);

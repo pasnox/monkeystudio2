@@ -733,8 +733,8 @@ void QsciScintilla::startAutoCompletion(AutoCompletionSource acs,
     SendScintilla(SCI_AUTOCSETCHOOSESINGLE, single);
     SendScintilla(SCI_AUTOCSETSEPARATOR, acSeparator);
 
-    QString chlist = wlist.join(QChar(acSeparator));
-    SendScintilla(SCI_AUTOCSHOW, last_len, chlist.latin1());
+    ScintillaString wlist_s = convertTextQ2S(wlist.join(QChar(acSeparator)));
+    SendScintilla(SCI_AUTOCSHOW, last_len, ScintillaStringData(wlist_s));
 }
 
 
@@ -1229,6 +1229,27 @@ void QsciScintilla::setFolding(FoldStyle folding, int margin)
 }
 
 
+// Clear all current folds.
+void QsciScintilla::clearFolds()
+{
+    recolor();
+
+    int maxLine = SendScintilla(SCI_GETLINECOUNT);
+
+    for (int line = 0; line < maxLine; line++)
+    {
+        int level = SendScintilla(SCI_GETFOLDLEVEL, line);
+
+        if (level & SC_FOLDLEVELHEADERFLAG)
+        {
+            SendScintilla(SCI_SETFOLDEXPANDED, line, 1);
+            foldExpand(line, true, false, 0, level);
+            line--;
+        }
+    }
+}
+
+
 // Set up a folder marker.
 void QsciScintilla::setFoldMarker(int marknr, int mark)
 {
@@ -1714,12 +1735,13 @@ void QsciScintilla::setSelection(int lineFrom, int indexFrom, int lineTo,
 // Set the background colour of selected text.
 void QsciScintilla::setSelectionBackgroundColor(const QColor &col)
 {
-    SendScintilla(SCI_SETSELBACK, 1, col);
-
     int alpha = qAlpha(col.rgb());
     
-    if (alpha < 255)
-        SendScintilla(SCI_SETSELALPHA, alpha);
+    if (alpha == 255)
+        alpha = SC_ALPHA_NOALPHA;
+
+    SendScintilla(SCI_SETSELBACK, 1, col);
+    SendScintilla(SCI_SETSELALPHA, alpha);
 }
 
 
@@ -1776,12 +1798,13 @@ void QsciScintilla::setCaretForegroundColor(const QColor &col)
 // Set the background colour of the line containing the caret.
 void QsciScintilla::setCaretLineBackgroundColor(const QColor &col)
 {
-    SendScintilla(SCI_SETCARETLINEBACK, col);
-
     int alpha = qAlpha(col.rgb());
-    
-    if (alpha < 255)
-        SendScintilla(SCI_SETCARETLINEBACKALPHA, alpha);
+
+    if (alpha == 255)
+        alpha = SC_ALPHA_NOALPHA;
+
+    SendScintilla(SCI_SETCARETLINEBACK, col);
+    SendScintilla(SCI_SETCARETLINEBACKALPHA, alpha);
 }
 
 
@@ -2390,7 +2413,7 @@ int QsciScintilla::markerDefine(MarkerSymbol sym, int mnr)
     checkMarker(mnr);
 
     if (mnr >= 0)
-        SendScintilla(SCI_MARKERDEFINE, mnr,static_cast<long>(sym));
+        SendScintilla(SCI_MARKERDEFINE, mnr, static_cast<long>(sym));
 
     return mnr;
 }
@@ -2422,7 +2445,7 @@ int QsciScintilla::markerDefine(const QPixmap &pm, int mnr)
 
 
 // Add a marker to a line.
-int QsciScintilla::markerAdd(int linenr,int mnr)
+int QsciScintilla::markerAdd(int linenr, int mnr)
 {
     if (mnr < 0 || mnr > MARKER_MAX || (allocatedMarkers & (1 << mnr)) == 0)
         return -1;
@@ -2509,6 +2532,10 @@ void QsciScintilla::setMarkerBackgroundColor(const QColor &col, int mnr)
     {
         int alpha = qAlpha(col.rgb());
 
+        // An opaque background would make the text invisible.
+        if (alpha == 255)
+            alpha = SC_ALPHA_NOALPHA;
+
         if (mnr < 0)
         {
             unsigned am = allocatedMarkers;
@@ -2518,9 +2545,7 @@ void QsciScintilla::setMarkerBackgroundColor(const QColor &col, int mnr)
                 if (am & 1)
                 {
                     SendScintilla(SCI_MARKERSETBACK, m, col);
-
-                    if (alpha < 255)
-                        SendScintilla(SCI_MARKERSETALPHA, m, alpha);
+                    SendScintilla(SCI_MARKERSETALPHA, m, alpha);
                 }
 
                 am >>= 1;
@@ -2529,9 +2554,7 @@ void QsciScintilla::setMarkerBackgroundColor(const QColor &col, int mnr)
         else if (allocatedMarkers & (1 << mnr))
         {
             SendScintilla(SCI_MARKERSETBACK, mnr, col);
-
-            if (alpha < 255)
-                SendScintilla(SCI_MARKERSETALPHA, mnr, alpha);
+            SendScintilla(SCI_MARKERSETALPHA, mnr, alpha);
         }
     }
 }
@@ -2555,7 +2578,9 @@ void QsciScintilla::setMarkerForegroundColor(const QColor &col, int mnr)
             }
         }
         else if (allocatedMarkers & (1 << mnr))
+        {
             SendScintilla(SCI_MARKERSETFORE, mnr, col);
+        }
     }
 }
 
@@ -2565,8 +2590,8 @@ void QsciScintilla::checkMarker(int &mnr)
 {
     if (mnr >= 0)
     {
-        // Check the explicit marker number isn't already allocated.
-        if (mnr > MARKER_MAX || allocatedMarkers & (1 << mnr))
+        // Note that we allow existing markers to be explicitly redefined.
+        if (mnr > MARKER_MAX)
             mnr = -1;
     }
     else
@@ -3331,8 +3356,9 @@ void QsciScintilla::showUserList(int id, const QStringList &list)
         return;
 
     SendScintilla(SCI_AUTOCSETSEPARATOR, userSeparator);
-    SendScintilla(SCI_USERLISTSHOW, id,
-            list.join(QChar(userSeparator)).latin1());
+
+    ScintillaString s = convertTextQ2S(list.join(QChar(userSeparator)));
+    SendScintilla(SCI_USERLISTSHOW, id, ScintillaStringData(s));
 }
 
 
@@ -3477,7 +3503,7 @@ void QsciScintilla::setAnnotationDisplay(QsciScintilla::AnnotationDisplay displa
 // Clear annotations.
 void QsciScintilla::clearAnnotations(int line)
 {
-    if (line < 0)
+    if (line >= 0)
         SendScintilla(SCI_ANNOTATIONSETTEXT, line, (const char *)0);
     else
         SendScintilla(SCI_ANNOTATIONCLEARALL);

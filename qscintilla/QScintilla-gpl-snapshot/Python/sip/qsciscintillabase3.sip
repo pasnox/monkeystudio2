@@ -1026,14 +1026,16 @@ while (i >= 0);
     long SendScintilla(unsigned int msg, unsigned long wParam,
             void *lParam) const;
     long SendScintilla(unsigned int msg, unsigned long wParam,
-            const char *lParam) const;
-    long SendScintilla(unsigned int msg, const char *lParam); const
-    long SendScintilla(unsigned int msg, const char *wParam,
-            const char *lParam) const;
+            const char *lParam /DocType="Py_v3:bytes;str", Encoding="None"/) const;
+    long SendScintilla(unsigned int msg,
+            const char *lParam /DocType="Py_v3:bytes;str", Encoding="None"/); const
+    long SendScintilla(unsigned int msg,
+            const char *wParam /DocType="Py_v3:bytes;str", Encoding="None"/,
+            const char *lParam /DocType="Py_v3:bytes;str", Encoding="None"/) const;
     long SendScintilla(unsigned int msg, long wParam) const;
     //long SendScintilla(unsigned int msg, int wParam) const;
     long SendScintilla(unsigned int msg, long cpMin, long cpMax,
-            char *lpstrText) const;
+            char *lpstrText /DocType="Py_v3:bytes;str", Encoding="None"/) const;
     long SendScintilla(unsigned int msg, unsigned long wParam,
             const QColor &col) const;
     long SendScintilla(unsigned int msg, const QColor &col) const;
@@ -1080,6 +1082,7 @@ signals:
     void SCN_ZOOM();
 
 protected:
+
     virtual void contextMenuEvent(QContextMenuEvent *e);
     virtual void dragEnterEvent(QDragEnterEvent *e);
     virtual void dragLeaveEvent(QDragLeaveEvent *e);
