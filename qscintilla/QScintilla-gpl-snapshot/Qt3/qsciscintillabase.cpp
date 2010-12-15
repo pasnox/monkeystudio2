@@ -394,12 +394,7 @@ void QsciScintillaBase::focusInEvent(QFocusEvent *)
 // Re-implemented to tell the widget it has lost the focus.
 void QsciScintillaBase::focusOutEvent(QFocusEvent *)
 {
-    // If an autocompletion list is being displayed (a Qt::Tool) and it is
-    // clicked on, then we receive this event but the current focus event is 0.
-    // We detect this and don't tell Scintilla as it would immediately destroy
-    // the list.
-    if (qApp->focusWidget())
-        sci->SetFocusState(false);
+    sci->SetFocusState(false);
 }
 
 
@@ -729,3 +724,7 @@ void QsciScintillaBase::dropEvent(QDropEvent *e)
     sci->DropAt(sci->posDrop, s, moving, false);
     sci->Redraw();
 }
+
+
+
+
