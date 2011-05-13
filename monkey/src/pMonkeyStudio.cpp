@@ -733,8 +733,10 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldCompact();
 #if QSCINTILLA_VERSION >= 0x020300
+	#if QSCINTILLA_VERSION < 0x020500
 		else if ( lng == "tcl" )
 			return qobject_cast<QsciLexerTCL*>( lexer )->foldCompact();
+	#endif
 		else if ( lng == "fortran" )
 			return qobject_cast<QsciLexerFortran*>( lexer )->foldCompact();
 		else if ( lng == "fortran77" )
