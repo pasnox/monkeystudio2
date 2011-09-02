@@ -104,6 +104,22 @@ warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
 					 text = "src\CmlLineManager.cpp:11: warning: unused variable 'z'",
 					 hint = "src\CmlLineManager.cpp:11: warning: unused variable 'z'")
 
+## Multiply definition
+
+regEx = Template("^($file_name):($number): (multiple definition of [^\\n]+)")
+multipleDefinition = parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
+									 type = 'error',
+									 file = "%1",
+									 line = "%2",
+									 text = "%3")
+multipleDefinition.setComment('#warning preprocessor dirrective')
+multipleDefinition.test("/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'\n",
+						type = 'error',
+						text = "multiple definition of `toto(int, int)'",
+						file = '/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h',
+						line = '9',
+						hint = "/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'")
+
 ## Linking failed, probably undefined reference
 regEx = "^collect2: ld returned 1 exit status"
 link_failed =parsing.Pattern(regEx,
@@ -229,6 +245,7 @@ print '# It is a machine generated file. Do not edit it manualy!\n'
 
 print error.generateMkSScript('GCC')
 print warning.generateMkSScript('GCC')
+print multipleDefinition.generateMkSScript('GCC')
 print compiling.generateMkSScript('GCC')
 print no_lib.generateMkSScript('GCC')
 print link_failed.generateMkSScript('GCC')

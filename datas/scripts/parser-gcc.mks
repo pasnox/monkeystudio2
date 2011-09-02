@@ -6,6 +6,9 @@ parser add "GCC" "^([\w\d\./\\\-]+):(\d+):[\d:]* ((fatal )?error:|undefined refe
 # Warning or Note
 parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (warning|note): [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"
 		
+# #warning preprocessor dirrective
+parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (multiple definition of [^\n]+)" "%1" "-1" "%2" "error" "%3" "%0"
+		
 # Compiling
 parser add "GCC" "^([\w\d\./\\\-]+)?(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*[^\n]+ ([\w\d\./\\\-]+\.[cpmh]{1,3})" "%3" "-1" "-1" "compiling" "Compiling %3..." "%0"
 		
