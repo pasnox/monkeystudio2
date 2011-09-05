@@ -4,7 +4,7 @@
 parser add "GCC" "^([\w\d\./\\\-]+):(\d+):[\d:]* ((fatal )?error:|undefined reference) [^\n]+" "%1" "-1" "%2" "error" "%0" "%0"
 		
 # Warning or Note
-parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (warning|note): [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"
+parser add "GCC" "^([\w\d\./\\\-]+):(\d+):(\d+:)? (warning|note): [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"
 		
 # #warning preprocessor dirrective
 parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (multiple definition of [^\n]+)" "%1" "-1" "%2" "error" "%3" "%0"

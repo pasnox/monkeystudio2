@@ -74,7 +74,7 @@ error.test(	text,
 					hint = text[:-1])
 
 ## Warning or Note
-regEx = Template("^($file_name):($number): (warning|note): [^\\n]+")
+regEx = Template("^($file_name):($number):($number:)? (warning|note): [^\\n]+")
 warning =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'warning',
 								   file = "%1",
@@ -95,6 +95,13 @@ warning.test("qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetw
 				line = '93',
 				text = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
 				hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)")
+warning.test("src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+				type = 'warning',
+				file = 'src/QMake.h',
+				line = '30',
+				text = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+				hint = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:")
+			 
 
 # windows specific
 warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
