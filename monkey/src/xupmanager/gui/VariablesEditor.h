@@ -1,14 +1,19 @@
 #ifndef VARIABLESEDITOR_H
 #define VARIABLESEDITOR_H
 
-#include <objects/MonkeyExport.h>
+#include "MonkeyExport.h"
+#include "XUPPageEditor.h"
+#include "xupmanager/core/XUPItemVariableEditorModel.h"
 
-#include "ui_VariablesEditor.h"
+#include <QModelIndex>
+
+class Ui_VariablesEditor;
 
 class XUPProjectItem;
 class XUPItem;
+class XUPItemVariableEditorModel;
 
-class Q_MONKEY_EXPORT VariablesEditor : public QFrame, public Ui::VariablesEditor
+class Q_MONKEY_EXPORT VariablesEditor : public XUPPageEditor
 {
 	Q_OBJECT
 
@@ -16,49 +21,45 @@ public:
 	VariablesEditor( QWidget* parent = 0 );
 	virtual ~VariablesEditor();
 	
-	inline QStringList& fileVariables() { return mFileVariables; }
-	inline QStringList& pathVariables() { return mPathVariables; }
-	inline QStringList& managedVariables() { return mManagedVariables; }
-	inline QStringList& variablesToRemove() { return mVariablesToRemove; }
-	inline QMap<QString, QString>& values() { return mValues; }
+	bool isQuoteSpacedValuesVisible() const;
+	bool isQuoteSpacedValuesChecked() const;
 	
-	void init( XUPProjectItem* project );
-	void finalize();
+	virtual XUPItemVariableEditorModel::FilterMode filterMode() const;
+	virtual bool isFriendlyDisplayText() const;
+	virtual QStringList filteredVariables() const;
+	
+	virtual void setup( XUPProjectItem* project );
+	virtual void finalize();
+
+public slots:
+	void setQuoteSpacedValuesVisible( bool visible );
+	void setQuoteSpacedValuesChecked( bool checked );
 
 protected:
-	QAction* aOthersValuesAddValue;
-	QAction* aOthersValuesAddFile;
-	QAction* aOthersValuesAddPath;
-	QAction* aOthersValuesEditValue;
-	QAction* aOthersValuesEditFile;
-	QAction* aOthersValuesEditPath;
-	
+	Ui_VariablesEditor* ui;
+	QAction* aValuesAddValue;
+	QAction* aValuesAddFile;
+	QAction* aValuesAddPath;
+	QAction* aValuesEditValue;
+	QAction* aValuesEditFile;
+	QAction* aValuesEditPath;
 	XUPProjectItem* mProject;
-	QStringList mFileVariables;
-	QStringList mPathVariables;
-	QStringList mManagedVariables;
-	QStringList mVariablesToRemove;
-	QMap<QString, QString> mValues;
+	XUPItemVariableEditorModel* mModel;
 	
-	XUPItem* getUniqueVariableItem( const QString& variableName, bool create );
-	void updateValuesEditorVariables();
-	void updateValuesEditorValues( const QString& variable = QString::null );
+	QModelIndex currentVariable() const;
+	QModelIndex currentValue() const;
 
 protected slots:
-	// variables
-	void on_lwOthersVariables_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
-	void on_tbOthersVariablesAdd_clicked();
-	void on_tbOthersVariablesEdit_clicked();
-	void on_tbOthersVariablesRemove_clicked();
+	void lvVariables_selectionModel_selectionChanged();
+	void on_tbVariablesAdd_clicked();
+	void on_tbVariablesEdit_clicked();
 	
-	// values
-	void on_lwOthersValues_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
-	void on_tbOthersValuesAdd_clicked();
-	void on_tbOthersValuesAdd_triggered( QAction* action );
-	void on_tbOthersValuesEdit_clicked();
-	void on_tbOthersValuesEdit_triggered( QAction* action );
-	void on_tbOthersValuesRemove_clicked();
-	void on_tbOthersValuesClear_clicked();
+	void lvValues_selectionModel_selectionChanged();
+	void on_tbValuesAdd_clicked();
+	void on_tbValuesAdd_triggered( QAction* action );
+	void on_tbValuesEdit_clicked();
+	void on_tbValuesEdit_triggered( QAction* action );
+	void on_tbValuesClear_clicked();
 };
 
 #endif // VARIABLESEDITOR_H
