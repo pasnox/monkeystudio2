@@ -14,9 +14,10 @@ CONFIG	*= staticlib
 CONFIG	-= qt
 DESTDIR	= $${PACKAGE_BUILD_PATH}
 
-CTAGS_SOURCES_PATHS = $$getFolders( ./$${CTAGS_VERSION} )
-INCLUDEPATH	*= ./$${CTAGS_VERSION} #$${CTAGS_SOURCES_PATHS}
-win32:INCLUDEPATH	*= $${PWD}/$${CTAGS_VERSION}/gnu_regex
+CTAGS_SOURCES_PATHS = $$getFolders( $${CTAGS_VERSION} )
+INCLUDEPATH	*= $${CTAGS_VERSION}
+win32:INCLUDEPATH	*= $${CTAGS_VERSION}/gnu_regex
+#INCLUDEPATH	*= $${CTAGS_SOURCES_PATHS}
 DEPENDPATH	*= $${CTAGS_SOURCES_PATHS}
 
 HEADERS	*=  $${CTAGS_VERSION}/debug.h \
@@ -89,7 +90,7 @@ SOURCES	*= $${CTAGS_VERSION}/asm.c \
 win32 {
 	HEADERS	*= $${CTAGS_VERSION}/gnu_regex/regex.h \
 		$${CTAGS_VERSION}/gnu_regex/regex_internal.h
-
+	
 	SOURCES	*= $${CTAGS_VERSION}/gnu_regex/regex.c \
 		$${CTAGS_VERSION}/gnu_regex/regcomp.c \
 		$${CTAGS_VERSION}/gnu_regex/regexec.c \
