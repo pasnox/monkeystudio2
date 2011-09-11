@@ -60,7 +60,7 @@ CONFIG( debug, debug|release ) {
 INCLUDEPATH	*= $${UI_DIR} # some qmake versions has bug and do not do it automatically
 
 # define some usefull values
-QMAKE_TARGET_COMPANY	= "The MkS Team"
+QMAKE_TARGET_COMPANY	= "The Monkey Studio Team"
 QMAKE_TARGET_PRODUCT	= "Monkey Studio IDE"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "(C) 2005 - 2011 Filipe AZEVEDO and $$QMAKE_TARGET_COMPANY"
@@ -69,9 +69,9 @@ PACKAGE_DOMAIN	= "monkeystudio.org"
 PACKAGE_VERSION	= 1.9.0.0
 
 CONFIG( debug, debug|release ) {
-	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}newxup_debug
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
 } else {
-	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}newxup_release
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
 }
 
 # define variable for source code
