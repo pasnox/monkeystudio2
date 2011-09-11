@@ -1,52 +1,97 @@
-#include "XUPProjectItemHelper.h"
-#include "XUPProjectItem.h"
+#include "xupmanager/core/XUPProjectItemHelper.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "xupmanager/core/XUPDynamicFolderItem.h"
 #include "pMonkeyStudio.h"
 
 #include <QDir>
 #include <QDebug>
 
-XUPItem* XUPProjectItemHelper::projectCommandsScope( XUPProjectItem* project, bool create )
+QString settingsKey( const QString& key )
 {
-	XUPItem* settingsScope = project->projectSettingsScope( create );
+	const QString prefix = QString( "%1." ).arg( XUPProjectItemHelper::SettingsScopeName );
+	QString k = key;
 	
-	if ( !settingsScope )
-	{
-		return 0;
+	if ( !k.startsWith( prefix, Qt::CaseInsensitive ) ) {
+		k.prepend( prefix );
 	}
 	
-	foreach ( XUPItem* child, settingsScope->childrenList() )
-	{
-		if ( child->type() == XUPItem::Scope && child->attribute( "name" ) == CommandsScopeName )
-		{
-			return child;
+	return k;
+}
+
+void XUPProjectItemHelper::setProjectSettingsValues( XUPProjectItem* project, const QString& key, const QStringList& _values )
+{
+	XUPItem* variable = project->getVariable( project, settingsKey( key ) );
+	QStringList values = _values;
+	
+	if ( !variable && values.isEmpty() ) {
+		return;
+	}
+	
+	if ( !variable ) {
+		variable = project->addChild( XUPItem::Variable );
+		variable->setAttribute( "name", settingsKey( key ) );
+	}
+	
+	foreach ( XUPItem* item, variable->childrenList() ) {
+		if ( item->type() != XUPItem::Value ) {
+			continue;
+		}
+		
+		const int index = values.indexOf( item->content() );
+		
+		if ( index == -1 ) {
+			variable->removeChild( item );
+		}
+		else {
+			values.removeAt( index );
 		}
 	}
 	
-	if ( !create )
-	{
-		return 0;
+	foreach ( const QString& value, values ) {
+		XUPItem* item = variable->addChild( XUPItem::Value );
+		item->setContent( value );
+	}
+}
+
+QStringList XUPProjectItemHelper::projectSettingsValues( XUPProjectItem* project, const QString& key, const QStringList& defaultValues )
+{
+	XUPItem* variable = project->getVariable( project, settingsKey( key ) );
+	QStringList values;
+	
+	if ( variable ) {
+		foreach ( XUPItem* item, variable->childrenList() ) {
+			if ( item->type() == XUPItem::Value ) {
+				values << item->content();
+			}
+		}
 	}
 	
-	XUPItem* commandsScope = settingsScope->addChild( XUPItem::Scope );
-	commandsScope->setAttribute( "name", CommandsScopeName );
-	commandsScope->setAttribute( "nested", "false" );
-	return commandsScope;
+	return values.isEmpty() ? defaultValues : values;
+}
+
+void XUPProjectItemHelper::setProjectSettingsValue( XUPProjectItem* project, const QString& key, const QString& value )
+{
+	XUPProjectItemHelper::setProjectSettingsValues( project, key, QStringList( value ) );
+}
+
+QString XUPProjectItemHelper::projectSettingsValue( XUPProjectItem* project, const QString& key, const QString& defaultValue )
+{
+    const QStringList values = XUPProjectItemHelper::projectSettingsValues( project, key );
+	return values.isEmpty() ? defaultValue : values.join( " " );
 }
 
 void XUPProjectItemHelper::addCommandProperty( XUPItem* variableItem, const QString& value )
 {
 	XUPItem* valueItem = variableItem->addChild( XUPItem::Value );
-	valueItem->setAttribute( "content", value );
+	valueItem->setContent( value );
 }
 
-void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const TypeCommandListMap& commands )
+void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const MenuCommandListMap& commands )
 {
 	bool emptyCommands = true;
 	
-	foreach ( const BasePlugin::Type& type, commands.keys() )
-	{
-		if ( commands[ type ].isEmpty() )
-		{
+	foreach ( const QString& menu, commands.keys() ) {
+		if ( commands[ menu ].isEmpty() ) {
 			continue;
 		}
 		
@@ -54,37 +99,28 @@ void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const Ty
 		break;
 	}
 	
-	XUPItem* commandsScope = projectCommandsScope( project, !emptyCommands );
+	XUPItem* commandsScope = project;
 	
-	if ( !commandsScope )
-	{
-		return;
-	}
-	
-	// delete scope if no commands
-	if ( emptyCommands )
-	{
-		commandsScope->parent()->removeChild( commandsScope );
+	if ( !commandsScope ) {
 		return;
 	}
 	
 	// clear existing commands
-	foreach ( XUPItem* child, commandsScope->childrenList() )
-	{
+	foreach ( XUPItem* child, commandsScope->childrenList() ) {
+		if ( child->type() != XUPItem::Variable || child->attribute( "name" ) != XUPProjectItemHelper::CommandScopeName ) {
+			continue;
+		}
+		
 		commandsScope->removeChild( child );
 	}
 	
 	// create new ones
-	foreach ( const BasePlugin::Type& type, commands.keys() )
-	{
-		foreach ( const pCommand& command, commands[ type ] )
-		{
+	foreach ( const QString& menu, commands.keys() ) {
+		foreach ( const pCommand& command, commands[ menu ] ) {
 			XUPItem* variable = commandsScope->addChild( XUPItem::Variable );
 			variable->setAttribute( "name", CommandScopeName );
-			variable->setAttribute( "operator", "=" );
-			variable->setAttribute( "multiline", "true" );
 			
-			addCommandProperty( variable, QString::number( type ) );
+			addCommandProperty( variable, menu );
 			addCommandProperty( variable, command.text() );
 			addCommandProperty( variable, command.command() );
 			addCommandProperty( variable, command.arguments() );
@@ -96,24 +132,24 @@ void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const Ty
 	}
 }
 
-TypeCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* project )
+MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* project )
 {
-	TypeCommandListMap commands;
-	XUPItem* commandsScope = projectCommandsScope( project, false );
+	MenuCommandListMap commands;
+	XUPItem* commandsScope = project;
 	
-	if ( commandsScope )
-	{
-		foreach ( XUPItem* commandVariable, commandsScope->childrenList() )
-		{
-			QVariantList values;
-			
-			foreach ( XUPItem* commandValue, commandVariable->childrenList() )
-			{
-				values << commandValue->attribute( "content" );
+	if ( commandsScope ) {
+		foreach ( XUPItem* commandVariable, commandsScope->childrenList() ) {
+			if ( commandVariable->attribute( "name" ) != XUPProjectItemHelper::CommandScopeName ) {
+				continue;
 			}
 			
-			if ( values.count() != 8 )
-			{
+			QVariantList values;
+			
+			foreach ( XUPItem* commandValue, commandVariable->childrenList() ) {
+				values << commandValue->content();
+			}
+			
+			if ( values.count() != 8 ) {
 				qWarning() << "Skip reading incomplete command";
 				Q_ASSERT( 0 );
 				continue;
@@ -128,39 +164,13 @@ TypeCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
 			command.setParsers( values.at( 5 ).toString().split( ";", QString::SkipEmptyParts ) );
 			command.setSkipOnError( values.at( 6 ).toBool() );
 			command.setTryAllParsers( values.at( 7 ).toBool() );
+			command.setUserData( Qt::Checked );
 			
-			commands[ (BasePlugin::Type)values.at( 0 ).toInt() ] << command;
+			commands[ values.at( 0 ).toString() ] << command;
 		}
 	}
 	
 	return commands;
-}
-
-void XUPProjectItemHelper::installProjectCommands( XUPProjectItem* project )
-{
-	const TypeCommandListMap commands = projectCommands( project );
-	
-	foreach ( const BasePlugin::Type& type, commands.keys() )
-	{
-		foreach ( pCommand command, commands[ type ] )
-		{
-			switch ( type )
-			{
-				case BasePlugin::iBuilder:
-					project->addCommand( command, "mBuilder" );
-					break;
-				case BasePlugin::iDebugger:
-					project->addCommand( command, "mDebugger" );
-					break;
-				case BasePlugin::iInterpreter:
-					project->addCommand( command, "mInterpreter" );
-					break;
-				default:
-					Q_ASSERT( 0 );
-					break;
-			}
-		}
-	}
 }
 
 XUPItem* XUPProjectItemHelper::projectDynamicFolderSettingsItem( XUPProjectItem* project, bool create )
@@ -180,15 +190,13 @@ XUPItem* XUPProjectItemHelper::projectDynamicFolderSettingsItem( XUPProjectItem*
 	
 	XUPItem* dynamicFolderSettingsItem = project->addChild( XUPItem::Variable );
 	dynamicFolderSettingsItem->setAttribute( "name", DynamicFolderSettingsName );
-	dynamicFolderSettingsItem->setAttribute( "operator", "=" );
-	dynamicFolderSettingsItem->setAttribute( "multiline", "true" );
 	return dynamicFolderSettingsItem;
 }
 
 void XUPProjectItemHelper::addDynamicFolderSettingsProperty( XUPItem* dynamicFolderSettingsItem, const QString& value )
 {
 	XUPItem* valueItem = dynamicFolderSettingsItem->addChild( XUPItem::Value );
-	valueItem->setAttribute( "content", value );
+	valueItem->setContent( value );
 }
 
 XUPDynamicFolderSettings XUPProjectItemHelper::projectDynamicFolderSettings( XUPProjectItem* project )
@@ -202,7 +210,7 @@ XUPDynamicFolderSettings XUPProjectItemHelper::projectDynamicFolderSettings( XUP
 		
 		foreach ( XUPItem* valueItem, dynamicFolderSettingsItem->childrenList() )
 		{
-			values << valueItem->attribute( "content" );
+			values << valueItem->content();
 		}
 		
 		if ( values.count() != 3 )
@@ -243,63 +251,21 @@ void XUPProjectItemHelper::setProjectDynamicFolderSettings( XUPProjectItem* proj
 	}
 }
 
-XUPItem* XUPProjectItemHelper::projectDynamicFolderItem( XUPProjectItem* project, bool create )
+XUPDynamicFolderItem* XUPProjectItemHelper::projectDynamicFolderItem( XUPProjectItem* project, bool create )
 {
-	foreach ( XUPItem* child, project->childrenList() )
-	{
-		if ( child->type() == XUPItem::DynamicFolder && child->attribute( "name" ) == DynamicFolderName )
-		{
-			return child;
+	foreach ( XUPItem* child, project->childrenList() ) {
+		if ( child->type() == XUPItem::DynamicFolder ) {
+			return static_cast<XUPDynamicFolderItem*>( child );
 		}
 	}
 	
-	if ( !create )
-	{
+	if ( !create ) {
 		return 0;
 	}
 	
-	XUPItem* dynamicFolderItem = project->addChild( XUPItem::DynamicFolder );
+	XUPDynamicFolderItem* dynamicFolderItem = static_cast<XUPDynamicFolderItem*>( project->addChild( XUPItem::DynamicFolder ) );
 	dynamicFolderItem->setAttribute( "name", DynamicFolderName );
-	dynamicFolderItem->setAttribute( "operator", "=" );
-	dynamicFolderItem->setAttribute( "multiline", "true" );
 	return dynamicFolderItem;
-}
-
-void XUPProjectItemHelper::addDynamicFolderProperty( XUPItem* dynamicFolderItem, const QString& value )
-{
-	XUPItem* valueItem = dynamicFolderItem->addChild( XUPItem::File );
-	valueItem->setAttribute( "content", value );
-}
-
-void XUPProjectItemHelper::updateDynamicFolder( XUPProjectItem* project, const QString& path )
-{
-	XUPItem* dynamicFolderItem = projectDynamicFolderItem( project, true );
-	const XUPDynamicFolderSettings folder = projectDynamicFolderSettings( project );
-	const bool samePath = QDir::cleanPath( path ) == QDir::cleanPath( folder.AbsolutePath );
-	
-	if ( !dynamicFolderItem || !samePath )
-	{
-		return;
-	}
-	
-	foreach ( XUPItem* child, dynamicFolderItem->childrenList() )
-	{
-		dynamicFolderItem->removeChild( child );
-	}
-	
-	QDir dir( path );
-	QFileInfoList files = pMonkeyStudio::getFiles( dir, folder.FilesPatterns, false );
-	
-	if ( !folder.Active || files.isEmpty() )
-	{
-		project->removeChild( dynamicFolderItem );
-		return;
-	}
-	
-	foreach ( const QFileInfo& file, files )
-	{
-		addDynamicFolderProperty( dynamicFolderItem, file.absoluteFilePath() );
-	}
 }
 
 QDomDocument XUPProjectItemHelper::stripDynamicFolderFiles( const QDomDocument& document )
@@ -307,8 +273,7 @@ QDomDocument XUPProjectItemHelper::stripDynamicFolderFiles( const QDomDocument& 
 	QDomDocument doc = document.cloneNode().toDocument();
 	const QDomNodeList nodesToRemove = doc.elementsByTagName( "dynamicfolder" );
 	
-	for ( int i = 0; i < nodesToRemove.count(); i++ )
-	{
+	for ( int i = 0; i < nodesToRemove.count(); i++ ) {
 		const QDomNode& node = nodesToRemove.at( i );
 		node.parentNode().removeChild( node );
 	}
