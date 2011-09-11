@@ -213,12 +213,8 @@ void DebugDockWidget::generateFakeProject()
 {
 	XUPProjectItem* project = MonkeyCore::projectTypesIndex()->newProjectItemByType( "QMake" );
 	XUPItem* item;
-	XUPItem* comment;
 	XUPItem* variable;
 	XUPItem* value;
-	XUPItem* scope;
-	XUPItem* subScope;
-	XUPItem* function;
 	
 	project->mDocument = QDomDocument( "XUPProject" );
 	QDomElement projectElement = project->mDocument.createElement( "project" );
@@ -267,7 +263,6 @@ void DebugDockWidget::childInfos()
 {
 	const QModelIndex index = tvProjects->selectionModel()->selectedIndexes().value( 0 );
 	XUPItem* item = MonkeyCore::projectsManager()->currentProjectModel()->itemFromIndex( index );
-	XUPProjectItem* project = item ? item->project() : 0;
 	
 	if ( !item ) {
 		return;

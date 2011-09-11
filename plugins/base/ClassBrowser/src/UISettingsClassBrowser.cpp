@@ -38,6 +38,7 @@ void UISettingsClassBrowser::on_tbDBFileName_clicked()
 
 void UISettingsClassBrowser::on_dbbButtons_clicked( QAbstractButton* button )
 {
+	Q_UNUSED( button );
 	qCtagsSenseProperties properties;
 	properties.SystemPaths = ui->pePaths->values();
 	properties.FilteredSuffixes = ui->sleSuffixes->values();

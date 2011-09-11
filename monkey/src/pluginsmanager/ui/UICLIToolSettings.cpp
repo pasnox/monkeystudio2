@@ -141,5 +141,7 @@ void UICLIToolSettings::on_dbbButtons_clicked( QAbstractButton* button )
 		case QDialogButtonBox::Save:
 			save();
 			break;
+		default:
+			break;
 	}
 }

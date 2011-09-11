@@ -50,7 +50,7 @@ class UIMessageBoxSettings : public QWidget, public Ui::UIMessageBoxSettings
 	Q_OBJECT
 	
 public:
-	enum Dock { BuildStep = 0, Output, Command };
+	enum Dock { BuildStep = 0, Output };
 	UIMessageBoxSettings( MessageBox* plugin, QWidget* parent = 0 );
 
 protected:

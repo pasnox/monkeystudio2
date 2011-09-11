@@ -115,6 +115,7 @@ bool pGenericTableModel::insertRows( int row, int count, const QModelIndex& pare
 		}
 	}
 	endInsertRows();
+	return true;
 }
 
 bool pGenericTableModel::removeRows( int row, int count, const QModelIndex& parent )
@@ -134,6 +135,7 @@ bool pGenericTableModel::removeRows( int row, int count, const QModelIndex& pare
 		}
 	}
 	endRemoveRows();
+	return true;
 }
 
 void pGenericTableModel::setColumnCount( int count )
@@ -254,6 +256,8 @@ bool pGenericTableModel::swapRows( int fromRow, int toRow )
 	changePersistentIndexList( oldIndexes, newIndexes );
 	
 	emit layoutChanged();
+	
+	return true;
 }
 
 pGenericTableModel::IntVariantMap* pGenericTableModel::indexInternalData( const QModelIndex& index )
