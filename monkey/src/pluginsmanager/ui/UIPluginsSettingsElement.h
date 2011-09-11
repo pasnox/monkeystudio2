@@ -1,7 +1,7 @@
 #ifndef UIPLUGINSSETTINGSELEMENT_H
 #define UIPLUGINSSETTINGSELEMENT_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include "ui_UIPluginsSettingsElement.h"
 

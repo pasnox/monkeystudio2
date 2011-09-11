@@ -1,7 +1,7 @@
 #ifndef UIPLUGINSSETTINGSABOUT_H
 #define UIPLUGINSSETTINGSABOUT_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include "ui_UIPluginsSettingsAbout.h"
 
@@ -13,6 +13,9 @@ class Q_MONKEY_EXPORT UIPluginsSettingsAbout : public QDialog, public Ui::UIPlug
 	
 public:
 	UIPluginsSettingsAbout( BasePlugin* plugin, QWidget* parent = 0 );
+
+protected:
+	QStringList trimmedSplitedString( const QString& string ) const;
 };
 
 #endif // UIPLUGINSSETTINGSABOUT_H

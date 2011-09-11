@@ -40,7 +40,7 @@ UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	setAttribute( Qt::WA_DeleteOnClose );
 	
 	// fill list with plugins type
-	for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
+	for ( int i = BasePlugin::iBase; i < BasePlugin::iLast; i++ )
 	{
 		const QString s = BasePlugin::typeToString( (BasePlugin::Type)i );
 		if ( !s.isEmpty() && cbPluginType->findData( i ) == -1 )
@@ -78,6 +78,6 @@ void UIPluginsSettings::on_cbPluginType_currentIndexChanged( int id )
 	{
 		QListWidgetItem* item = lwPlugins->item( i );
 		UIPluginsSettingsElement* pse = qobject_cast<UIPluginsSettingsElement*>( lwPlugins->itemWidget( item ) );
-		item->setHidden( mType != BasePlugin::iAll && !pse->plugin()->infos().Type.testFlag( mType ) );
+		item->setHidden( mType != BasePlugin::iBase && !pse->plugin()->infos().Type.testFlag( mType ) );
 	}
 }
