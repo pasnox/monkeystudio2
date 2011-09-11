@@ -4,8 +4,8 @@
 include( $${PWD}/ctags_shared.pri )
 
 # include path
-INCLUDEPATH	*= $${PWD}/$${CTAGS_VERSION} #$$getFolders( $${PWD}/$${CTAGS_VERSION} )
-win32:INCLUDEPATH	*= $${PWD}/$${CTAGS_VERSION}/gnu_regex
+INCLUDEPATH	*= $${PWD}/$${CTAGS_VERSION}
+#INCLUDEPATH	*= $$getFolders( $${PWD}/$${CTAGS_VERSION} )
 
 # dependency
 PRE_TARGETDEPS	*= $${PWD}
