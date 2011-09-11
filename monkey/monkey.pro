@@ -12,8 +12,9 @@ DEFINES	*= MONKEY_CORE_BUILD
 DESTDIR	= $$PACKAGE_DESTDIR
 
 # monkey sources paths // added at first to avoid conflict with possible same name files in subprojects (like main.h from ctags)
-MONKEY_SOURCES_PATHS = $$getFolders( ./src, resources )
-INCLUDEPATH	*= ./src #$${MONKEY_SOURCES_PATHS}
+MONKEY_SOURCES_PATHS	= $$getFolders( ./src, resources )
+INCLUDEPATH	*= src
+#INCLUDEPATH	*= $${MONKEY_SOURCES_PATHS}
 DEPENDPATH	*= $${MONKEY_SOURCES_PATHS}
 
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
@@ -54,17 +55,17 @@ FORMS	*= src/maininterface/ui/UIAbout.ui \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
-	src/pluginsmanager/ui/UICLIToolSettings.ui \
-	src/pluginsmanager/ui/UIBuilderSettings.ui \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.ui \
 	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui \
 	src/xupmanager/gui/UIXUPFindFiles.ui \
 	src/xupmanager/gui/XUPProjectManager.ui \
-	src/xupmanager/gui/XUPAddFiles.ui \
-	src/pluginsmanager/ui/UIInterpreterSettings.ui \
+	src/pluginsmanager/ui/UICLIToolSettings.ui \
+	src/workspace/pOpenedFileExplorer.ui \
 	src/xupmanager/gui/CommandsEditor.ui \
 	src/xupmanager/gui/VariablesEditor.ui \
-	src/workspace/pOpenedFileExplorer.ui
+	src/xupmanager/gui/UIXUPEditor.ui \
+	src/xupmanager/gui/FilesEditor.ui \
+	src/xupmanager/gui/MainEditor.ui
 
 HEADERS	*= src/main.h \
 	src/maininterface/ui/UIAbout.h \
@@ -91,12 +92,8 @@ HEADERS	*= src/main.h \
 	src/pluginsmanager/BasePlugin.h \
 	src/pluginsmanager/XUPPlugin.h \
 	src/pluginsmanager/ChildPlugin.h \
-	src/pluginsmanager/CLIToolPlugin.h \
-	src/pluginsmanager/BuilderPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
-	src/pluginsmanager/ui/UICLIToolSettings.h \
-	src/pluginsmanager/ui/UIBuilderSettings.h \
 	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h \
 	src/statusbar/StatusBar.h \
@@ -105,26 +102,34 @@ HEADERS	*= src/main.h \
 	src/xupmanager/core/XUPFilteredProjectModel.h \
 	src/xupmanager/core/XUPItem.h \
 	src/xupmanager/core/XUPProjectItem.h \
-	src/xupmanager/core/XUPProjectItemInfos.h \
+	src/xupmanager/core/ProjectTypesIndex.h \
 	src/xupmanager/core/XUPProjectModel.h \
 	src/xupmanager/gui/UIXUPFindFiles.h \
 	src/xupmanager/gui/XUPProjectManager.h \
 	src/xupmanager/core/XUPProjectModelProxy.h \
-	src/xupmanager/gui/XUPAddFiles.h \
 	src/shared/MkSFileDialog.h \
-	src/pluginsmanager/ui/UIInterpreterSettings.h \
+	src/pluginsmanager/ui/UICLIToolSettings.h \
 	src/commandlinemanager/CommandLineManager.h \
 	src/shellmanager/MkSShellConsole.h \
 	src/shellmanager/MkSShellInterpreter.h \
 	src/pluginsmanager/PluginsMenu.h \
-	src/xupmanager/gui/CommandsEditor.h \
-	src/xupmanager/core/XUPProjectItemHelper.h \
-	src/xupmanager/gui/VariablesEditor.h \
 	src/workspace/pOpenedFileExplorer.h \
 	src/workspace/pOpenedFileModel.h \
 	src/consolemanager/EnvironmentVariablesManager.h \
 	src/consolemanager/pConsoleManagerStep.h \
-	src/consolemanager/pConsoleManagerStepModel.h
+	src/xupmanager/core/XUPDynamicFolderItem.h \
+	src/xupmanager/gui/XUPOpenedProjectsModel.h \
+	src/xupmanager/gui/CommandsEditor.h \
+	src/xupmanager/gui/VariablesEditor.h \
+	src/xupmanager/gui/UIXUPEditor.h \
+	src/xupmanager/core/XUPProjectItemHelper.h \
+	src/xupmanager/core/XUPItemVariableEditorModel.h \
+	src/xupmanager/gui/FilesEditor.h \
+	src/xupmanager/gui/MainEditor.h \
+	src/xupmanager/gui/XUPPageEditor.h \
+	src/xupmanager/gui/CommandsEditorModel.h \
+	src/xupmanager/core/XUPProjectItemCache.h \
+	src/shared/FileSystemModel.h
 
 SOURCES	*= src/maininterface/ui/UIAbout.cpp \
 	src/maininterface/ui/UISettings.cpp \
@@ -147,8 +152,6 @@ SOURCES	*= src/maininterface/ui/UIAbout.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/BasePlugin.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
-	src/pluginsmanager/ui/UICLIToolSettings.cpp \
-	src/pluginsmanager/ui/UIBuilderSettings.cpp \
 	src/main.cpp \
 	src/settingsmanager/Settings.cpp \
 	src/coremanager/MonkeyCore.cpp \
@@ -158,29 +161,35 @@ SOURCES	*= src/maininterface/ui/UIAbout.cpp \
 	src/xupmanager/core/XUPFilteredProjectModel.cpp \
 	src/xupmanager/core/XUPItem.cpp \
 	src/xupmanager/core/XUPProjectItem.cpp \
-	src/xupmanager/core/XUPProjectItemInfos.cpp \
+	src/xupmanager/core/ProjectTypesIndex.cpp \
 	src/xupmanager/core/XUPProjectModel.cpp \
 	src/xupmanager/gui/UIXUPFindFiles.cpp \
 	src/xupmanager/gui/XUPProjectManager.cpp \
 	src/xupmanager/core/XUPProjectModelProxy.cpp \
-	src/xupmanager/gui/XUPAddFiles.cpp \
 	src/shared/MkSFileDialog.cpp \
-	src/pluginsmanager/ui/UIInterpreterSettings.cpp \
+	src/pluginsmanager/ui/UICLIToolSettings.cpp \
 	src/commandlinemanager/CommandLineManager.cpp \
 	src/shellmanager/MkSShellInterpreter.cpp \
 	src/shellmanager/MkSShellConsole.cpp \
 	src/pluginsmanager/PluginsMenu.cpp \
-	src/xupmanager/gui/CommandsEditor.cpp \
-	src/xupmanager/core/XUPProjectItemHelper.cpp \
-	src/xupmanager/gui/VariablesEditor.cpp \
 	src/workspace/pOpenedFileExplorer.cpp \
 	src/workspace/pOpenedFileModel.cpp \
-	src/pluginsmanager/BuilderPlugin.cpp \
 	src/pluginsmanager/CLIToolPlugin.cpp \
-	src/pluginsmanager/InterpreterPlugin.cpp \
 	src/consolemanager/EnvironmentVariablesManager.cpp \
 	src/consolemanager/pConsoleManagerStep.cpp \
-	src/consolemanager/pConsoleManagerStepModel.cpp
+	src/xupmanager/core/XUPDynamicFolderItem.cpp \
+	src/xupmanager/gui/XUPOpenedProjectsModel.cpp \
+	src/xupmanager/gui/CommandsEditor.cpp \
+	src/xupmanager/gui/VariablesEditor.cpp \
+	src/xupmanager/gui/UIXUPEditor.cpp \
+	src/xupmanager/core/XUPProjectItemHelper.cpp \
+	src/xupmanager/core/XUPItemVariableEditorModel.cpp \
+	src/xupmanager/gui/FilesEditor.cpp \
+	src/xupmanager/gui/MainEditor.cpp \
+	src/xupmanager/gui/XUPPageEditor.cpp \
+	src/xupmanager/gui/CommandsEditorModel.cpp \
+	src/xupmanager/core/XUPProjectItemCache.cpp \
+	src/shared/FileSystemModel.cpp
 
 TRANSLATIONS	*= ../datas/translations/monkeystudio_fr.ts \
 	../datas/translations/monkeystudio_be.ts \
