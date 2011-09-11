@@ -32,7 +32,7 @@
 #include "coremanager/MonkeyCore.h"
 #include "workspace/pWorkspace.h"
 
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {

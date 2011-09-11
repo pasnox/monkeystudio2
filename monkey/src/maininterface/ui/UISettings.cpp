@@ -207,6 +207,7 @@ void UISettings::loadSettings()
 
 	// General
 	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
+	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
 	cbTabModes->setCurrentIndex( cbTabModes->findData( documentMode() ) );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
@@ -351,6 +352,7 @@ void UISettings::saveSettings()
 
 	// General
 	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
+	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
 	setDocumentMode( (pWorkspace::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
@@ -534,6 +536,13 @@ void UISettings::on_twMenu_itemSelectionChanged()
 		else
 			swPages->setCurrentIndex( it->parent()->indexOfChild( it ) +2 );
 	}
+}
+
+void UISettings::on_tbDefaultProjectsDirectory_clicked()
+{
+	QString s = QFileDialog::getExistingDirectory( window(), tr( "Select default projects directory" ), leDefaultProjectsDirectory->text() );
+	if ( !s.isNull() )
+		leDefaultProjectsDirectory->setText( s );
 }
 
 void UISettings::on_pbDefaultDocumentFont_clicked()

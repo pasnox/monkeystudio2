@@ -22,7 +22,7 @@
 	\brief Implementation of pTemplatesManager class
 */
 
-#include "pTemplatesManager.h"
+#include "templatesmanager/pTemplatesManager.h"
 #include "pMonkeyStudio.h"
 #include "workspace/pFileManager.h"
 #include "xupmanager/core/XUPItem.h"
@@ -224,7 +224,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		// add files to project if needed
 		if ( scope && temp.FilesToAdd.contains( f ) )
 		{
-			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ) );
+			MonkeyCore::projectsManager()->addFiles( QStringList( s ), scope );
 		}
 	}
 	

@@ -1,7 +1,7 @@
 #ifndef QUEUEDSTATUSBAR_H
 #define QUEUEDSTATUSBAR_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 #include <qsciscintilla.h>
 
 #include <QStatusBar>

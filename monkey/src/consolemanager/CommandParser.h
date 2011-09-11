@@ -60,7 +60,7 @@ public:
 		%d patterns will be replaced with submatching of regular expression, when
 		parsing result are generated.
 	*/
-	struct Pattern
+	struct Q_MONKEY_EXPORT Pattern
 	{
 		QRegExp regExp;
 		QString FileName;

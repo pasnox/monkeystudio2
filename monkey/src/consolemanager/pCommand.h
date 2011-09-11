@@ -35,32 +35,13 @@
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
+
+#include "xupmanager/core/XUPProjectItem.h"
 
 #include <QStringList>
 #include <QVariant>
-
-class XUPProjectItem;
-
-struct Q_MONKEY_EXPORT pCommandTargetExecution
-{
-	pCommandTargetExecution()
-	{
-		isActive = false;
-		targetType = -1;
-		platformType = -1;
-	}
-	
-	bool operator==( const pCommandTargetExecution& other ) const
-	{
-		return isActive == other.isActive &&
-			targetType == other.targetType && platformType == other.platformType;
-	}
-	
-	bool isActive;
-	int targetType;
-	int platformType;
-};
+#include <QPointer>
 
 /*!
 	Container for storing console command
@@ -73,11 +54,17 @@ struct Q_MONKEY_EXPORT pCommandTargetExecution
 class Q_MONKEY_EXPORT pCommand
 {
 public:
-	pCommand() 
+	typedef QList<pCommand> List;
+	
+	pCommand( const QString& t = QString::null, const QString& p = QString::null )
 	{
+		mText = t;
 		mSkipOnError = false;
+		mWorkingDirectory = p;
 		mTryAllParsers = false;
 		mProject = 0;
+		mExecutableCheckingType = XUPProjectItem::NoTarget;
+		mId = -1;
 	}
 	
 	pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
@@ -90,17 +77,35 @@ public:
 		mWorkingDirectory = d;
 		mTryAllParsers = bb;
 		mProject = 0;
+		mExecutableCheckingType = XUPProjectItem::NoTarget;
+		mId = -1;
 	}
 	~pCommand() {}
 	
 	bool isValid() const
-	{ return !text().isEmpty() && ( !command().isEmpty() || mTargetExecution.isActive ); }
+	{
+		bool valid = !text().isEmpty() && !command().isEmpty();
+		
+		if ( !valid ) {
+			foreach ( const pCommand& cmd, mChildCommands ) {
+				valid = cmd.isValid();
+				
+				if ( valid ) {
+					break;
+				}
+			}
+		}
+		
+		return valid;
+	}
 	
 	bool operator==( const pCommand& t ) const
 	{ return mText == t.mText && mCommand == t.mCommand && mArguments == t.mArguments &&
 			mWorkingDirectory == t.mWorkingDirectory && mParsers == t.mParsers && mSkipOnError == t.mSkipOnError &&
 			mTryAllParsers == t.mTryAllParsers && mUserData == t.mUserData && mProject == t.mProject &&
-			mTargetExecution == t.mTargetExecution; }
+			mExecutableCheckingType == t.mExecutableCheckingType && mId == t.mId
+		;
+	}
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
@@ -111,7 +116,13 @@ public:
 	bool tryAllParsers() const { return mTryAllParsers; }
 	QVariant userData() const { return mUserData; }
 	XUPProjectItem* project() const { return mProject; }
-	pCommandTargetExecution& targetExecution() { return mTargetExecution; }
+	pCommand::List childCommands() const { return mChildCommands; }
+	/* If true, MkS core will check if executable file exists, and warn user, if it not.
+	   File searched in the working dirrectory.
+	   This parameter could be usable for execute project targets
+	 */
+	int executableCheckingType() { return mExecutableCheckingType; }
+	int id() const { return mId; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
@@ -124,6 +135,14 @@ public:
 	void setTryAllParsers( bool b ) { mTryAllParsers = b; }
 	void setUserData( const QVariant& data ) { mUserData = data; }
 	void setProject( XUPProjectItem* project ) { mProject = project; }
+	void setChildCommands( const pCommand::List& commands ) { mChildCommands = commands; }
+	void addChildCommand( const pCommand& command ) { mChildCommands << command; }
+	/* If true, MkS core will check if executable file exists, and warn user, if it not.
+	   File searched in the working dirrectory.
+	   This parameter could be usable for execute project targets
+	 */
+	void setExecutableCheckingType( int type ) { mExecutableCheckingType = type; }
+	void setId( int id ) { mId = id; }
 	
 	QString toString() const
 	{
@@ -136,7 +155,9 @@ public:
 		s += QString( "mParsers: %1\n" ).arg( mParsers.join( " " ) );
 		s += QString( "mTryAllParsers: %1\n" ).arg( mTryAllParsers );
 		s += QString( "mUserData: %1\n" ).arg( mUserData.toString() );
-		s += QString( "mProject: %1" ).arg( (quintptr)mProject );
+		s += QString( "mProject: %1\n" ).arg( (quintptr)mProject.data() );
+		s += QString( "mExecutableCheckingType: %1" ).arg( mExecutableCheckingType );
+		s += QString( "mId: %1" ).arg( mId );
 		return s;
 	}
 	
@@ -151,20 +172,14 @@ protected:
 	bool mSkipOnError;							/**< Skip command, if error ocurred */
 	QStringList mParsers;						/**< List of parsers, which should be used for command. Position in the list is not ignored */
 	bool mTryAllParsers;						/**< Try to use all availible parsers after parsers from list */
-	XUPProjectItem* mProject;					/**< Project, for which command is executing */
+	QPointer<XUPProjectItem> mProject;			/**< Project, for which command is executing */
+	pCommand::List mChildCommands;				/**< This command is a fake command executing the child commands */
 	QVariant mUserData;							/**< User custom placeholder to stock customdata, currently it's internally used to store commands map */
-	pCommandTargetExecution mTargetExecution;	/**< Determine if the command is the result of proejct target execution */
+	int mExecutableCheckingType;				/**< Warn user, if executable file does not exist and propose to select a file */
+	int mId;									/**< An id for the command */
 };
 
-/*!
-	List of pCommand objects
-*/
-typedef QList<pCommand> pCommandList;
-typedef QMap<QString, pCommand> pCommandMap;
-
 Q_DECLARE_METATYPE( pCommand );
-Q_DECLARE_METATYPE( pCommandList );
-Q_DECLARE_METATYPE( pCommandMap );
-Q_DECLARE_METATYPE( pCommandMap* );
+Q_DECLARE_METATYPE( pCommand::List );
 
 #endif // PCOMMAND_H

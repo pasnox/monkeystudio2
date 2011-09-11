@@ -1,11 +1,13 @@
 #ifndef ENVIRONMENTVARIABLESMANAGER_H
 #define ENVIRONMENTVARIABLESMANAGER_H
 
-#include <widgets/pEnvironmentVariablesManager.h>
+#include "MonkeyExport.h"
+
+#include <pEnvironmentVariablesManager.h>
 
 class MkSShellInterpreter;
 
-class EnvironmentVariablesManager : public pEnvironmentVariablesManager
+class Q_MONKEY_EXPORT EnvironmentVariablesManager : public pEnvironmentVariablesManager
 {
 public:
 	EnvironmentVariablesManager();

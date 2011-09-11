@@ -36,9 +36,9 @@
 #ifndef PCONSOLEMANAGER_H
 #define PCONSOLEMANAGER_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
-#include "pCommand.h"
+#include "consolemanager/pCommand.h"
 #include "pConsoleManagerStep.h"
 #include "EnvironmentVariablesManager.h"
 
@@ -77,17 +77,16 @@ public:
 	QString quotedString( const QString& );
 	QString processInternalVariables( const QString& );
 	pCommand processCommand( pCommand );
-	pCommand getCommand( const pCommandList&, const QString& );
-	pCommandList recursiveCommandList( const pCommandList&, pCommand );
 	
 	static QString errorToString( QProcess::ProcessError error );
+	static QString variablesHelp();
 
 protected:
 	int mTimerId;
 	QBuffer mBuffer; //All output comming to this buffer
 	QString mStringBuffer; //... then by portions to this buffer
 	int mLinesInStringBuffer;
-	pCommandList mCommands;
+	pCommand::List mCommands;
 	QStringList mCurrentParsers;
 	QHash<QString, AbstractCommandParser*> mParsers;
 	QAction* mStopAction;
@@ -108,9 +107,9 @@ public slots:
 	void sendRawData( const QByteArray& );
 	void stopCurrentCommand();
 	void addCommand( const pCommand& );
-	void addCommands( const pCommandList& );
+	void addCommands( const pCommand::List& );
 	void removeCommand( const pCommand& );
-	void removeCommands( const pCommandList& );
+	void removeCommands( const pCommand::List& );
 
 private slots:
 	void executeProcess();

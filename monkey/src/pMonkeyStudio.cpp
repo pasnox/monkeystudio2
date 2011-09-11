@@ -19,11 +19,12 @@
 #include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
 #include "workspace/pFileManager.h"
+#include "xupmanager/core/ProjectTypesIndex.h"
 
 #include "workspace/pAbstractChild.h"
 #include "qscintillamanager/pEditor.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <qsciapis.h>
 #include <qsciglobal.h>
@@ -65,13 +66,67 @@
 #endif
 
 #include <QTextCodec>
-#include <QImageReader>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QLocale>
 
 QHash<QString,QsciLexer*> mGlobalsLexers;
 QHash<QString,QsciAPIs*> mGlobalsAPIs;
+
+bool insensitiveStringLesserThan( const QString& left, const QString& right )
+{
+	return left.toLower() < right.toLower();
+}
+
+/*!
+	\details Build a \a QFileDialog filter from \map.
+	Add "All Files" filter according to \a addAll and "All Supported Files" filter according to addSupported.
+*/
+QString pMonkeyStudio::buildFileDialogFilter( const QMap<QString, QStringList>& map, bool addAll, bool addSupported )
+{
+	QStringList filters;
+	QStringList allSuffixes;
+	
+	foreach ( const QString& name, map.keys() ) {
+		const QStringList& suffixes = map[ name ];
+		
+		if ( !suffixes.isEmpty() ) {
+			filters << QObject::tr( "%1 (%2)" ).arg( name ).arg( suffixes.join( " " ) );
+			
+			if ( addSupported ) {
+				allSuffixes << suffixes;
+			}
+		}
+	}
+	
+	if ( !filters.isEmpty() ) {
+		if ( addAll ) {
+			filters.prepend( QObject::tr( "All Files (*)" ) );
+		}
+		
+		if ( addSupported ) {
+			qSort( allSuffixes.begin(), allSuffixes.end(), insensitiveStringLesserThan );
+			filters.prepend( QObject::tr( "All Supported Files (%1)" ).arg( QStringList( allSuffixes.toSet().toList() ).join( " " ) ) );
+		}
+	}
+	
+	return filters.join( ";;" );
+}
+
+QString pMonkeyStudio::buildFileDialogFilter( const DocumentFilterMap& filters, bool addAll, bool addSupported )
+{
+	QMap<QString, QStringList> map;
+	
+	foreach ( const QString& name, filters.keys() ) {
+		const DocumentFilter& filter = filters[ name ];
+		
+		if ( filter.type == DocumentFilter::File ) {
+			map[ filter.label ] = filter.filters;
+		}
+	}
+	
+	return buildFileDialogFilter( map, addAll, addSupported );
+}
 
 /*!
 	\details Return true if files point to same file, usefull when files are symbolic link, or windows link
@@ -103,31 +158,17 @@ bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 */
 QStringList pMonkeyStudio::availableTextCodecs()
 {
-	static QMap<QString, QString> codecs;
+	static QStringList codecs;
 
-	if ( codecs.isEmpty() )
-	{
-		foreach ( const QByteArray& codec, QTextCodec::availableCodecs() )
-		{
-			codecs[ codec.toLower() ] = codec;
+	if ( codecs.isEmpty() ) {
+		foreach ( const QByteArray& codec, QTextCodec::availableCodecs() ) {
+			codecs << QString::fromAscii( codec );
 		}
+		
+		qSort( codecs.begin(), codecs.end(), insensitiveStringLesserThan );
 	}
-	return codecs.values();
-}
-
-/*!
-	\details Return a list of all know image formats
-*/
-QStringList pMonkeyStudio::availableImageFormats()
-{
-	static QStringList l;
-	if ( l.isEmpty() )
-	{
-		foreach ( QByteArray a, QImageReader::supportedImageFormats() )
-			l << a;
-		l.sort();
-	}
-	return l;
+	
+	return codecs;
 }
 
 /*!
@@ -137,11 +178,11 @@ QStringList pMonkeyStudio::availableLanguages()
 {
 	static QStringList languages;
 
-	if ( languages.isEmpty() )
-	{
-		languages = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
-			<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua" << "Makefile" << "Perl"
-			<< "POV" << "Properties" << "Ruby" << "Python" << "SQL" << "TeX" << "VHDL"
+	if ( languages.isEmpty() ) {
+		languages
+			<< "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS" << "D" << "Diff" << "HTML" << "IDL"
+			<< "Java" << "JavaScript" << "Lua" << "Makefile" << "Perl" << "POV" << "Properties" << "Ruby"
+			<< "Python" << "SQL" << "TeX" << "VHDL"
 #if QSCINTILLA_VERSION >= 0x020300
 			<< "Fortran" << "Fortran77" << "Pascal" << "PostScript" << "TCL" << "XML" << "YAML"
 #endif
@@ -150,7 +191,7 @@ QStringList pMonkeyStudio::availableLanguages()
 #endif
 		;
 
-		languages.sort();
+		qSort( languages.begin(), languages.end(), insensitiveStringLesserThan );
 	}
 
 	return languages;
@@ -211,151 +252,6 @@ QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters,
 QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QString& filter, bool recursive )
 { return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive ); }
 
-QFileDialog* getOpenDialog( QFileDialog::FileMode fileMode, const QString& caption, const QString& fileName, const QString& filter, QWidget* parent, QFileDialog::AcceptMode acceptMode = QFileDialog::AcceptOpen )
-{
-	// create dialg
-	QFileDialog* dlg = new QFileDialog( parent, caption, fileName, filter );
-	// set file accept mode
-	dlg->setAcceptMode( acceptMode );
-	// set file mode
-	dlg->setFileMode( fileMode );
-	// return dialog
-	return dlg;
-}
-
-/*!
-	\details A dialog that return a list of files name choosen from available know image formats
-	\param caption The window title
-	\param fileName The default filename to select ( or path )
-	\param parent The parent widget
-*/
-QStringList pMonkeyStudio::getImageFileNames( const QString& caption, const QString& fileName, QWidget* parent )
-{
-	// get image filters
-	QStringList filters;
-	foreach ( QString filter, availableImageFormats() )
-		filters << QObject::tr( "%1 Files (*.%2)" ).arg( filter.toUpper() ).arg( filter );
-	// add all format as one filter at begining
-	if ( !filters.isEmpty() )
-		filters.prepend( QObject::tr( "All Image Files (%1)" ).arg( QStringList( availableImageFormats() ).replaceInStrings( QRegExp( "^(.*)$" ), "*.\\1" ).join( " " ) ) );
-	// create dialog
-	QFileDialog* dlg = getOpenDialog( QFileDialog::ExistingFiles, caption.isEmpty() ? QObject::tr( "Select image(s)" ) : caption, fileName, filters.join( ";;" ), parent );
-	// choose last used filter if available
-	if ( !filters.isEmpty() )
-		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/ImageFilter" ).toString() );
-	// execute dialog
-	if ( dlg->exec() )
-	{
-		// remember last filter if available
-		if ( !filters.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/ImageFilter", dlg->selectedFilter() );
-		// remember selected files
-		filters = dlg->selectedFiles();
-		// delete dialog
-		delete dlg;
-		// return selected files
-		return filters;
-	}
-	// delete dialog
-	delete dlg;
-	// return empty list
-	return QStringList();
-}
-
-/*!
-	\details A dialog that return a file name choosen from available know image formats
-	\param caption The window title
-	\param fileName The default filename to select ( or path )
-	\param parent The parent widget
-*/
-QString pMonkeyStudio::getImageFileName( const QString& caption, const QString& fileName, QWidget* parent )
-{ return getImageFileNames( caption, fileName, parent ).value( 0 ); }
-
-/*!
-	\details Return a QStringList of files name
-	\param caption The window title
-	\param fileName The default filename to select ( or path )
-	\param filter The filter to apply
-	\param parent The parent widget
-*/
-QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
-{
-	// create dialg
-	QFileDialog* dlg = getOpenDialog( QFileDialog::ExistingFiles, caption.isEmpty() ? QObject::tr( "Select file(s)" ) : caption, fileName, filter, parent );
-	// choose last used filter if available
-	if ( !filter.isEmpty() )
-		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
-	// execute dialog
-	if ( dlg->exec() )
-	{
-		// remember last filter if available
-		if ( !filter.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/FileFilter", dlg->selectedFilter() );
-		// remember selected files
-		QStringList files = dlg->selectedFiles();
-		// delete dialog
-		delete dlg;
-		// return selected files
-		return files;
-	}
-	// delete dialog
-	delete dlg;
-	// return empty list
-	return QStringList();
-}
-
-/*!
-	\details Return a QString file name
-	\param caption The window title
-	\param fileName The default filename to select ( or path )
-	\param filter The filter to apply
-	\param parent The parent widget
-*/
-QString pMonkeyStudio::getOpenFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
-{ return getOpenFileNames( caption, fileName, filter, parent ).value( 0 ); }
-
-/*!
-	\details Return a QString file name
-	\param caption The window title
-	\param fileName The default filename to select ( or path )
-	\param filter The filter to apply
-	\param parent The parent widget
-*/
-QString pMonkeyStudio::getSaveFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
-{
-	// create dialg
-	QFileDialog* dlg = getOpenDialog( QFileDialog::AnyFile, caption.isEmpty() ? QObject::tr( "Choose a filename" ) : caption, fileName, filter, parent, QFileDialog::AcceptSave );
-	// choose last used filter if available
-	if ( !filter.isEmpty() )
-		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
-	// execute dialog
-	if ( dlg->exec() )
-	{
-		// remember last filter if available
-		if ( !filter.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/FileFilter", dlg->selectedFilter() );
-		// remember selected files
-		QStringList files = dlg->selectedFiles();
-		// delete dialog
-		delete dlg;
-		// return selected files
-		return files.value( 0 );
-	}
-	// delete dialog
-	delete dlg;
-	// return empty list
-	return QString();
-}
-
-/*!
-	\details Convenient function for get an existing folder
-	\param caption The window title
-	\param fileName The default path to shown
-	\param parent The parent widget
-*/
-QString pMonkeyStudio::getExistingDirectory( const QString& caption, const QString& fileName, QWidget* parent )
-{ return QFileDialog::getExistingDirectory( parent, caption.isEmpty() ? QObject::tr( "Select a folder" ) : caption, fileName ); }
-
 /*!
 	\details Return a tokenized string, ie: the token $HOME$ is replaced by the home path of the user
 	\param string The string to tokenize
@@ -371,7 +267,7 @@ QString pMonkeyStudio::unTokenizeHome( const QString& string )
 { return QString( string ).replace( "$HOME$", QDir::homePath() ); }
 
 /*!
-	\details Return all available languages suffixes
+	\details Returne a map of language suffixes.
 */
 QMap<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 {
@@ -379,66 +275,34 @@ QMap<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 }
 
 /*!
-	\details Return all available files suffixes
+	\details Return all files filter
 */
-QMap<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
+QString pMonkeyStudio::availableFilesFilter()
 {
-	// get language suffixes
-	QMap<QString, QStringList> l = availableLanguagesSuffixes();
-	// add child plugins suffixes
-	QMap<QString, QStringList> ps = MonkeyCore::pluginsManager()->childSuffixes();
-	foreach ( QString k, ps.keys() )
-		foreach ( QString s, ps[k] )
-			if ( !l[k].contains( s ) )
-				l[k] << s;
-	// return list
-	return l;
-}
-
-/*!
-	\details Return all available languages filters
-*/
-QString pMonkeyStudio::availableLanguagesFilters()
-{
-	QString f;
-	// get suffixes
-	QMap<QString, QStringList> sl = availableLanguagesSuffixes();
-	//
-	foreach ( QString k, sl.keys() )
-		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
-	// remove trailing ;;
-	if ( f.endsWith( ";;" ) )
-		f.chop( 2 );
-	// return filters list
-	return f;
-}
-
-/*!
-	\details Return all available files filters
-*/
-QString pMonkeyStudio::availableFilesFilters()
-{
-	QString f;
-	// get suffixes
-	QMap<QString, QStringList> sl = availableFilesSuffixes();
-	//
-	foreach ( QString k, sl.keys() )
-		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
-	// remove trailing ;;
-	if ( f.endsWith( ";;" ) )
-		f.chop( 2 );
-
-	if ( !f.isEmpty() )
-	{
-		QString s;
-		foreach ( QStringList l, availableFilesSuffixes().values() )
-			s.append( l.join( " " ).append( " " ) );
-		f.prepend( QString( "All Files (*);;" ));
-		f.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
+	const QMap<QString, QStringList> childrenSuffixes = MonkeyCore::pluginsManager()->childSuffixes();
+	const QMap<QString, QStringList> projectsSuffixes = MonkeyCore::projectTypesIndex()->suffixes();
+	const QMap<QString, QStringList> languagesSuffixes = availableLanguagesSuffixes();
+	QMap<QString, QStringList> filesSuffixes;
+	
+	foreach ( const QString& childrenName, childrenSuffixes.keys() ) {;
+		filesSuffixes[ childrenName ] << childrenSuffixes[ childrenName ];
 	}
-
-	// return filters list
-	return f;
+	
+	foreach ( const QString& projectTypeName, projectsSuffixes.keys() ) {
+		filesSuffixes[ projectTypeName ] << projectsSuffixes[ projectTypeName ];
+	}
+	
+	foreach ( const QString& languageName, languagesSuffixes.keys() ) {
+		filesSuffixes[ QObject::tr( "%1 Sources" ).arg( languageName ) ] << languagesSuffixes[ languageName ];
+	}
+	
+	foreach ( const QString& key, filesSuffixes.keys() ) {
+		QStringList& suffixes = filesSuffixes[ key ];
+		suffixes.removeDuplicates();
+		qSort( suffixes.begin(), suffixes.end(), insensitiveStringLesserThan );
+	}
+	
+	return buildFileDialogFilter( filesSuffixes, true, true );
 }
 
 /*!
@@ -529,7 +393,7 @@ QString pMonkeyStudio::languageForFileName( const QString& fileName )
 QsciLexer* pMonkeyStudio::lexerForFileName( const QString& fileName )
 {
 	// get suffixes
-	QMap<QString, QStringList> l = availableFilesSuffixes();
+	QMap<QString, QStringList> l = availableLanguagesSuffixes();
 	// check suffixe
 	foreach ( QString k, l.keys() )
 		if ( QDir::match( l.value( k ), fileName ) )
@@ -733,10 +597,8 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldCompact();
 #if QSCINTILLA_VERSION >= 0x020300
-	#if QSCINTILLA_VERSION < 0x020500
 		else if ( lng == "tcl" )
 			return qobject_cast<QsciLexerTCL*>( lexer )->foldCompact();
-	#endif
 		else if ( lng == "fortran" )
 			return qobject_cast<QsciLexerFortran*>( lexer )->foldCompact();
 		else if ( lng == "fortran77" )
@@ -1051,7 +913,20 @@ void pMonkeyStudio::setSaveFilesOnCustomAction( bool save )
 	\details Return true if files are saved on custom actions triggered, else false
 */
 bool pMonkeyStudio::saveFilesOnCustomAction()
-{ return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", true ).toBool(); }
+
+/*!
+	\details Set the default project path
+	\param path The default path
+*/
+void pMonkeyStudio::setDefaultProjectsDirectory( const QString& path )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", tokenizeHome( path ) ); }
+
+/*!
+	\details Return the default project path
+*/
+QString pMonkeyStudio::defaultProjectsDirectory()
+{ return unTokenizeHome( MonkeyCore::settings()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/Documents/Monkey Studio/Projects" ).toString() ); }
 
 /*!
 	\details Set if tabs have close button
@@ -1233,7 +1108,7 @@ void pMonkeyStudio::setAutoEolConversion( bool convert )
 	\details Return true if eol are convert, else false
 */
 bool pMonkeyStudio::autoEolConversion()
-{ return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", false ).toBool(); }
 
 /*!
 	\details Set the default used codec for opening/saving files
@@ -1521,7 +1396,7 @@ void pMonkeyStudio::setIndentationsUseTabs( bool tabs )
 	\details Return true if indentation use tabs, else false
 */
 bool pMonkeyStudio::indentationsUseTabs()
-{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", false ).toBool(); }
 
 /*!
 	\details Set if indent is auto detected
@@ -1534,7 +1409,7 @@ void pMonkeyStudio::setAutoDetectIndent( bool detect )
 	\details Return true if indent is auto detected, else false
 */
 bool pMonkeyStudio::autoDetectIndent()
-{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", true ).toBool(); }
 
 /*!
 	\details Set indentation width
@@ -1809,7 +1684,7 @@ void pMonkeyStudio::setAutoDetectEol( bool detect )
 { MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectEol", detect ); }
 
 bool pMonkeyStudio::autoDetectEol()
-{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectEol", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectEol", true ).toBool(); }
 
 void pMonkeyStudio::setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility w )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WhitespaceVisibility", w ); }

@@ -26,7 +26,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "MonkeyCore.h"
+#include "coremanager/MonkeyCore.h"
 #include "main.h"
 #include "pMonkeyStudio.h"
 #include "settingsmanager/Settings.h"
@@ -40,15 +40,16 @@
 #include "statusbar/StatusBar.h"
 #include "shellmanager/MkSShellInterpreter.h"
 #include "abbreviationsmanager/pAbbreviationsManager.h"
+
 #include "maininterface/ui/UISettings.h"
 
-#include <objects/pIconManager.h>
-#include <widgets/pMultiToolBar.h>
-#include <widgets/pQueuedMessageToolBar.h>
-#include <objects/TranslationManager.h>
-#include <widgets/TranslationDialog.h>
-#include <widgets/pActionsManager.h>
-#include <widgets/pMenuBar.h>
+#include <pIconManager.h>
+#include <pMultiToolBar.h>
+#include <pQueuedMessageToolBar.h>
+#include <TranslationManager.h>
+#include <TranslationDialog.h>
+#include <pActionsManager.h>
+#include <pMenuBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>
@@ -298,4 +299,11 @@ TranslationManager* MonkeyCore::translationsManager()
 	if ( !mInstances.contains( &TranslationManager::staticMetaObject ) )
 		mInstances[&TranslationManager::staticMetaObject] = new TranslationManager( QCoreApplication::instance() );
 	return qobject_cast<TranslationManager*>( mInstances[&TranslationManager::staticMetaObject] );
+}
+
+ProjectTypesIndex* MonkeyCore::projectTypesIndex()
+{
+	if ( !mInstances.contains( &ProjectTypesIndex::staticMetaObject ) )
+		mInstances[&ProjectTypesIndex::staticMetaObject] = new ProjectTypesIndex();
+	return qobject_cast<ProjectTypesIndex*>( mInstances[&ProjectTypesIndex::staticMetaObject] );
 }

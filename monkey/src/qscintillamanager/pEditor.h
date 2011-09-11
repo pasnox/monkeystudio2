@@ -29,7 +29,7 @@
 #ifndef PEDITOR_H
 #define PEDITOR_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 #include <qsciscintilla.h>
 
 class Q_MONKEY_EXPORT pEditor : public QsciScintilla
@@ -70,7 +70,7 @@ public:
 	void autoDetectEol();
 
 protected:
-	struct SearchState
+	struct Q_MONKEY_EXPORT SearchState
     {
         SearchState() : inProgress(0) {}
 

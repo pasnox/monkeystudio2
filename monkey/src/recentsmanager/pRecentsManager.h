@@ -29,7 +29,7 @@
 #ifndef PRECENTSMANAGER_H
 #define PRECENTSMANAGER_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include <QObject>
 

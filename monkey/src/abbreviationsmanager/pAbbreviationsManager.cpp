@@ -32,7 +32,7 @@
 #include "settingsmanager/Settings.h"
 #include "shellmanager/MkSShellInterpreter.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <qscilexer.h>
 
 #include <QFile>

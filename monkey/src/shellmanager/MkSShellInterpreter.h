@@ -1,8 +1,8 @@
 #ifndef MKSSHELLINTERPRETER_H
 #define MKSSHELLINTERPRETER_H
 
-#include <objects/MonkeyExport.h>
-#include "widgets/pConsoleCommand.h"
+#include <MonkeyExport.h>
+#include "pConsoleCommand.h"
 
 #include <QPointer>
 #include <QObject>

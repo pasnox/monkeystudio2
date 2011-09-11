@@ -1,6 +1,6 @@
 #include "MkSShellConsole.h"
 
-#include "MkSShellInterpreter.h"
+#include "shellmanager/MkSShellInterpreter.h"
 
 MkSShellConsole::MkSShellConsole( QWidget* parent )
 	: pConsole( parent )

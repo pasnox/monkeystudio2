@@ -36,7 +36,7 @@
 #include <QMenu>
 #include <QDebug>
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include "pMonkeyStudio.h"
 
@@ -46,6 +46,7 @@ class Q_MONKEY_EXPORT pAbstractChild : public QMdiSubWindow
 {
 	Q_OBJECT
 	Q_ENUMS( DocumentMode LayoutMode )
+	friend class DebugDockWidget;
 
 public:
 	enum DocumentMode { mNone = 0, mNa, mInsert, mOverwrite, mReadOnly } mDocument;
@@ -123,8 +124,7 @@ public:
 	}
 	
 	// return the current buffer of filename
-	virtual QString fileBuffer() const
-	{ return QString::null; }
+	virtual QString fileBuffer() const = 0;
 	
 	// return the child context
 	virtual QString context() const = 0;
@@ -200,6 +200,8 @@ public slots:
 	virtual void closeFile() = 0;
 	// ask to reload the current file
 	virtual void reload() = 0;
+	// set the content of the document
+	virtual void setFileBuffer( const QString& content ) = 0;
 	// ask to print this file
 	virtual void printFile() = 0;
 	// ask to quick print this file

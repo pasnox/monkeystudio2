@@ -1,6 +1,6 @@
 #include "pConsoleManagerStep.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 pConsoleManagerStep::pConsoleManagerStep( pConsoleManagerStep::Data data )
 {

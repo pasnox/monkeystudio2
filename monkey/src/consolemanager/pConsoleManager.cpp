@@ -40,10 +40,10 @@
 #include "pConsoleManager.h"
 #include "CommandParser.h"
 #include "AbstractCommandParser.h"
-#include "coremanager/MonkeyCore.h"
-#include "variablesmanager/VariablesManager.h"
 
-#include <widgets/pActionsManager.h>
+#include "coremanager/MonkeyCore.h"
+#include <pActionsManager.h>
+#include "variablesmanager/VariablesManager.h"
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
@@ -155,7 +155,7 @@ AbstractCommandParser* pConsoleManager::getParser(const QString& name)
 */
 QString pConsoleManager::quotedString( const QString& s )
 {
-	if ( s.contains( " " ) && !s.startsWith( '"' ) /*&& !s.endsWith( '"' )*/ )
+	if ( s.contains( " " ) && !s.startsWith( '"' ) && !s.endsWith( '"' ) )
 	{
 		return QString( s ).prepend( '"' ).append( '"' );
 	}
@@ -192,48 +192,6 @@ pCommand pConsoleManager::processCommand( pCommand c )
 }
 
 /*!
-	Search command in the list by it's text, or return empty one
-	\param l List of commands, where to search
-	\param s Text of command for searhing
-	\return Finded command, or empty command if not finded
-*/
-pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
-{
-	foreach ( pCommand c, l )
-		if ( c.text() == s )
-			return c;
-	return pCommand();
-}
-
-/*!
-	FIXME PasNox, comment please
-
-*/
-pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pCommand c )
-{
-	pCommandList cl;
-	// check if chan command
-	QStringList lc = c.command().split( ";" );
-	if ( lc.count() > 1 )
-	{
-		foreach ( QString s, lc )
-			cl << recursiveCommandList( l, getCommand( l, s ) );
-	}
-	// process variables
-	else
-	{
-		// process variables
-		pCommand pc = processCommand( c );
-		// set skit on error
-		pc.setSkipOnError( true );
-		// add to list
-		cl << pc;
-	}
-	// return list
-	return cl;
-}
-
-/*!
 	Return human readable string of a QProcess::ProcessError
 
 	\param error The error to get string from
@@ -256,6 +214,23 @@ QString pConsoleManager::errorToString( QProcess::ProcessError error )
 		default:
 			return tr( "An unknown error occurred. This is the default return value of error()." );
 	}
+}
+
+/*!
+	Return the help for variables.
+*/
+QString pConsoleManager::variablesHelp()
+{
+	return pConsoleManager::tr(
+		"<b>Console Manager Variables</b><br><br>"
+		"<b>$cpp$</b> : Current project path<br>"
+		"<b>$cp$</b> : Current project filepath<br>"
+		"<b>$target$</b> : Current project target"
+		"<b>$cfp$</b> : Current tab path<br>"
+		"<b>$cf$</b> : Current tab filepath<br>"
+		"<b>$cip$</b> : Current item path<br>"
+		"<b>$ci$</b> : Current item filepath"
+	);
 }
 
 /*!
@@ -426,9 +401,9 @@ void pConsoleManager::addCommand( const pCommand& c )
 	Add list of command for executing
 	\param l List of commands
 */
-void pConsoleManager::addCommands( const pCommandList& l )
+void pConsoleManager::addCommands( const pCommand::List& l )
 {
-	foreach ( pCommand c, l )
+	foreach ( const pCommand& c, l )
 		addCommand( c );
 }
 
@@ -447,7 +422,7 @@ void pConsoleManager::removeCommand( const pCommand& c )
 	Remove list of commands from list for executing
 	\param l List of commands
 */
-void pConsoleManager::removeCommands( const pCommandList& l )
+void pConsoleManager::removeCommands( const pCommand::List& l )
 {
 	foreach ( pCommand c, l )
 		removeCommand( c );
@@ -463,12 +438,34 @@ void pConsoleManager::executeProcess()
 		// if last was error, cancel this one if it want to
 		if ( c.skipOnError() && QProcess::error() != QProcess::UnknownError )
 		{
-			// emit command skipped
 			emit commandSkipped( c );
-			// remove command from command to execute
 			removeCommand( c );
-			// execute next
 			continue;
+		}
+		
+		// some check to taget file path if needed
+		if ( c.executableCheckingType() != XUPProjectItem::NoTarget ) {
+			if ( !c.project() && !c.command().contains( "$target$" ) ) {
+				emit commandSkipped( c );
+				removeCommand( c );
+				continue;
+			}
+			
+			if ( c.command().contains( "$target$" ) ) {
+				const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
+				
+				if ( filePath.isEmpty() ) {
+					emit commandSkipped( c );
+					removeCommand( c );
+					continue;
+				}
+				
+				c.setCommand( c.command().replace( "$target$", quotedString( filePath ) ) );
+				
+				if ( c.workingDirectory().isEmpty() ) {
+					c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
+				}
+			}
 		}
 
 		// set current parsers list
@@ -476,17 +473,21 @@ void pConsoleManager::executeProcess()
 		mCurrentParsers = c.parsers();
 		
 		// check if need tryall, and had all other parsers if needed at end
-		if ( c.tryAllParsers() )
-			foreach ( QString s, parsersName() )
-				if ( !mCurrentParsers.contains( s ) )
+		if ( c.tryAllParsers() ) {
+			foreach ( const QString& s, parsersName() ) {
+				if ( !mCurrentParsers.contains( s ) ) {
 					mCurrentParsers << s;
+				}
+			}
+		}
+		
 		// execute command
 		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
 		
 		QStringList variables = mEnvironmentVariablesManager.variables( false );
 		
-		// unset some variables environments when no parsers is defined
+		// unset some variables environments when parsers is defined
 		if ( !mCurrentParsers.isEmpty() )
 		{
 			const int index = variables.indexOf( QRegExp( "^LANG=.*$" ) );
@@ -541,6 +542,7 @@ void pConsoleManager::parseOutput( bool commandFinished )
 			if ( !parser )
 			{
 				qWarning() << "Invalid parser" << parserName;
+				qWarning() << mParsers;
 				continue; //for
 			}
 			

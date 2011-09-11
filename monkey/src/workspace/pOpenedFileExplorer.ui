@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>283</width>
-    <height>441</height>
+    <width>285</width>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset>
     <normaloff>:/openedfileexplorer/view-list-tree.png</normaloff>:/openedfileexplorer/view-list-tree.png</iconset>
   </property>
   <property name="windowTitle">
@@ -57,7 +57,7 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header location="global">widgets/pDockWidget.h</header>
+   <header location="global">pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

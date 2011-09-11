@@ -29,8 +29,8 @@
 #ifndef UISETTINGS_H
 #define UISETTINGS_H
 
-#include <objects/MonkeyExport.h>
-#include <objects/QSingleton.h>
+#include <MonkeyExport.h>
+#include <QSingleton.h>
 
 #include "ui_UISettings.h"
 
@@ -64,6 +64,7 @@ public slots:
 
 private slots:
 	void on_twMenu_itemSelectionChanged();
+	void on_tbDefaultProjectsDirectory_clicked();
 	void on_pbDefaultDocumentFont_clicked();
 	void on_gbAutoCompletionEnabled_clicked( bool checked );
 	void tbFonts_clicked();

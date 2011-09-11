@@ -1,7 +1,7 @@
 #ifndef POPENEDFILEMODEL_H
 #define POPENEDFILEMODEL_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include <QAbstractItemModel>
 #include <QIcon>

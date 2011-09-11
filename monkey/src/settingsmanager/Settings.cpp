@@ -26,12 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "Settings.h"
+#include "settingsmanager/Settings.h"
 #include "main.h"
 #include "coremanager/MonkeyCore.h"
 #include "pMonkeyStudio.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <qscilexer.h>
 
 #include <QApplication>
@@ -200,24 +200,54 @@ void Settings::setDefaultSettings()
 
 	// apis
 	foreach ( const QString& path, apisPaths ) {
-		if ( QFile::exists( path +"/cmake.api" ) ) {
-			setValue( "SourceAPIs/CMake", QStringList( QDir::cleanPath( path +"/cmake.api" ) ) );
+		// Python
+		if ( QFile::exists( path +"/Python" ) ) {
+			const QStringList apis = QStringList()
+				<< path +"/Python/python.api"
+				<< path +"/Python/pyqt.api"
+				;
+			
+			setValue( "SourceAPIs/Python", apis );
 		}
-
-		if ( QFile::exists( path +"/cs.api" ) ) {
-			setValue( "SourceAPIs/C#", QStringList( QDir::cleanPath( path +"/cs.api" ) ) );
+		
+		// Ruby
+		if ( QFile::exists( path +"/Ruby" ) ) {
+			const QStringList apis = QStringList()
+				<< path +"/Ruby/Ruby-1.8.7.api"
+				;
+			
+			setValue( "SourceAPIs/Ruby", apis );
 		}
-
-		if ( QFile::exists( path +"/c.api" ) ) {
-			QStringList files;
-
-			files << QDir::cleanPath( path +"/c.api" );
-			files << QDir::cleanPath( path +"/cpp.api" );
-			files << QDir::cleanPath( path +"/glut.api" );
-			files << QDir::cleanPath( path +"/opengl.api" );
-			files << QDir::cleanPath( path +"/qt-4.5.x.api" );
-
-			setValue( "SourceAPIs/C++", files );
+		
+		// C / C++
+		if ( QFile::exists( path +"/C++" ) ) {
+			const QStringList apis = QStringList()
+				<< path +"/C++/c.api"
+				<< path +"/C++/cpp.api"
+				<< path +"/C++/glut.api"
+				<< path +"/C++/opengl.api"
+				<< path +"/C++/qt-4.7.x.api"
+				;
+			
+			setValue( "SourceAPIs/C++", apis );
+		}
+		
+		// CMake
+		if ( QFile::exists( path +"/Builder/cmake.api" ) ) {
+			const QStringList apis = QStringList()
+				<< path +"/Builder/cmake.api"
+				;
+			
+			setValue( "SourceAPIs/CMake", apis );
+		}
+		
+		// C#
+		if ( QFile::exists( path +"/CSharp" ) ) {
+			const QStringList apis = QStringList()
+				<< path +"/CSharp/cs.api"
+				;
+			
+			setValue( "SourceAPIs/C#", apis );
 		}
 	}
 

@@ -1,10 +1,12 @@
 #ifndef COMMANDLINEMANAGER_H
 #define COMMANDLINEMANAGER_H
 
+#include "MonkeyExport.h"
+
 #include <QMap>
 #include <QStringList>
 
-class CommandLineManager
+class Q_MONKEY_EXPORT CommandLineManager
 {
 public:
 	CommandLineManager();

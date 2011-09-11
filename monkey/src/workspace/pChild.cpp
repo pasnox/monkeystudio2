@@ -30,7 +30,7 @@
 #include "qscintillamanager/pEditor.h"
 #include "coremanager/MonkeyCore.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <qscilexer.h>
 
 #include <QFileInfo>
@@ -240,6 +240,15 @@ void pChild::reload()
 	openFile( mEditor->property( "fileName" ).toString(), mEditor->property( "codec" ).toString() );
 	
 	emit fileReloaded();
+}
+
+void pChild::setFileBuffer( const QString& content )
+{
+	mEditor->beginUndoAction();
+	mEditor->selectAll();
+	mEditor->removeSelectedText();
+	mEditor->insert( content );
+	mEditor->endUndoAction();
 }
 
 void pChild::printFile()

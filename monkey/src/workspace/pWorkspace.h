@@ -29,7 +29,7 @@
 #ifndef PWORKSPACE_H
 #define PWORKSPACE_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include "consolemanager/pConsoleManager.h"
 
@@ -37,6 +37,7 @@
 #include <QMdiArea>
 
 class pAbstractChild;
+class pChild;
 class QMainWindow;
 class XUPProjectItem;
 class QFileSystemWatcher;
@@ -83,7 +84,6 @@ public:
 	void unhandleDocument( pAbstractChild* document );
 
 public slots:
-	pAbstractChild* openFile( const QString& fileName, const QString& codec );
 	void closeFile( const QString& );
 	
 	void closeCurrentDocument();
@@ -129,14 +129,10 @@ protected slots:
 	
 	void internal_urlsDropped( const QList<QUrl>& urls );
 	void internal_currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
-	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
-	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
-	void internal_projectCustomActionTriggered();
 
 public slots:
 	// file menu
 	void fileNew_triggered();
-	void fileOpen_triggered();
 	void fileSessionSave_triggered();
 	void fileSessionRestore_triggered();
 	void fileSaveCurrent_triggered();

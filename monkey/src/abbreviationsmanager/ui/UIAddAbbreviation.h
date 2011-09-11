@@ -29,7 +29,7 @@
 #ifndef UIADDABBREVIATION_H
 #define UIADDABBREVIATION_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include "ui_UIAddAbbreviation.h"
 

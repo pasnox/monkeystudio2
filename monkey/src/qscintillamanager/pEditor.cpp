@@ -31,7 +31,7 @@
 #include "qscintillamanager/qSciShortcutsManager.h"
 #include "coremanager/MonkeyCore.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <qsciprinter.h>
 
 #include <QKeyEvent>

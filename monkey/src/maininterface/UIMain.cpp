@@ -26,7 +26,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "UIMain.h"
+#include "maininterface/UIMain.h"
 #include "main.h"
 #include "coremanager/MonkeyCore.h"
 #include "pMonkeyStudio.h"
@@ -39,11 +39,11 @@
 #include "statusbar/StatusBar.h"
 #include "workspace/pOpenedFileExplorer.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
-#include <widgets/pDockToolBar.h>
-#include <widgets/pMultiToolBar.h>
-#include <widgets/pMenuBar.h>
-#include <objects/pStylesActionGroup.h>
+#include <pQueuedMessageToolBar.h>
+#include <pDockToolBar.h>
+#include <pMultiToolBar.h>
+#include <pMenuBar.h>
+#include <pStylesActionGroup.h>
 
 #include <QCloseEvent>
 #include <QMenu>
@@ -172,7 +172,8 @@ void UIMain::initMenuBar()
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
 		mb->action( "aNewTextEditor", tr( "&New Text File..." ), QIcon( ":/file/icons/file/new.png" ), QString::null, tr( "Quickly create a new text based file" ) );
-		mb->action( "aOpen", tr( "&Open..." ), QIcon( ":/file/icons/file/open.png" ), tr( "Ctrl+O" ), tr( "Open a file" ) );
+		mb->action( "aOpen", tr( "&Open file or project..." ), QIcon( ":/file/icons/file/open.png" ), tr( "Ctrl+O" ), tr( "Open a file" ) );
+		mb->action( "aOpenText", tr( "&Open as text..." ), QIcon( ":/file/icons/file/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a file in text editor" ) );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/file/icons/file/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/file/icons/file/clear.png" ), QString::null, tr( "Clear the recents files list" ) );
 		mb->action( "mRecents/aSeparator1" );
@@ -181,19 +182,18 @@ void UIMain::initMenuBar()
 		mb->action( "mSession/aSave", tr( "Save" ), QIcon( ":/file/icons/file/save.png" ), QString::null, tr( "Save the current session files list" ) );
 		mb->action( "mSession/aRestore", tr( "Restore" ), QIcon( ":/file/icons/file/restore.png" ), QString::null, tr( "Restore the current session files list" ) );
 		mb->action( "aSeparator2" );
-		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
-		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/file/icons/file/saveall.png" ), QString::null, tr( "Save all files" ) )->setEnabled( false );
-		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
-		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
-		mb->action( "aSeparator3" );
-		mb->action( "aReload", tr( "Reload" ), QIcon( ":/file/icons/file/reload.png" ), QString::null, tr( "Reload the current file asking user confirmation if needed" ) )->setEnabled( false );
+		mb->action( "aSaveCurrent", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
+		mb->action( "aSaveAll", tr( "Save &All" ), QIcon( ":/file/icons/file/saveall.png" ), QString::null, tr( "Save all files" ) )->setEnabled( false );
 		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), QString::null, tr( "Save a backup of the current file" ) )->setEnabled( false );
+		mb->action( "aSeparator3" );
+		mb->action( "aCloseCurrent", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
+		mb->action( "aCloseAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
+		mb->action( "aReload", tr( "Reload" ), QIcon( ":/file/icons/file/reload.png" ), QString::null, tr( "Reload the current file asking user confirmation if needed" ) )->setEnabled( false );
+		mb->action( "aSeparator5" );
 		mb->action( "aQuickPrint", tr( "Quic&k Print" ), QIcon( ":/file/icons/file/quickprint.png" ), QString::null, tr( "Quick print the current file" ) )->setEnabled( false );
 		mb->action( "aPrint", tr( "&Print..." ), QIcon( ":/file/icons/file/print.png" ), tr( "Ctrl+P" ), tr( "Print the current file" ) )->setEnabled( false );
-		mb->action( "aSeparator5" );
+		mb->action( "aSeparator6" );
 		mb->action( "aQuit", tr( "&Quit" ), QIcon( ":/file/icons/file/quit.png" ), tr( "Ctrl+Q" ), tr( "Quit the application" ) );
 	mb->endGroup();
 	mb->menu( "mEdit", tr( "Edit" ) );
@@ -228,7 +228,6 @@ void UIMain::initMenuBar()
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
 		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atNew ) );
-		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atOpen ) );
 		mb->action( "aSeparator1" );
 		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atClose ) );
 		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll ) );
@@ -244,14 +243,6 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mBuilder", tr( "Build" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mBuilder" )->menuAction()->setVisible( false );
-	mb->beginGroup( "mBuilder" );
-		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
-		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/build/icons/build/rebuild.png" ) );
-		mb->menu( "mClean", tr( "&Clean" ), QIcon( ":/build/icons/build/clean.png" ) );
-		mb->menu( "mExecute", tr( "&Execute" ), QIcon( ":/build/icons/build/execute.png" ) );
-		mb->menu( "mUserCommands", tr( "&User Commands" ), QIcon( ":/build/icons/build/misc.png" ) );
-		mb->action( "aSeparator1" );
-	mb->endGroup();
 	mb->menu( "mDebugger", tr( "Debugger" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mDebugger" )->menuAction()->setVisible( false );
 	mb->menu( "mInterpreter", tr( "Interpreter" ) )->menuAction()->setEnabled( false );
@@ -302,8 +293,10 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNew" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNewTextEditor" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aOpen" ) );
-	dockToolBar( Qt::TopToolBarArea )->addActions( menuBar()->menu( "mFile/mSave" )->actions() );
-	dockToolBar( Qt::TopToolBarArea )->addActions( menuBar()->menu( "mFile/mClose" )->actions() );
+	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aSaveCurrent" ) );
+	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aSaveAll" ) );
+	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aCloseCurrent" ) );
+	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aCloseAll" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aQuickPrint" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
 	// edit action
@@ -328,16 +321,17 @@ void UIMain::initConnections()
 	// file connection
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
 	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( createNewTextEditor() ) );
-	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
+	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::fileManager(), SLOT( fileOpen_triggered() ) );
+	connect( menuBar()->action( "mFile/aOpenText" ), SIGNAL( triggered() ), MonkeyCore::fileManager(), SLOT( fileOpenText_triggered() ) );
 	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
 	connect( menuBar()->action( "mFile/mSession/aRestore" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionRestore_triggered() ) );
-	connect( menuBar()->action( "mFile/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveCurrent_triggered() ) );
-	connect( menuBar()->action( "mFile/mSave/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAll_triggered() ) );
-	connect( menuBar()->action( "mFile/mClose/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseCurrent_triggered() ) );
-	connect( menuBar()->action( "mFile/mClose/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseAll_triggered() ) );
-	connect( menuBar()->action( "mFile/aReload" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileReload_triggered() ) );
+	connect( menuBar()->action( "mFile/aSaveCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveCurrent_triggered() ) );
+	connect( menuBar()->action( "mFile/aSaveAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAll_triggered() ) );
 	connect( menuBar()->action( "mFile/aSaveAsBackup" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAsBackup_triggered() ) );
+	connect( menuBar()->action( "mFile/aCloseCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseCurrent_triggered() ) );
+	connect( menuBar()->action( "mFile/aCloseAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseAll_triggered() ) );
+	connect( menuBar()->action( "mFile/aReload" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileReload_triggered() ) );
 	connect( menuBar()->action( "mFile/aQuickPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileQuickPrint_triggered() ) );
 	connect( menuBar()->action( "mFile/aPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( filePrint_triggered() ) );
 	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileExit_triggered() ) );
@@ -365,7 +359,7 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString&, const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString&, const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	// builder debugger interpreter menu
 	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );

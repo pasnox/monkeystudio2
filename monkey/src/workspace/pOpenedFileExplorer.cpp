@@ -1,11 +1,11 @@
 #include "pOpenedFileExplorer.h"
-#include "pWorkspace.h"
+#include "workspace/pWorkspace.h"
+
 #include "coremanager/MonkeyCore.h"
 #include "maininterface/UIMain.h"
-
-#include <objects/pIconManager.h>
-#include <widgets/pDockWidgetTitleBar.h>
-#include <widgets/pMenuBar.h>
+#include <pIconManager.h>
+#include <pDockWidgetTitleBar.h>
+#include <pMenuBar.h>
 
 #include <QWidgetAction>
 #include <QComboBox>
@@ -89,6 +89,7 @@ signals:
 pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	: pDockWidget( workspace )
 {
+	setObjectName( metaObject()->className() );
 	Q_ASSERT( workspace );
 	mWorkspace = workspace;
 	mModel = new pOpenedFileModel( workspace );
@@ -243,9 +244,9 @@ void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection&
 void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& pos )
 {
 	QMenu menu;
-	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
-	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/aSaveCurrent" ) );
 	menu.addAction( MonkeyCore::menuBar()->action( "mFile/aReload" ) );
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/aCloseCurrent" ) );
 	menu.addSeparator();
 	menu.addAction( mSortMenu->menuAction() );
 	menu.exec( tvFiles->mapToGlobal( pos ) );

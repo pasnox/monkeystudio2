@@ -29,8 +29,8 @@
 #ifndef QSCISHORTCUTSMANAGER
 #define QSCISHORTCUTSMANAGER
 
-#include <objects/MonkeyExport.h>
-#include <objects/QSingleton.h>
+#include <MonkeyExport.h>
+#include <QSingleton.h>
 
 #include <QApplication>
 #include <QIcon>

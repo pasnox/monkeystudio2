@@ -24,8 +24,7 @@
 #ifndef PTEMPLATESMANAGER_H
 #define PTEMPLATESMANAGER_H
 
-#include <objects/MonkeyExport.h>
-
+#include <MonkeyExport.h>
 #include "variablesmanager/VariablesManager.h"
 
 #include <QApplication>

@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "main.h"
+#include <main.h>
 #include "coremanager/MonkeyCore.h"
 #include "pluginsmanager/PluginsManager.h"
 #include "settingsmanager/Settings.h"

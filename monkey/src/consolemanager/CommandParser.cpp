@@ -56,19 +56,16 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 	Q_UNUSED( interpreter );
 	Q_UNUSED( data );
 	CommandParser::Pattern pattern;
-	
-	if (9 != arguments.size())
-	{
-		if ( status )
-		{
-			*status = MkSShellInterpreter::InvalidCommand;
-		}
 		
-		return QString("Command '%1' has 9 arguments").arg(command);
-	}
-	
 	if (arguments[0] == "add")
 	{
+		if (9 != arguments.size())
+		{
+			*status = MkSShellInterpreter::InvalidCommand;
+			
+			return QString("Command '%1' has 9 arguments").arg(command);
+		}
+
 		pattern.regExp = QRegExp(arguments[2], Qt::CaseSensitive, QRegExp::RegExp2);
 		pattern.FileName = arguments[3];
 		pattern.col = arguments[4];
@@ -90,10 +87,7 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 			pattern.Type = pConsoleManagerStep::Invalid;
 		else
 		{
-			if ( status )
-			{
-				*status = MkSShellInterpreter::InvalidCommand;
-			}
+			*status = MkSShellInterpreter::InvalidCommand;
 			
 			return QString("Invalid type '%1'").arg(arguments[6]);
 		}
@@ -110,11 +104,7 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 			}
 			else
 			{
-				if ( status )
-				{
-					*status = MkSShellInterpreter::InvalidCommand;
-				}
-				
+				*status = MkSShellInterpreter::InvalidCommand;
 				return QString("Parser '%1' has invalid type").arg(arguments[1]);
 			}
 		}
@@ -124,6 +114,16 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 			comParser->addPattern(pattern);
 			MonkeyCore::consoleManager()->addParser(comParser);
 		}
+	}
+	else if (arguments[0] == "list")
+	{
+		if (1 != arguments.size())
+		{
+			*status = MkSShellInterpreter::InvalidCommand;
+			return QString("Command '%1 %2' has no arguments").arg(command).arg(arguments[0]);
+		}
+		
+		return MonkeyCore::consoleManager()->parsersName().join("\n");
 	}
 	else // Command is not "add"
 	{
@@ -147,7 +147,7 @@ void CommandParser::installParserCommand()
 {
 	QString help = tr( "This command allows to add and remove console output parsing patterns. Usage:\n"
 						"\tparser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>\n"
-						"\tparser remove <name> <regular expression>\n" );
+						"\tparser list\n" );
 	
 	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help, 0 );
 }

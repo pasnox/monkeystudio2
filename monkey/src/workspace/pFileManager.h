@@ -29,7 +29,7 @@
 #ifndef PFILEMANAGER_H
 #define PFILEMANAGER_H
 
-#include <objects/MonkeyExport.h>
+#include <MonkeyExport.h>
 
 #include <QObject>
 #include <QPoint>
@@ -86,10 +86,26 @@ protected:
 	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data );
 
 public slots:
-	pAbstractChild* openFile( const QString& fileName, const QString& codec );
+	// main menu action handlers
+	void fileOpen_triggered();
+	void fileOpenText_triggered();
+	
+	/** Open file in the MkS.
+	 * \param fileName File name
+	 * \param codec File codec
+	 * \param asText When true - file opened in the text editor. When false - 
+	 *	MkS detects file type and opens it in by text editor, Qt Designer and other plugins
+	 */
+	pAbstractChild* openFile( const QString& fileName, const QString& codec, bool asText = false );
 	void closeFile( const QString& fileName );
 	void goToLine( const QString& fileName, const QPoint& position, const QString& codec, int selectionLength = 0 );
-	void openProject( const QString& fileName, const QString& codec );
+	bool openProject( const QString& fileName, const QString& codec );
+	/** Open source file or project in the MkS.
+	 * If file name is a project - it is opened as a project, otherwise - as source file
+	 * \param fileName File name
+	 * \param codec File codec
+	 */	
+	bool open( const QString& fileName, const QString& codec );
 
 signals:
 	// files

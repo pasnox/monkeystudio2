@@ -26,6 +26,7 @@
 
 #include "workspace/pWorkspace.h"
 #include "workspace/pOpenedFileModel.h"
+#include "xupmanager/core/ProjectTypesIndex.h"
 
 #include <qsciscintilla.h>
 
@@ -34,6 +35,8 @@
 
 class pEditor;
 class QsciAPIs;
+
+typedef QSet<QString> QStringSet;
 
 namespace pMonkeyStudio
 {
@@ -51,33 +54,22 @@ namespace pMonkeyStudio
 #endif
 	};
 
+	Q_MONKEY_EXPORT QString buildFileDialogFilter( const QMap<QString, QStringList>& map, bool addAll, bool addSupported );
+	Q_MONKEY_EXPORT QString buildFileDialogFilter( const DocumentFilterMap& filters, bool addAll, bool addSupported );
 	Q_MONKEY_EXPORT bool isSameFile( const QString& left, const QString& right );
 
 	Q_MONKEY_EXPORT QStringList availableTextCodecs();
-	Q_MONKEY_EXPORT QStringList availableImageFormats();
 	Q_MONKEY_EXPORT QStringList availableLanguages();
 
 	Q_MONKEY_EXPORT QFileInfoList getFolders( QDir fromDir, const QStringList& filters, bool recursive = true );
 	Q_MONKEY_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
 	Q_MONKEY_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
 
-	Q_MONKEY_EXPORT QStringList getImageFileNames( const QString& title, const QString& filename, QWidget* parent = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT QString getImageFileName( const QString& title, const QString& filename, QWidget* parent = QApplication::activeWindow() );
-
-	Q_MONKEY_EXPORT QStringList getOpenFileNames( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT QString getOpenFileName( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
-	
-	Q_MONKEY_EXPORT QString getSaveFileName( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
-
-	Q_MONKEY_EXPORT QString getExistingDirectory( const QString& title, const QString& path, QWidget* parent = QApplication::activeWindow() );
-
 	Q_MONKEY_EXPORT QString tokenizeHome( const QString& string );
 	Q_MONKEY_EXPORT QString unTokenizeHome( const QString& string );
 	
 	Q_MONKEY_EXPORT QMap<QString, QStringList> availableLanguagesSuffixes();
-	Q_MONKEY_EXPORT QMap<QString, QStringList> availableFilesSuffixes();
-	Q_MONKEY_EXPORT QString availableLanguagesFilters();
-	Q_MONKEY_EXPORT QString availableFilesFilters();
+	Q_MONKEY_EXPORT QString availableFilesFilter();
 
 	Q_MONKEY_EXPORT QString settingsPath();
 	Q_MONKEY_EXPORT QString scintillaSettingsPath();
@@ -98,6 +90,8 @@ namespace pMonkeyStudio
 	/***** GENERAL *****/
 	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool save );
 	Q_MONKEY_EXPORT bool saveFilesOnCustomAction();
+	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& dirName );
+	Q_MONKEY_EXPORT QString defaultProjectsDirectory();
 	Q_MONKEY_EXPORT void setTabsHaveCloseButton( bool have );
 	Q_MONKEY_EXPORT bool tabsHaveCloseButton();
 	Q_MONKEY_EXPORT void setTabsHaveShortcut( bool have );

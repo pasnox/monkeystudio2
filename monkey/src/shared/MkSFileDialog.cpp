@@ -1,158 +1,151 @@
-#include "MkSFileDialog.h"
+#include "shared/MkSFileDialog.h"
 #include "xupmanager/core/XUPProjectItem.h"
-#include "xupmanager/core/XUPProjectItemInfos.h"
+#include "xupmanager/core/ProjectTypesIndex.h"
 #include "pMonkeyStudio.h"
-#include "xupmanager/gui/XUPAddFiles.h"
 #include "coremanager/MonkeyCore.h"
+#include "workspace/pFileManager.h"
 #include "xupmanager/gui/XUPProjectManager.h"
-
-#include <widgets/pTreeComboBox.h>
+#include "settingsmanager/Settings.h"
 
 #include <QComboBox>
+#include <QDebug>
 
-MkSFileDialog::MkSFileDialog( QWidget* parent, const QString& caption, const QString& directory, const QString& filter, bool textCodecEnabled, bool openReadOnlyEnabled )
-	: pFileDialog( parent, caption, directory, filter, textCodecEnabled, openReadOnlyEnabled )
+MkSFileDialog::MkSFileDialog( QWidget* parent, const QString& caption, const QString& directory, const QString& filter, bool textCodecEnabled )
+	: pFileDialog( parent, caption, directory, filter, textCodecEnabled, false )
 {
-	mAddFiles = new XUPAddFiles( this );
-	glDialog->addWidget( mAddFiles, 6, 0, 1, -1 );
-	
-	connect( mAddFiles, SIGNAL( currentScopeChanged( XUPItem* ) ), this, SLOT( currentScopeChanged( XUPItem* ) ) );
 }
 
-void MkSFileDialog::currentScopeChanged( XUPItem* scope )
+void MkSFileDialog::setRecentNameFilter( const QString& name )
 {
-	if ( scope )
-	{
-		QString projectPath = QDir( scope->project()->path() ).canonicalPath();
-		
-		if ( !directory().canonicalPath().startsWith( projectPath ) )
-		{
-			setDirectory( projectPath );
-		}
+	if ( !name.isEmpty() ) {
+		selectNameFilter( name );
 	}
 }
 
-pFileDialogResult MkSFileDialog::getOpenFileName( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
+QString MkSFileDialog::recentNameFilter() const
+{
+	return selectedNameFilter();
+}
+
+pFileDialogResult MkSFileDialog::getOpenFileName( bool useRecents, QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
 {
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
-	setOpenFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
+	setOpenFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, false, selectedFilter, options );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
-	fd.mAddFiles->setVisible( false );
 	
-	if ( fd.exec() == QDialog::Accepted )
-	{
-		if ( selectedFilter )
-		{
-			*selectedFilter = fd.selectedFilter();
+	if ( useRecents ) {
+		if ( !filter.isEmpty() ) {
+			fd.setRecentNameFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
+		}
+	}
+	
+	if ( fd.exec() == QDialog::Accepted ) {
+		if ( useRecents ) {
+			if ( !filter.isEmpty() ) {
+				MonkeyCore::settings()->setValue( "Recents/FileFilter", fd.selectedNameFilter() );
+			}
+		}
+		
+		if ( selectedFilter ) {
+			*selectedFilter = fd.selectedNameFilter();
 		}
 		
 		result[ "filename" ] = fd.selectedFiles().value( 0 );
 		result[ "codec" ] = fd.textCodec();
-		result[ "openreadonly" ] = fd.openReadOnly();
 	}
 	
 	return result;
 }
 
-pFileDialogResult MkSFileDialog::getOpenFileNames( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
+pFileDialogResult MkSFileDialog::getOpenFileNames( bool useRecents, QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
 {
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
-	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
+	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, false, selectedFilter, options );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
-	fd.mAddFiles->setVisible( false );
 	
-	if ( fd.exec() == QDialog::Accepted )
-	{
-		if ( selectedFilter )
-		{
-			*selectedFilter = fd.selectedFilter();
+	if ( useRecents ) {
+		if ( !filter.isEmpty() ) {
+			fd.setRecentNameFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
+		}
+	}
+	
+	if ( fd.exec() == QDialog::Accepted ) {
+		if ( useRecents ) {
+			if ( !filter.isEmpty() ) {
+				MonkeyCore::settings()->setValue( "Recents/FileFilter", fd.selectedNameFilter() );
+			}
+		}
+		
+		if ( selectedFilter ) {
+			*selectedFilter = fd.selectedNameFilter();
 		}
 		
 		result[ "filenames" ] = fd.selectedFiles();
 		result[ "codec" ] = fd.textCodec();
-		result[ "openreadonly" ] = fd.openReadOnly();
 	}
 	
 	return result;
 }
 
-pFileDialogResult MkSFileDialog::getSaveFileName( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
+pFileDialogResult MkSFileDialog::getSaveFileName( bool useRecents, QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
 {
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
 	setSaveFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, selectedFilter, options );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
-	fd.mAddFiles->setVisible( false );
 	
-	if ( fd.exec() == QDialog::Accepted )
-	{
-		if ( selectedFilter )
-		{
-			*selectedFilter = fd.selectedFilter();
+	if ( useRecents ) {
+		if ( !filter.isEmpty() ) {
+			fd.setRecentNameFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
+		}
+	}
+	
+	if ( fd.exec() == QDialog::Accepted ) {
+		if ( useRecents ) {
+			if ( !filter.isEmpty() ) {
+				MonkeyCore::settings()->setValue( "Recents/FileFilter", fd.selectedNameFilter() );
+			}
+		}
+		
+		if ( selectedFilter ) {
+			*selectedFilter = fd.selectedNameFilter();
 		}
 		
 		result[ "filename" ] = fd.selectedFiles().value( 0 );
 		result[ "codec" ] = fd.textCodec();
-		result[ "openreadonly" ] = fd.openReadOnly();
 	}
 	
 	return result;
 }
 
-pFileDialogResult MkSFileDialog::getOpenProjects( QWidget* parent )
+pFileDialogResult MkSFileDialog::getExistingDirectory( bool useRecents, QWidget* parent, const QString& caption, const QString& dir, bool enabledTextCodec, Options options )
 {
 	pFileDialogResult result;
-	QString caption = tr( "Choose project(s) to open" );
-	QString filter = XUPProjectItem::projectInfos()->projectsFilter();
-	bool enabledTextCodec = true;
-	bool enabledOpenReadOnly = false;
-	
 	MkSFileDialog fd( parent );
-	setOpenFileNamesDialog( &fd, caption, QDir::currentPath() , filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
+	setOpenFileNameDialog( &fd, caption, dir, QString::null, enabledTextCodec, false, 0, options );
+	fd.setFileMode( QFileDialog::Directory );
 	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
-	fd.mAddFiles->setVisible( false );
 	
-	if ( fd.exec() == QDialog::Accepted )
-	{
-		result[ "filenames" ] = fd.selectedFiles();
-		result[ "codec" ] = fd.textCodec();
-		result[ "openreadonly" ] = fd.openReadOnly();
-	}
+	#warning Does we need recents handling here ?
+	Q_UNUSED( useRecents );
 	
-	return result;
-}
-
-pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent, bool allowChooseScope )
-{
-	pFileDialogResult result;
-	XUPProjectModel* model = MonkeyCore::projectsManager()->currentProjectModel();
-	
-	if ( model )
-	{
-		XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
-		QStringList operators = curProject->projectInfos()->operators( curProject->projectType() );
-		QString caption = tr( "Choose file(s) to add to your project" );
-		QString filter = XUPProjectItem::projectInfos()->variableSuffixesFilter( curProject->projectType() );
-		bool enabledTextCodec = false;
-		bool enabledOpenReadOnly = false;
-		
-		MkSFileDialog fd( parent );
-		setOpenFileNamesDialog( &fd, caption, QDir::currentPath(), filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
-		fd.setTextCodec( pMonkeyStudio::defaultCodec() );
-		fd.mAddFiles->setModel( model );
-		fd.mAddFiles->setCurrentScope( curProject );
-		fd.mAddFiles->setScopeChoiceEnabled( allowChooseScope );
-		
-		if ( fd.exec() == QDialog::Accepted )
-		{
-			result[ "filenames" ] = fd.selectedFiles();
-			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
-			result[ "import" ] = fd.mAddFiles->importExternalFiles();
-			result[ "importpath" ] = fd.mAddFiles->importExternalFilesPath();
-			result[ "directory" ] = fd.directory().absolutePath();
+	/*if ( useRecents ) {
+		if ( !filter.isEmpty() ) {
+			fd.setRecentNameFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 		}
+	}*/
+	
+	if ( fd.exec() == QDialog::Accepted ) {
+		/*if ( useRecents ) {
+			if ( !filter.isEmpty() ) {
+				MonkeyCore::settings()->setValue( "Recents/FileFilter", fd.selectedNameFilter() );
+			}
+		}*/
+		
+		result[ "filename" ] = fd.selectedFiles().value( 0 );
+		result[ "codec" ] = fd.textCodec();
 	}
 	
 	return result;
@@ -160,40 +153,25 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent, bool allow
 
 pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 {
+	const XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
+	const QString caption = tr( "New File Name..." );
+	const QString filter = pMonkeyStudio::availableFilesFilter();
+	const bool enabledTextCodec = true;
+	const QString codec = curProject ? curProject->codec() : pMonkeyStudio::defaultCodec();
+	QString path = MonkeyCore::fileManager()->currentDocumentFile();
 	pFileDialogResult result;
-	XUPProjectModel* model = MonkeyCore::projectsManager()->currentProjectModel();
-	XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
-	QStringList operators = curProject ? curProject->projectInfos()->operators( curProject->projectType() ) : QStringList();
-	QString caption = tr( "New File Name..." );
-	QString filter = curProject ? XUPProjectItem::projectInfos()->variableSuffixesFilter( curProject->projectType() ) : pMonkeyStudio::availableFilesFilters();
-	bool enabledTextCodec = true;
+	
+	if ( path.isEmpty() && curProject ) {
+		path = curProject->path();
+	}
 	
 	MkSFileDialog fd( parent );
-	setSaveFileNameDialog( &fd, caption, QDir::currentPath(), filter, enabledTextCodec, 0, 0 );
-	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
+	setSaveFileNameDialog( &fd, caption, path, filter, enabledTextCodec, 0, 0 );
+	fd.setTextCodec( codec );
 	
-	if ( curProject )
-	{
-		fd.mAddFiles->setModel( model );
-		fd.mAddFiles->setAddToProjectChoice( true );
-		fd.mAddFiles->setAddToProject( false );
-		fd.mAddFiles->setCurrentScope( curProject );
-	}
-	else
-	{
-		fd.mAddFiles->setVisible( false );
-	}
-	
-	if ( fd.exec() == QDialog::Accepted )
-	{
+	if ( fd.exec() == QDialog::Accepted ) {
 		result[ "filename" ] = fd.selectedFiles().value( 0 );
 		result[ "codec" ] = fd.textCodec();
-		
-		if ( model )
-		{
-			result[ "addtoproject" ] = fd.mAddFiles->addToProject();
-			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
-		}
 	}
 	
 	return result;

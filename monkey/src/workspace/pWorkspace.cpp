@@ -38,11 +38,11 @@
 
 #include <QDebug>
 
-#include "pWorkspace.h"
+#include "workspace/pWorkspace.h"
 #include "pOpenedFileExplorer.h"
 #include "pAbstractChild.h"
-#include "recentsmanager/pRecentsManager.h"
-#include "pFileManager.h"
+#include "recentsmanager/pRecentsManager.h" // FIXME remove
+#include "workspace/pFileManager.h"
 #include "maininterface/ui/UISettings.h"
 #include "UISaveFiles.h"
 #include "maininterface/ui/UIAbout.h"
@@ -52,20 +52,19 @@
 #include "templatesmanager/pTemplatesManager.h"
 #include "xupmanager/gui/XUPProjectManager.h"
 #include "xupmanager/core/XUPProjectItem.h"
-#include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
 #include "maininterface/UIMain.h"
 #include "statusbar/StatusBar.h"
-#include "shared/MkSFileDialog.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "shared/MkSFileDialog.h" // FIXME remove
 
-#include "pChild.h"
 #include "qscintillamanager/pEditor.h"
 
-#include <widgets/pQueuedMessageToolBar.h>
-#include <widgets/pMenuBar.h>
-#include <widgets/pMultiToolBar.h>
-#include <widgets/TranslationDialog.h>
-#include <objects/TranslationManager.h>
+#include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
+#include <pMultiToolBar.h>
+#include <TranslationDialog.h>
+#include <TranslationManager.h>
 
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
 QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );
@@ -234,12 +233,12 @@ void pWorkspace::updateGuiState( pAbstractChild* document )
 	multitoolbar_notifyChanges();
 
 	// update file menu
-	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
-	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aSaveCurrent" )->setEnabled( modified );
+	MonkeyCore::menuBar()->action( "mFile/aSaveAll" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aCloseCurrent" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aCloseAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
 
@@ -266,8 +265,7 @@ void pWorkspace::updateGuiState( pAbstractChild* document )
 	MonkeyCore::statusBar()->setCursorPosition( document ? document->cursorPosition() : QPoint( -1, -1 ) );
 	
 	// internal update
-	if ( hasDocument )
-		QDir::setCurrent( document->path() );
+	QDir::setCurrent( hasDocument ? document->path() : pMonkeyStudio::defaultProjectsDirectory() );
 }
 
 QString pWorkspace::defaultContext()
@@ -376,7 +374,7 @@ void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, const QSt
 		}
 	}
 
-	pAbstractChild* document = openFile( fileName, codec );
+	pAbstractChild* document = MonkeyCore::fileManager()->openFile( fileName, codec );
 
 	if ( document )
 	{
@@ -427,7 +425,7 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	connect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
 	connect( document, SIGNAL( fileReloaded() ), this, SLOT( document_fileReloaded() ) );
 	// update file menu
-	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/aSaveCurrent" ), SLOT( setEnabled( bool ) ) );
 	// update edit menu
 	connect( document, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
 	connect( document, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
@@ -456,7 +454,7 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	disconnect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
 	disconnect( document, SIGNAL( fileReloaded() ), this, SLOT( document_fileReloaded() ) );
 	// update file menu
-	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/aSaveCurrent" ), SLOT( setEnabled( bool ) ) );
 	// update edit menu
 	disconnect( document, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
 	disconnect( document, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
@@ -482,60 +480,6 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 			doc->showMaximized();
 		}
 	}
-}
-
-pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& codec )
-{
-	// if it not exists
-	if ( !QFile::exists( fileName ) || !QFileInfo( fileName ).isFile() )
-	{
-		return 0;
-	}
-	
-	// check if file is already opened
-	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
-	{
-		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
-		
-		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
-		{
-			setCurrentDocument( document );
-			return document;
-		}
-	}
-
-	// get a document interface that can handle the file
-	pAbstractChild* document = MonkeyCore::pluginsManager()->documentForFileName( fileName );
-	
-	// open it with pChild instance if no document
-	if ( !document )
-	{
-		document = new pChild;
-	}
-	
-	// make connection if worksapce don t contains this document
-	if ( !mMdiArea->subWindowList().contains( document ) )
-	{
-		handleDocument( document );
-	}
-
-	// open file
-	if ( !document->openFile( fileName, codec ) )
-	{
-		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
-		closeDocument( document );
-		
-		return 0;
-	}
-	
-	document->showMaximized();
-	mMdiArea->setActiveSubWindow( document );
-	
-	// update gui state
-	//updateGuiState( document );
-
-	// return child instance
-	return document;
 }
 
 void pWorkspace::closeFile( const QString& filePath )
@@ -731,41 +675,33 @@ void pWorkspace::setDocumentMode( pWorkspace::ViewMode mode )
 
 pAbstractChild* pWorkspace::createNewTextEditor()
 {
-	pFileDialogResult result = MkSFileDialog::getNewEditorFile( window() );
-
-	// open open file dialog
-	QString fileName = result[ "filename" ].toString();
+	const pFileDialogResult result = MkSFileDialog::getNewEditorFile( window() );
+	const QString fileName = result[ "filename" ].toString();
 	
-	// return 0 if user cancel
-	if ( fileName.isEmpty() )
-	{
+	if ( fileName.isEmpty() ) {
 		return 0;
 	}
 	
-	// close file if already open
-	closeFile( fileName );
+	if ( QFile::exists( fileName ) ) {
+		return 0;
+	}
+	
+	//closeFile( fileName );
 
 	// create/reset file
 	QFile file( fileName );
 	
-	if ( !file.open( QIODevice::WriteOnly ) )
-	{
+	if ( !file.open( QIODevice::WriteOnly ) ) {
 		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
 		return 0;
 	}
 	
 	// reset file
-	file.resize( 0 );
+	//file.resize( 0 );
 	file.close();
 	
-	if ( result.value( "addtoproject", false ).toBool() )
-	{
-		// add files to scope
-		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ) );
-	}
-	
 	// open file
-	return openFile( fileName, result[ "codec" ].toString() );
+	return MonkeyCore::fileManager()->openFile( fileName, result[ "codec" ].toString() );
 }
 
 void pWorkspace::document_fileOpened()
@@ -867,7 +803,7 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& urls )
 		{
 			if ( !url.toLocalFile().trimmed().isEmpty() )
 			{
-				openFile( url.toLocalFile(), pMonkeyStudio::defaultCodec() );
+				MonkeyCore::fileManager()->openFile( url.toLocalFile(), pMonkeyStudio::defaultCodec() );
 			}
 		}
 	}
@@ -886,147 +822,37 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& urls )
 void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject )
 {
 	// uninstall old commands
-	if ( previousProject )
-	{
+	if ( previousProject ) {
 		previousProject->uninstallCommands();
-		
-		disconnect( previousProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
-		disconnect( previousProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	}
 	
-	// get pluginsmanager
-	PluginsManager* pm = MonkeyCore::pluginsManager();
+	if ( previousProject ) {
+		foreach( const QString& pluginName, previousProject->autoActivatePlugins() ) {
+			BasePlugin* plugin = MonkeyCore::pluginsManager()->plugin<BasePlugin*>( PluginsManager::stAll, pluginName );
+			
+			if ( plugin ) {
+				plugin->setEnabled( false );
+			}
+		}
+	}
 	
-	// set debugger and interpreter
-	BuilderPlugin* bp = currentProject ? currentProject->builder() : 0;
-	DebuggerPlugin* dp = currentProject ? currentProject->debugger() : 0;
-	InterpreterPlugin* ip = currentProject ? currentProject->interpreter() : 0;
-	
-	pm->setCurrentBuilder( bp && !bp->neverEnable() ? bp : 0 );
-	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
-	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
+	if ( currentProject ) {
+		foreach( const QString& pluginName, currentProject->autoActivatePlugins() ) {
+			BasePlugin* plugin = MonkeyCore::pluginsManager()->plugin<BasePlugin*>( PluginsManager::stAll, pluginName );
+			
+			if ( plugin ) {
+				plugin->setEnabled( true );
+			}
+		}
+	}
 	
 	// install new commands
-	if ( currentProject )
-	{
-		connect( currentProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
-		connect( currentProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
-		
+	if ( currentProject ) {
 		currentProject->installCommands();
 	}
 	
 	// update menu visibility
 	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
-}
-
-void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
-{
-	// create action
-	QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ) , cmd.text() );
-	action->setStatusTip( cmd.text() );
-	
-	// set action custom data contain the command to execute
-	action->setData( QVariant::fromValue( cmd ) );
-	
-	// connect to signal
-	connect( action, SIGNAL( triggered() ), this, SLOT( internal_projectCustomActionTriggered() ) );
-	
-	// update menu visibility
-	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
-}
-
-void pWorkspace::internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu )
-{
-	QMenu* menu = MonkeyCore::menuBar()->menu( mnu );
-	
-	foreach ( QAction* action, menu->actions() )
-	{
-		if ( action->menu() )
-		{
-			internal_projectUninstallCommandRequested( cmd, QString( "%1/%2" ).arg( mnu ).arg( action->menu()->objectName() ) );
-		}
-		else if ( !action->isSeparator() && action->data().value<pCommand>() == cmd )
-		{
-			delete action;
-		}
-	}
-	
-	// update menu visibility
-	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
-}
-
-void pWorkspace::internal_projectCustomActionTriggered()
-{
-	QAction* action = qobject_cast<QAction*>( sender() );
-	
-	if ( action )
-	{
-		pConsoleManager* cm = MonkeyCore::consoleManager();
-		pCommand cmd = action->data().value<pCommand>();
-		pCommandMap* cmdsHash = cmd.userData().value<pCommandMap*>();
-		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
-		
-		// save project files
-		if ( pMonkeyStudio::saveFilesOnCustomAction() )
-		{
-			fileSaveAll_triggered();
-		}
-		
-		// check that command to execute exists, else ask to user if he want to choose another one
-		if ( cmd.targetExecution().isActive && cmd.project() )
-		{
-			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString fileName = cmd.project()->filePath( cmd.command() );
-			QString workDir = cmd.workingDirectory();
-			
-			// Try to correct command by asking user
-			if ( !QFile::exists( fileName ) )
-			{
-				XUPProjectItem* project = cmd.project();
-				fileName = project->targetFilePath( cmd.targetExecution() );
-				
-				if ( fileName.isEmpty() )
-				{
-					return;
-				}
-				
-				const QFileInfo fileInfo( fileName );
-				
-				// if not exists ask user to select one
-				if ( !fileInfo.exists() )
-				{
-					QMessageBox::critical( window(), tr( "Executable file not found" ), tr( "Target '%1' does not exists" ).arg( fileName ) );
-					return;
-				}
-				
-				if ( !fileInfo.isExecutable() )
-				{
-					QMessageBox::critical( window(), tr( "Can't execute target" ), tr( "Target '%1' is not an executable" ).arg( fileName ) );
-					return;
-				}
-				
-				// file found, and it is executable. Correct command
-				cmd.setCommand( fileName );
-				cmd.setWorkingDirectory( fileInfo.absolutePath() );
-			}
-			
-			cm->addCommand( cmd );
-			
-			return;
-		}
-		
-		// generate commands list
-		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
-		
-		// the first one must not be skipped on last error
-		if ( !mCmds.isEmpty() )
-		{
-			mCmds.first().setSkipOnError( false );
-		}
-		
-		// send command to consolemanager
-		cm->addCommands( mCmds );
-	}
 }
 
 // file menu
@@ -1035,38 +861,6 @@ void pWorkspace::fileNew_triggered()
 	UITemplatesWizard wizard( this );
 	wizard.setType( "Files" );
 	wizard.exec();
-}
-
-void pWorkspace::fileOpen_triggered()
-{
-	const QString mFilters = pMonkeyStudio::availableFilesFilters(); // get available filters
-	
-	// show filedialog to user
-	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::currentPath(), mFilters, true, false );
-
-	// open open file dialog
-	const QStringList fileNames = result[ "filenames" ].toStringList();
-	
-	// return 0 if user cancel
-	if ( fileNames.isEmpty() )
-	{
-		return;
-	}
-
-	// for each entry, open file
-	foreach ( const QString& file, fileNames )
-	{
-		if ( openFile( file, result[ "codec" ].toString() ) )
-		{
-			// append file to recents
-			MonkeyCore::recentsManager()->addRecentFile( file );
-		}
-		else
-		{
-			// remove it from recents files
-			MonkeyCore::recentsManager()->removeRecentFile( file );
-		}
-	}
 }
 
 void pWorkspace::fileSessionSave_triggered()
@@ -1096,7 +890,7 @@ void pWorkspace::fileSessionRestore_triggered()
 	// restore files
 	foreach ( const QString& file, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
 	{
-		if ( !openFile( file, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
+		if ( !MonkeyCore::fileManager()->openFile( file, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
 		{
 			MonkeyCore::recentsManager()->removeRecentFile( file );
 		}
@@ -1176,13 +970,11 @@ void pWorkspace::fileSaveAsBackup_triggered()
 {
 	pAbstractChild* document = currentDocument();
 	
-	if ( document )
-	{
-		const QString fileName = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), document->fileName(), QString::null, this );
+	if ( document ) {
+		const QString filePath = MkSFileDialog::getSaveFileName( false, this, tr( "Choose a filename to backup your file" ), document->fileName(), QString::null ).value( "filename" ).toString();
 		
-		if ( !fileName.isEmpty() )
-		{
-			document->backupFileAs( fileName );
+		if ( !filePath.isEmpty() ) {
+			document->backupFileAs( filePath );
 		}
 	}
 }
