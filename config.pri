@@ -20,6 +20,7 @@ unix { # build on ramdisk instead of physical hard disk if possible
 
 # build mode
 CONFIG	*= qt warn_on thread x11 windows debug
+CONFIG	-= warn_off release debug_and_release
 QT	*= xml sql
 
 # Mac universal build from 10.3 to up to 10.5
