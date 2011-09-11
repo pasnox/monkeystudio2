@@ -1,5 +1,4 @@
 TEMPLATE	= subdirs
-
 SUBDIRS	= FileBrowser \
 	MessageBox \
 	AStyle \
@@ -11,4 +10,5 @@ SUBDIRS	= FileBrowser \
 	MkSShell \
 	UpdateChecker \
 	FileWatcher \
-	Tools
+	Tools \
+	AppDebug

@@ -16,15 +16,20 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "UIToolsEdit.h"
-#include "ToolsManager.h"
+#include "../ToolsManager.h"
 
 #include <pMonkeyStudio.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
+#include <shared/MkSFileDialog.h>
 
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QFileInfo>
 #include <QUrl>
 #include <QWhatsThis>
+#include <QImageReader>
 
 UIToolsEdit::UIToolsEdit( ToolsManager* manager, QWidget* parent )
 	: QDialog( parent )
@@ -221,15 +226,7 @@ void UIToolsEdit::on_aDown_triggered()
 
 void UIToolsEdit::helpRequested()
 {
-	QString help = tr( "<b>Tools Editor</b> give you the possibility to use variables<br><br>"
-		"<b>$cpp$</b> : Current project path<br>"
-		"<b>$cp$</b> : Current project filepath<br>"
-		"<b>$cfp$</b> : Current tab path<br>"
-		"<b>$cf$</b> : Current tab filepath<br>"
-		"<b>$cip$</b> : Current item path<br>"
-		"<b>$ci$</b> : Current item filepath" );
-	
-	QWhatsThis::showText( mapToGlobal( rect().center() ), help );
+	QWhatsThis::showText( mapToGlobal( rect().center() ), pConsoleManager::variablesHelp() );
 }
 
 void UIToolsEdit::on_leCaption_editingFinished()
@@ -249,7 +246,17 @@ void UIToolsEdit::on_tbFileIcon_clicked()
 {
 	if ( QListWidgetItem* item = lwTools->selectedItems().value( 0 ) ) {
 		ToolsManager::Tool tool = item->data( Qt::UserRole ).value<ToolsManager::Tool>();
-		const QString fn = pMonkeyStudio::getImageFileName( tr( "Choose an icon for this tool" ), tool.fileIcon, this );
+		
+		QStringList availableImageFormats;
+		foreach ( QByteArray a, QImageReader::supportedImageFormats() )
+			availableImageFormats << a;
+		
+		QString imageFilter = QObject::tr( "All Image Files (%1)" ).arg( availableImageFormats.replaceInStrings( QRegExp( "^(.*)$" ), "*.\\1" ).join( " " ) ); 
+		
+		const QString fn = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(),
+														tr( "Choose an icon for this tool" ),
+														tool.fileIcon,
+														imageFilter);
 		
 		if ( fn.isEmpty() ) {
 			return;
@@ -281,8 +288,9 @@ void UIToolsEdit::on_tbFilePath_clicked()
 {
 	if ( QListWidgetItem* item = lwTools->selectedItems().value( 0 ) ) {
 		ToolsManager::Tool tool = item->data( Qt::UserRole ).value<ToolsManager::Tool>();
-		const QString fn = pMonkeyStudio::getOpenFileName( tr( "Choose the file to execute for this tool" ), tool.filePath, QString::null, this );
-		
+		const QString fn = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(),
+														 tr( "Choose the file to execute for this tool" ),
+														 tool.filePath);
 		if ( fn.isEmpty() ) {
 			return;
 		}
@@ -332,7 +340,7 @@ void UIToolsEdit::on_tbWorkingPath_clicked()
 {
 	if ( QListWidgetItem* item = lwTools->selectedItems().value( 0 ) ) {
 		ToolsManager::Tool tool = item->data( Qt::UserRole ).value<ToolsManager::Tool>();
-		const QString path = pMonkeyStudio::getExistingDirectory( tr( "Choose the working path for this tool" ), tool.workingPath, this );
+		const QString path = MkSFileDialog::getExistingDirectory( false, this, tr( "Choose the working path for this tool" ), tool.workingPath, false ).value( "filename" ).toString();
 		
 		if ( path.isEmpty() ) {
 			return;

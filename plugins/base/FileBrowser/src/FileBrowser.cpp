@@ -41,8 +41,8 @@
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
 #include <pMonkeyStudio.h>
-#include <widgets/pDockToolBar.h>
-#include <widgets/pActionsManager.h>
+#include <pDockToolBar.h>
+#include <pActionsManager.h>
 
 #include <QIcon>
 
@@ -98,8 +98,8 @@ bool FileBrowser::uninstall()
 	Get settings widget of plugin
 	\return Pointer to created settings widget for plugin
 */
-QWidget* FileBrowser::settingsWidget()
-{ return new FileBrowserSettings( this ); }
+QWidget* FileBrowser::settingsWidget() const
+{ return new FileBrowserSettings( const_cast<FileBrowser*>( this ) ); }
 
 /*!
 	Get filter wildcards, which using for filtering out some files, which should be removed
@@ -123,7 +123,7 @@ void FileBrowser::setFilters( const QStringList& filters, bool updateDock )
 
 QStringList FileBrowser::bookmarks() const
 {
-	return settingsValue( "Bookmarks", QStringList() << QDir::homePath() ).toStringList();
+	return settingsValue( "Bookmarks", QStringList() << QDir::homePath() << pMonkeyStudio::defaultProjectsDirectory() ).toStringList();
 }
 
 void FileBrowser::setBookmarks( const QStringList& bookmarks, bool updateDock )

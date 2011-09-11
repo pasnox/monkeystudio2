@@ -18,31 +18,35 @@
 #ifndef QMAKE_H
 #define QMAKE_H
 
+#include <pluginsmanager/CLIToolPlugin.h>
 #include <pluginsmanager/XUPPlugin.h>
+#include <xupmanager/core/ProjectTypesIndex.h>
 
 #include <QPointer>
 
 class QtVersionManager;
 
-class QMake : public XUPPlugin
+class QMake : virtual public BasePlugin, public CLIToolPlugin, public XUPPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES( BasePlugin XUPPlugin )
+	Q_INTERFACES( BasePlugin CLIToolPlugin XUPPlugin )
 
-protected:	
-	void fillPluginInfos();
-	virtual bool install();
-	virtual bool uninstall();
-	
 public:
-	virtual QWidget* settingsWidget();
-	virtual bool editProject( XUPProjectItem* project );
+	// BasePlugin
+	virtual QWidget* settingsWidget() const;
+	// CLIToolPlugin
+	virtual QStringList availableParsers() const;
+	virtual pCommand defaultCommand() const;
 	
 	static QtVersionManager* versionManager();
 
 protected:
-	QPointer<XUPProjectItem> mItem;
+	DocumentFilterMap mFilters;
 	static QPointer<QtVersionManager> mQtVersionManager;
+	// BasePlugin
+	virtual void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 };
 
 #endif // QMAKE_H

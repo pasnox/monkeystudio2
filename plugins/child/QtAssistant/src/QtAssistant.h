@@ -11,7 +11,7 @@ class QtAssistant : public ChildPlugin
 	Q_INTERFACES( BasePlugin ChildPlugin )
 
 public:
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:

@@ -43,13 +43,12 @@
 
 #include "ui_UIBuildStep.h"
 #include "ui_UIOutput.h"
-#include "ui_UICommand.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <consolemanager/pConsoleManager.h>
-#include <widgets/pDockWidgetTitleBar.h>
+#include <pDockWidgetTitleBar.h>
 #include <coremanager/MonkeyCore.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 class pConsoleManagerStepModel;
 
@@ -58,6 +57,8 @@ class pConsoleManagerStepModel;
 */
 class UIBuildStep : public pDockWidget, public Ui::UIBuildStep
 {
+	Q_OBJECT
+	
 public:
 	UIBuildStep( QWidget* parent = 0 )
 		: pDockWidget( parent )
@@ -68,9 +69,10 @@ public:
 		lvBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
 		lvBuildSteps->setAttribute( Qt::WA_MacSmallSize );
 		
-		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextWarning" ), 0 );
-		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextError" ), 1 );
-		titleBar()->addSeparator( 2 );
+		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextErrorOrWarning" ), 0 );
+		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextWarning" ), 1 );
+		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextError" ), 2 );
+		titleBar()->addSeparator( 3 );
 	}
 };
 
@@ -79,34 +81,17 @@ public:
 */
 class UIOutput : public pDockWidget, public Ui::UIOutput
 {
+	Q_OBJECT
+	
 public:
 	UIOutput( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
 		setObjectName( metaObject()->className() );
+		
 		setupUi( this );
-		lRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
-		lRawCommand->setAttribute( Qt::WA_MacSmallSize );
-		cbRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
-		cbRawCommand->setAttribute( Qt::WA_MacSmallSize );
 		tbOutput->setAttribute( Qt::WA_MacShowFocusRect, false );
 		tbOutput->setAttribute( Qt::WA_MacSmallSize );
-	}
-};
-
-/*!
-	Implementation of Commands tab of Message box
-*/
-class UICommand : public pDockWidget, public Ui::UICommand
-{
-public:
-	UICommand( QWidget* parent = 0 )
-		: pDockWidget( parent )
-	{
-		setObjectName( metaObject()->className() );
-		setupUi( this );
-		teLog->setAttribute( Qt::WA_MacShowFocusRect, false );
-		teLog->setAttribute( Qt::WA_MacSmallSize );
 	}
 };
 
@@ -131,7 +116,6 @@ public:
 protected:
 	UIBuildStep* mBuildStep;
 	UIOutput* mOutput;
-	UICommand* mCommand;
 	pConsoleManagerStepModel* mStepModel;
 
 public slots:
@@ -142,13 +126,12 @@ public slots:
 	void appendSteps( const pConsoleManagerStepList& steps );
 	void showBuild();
 	void showOutput();
-	void showLog();
+	void showNextErrorOrWarning();
 	void showNextWarning();
 	void showNextError();
 
 protected slots:
 	void lvBuildSteps_activated( const QModelIndex& index );
-	void cbRawCommand_returnPressed();
 	void commandError( const pCommand& command, QProcess::ProcessError error );
 	void commandFinished( const pCommand& command, int exitCode, QProcess::ExitStatus exitStatus );
 	void commandReadyRead( const pCommand& command, const QByteArray& data );

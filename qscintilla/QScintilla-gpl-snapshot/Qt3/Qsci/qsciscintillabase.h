@@ -2715,7 +2715,6 @@ signals:
     void SCN_ZOOM();
 
 protected:
-
     //! Re-implemented to handle the context menu.
     virtual void contextMenuEvent(QContextMenuEvent *e);
 
@@ -2779,7 +2778,6 @@ private:
     QScrollBar *vsb;
     QScrollBar *hsb;
     QWidget *txtarea;
-
 
     QsciScintillaBase(const QsciScintillaBase &);
     QsciScintillaBase &operator=(const QsciScintillaBase &);

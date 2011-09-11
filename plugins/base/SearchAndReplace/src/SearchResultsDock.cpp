@@ -2,11 +2,11 @@
 #include "SearchThread.h"
 #include "SearchResultsModel.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <pMonkeyStudio.h>
 #include <coremanager/MonkeyCore.h>
 #include <workspace/pFileManager.h>
-#include <widgets/pDockWidgetTitleBar.h>
+#include <pDockWidgetTitleBar.h>
 
 #include <QHBoxLayout>
 #include <QTreeView>

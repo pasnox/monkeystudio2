@@ -29,7 +29,10 @@
 #include "UICtags2Api.h"
 
 #include <pMonkeyStudio.h>
+#include <coremanager/MonkeyCore.h>
+#include <maininterface/UIMain.h>
 
+#include <QFileDialog>
 #include <QPushButton>
 #include <QRegExp>
 #include <QFile>
@@ -106,7 +109,7 @@ QList<QByteArray> UICtags2Api::getFileContent( const QString& s )
 
 void UICtags2Api::on_tbCtagsBinary_clicked()
 {
-	QString s = getOpenFileName( tr( "Select the ctags binary file" ), leCtagsBinary->text(), QString::null, this );
+	QString s = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Select the ctags binary file" ), leCtagsBinary->text() );
 	if ( !s.isNull() )
 		leCtagsBinary->setText( s );
 }
@@ -123,10 +126,10 @@ void UICtags2Api::on_tbBrowse_clicked()
 	switch( cbGenerateFrom->currentIndex() )
 	{
 		case 0: // include
-			s = getExistingDirectory( tr( "Select the include path to scan" ), leLabel->text(), this );
+			s = QFileDialog::getExistingDirectory( this, tr( "Select the include path to scan" ), leLabel->text() );
 			break;
 		case 1: // ctags
-			s = getOpenFileName( tr( "Select the tags file to convert" ), leLabel->text(), tr( "Ctags File (tags *.tags)" ), this );
+			s = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Select the tags file to convert" ), leLabel->text(), tr( "Ctags File (tags *.tags)" ));
 			break;
 	}
 	if ( !s.isNull() )
@@ -135,7 +138,7 @@ void UICtags2Api::on_tbBrowse_clicked()
 
 void UICtags2Api::on_tbSrcPathBrowse_clicked()
 {
-	QString s = getExistingDirectory( tr( "Select the directory from witch you generated this tags file" ), leSrcPath->text(), this );
+	QString s = QFileDialog::getExistingDirectory( this, tr( "Select the directory from witch you generated this tags file" ), leSrcPath->text() );
 	if ( !s.isNull() )
 		leSrcPath->setText( s );
 }
@@ -305,7 +308,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	}
 	
 	// get save filename
-	QString s = getSaveFileName( tr( "Save api file" ), QString::null, tr( "Api Files (*.api)" ), this );
+	QString s = QFileDialog::getSaveFileName( this, tr( "Save api file" ), tr( "Api Files (*.api)" ) );
 	if ( s.isEmpty() )
 	{
 		pbLoading->setVisible( false );

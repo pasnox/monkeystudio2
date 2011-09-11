@@ -1,21 +1,22 @@
 #ifndef PYQTPROJECTITEM_H
 #define PYQTPROJECTITEM_H
 
-#include <xupmanager/core/XUPProjectItem.h>
+#include "xupmanager/core/XUPProjectItem.h"
+
+class CLIToolPlugin;
 
 class PyQtProjectItem : public XUPProjectItem
 {
 	Q_OBJECT
 
 public:
-	enum ProjectType { PyQtProject = 3 };
-
-	virtual int projectType() const;
-	virtual void registerProjectType() const;
-	virtual XUPProjectItem* newProject() const;
+	Q_INVOKABLE PyQtProjectItem();
 	
-	virtual InterpreterPlugin* interpreter( const QString& plugin = QString() ) const;
+	virtual QString projectType() const;
 	virtual void installCommands();
+	
+protected:
+	CLIToolPlugin* interpreter() const;
 };
 
 #endif // PYQTPROJECTITEM_H

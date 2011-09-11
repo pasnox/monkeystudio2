@@ -55,8 +55,9 @@ protected:
 	void fillPluginInfos();
 	virtual bool install();
 	virtual bool uninstall();
+	
 public:
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 	
 	QStringList filters() const;
 	void setFilters( const QStringList& filters, bool updateDock = false );

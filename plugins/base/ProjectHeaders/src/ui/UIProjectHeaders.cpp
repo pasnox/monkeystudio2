@@ -13,7 +13,7 @@
 **
 ****************************************************************************/
 #include "UIProjectHeaders.h"
-#include "ProjectHeaders.h"
+#include "../ProjectHeaders.h"
 
 #include <QDir>
 #include <QFileInfoList>
@@ -27,6 +27,7 @@
 
 #include <pMonkeyStudio.h>
 #include <variablesmanager/VariablesManager.h>
+#include <shared/MkSFileDialog.h>
 
 UIProjectHeaders::UIProjectHeaders( QWidget* parent, ProjectHeaders* plugin )
 	: QDialog( parent ), mPlugin( plugin )
@@ -189,9 +190,11 @@ void UIProjectHeaders::on_cbLanguages_currentIndexChanged( int i )
 
 void UIProjectHeaders::on_tbDirectory_clicked()
 {
-	const QString s = pMonkeyStudio::getExistingDirectory( tr( "Choose the directory to scan" ), QString(), window() );
-	if ( !s.isEmpty() )
+	const QString s = MkSFileDialog::getExistingDirectory( false, window(), tr( "Choose the directory to scan" ), QString::null, false ).value( "filename" ).toString();
+	
+	if ( !s.isEmpty() ) {
 		leDirectory->setText( s );
+	}
 }
 
 void UIProjectHeaders::reject()

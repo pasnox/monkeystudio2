@@ -19,13 +19,14 @@
 #include "ClassBrowser.h"
 
 #include <qCtagsSenseBrowser.h>
-#include <widgets/pDockWidgetTitleBar.h>
+#include <pDockWidgetTitleBar.h>
 #include <coremanager/MonkeyCore.h>
-#include <widgets/pActionsManager.h>
+#include <pActionsManager.h>
 
 pDockClassBrowser::pDockClassBrowser( ClassBrowser* plugin, QWidget* w )
 	: pDockWidget( w )
 {
+	setObjectName( metaObject()->className() );
 	Q_ASSERT( plugin );
 	mPlugin = plugin;
 	

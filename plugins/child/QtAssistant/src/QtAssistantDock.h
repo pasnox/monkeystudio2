@@ -1,7 +1,7 @@
 #ifndef QTASSISTANTDOCK_H
 #define QTASSISTANTDOCK_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 #include <QUrl>
 

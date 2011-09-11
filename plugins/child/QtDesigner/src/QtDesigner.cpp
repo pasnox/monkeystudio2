@@ -24,7 +24,7 @@ void QtDesigner::fillPluginInfos()
 	mPluginInfos.Caption = tr( "Qt Designer" );
 	mPluginInfos.Description = tr( "This plugin embeds Qt Designer" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Luc Bruant aka fullmetalcoder <fullmetalcoder@hotmail.fr>";
-	mPluginInfos.Type = BasePlugin::iChild;
+	mPluginInfos.Type = BasePlugin::iBase | BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;

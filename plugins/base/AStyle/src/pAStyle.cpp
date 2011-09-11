@@ -36,7 +36,7 @@
 #include <workspace/pWorkspace.h>
 #include <workspace/pAbstractChild.h>
 #include <qscintillamanager/pEditor.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 void pAStyle::fillPluginInfos()
 {
@@ -51,7 +51,7 @@ void pAStyle::fillPluginInfos()
 	mPluginInfos.Pixmap = pIconManager::pixmap( "astyle.png", ":/icons" );
 }
 
-QWidget* pAStyle::settingsWidget()
+QWidget* pAStyle::settingsWidget() const
 { return new UISettingsAStyle; }
 
 bool pAStyle::install()

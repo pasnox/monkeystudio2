@@ -83,7 +83,7 @@ public:
 		Settings settings;
 	};
 	
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 	
 	SearchAndReplace::Settings settings() const;
 	void setSettings( const SearchAndReplace::Settings& settings );

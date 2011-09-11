@@ -17,50 +17,57 @@
 ****************************************************************************/
 #include "PyQt.h"
 #include "PyQtProjectItem.h"
-#include "../XUP/src/gui/UIXUPEditor.h"
+#include <xupmanager/core/XUPProjectItemHelper.h>
 
 #include <coremanager/MonkeyCore.h>
-#include <maininterface/UIMain.h>
-
-#include <QDir>
 
 void PyQt::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "PyQt Project" );
 	mPluginInfos.Description = tr( "PyQt Project support for XUPManager" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase | BasePlugin::iXUP;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.FirstStartEnabled = true;
 	mPluginInfos.HaveSettingsWidget = false;
+	mPluginInfos.dependencies << "Python";
 }
 
 bool PyQt::install()
 {
-	// register pythonqt item
-	mItem = new PyQtProjectItem;
-	mItem->registerProjectType();
+	mFilters = DocumentFilterMap( ":/pyqtitems" );
+	int weight = 0;
+	
+	mFilters[ "PROJECT" ].weight = weight++;
+	mFilters[ "PROJECT" ].label = tr( "PyQt Project" );
+	mFilters[ "PROJECT" ].icon = "project.png";
+	mFilters[ "PROJECT" ].type = DocumentFilter::Project;
+	mFilters[ "PROJECT" ].filters << "*.xpyqt";
+	
+	mFilters[ "FORMS" ].weight = weight++;
+	mFilters[ "FORMS" ].label = tr( "Qt Forms" );
+	mFilters[ "FORMS" ].icon = "forms.png";
+	mFilters[ "FORMS" ].type = DocumentFilter::File;
+	mFilters[ "FORMS" ].filters << "*.ui";
+	mFilters[ "FORMS" ].filtered = true;
+	
+	mFilters[ "PYTHON_FILES" ].weight = weight++;
+	mFilters[ "PYTHON_FILES" ].label = tr( "Python Sources" );
+	mFilters[ "PYTHON_FILES" ].icon = "python.png";
+	mFilters[ "PYTHON_FILES" ].type = DocumentFilter::File;
+	mFilters[ "PYTHON_FILES" ].filters << "*.py*";
+	mFilters[ "PYTHON_FILES" ].filtered = true;
+	
+	MonkeyCore::projectTypesIndex()->registerType( PLUGIN_NAME, &PyQtProjectItem::staticMetaObject, mFilters );
 	return true;
 }
 
 bool PyQt::uninstall()
 {
-	// unregister item, unregistering auto delete the item
-	mItem->unRegisterProjectType();
-	delete mItem;
-	// return default value
+	MonkeyCore::projectTypesIndex()->unRegisterType( PLUGIN_NAME );
+	mFilters.clear();
 	return true;
-}
-
-bool PyQt::editProject( XUPProjectItem* project )
-{
-	if ( !project )
-	{
-		return false;
-	}
-
-	return UIXUPEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
 }
 
 Q_EXPORT_PLUGIN2( ProjectPyQt, PyQt )

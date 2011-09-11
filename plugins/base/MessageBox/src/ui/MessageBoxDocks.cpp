@@ -33,7 +33,7 @@
 #include <workspace/pFileManager.h>
 #include <xupmanager/core/XUPProjectItem.h>
 #include <xupmanager/gui/UIXUPFindFiles.h>
-#include <consolemanager/pConsoleManagerStepModel.h>
+#include "../pConsoleManagerStepModel.h"
 
 #include <QDebug>
 
@@ -51,18 +51,15 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	// create docks
 	mBuildStep = new UIBuildStep;
 	mOutput = new UIOutput;
-	mCommand = new UICommand;
 	mStepModel = new pConsoleManagerStepModel( this );
 	mBuildStep->lvBuildSteps->setModel( mStepModel );
 	
 	// set defaultshortcuts
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
 	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
-	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
 	
 	// connections
 	connect( mBuildStep->lvBuildSteps, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( lvBuildSteps_activated( const QModelIndex& ) ) );
-	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
@@ -82,7 +79,6 @@ MessageBoxDocks::~MessageBoxDocks()
 {
 	delete mBuildStep;
 	delete mOutput;
-	delete mCommand;
 }
 
 /*!
@@ -121,16 +117,16 @@ void MessageBoxDocks::appendOutput( const QString& s )
 void MessageBoxDocks::appendLog( const QString& s )
 {
 	// we check if the scroll bar is at maximum
-	int p = mCommand->teLog->verticalScrollBar()->value();
-	bool b = p == mCommand->teLog->verticalScrollBar()->maximum();
+	int p = mOutput->tbOutput->verticalScrollBar()->value();
+	bool b = p == mOutput->tbOutput->verticalScrollBar()->maximum();
 	// appendOutput text
-	mCommand->teLog->moveCursor( QTextCursor::End );
+	mOutput->tbOutput->moveCursor( QTextCursor::End );
 	// QPlainTextEdit does not have an insertHtml member
-	QTextCursor cursor = mCommand->teLog->textCursor();
+	QTextCursor cursor = mOutput->tbOutput->textCursor();
 	cursor.insertHtml( s +"<br />" );
-	mCommand->teLog->setTextCursor( cursor );
+	mOutput->tbOutput->setTextCursor( cursor );
 	// if scrollbar is at maximum, increase it
-	mCommand->teLog->verticalScrollBar()->setValue( b ? mCommand->teLog->verticalScrollBar()->maximum() : p );
+	mOutput->tbOutput->verticalScrollBar()->setValue( b ? mOutput->tbOutput->verticalScrollBar()->maximum() : p );
 }
 
 /*!
@@ -203,31 +199,19 @@ void MessageBoxDocks::showOutput()
 }
 
 /*!
-	Show Log dock
-*/
-void MessageBoxDocks::showLog()
-{
-	// show it if need
-	if ( !mCommand->isVisible() )
-		mCommand->show();
-}
-
-/*!
 	Show next warning on Build Steps dock
 */
-void MessageBoxDocks::showNextWarning()
+void MessageBoxDocks::showNextErrorOrWarning()
 {
 	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
-	const QModelIndex index = mStepModel->nextWarning( selectedIndex );
+	const QModelIndex index = mStepModel->nextErrorOrWarning( selectedIndex );
 	
-	if ( !index.isValid() )
-	{
+	if ( !index.isValid() ) {
 		return;
 	}
 	
 	// show it if need
-	if ( !mBuildStep->isVisible() )
-	{
+	if ( !mBuildStep->isVisible() ) {
 		mBuildStep->show();
 	}
 	
@@ -235,22 +219,35 @@ void MessageBoxDocks::showNextWarning()
 	lvBuildSteps_activated( index );
 }
 
-/*!
-	Show next error on Build Steps dock
-*/
+void MessageBoxDocks::showNextWarning()
+{
+	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
+	const QModelIndex index = mStepModel->nextWarning( selectedIndex );
+	
+	if ( !index.isValid() ) {
+		return;
+	}
+	
+	// show it if need
+	if ( !mBuildStep->isVisible() ) {
+		mBuildStep->show();
+	}
+	
+	mBuildStep->lvBuildSteps->setCurrentIndex( index );
+	lvBuildSteps_activated( index );
+}
+
 void MessageBoxDocks::showNextError()
 {
 	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
 	const QModelIndex index = mStepModel->nextError( selectedIndex );
 	
-	if ( !index.isValid() )
-	{
+	if ( !index.isValid() ) {
 		return;
 	}
 	
 	// show it if need
-	if ( !mBuildStep->isVisible() )
-	{
+	if ( !mBuildStep->isVisible() ) {
 		mBuildStep->show();
 	}
 	
@@ -306,7 +303,6 @@ void MessageBoxDocks::lvBuildSteps_activated( const QModelIndex& index )
 		{
 			QString findFile = fn;
 			QFileInfoList files = topLevelProject->findFile( findFile );
-
 			switch ( files.count() )
 			{
 				case 0:
@@ -340,23 +336,11 @@ void MessageBoxDocks::lvBuildSteps_activated( const QModelIndex& index )
 
 	if ( QFile::exists( fn ) )
 	{
-		const QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
+		const QString codec = project ? project->codec() : pMonkeyStudio::defaultCodec();
 		const QPoint position = itemStep.roleValue( pConsoleManagerStep::PositionRole ).toPoint();
 		qWarning() << "point" << position;
 		MonkeyCore::fileManager()->goToLine( fn, position, codec );
 	}
-}
-
-/*!
-	Handler of pressing return in the edit of Raw Command. Executes command
-	using console manager
-*/
-void MessageBoxDocks::cbRawCommand_returnPressed()
-{
-	// send command
-	MonkeyCore::consoleManager()->sendRawCommand( mOutput->cbRawCommand->currentText() );
-	// clear lineedit
-	mOutput->cbRawCommand->setCurrentIndex( -1 );
 }
 
 /*!
@@ -488,7 +472,7 @@ void MessageBoxDocks::commandStateChanged( const pCommand& c, QProcess::ProcessS
 			// clear all tabs
 			mStepModel->clear();
 			mOutput->tbOutput->clear();
-			mCommand->teLog->clear();
+			mOutput->tbOutput->clear();
 			break;
 		case QProcess::Running:
 			ss = tr( "Running" );

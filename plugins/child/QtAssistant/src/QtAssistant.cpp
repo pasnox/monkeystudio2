@@ -6,11 +6,11 @@
 
 #include <maininterface/UIMain.h>
 #include <workspace/pWorkspace.h>
-#include <widgets/pDockToolBar.h>
+#include <pDockToolBar.h>
 
 #include <QHelpEngine>
 
-QWidget* QtAssistant::settingsWidget()
+QWidget* QtAssistant::settingsWidget() const
 {
 	MkSQtDocInstaller::collectionFileDirectory( true );
 	QHelpEngine* engine = new QHelpEngine( MkSQtDocInstaller::defaultHelpCollectionFileName() );
@@ -32,7 +32,7 @@ void QtAssistant::fillPluginInfos()
 	mPluginInfos.Caption = tr( "Qt Assistant" );
 	mPluginInfos.Description = tr( "Qt Assistant Integration" );
 	mPluginInfos.Author = "Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iChild;
+	mPluginInfos.Type = BasePlugin::iBase | BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = true;

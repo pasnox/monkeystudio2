@@ -18,7 +18,7 @@
 #ifndef QDESIGNERRESOURCESEDITOR_H
 #define QDESIGNERRESOURCESEDITOR_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 

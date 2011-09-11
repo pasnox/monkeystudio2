@@ -52,7 +52,7 @@ class MessageBox : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 
 protected:
 	QPointer<MessageBoxDocks> mMessageBoxDocks;

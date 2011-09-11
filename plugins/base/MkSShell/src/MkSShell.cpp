@@ -1,11 +1,11 @@
 #include "MkSShell.h"
 
-#include <widgets/pDockWidget.h>
-#include <widgets/pDockToolBar.h>
+#include <pDockWidget.h>
+#include <pDockToolBar.h>
 #include <shellmanager/MkSShellConsole.h>
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
-#include <widgets/pActionsManager.h>
+#include <pActionsManager.h>
 
 class MkSShellDock : public pDockWidget
 {
@@ -13,6 +13,7 @@ public:
 	MkSShellDock( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setWidget( new MkSShellConsole( this ) );
 	}
 };

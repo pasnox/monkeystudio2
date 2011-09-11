@@ -18,13 +18,15 @@
 #ifndef QDESIGNEROBJECTINSPECTOR_H
 #define QDESIGNEROBJECTINSPECTOR_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 class QDesignerObjectInspectorInterface;
 
 class QDesignerObjectInspector : public pDockWidget
 {
+	Q_OBJECT
+	
 public:
 	QDesignerObjectInspector( QDesignerFormEditorInterface* core );
 	inline QDesignerObjectInspectorInterface* interface() const { return mInterface; }

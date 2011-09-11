@@ -1,6 +1,6 @@
 #include "QtAssistantInlineSearch.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 #include <QLineEdit>
 #include <QCheckBox>

@@ -209,9 +209,9 @@ private:
             int len, ColourAllocated fore);
     QFontMetrics metrics(Font &font_);
     QString convertText(const char *s, int len);
-    static QColor convertQColor(const ColourAllocated &col,
-            unsigned alpha = 255);
     static QRgb convertQRgb(const ColourAllocated &col, unsigned alpha);
+    static QColor convertQColor(const ColourAllocated &col,
+            unsigned alpha = 0xff);
 
     bool unicodeMode;
     QPaintDevice *pd;
@@ -628,16 +628,15 @@ QRgb SurfaceImpl::convertQRgb(const ColourAllocated &col, unsigned alpha)
     unsigned g = (c >> 8) & 0xff;
     unsigned b = (c >> 16) & 0xff;
 
-    return qRgba(r, g, b, alpha);
+    QRgb rgba = (alpha << 24) | (r << 16) | (g << 8) | b;
+
+    return rgba;
 }
 
-// Convert a Scintilla colour, and alpha component, to a Qt QColor.
+// Convert a Scintilla colour, and optional alpha component, to a Qt QColor.
 QColor SurfaceImpl::convertQColor(const ColourAllocated &col, unsigned alpha)
 {
-    QColor c;
-    c.setRgb(convertQRgb(col, alpha));
-
-    return c;
+    return QColor(convertQRgb(col, alpha));
 }
 
 

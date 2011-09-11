@@ -7,13 +7,13 @@
 #include <workspace/pWorkspace.h>
 #include <workspace/pAbstractChild.h>
 #include <maininterface/UIMain.h>
-#include <objects/pIconManager.h>
-#include <widgets/pDockToolBar.h>
-#include <widgets/pMenuBar.h>
+#include <pIconManager.h>
+#include <pDockToolBar.h>
+#include <pMenuBar.h>
 
-QWidget* SearchAndReplace::settingsWidget()
+QWidget* SearchAndReplace::settingsWidget() const
 {
-	return new SearchAndReplaceSettings( this );
+	return new SearchAndReplaceSettings( const_cast<SearchAndReplace*>( this ) );
 }
 
 SearchAndReplace::Settings SearchAndReplace::settings() const

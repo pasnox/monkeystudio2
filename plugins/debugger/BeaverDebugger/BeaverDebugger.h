@@ -68,7 +68,7 @@ protected:
 	virtual bool install(); // FIXME make protected for all plugins
 	virtual bool uninstall();
 public:
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 	
 	// plugin <-> settings API
 	QString beaverPath(); //FIXME make const

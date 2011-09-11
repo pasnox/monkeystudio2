@@ -18,7 +18,7 @@
 #ifndef QDESIGNERACTIONEDITOR_H
 #define QDESIGNERACTIONEDITOR_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 class QDesignerActionEditorInterface;

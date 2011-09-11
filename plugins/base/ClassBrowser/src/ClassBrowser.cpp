@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "ClassBrowser.h"
 #include "pDockClassBrowser.h"
-#include "ClassBrowserSettings.h"
+#include "UISettingsClassBrowser.h"
 
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
@@ -26,10 +26,10 @@
 #include <xupmanager/core/XUPProjectItem.h>
 #include <pMonkeyStudio.h>
 #include <qCtagsSense.h>
-#include <widgets/pMultiToolBar.h>
+#include <pMultiToolBar.h>
 #include <workspace/pAbstractChild.h>
-#include <widgets/pActionsManager.h>
-#include <widgets/pDockToolBar.h>
+#include <pActionsManager.h>
+#include <pDockToolBar.h>
 
 #include <QDesktopServices>
 #include <QDebug>
@@ -87,9 +87,9 @@ bool ClassBrowser::uninstall()
 	return true;
 }
 
-QWidget* ClassBrowser::settingsWidget()
+QWidget* ClassBrowser::settingsWidget() const
 {
-	return new ClassBrowserSettings( this, qApp->activeWindow() );
+	return new UISettingsClassBrowser( const_cast<ClassBrowser*>( this ) );
 }
 
 qCtagsSenseProperties ClassBrowser::properties() const

@@ -41,12 +41,14 @@ protected:
 
 	void showEvent( QShowEvent* event );
 	void printFormHelper( QDesignerFormWindowInterface* form, bool quick );
+	void createNewForm();
 
 protected slots:
 	void formChanged();
 	void formSelectionChanged();
 	void formGeometryChanged();
 	void formMainContainerChanged( QWidget* widget );
+	void formFileBufferChanged();
 
 public:
 	virtual QString fileBuffer() const;
@@ -77,6 +79,7 @@ public slots:
 	virtual bool openFile( const QString& fileName, const QString& codec );
 	virtual void closeFile();
 	virtual void reload();
+	virtual void setFileBuffer( const QString& content );
 	virtual void printFile();
 	virtual void quickPrintFile();
 };

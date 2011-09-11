@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerResourcesEditor.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 #include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
@@ -33,7 +33,7 @@ QDesignerResourcesEditor::QDesignerResourcesEditor( QDesignerFormEditorInterface
 	setWindowIcon( pIconManager::icon( "resource.png", ":/icons" ) );
 
 	// object name
-	setObjectName( "x-designer/resourceseditor" );
+	setObjectName( metaObject()->className() );
 
 	// create interface
 	mInterface = QDesignerComponents::createResourceEditor( core, this );

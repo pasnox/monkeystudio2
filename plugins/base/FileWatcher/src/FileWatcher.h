@@ -48,8 +48,6 @@ public:
 		Modified,
 		Deleted
 	};
-	
-	virtual QWidget* settingsWidget();
 
 protected:
 	QPointer<QFileSystemWatcher> mFileWatcher;

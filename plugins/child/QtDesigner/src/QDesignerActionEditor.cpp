@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerActionEditor.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 #include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
@@ -34,7 +34,7 @@ QDesignerActionEditor::QDesignerActionEditor( QDesignerFormEditorInterface* core
 	setWindowIcon( pIconManager::icon( "action.png", ":/icons" ) );
 
 	// object name
-	setObjectName( "x-designer/actioneditor" );
+	setObjectName( metaObject()->className() );
 
 	// create interface
 	mInterface = QDesignerComponents::createActionEditor( core, this );

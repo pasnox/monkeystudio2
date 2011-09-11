@@ -27,10 +27,10 @@
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
 #include <workspace/pWorkspace.h>
-#include <widgets/pQueuedMessageToolBar.h>
-#include <widgets/pStylesToolButton.h>
-#include <widgets/pMenuBar.h>
-#include <widgets/pDockToolBar.h>
+#include <pQueuedMessageToolBar.h>
+#include <pStylesToolButton.h>
+#include <pMenuBar.h>
+#include <pDockToolBar.h>
 
 #include <QPluginLoader>
 

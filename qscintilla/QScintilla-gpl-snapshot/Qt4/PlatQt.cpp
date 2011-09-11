@@ -210,8 +210,9 @@ private:
             int len, ColourAllocated fore);
     QFontMetrics metrics(Font &font_);
     QString convertText(const char *s, int len);
+    static QRgb convertQRgb(const ColourAllocated &col, unsigned alpha);
     static QColor convertQColor(const ColourAllocated &col,
-            unsigned alpha = 255);
+            unsigned alpha = 0xff);
 
     bool unicodeMode;
     QPaintDevice *pd;
@@ -392,11 +393,11 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
 
     // Assume that "cornerSize" means outline width.
     if (cornerSize > 0)
-        painter->setPen(QPen(convertQColor(outline, alphaOutline), cornerSize));
+        painter->setPen(QPen(QColor(convertQRgb(outline, alphaOutline)), cornerSize));
     else
         painter->setPen(Qt::NoPen);
 
-    painter->setBrush(convertQColor(fill, alphaFill));
+    painter->setBrush(QColor(convertQRgb(fill, alphaFill)));
     painter->drawRect(rc.left, rc.top, w, h);
 }
 
@@ -583,9 +584,8 @@ QString SurfaceImpl::convertText(const char *s, int len)
     return QString::fromLatin1(s, len);
 }
 
-
-// Convert a Scintilla colour, and alpha component, to a Qt QColor.
-QColor SurfaceImpl::convertQColor(const ColourAllocated &col, unsigned alpha)
+// Convert a Scintilla colour and alpha component to a Qt QRgb.
+QRgb SurfaceImpl::convertQRgb(const ColourAllocated &col, unsigned alpha)
 {
     long c = col.AsLong();
 
@@ -593,7 +593,15 @@ QColor SurfaceImpl::convertQColor(const ColourAllocated &col, unsigned alpha)
     unsigned g = (c >> 8) & 0xff;
     unsigned b = (c >> 16) & 0xff;
 
-    return QColor(r, g, b, alpha);
+    QRgb rgba = (alpha << 24) | (r << 16) | (g << 8) | b;
+
+    return rgba;
+}
+
+// Convert a Scintilla colour, and optional alpha component, to a Qt QColor.
+QColor SurfaceImpl::convertQColor(const ColourAllocated &col, unsigned alpha)
+{
+    return QColor(convertQRgb(col, alpha));
 }
 
 

@@ -42,7 +42,7 @@
 #include <pMonkeyStudio.h>
 #include <workspace/pFileManager.h>
 #include <xupmanager/core/XUPProjectItem.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 #include "BeaverDebugger.h"
 #include "BeaverDebuggerSettings.h"
@@ -56,7 +56,7 @@ void BeaverDebugger::fillPluginInfos()
 	mPluginInfos.Caption = tr( "Beaver Debugger" );
 	mPluginInfos.Description = tr( "Plugin for use Beaver Debugger together with MkS" );
 	mPluginInfos.Author = "Andei Kopats aka hlamer <hlamer@tut.by>";
-	mPluginInfos.Type = BasePlugin::iDebugger;
+	mPluginInfos.Type = BasePlugin::iBase | BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = false;
@@ -130,9 +130,9 @@ bool BeaverDebugger::uninstall()
 	Get settings widget of plugin
 	\return Pointer to created settings widget for plugin
 */
-QWidget* BeaverDebugger::settingsWidget()
+QWidget* BeaverDebugger::settingsWidget() const
 {
-	return new BeaverDebuggerSettings(this);
+	return new BeaverDebuggerSettings(const_cast<BeaverDebugger*>(this));
 }
 
 QString BeaverDebugger::beaverPath()
@@ -243,7 +243,7 @@ void BeaverDebugger::runBeaver()
 		XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
 		if (project)
 		{
-			QString target = project->targetFilePath(true,XUPProjectItem::DebugTarget,XUPProjectItem::CurrentPlatform);
+			QString target = project->targetFilePath(XUPProjectItem::DebugTarget);
 			QFileInfo finfo(target);
 			if (target.isEmpty())
 			{

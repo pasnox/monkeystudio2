@@ -5,8 +5,8 @@
 
 #include <coremanager/MonkeyCore.h>
 #include <shellmanager/MkSShellInterpreter.h>
-#include <widgets/pQueuedMessageToolBar.h>
-#include <widgets/pMenuBar.h>
+#include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
 
 #include <QFileInfo>
 

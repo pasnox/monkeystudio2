@@ -28,8 +28,8 @@
 
 #include <workspace/pWorkspace.h>
 #include <coremanager/MonkeyCore.h>
-#include <widgets/pDockWidget.h>
-#include <objects/QSingleton.h>
+#include <pDockWidget.h>
+#include <QSingleton.h>
 
 #include <QHBoxLayout>
 #include <QTabWidget>

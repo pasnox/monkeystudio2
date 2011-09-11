@@ -21,10 +21,10 @@
 
 #include <coremanager/MonkeyCore.h>
 #include <consolemanager/pConsoleManager.h>
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <settingsmanager/Settings.h>
 #include <shellmanager/MkSShellInterpreter.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 #include <QFileIconProvider>
 #include <QDesktopServices>

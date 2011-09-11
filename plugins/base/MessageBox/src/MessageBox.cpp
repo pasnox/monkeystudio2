@@ -39,7 +39,7 @@
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
 #include <consolemanager/pConsoleManager.h>
-#include <widgets/pDockToolBar.h>
+#include <pDockToolBar.h>
 
 #include <QIcon>
 #include <QTabWidget>
@@ -70,12 +70,11 @@ bool MessageBox::install()
 {
 	// create actions
 	pMenuBar* mb = MonkeyCore::menuBar();
-	QAction* warning;
-	QAction* error;
 
 	mb->beginGroup( "mView" );
-		warning = mb->action( "aShowNextWarning", tr( "Next Warning..." ), pIconManager::icon( "warning.png", ":/icons" ), tr( "Ctrl+Shift++" ), tr( "Show the next build step warning." ) );
-		error = mb->action( "aShowNextError", tr( "Next Error..." ), pIconManager::icon( "error.png", ":/icons" ), tr( "Ctrl+Alt++" ), tr( "Show the next build step error." ) );
+		QAction* aErrorOrWarning = mb->action( "aShowNextErrorOrWarning", tr( "Next Error/Warning..." ), pIconManager::icon( "misc.png" ), QString::null, tr( "Show the next build step error/warning." ) );
+		QAction* aWarning = mb->action( "aShowNextWarning", tr( "Next Warning..." ), pIconManager::icon( "warning.png", ":/icons" ), tr( "Ctrl+Shift++" ), tr( "Show the next build step warning." ) );
+		QAction* aError = mb->action( "aShowNextError", tr( "Next Error..." ), pIconManager::icon( "error.png", ":/icons" ), tr( "Ctrl+Alt++" ), tr( "Show the next build step error." ) );
 	mb->endGroup();
 	
 	// create docks
@@ -84,11 +83,11 @@ bool MessageBox::install()
 	// add docks to main window
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
 	
 	// connections
-	connect( warning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
-	connect( error, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+	connect( aErrorOrWarning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextErrorOrWarning() ) );
+	connect( aWarning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
+	connect( aError, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 	
 	return true;
@@ -106,16 +105,19 @@ bool MessageBox::uninstall()
 {
 	// delete actions
 	pMenuBar* mb = MonkeyCore::menuBar();
-	QAction* action;
 
 	mb->beginGroup( "mView" );
-		action = mb->action( "aShowNextWarning" );
-		disconnect( action, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
-		delete action;
+		QAction* aErrorOrWarning = mb->action( "aShowNextErrorOrWarning" );
+		disconnect( aErrorOrWarning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextErrorOrWarning() ) );
+		delete aErrorOrWarning;
 
-		action = mb->action( "aShowNextError" );
-		disconnect( action, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
-		delete action;
+		QAction* aWarning = mb->action( "aShowNextWarning" );
+		disconnect( aWarning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
+		delete aWarning;
+		
+		QAction* aError = mb->action( "aShowNextError" );
+		disconnect( aError, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+		delete aError;
 	mb->endGroup();
 	
 	// disconnections
@@ -131,8 +133,8 @@ bool MessageBox::uninstall()
 	Get settings widget for configuring plugin
 	\return Pointer to widget
 */
-QWidget* MessageBox::settingsWidget()
-{ return new UIMessageBoxSettings( this ); }
+QWidget* MessageBox::settingsWidget() const
+{ return new UIMessageBoxSettings( const_cast<MessageBox*>( this ) ); }
 
 void MessageBox::onConsoleStarted()
 {
@@ -146,9 +148,6 @@ void MessageBox::onConsoleStarted()
 				break;
 			case UIMessageBoxSettings::Output:
 				mMessageBoxDocks->mOutput->show();
-				break;
-			case UIMessageBoxSettings::Command:
-				mMessageBoxDocks->mCommand->show();
 				break;
 		}
 	}

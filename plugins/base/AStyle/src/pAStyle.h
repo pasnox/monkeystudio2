@@ -41,7 +41,7 @@ protected:
 	virtual bool install();
 	virtual bool uninstall();
 public:
-	virtual QWidget* settingsWidget();
+	virtual QWidget* settingsWidget() const;
 	
 protected slots:
 	void applyFormatter();

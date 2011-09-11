@@ -38,8 +38,9 @@
 #include <coremanager/MonkeyCore.h>
 #include <workspace/pFileManager.h>
 #include <pMonkeyStudio.h>
-#include <widgets/pDockWidgetTitleBar.h>
-#include <objects/pIconManager.h>
+#include <pDockWidgetTitleBar.h>
+#include <pIconManager.h>
+#include <shared/FileSystemModel.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -47,7 +48,6 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QListView>
-#include <QFileSystemModel>
 #include <QScrollArea>
 #include <QTabWidget>
 #include <QTreeView>
@@ -63,6 +63,7 @@
 pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	: pDockWidget( w )
 {
+	setObjectName( metaObject()->className() );
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	
@@ -134,9 +135,10 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	vl->addWidget( hline );
 	
 	// dir model
-	mDirsModel = new QFileSystemModel( this );
+	mDirsModel = new FileSystemModel( this );
 	mDirsModel->setNameFilterDisables( false );
-	mDirsModel->setFilter( QDir::AllDirs | QDir::AllEntries | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mDirsModel->setRootPath( QString::null );
+	mDirsModel->setFilter( QDir::AllDirs | QDir::AllEntries | QDir::NoDotAndDotDot );
 	
 	// create proxy model
 	mFilteredModel = new FileBrowserFilteredModel( this );
@@ -285,7 +287,7 @@ void pDockFileBrowser::tv_activated( const QModelIndex& idx )
 	}
 	else
 	{
-		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
+		MonkeyCore::fileManager()->open( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
 	}
 }
 
@@ -302,7 +304,7 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 	
 	if ( !mDirsModel->isDir( index ) )
 	{
-		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
+		MonkeyCore::fileManager()->open( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
 	}
 }
 
@@ -324,7 +326,7 @@ QString pDockFileBrowser::currentPath() const
 void pDockFileBrowser::setCurrentPath( const QString& s )
 {
 	// get index
-	QModelIndex index = mDirsModel->index( s );
+	QModelIndex index = mDirsModel->QFileSystemModel::index( s );
 	// set current path
 	mFilteredModel->invalidate();
 	mTree->setRootIndex( mFilteredModel->mapFromSource( index ) );
@@ -351,7 +353,7 @@ QString pDockFileBrowser::currentFilePath() const
 void pDockFileBrowser::setCurrentFilePath( const QString& s )
 {
 	// get index
-	QModelIndex index = mDirsModel->index( s );
+	QModelIndex index = mDirsModel->QFileSystemModel::index( s );
 	index = mFilteredModel->mapFromSource( index );
 	mTree->setCurrentIndex( index );
 }

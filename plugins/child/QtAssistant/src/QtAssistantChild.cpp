@@ -2,9 +2,9 @@
 #include "QtAssistantViewer.h"
 #include "QtAssistantInlineSearch.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <coremanager/MonkeyCore.h>
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QVBoxLayout>
 #include <QTabWidget>
@@ -105,6 +105,11 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 QtAssistantChild::~QtAssistantChild()
 {
 	saveSession();
+}
+
+QString QtAssistantChild::fileBuffer() const
+{
+	return QString::null;
 }
 
 QString QtAssistantChild::context() const
@@ -368,6 +373,11 @@ void QtAssistantChild::closeFile()
 void QtAssistantChild::reload()
 {
 	emit fileReloaded();
+}
+
+void QtAssistantChild::setFileBuffer( const QString& content )
+{
+	Q_UNUSED( content );
 }
 
 void QtAssistantChild::printFile()

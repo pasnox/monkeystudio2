@@ -20,13 +20,14 @@
 
 #include "widgethost.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <coremanager/MonkeyCore.h>
-#include <widgets/pQueuedMessageToolBar.h>
-#include <objects/pStylesActionGroup.h>
+#include <pQueuedMessageToolBar.h>
+#include <pStylesActionGroup.h>
 
 #include <QDesignerFormWindowManagerInterface>
 #include <QDesignerFormWindowInterface>
+#include <QDesignerFormWindowCursorInterface>
 #include <QDesignerFormEditorInterface>
 #include <QDesignerPropertyEditorInterface>
 #include <QDesignerPropertySheetExtension>
@@ -43,20 +44,31 @@ QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 {
 	Q_ASSERT( manager );
 	mDesignerManager = manager;
+	mHostWidget = 0;
 
-	// set up ui
 	setWindowIcon( pIconManager::icon( "designer.png", ":/icons" ) );
+	
+	createNewForm();
+}
 
+void QtDesignerChild::createNewForm()
+{
+	delete mHostWidget;
+	
 	// create form host widget
 	QDesignerFormWindowInterface* form = mDesignerManager->createNewForm( this );
 	mDesignerManager->addFormWindow( form );
-
+	
 	mHostWidget = new SharedTools::WidgetHost( this, form );
 	mHostWidget->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mHostWidget->setFocusProxy( form );
 
 	setWidget( mHostWidget );
 
+	if ( isVisible() ) {
+		mDesignerManager->setActiveFormWindow( mHostWidget->formWindow() );
+	}
+	
 	connect( mHostWidget->formWindow(), SIGNAL( changed() ), this, SLOT( formChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( selectionChanged() ), this, SLOT( formSelectionChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( geometryChanged() ), this, SLOT( formGeometryChanged() ) );
@@ -92,8 +104,7 @@ void QtDesignerChild::formGeometryChanged()
 	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
 	QRect geo = sheet->property( sheet->indexOf( "geometry" ) ).toRect();
 	geo.moveTopLeft( QPoint( 0, 0 ) );
-
-	// update property
+	delete sheet;
 	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", geo, modified );
 
 	// update state
@@ -126,6 +137,8 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 			return false;
 		}
 
+		createNewForm();
+		
 		setFilePath( fileName );
 		mHostWidget->formWindow()->setFileName( fileName );
 		mHostWidget->formWindow()->setContents( &file );
@@ -152,6 +165,7 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 
 void QtDesignerChild::closeFile()
 {
+	createNewForm();
 	setFilePath( QString::null );
 	emit fileClosed();
 }
@@ -159,8 +173,25 @@ void QtDesignerChild::closeFile()
 void QtDesignerChild::reload()
 {
 	openFile( mHostWidget->formWindow()->fileName(), QString::null );
-	
 	emit fileReloaded();
+}
+
+void QtDesignerChild::formFileBufferChanged()
+{
+	QDesignerFormWindowInterface* form = mHostWidget->formWindow();
+	QRect rect = form->geometry();
+	rect.moveTopLeft( QPoint() );
+	form->cursor()->setWidgetProperty( form->mainContainer(), "geometry", rect );
+}
+
+void QtDesignerChild::setFileBuffer( const QString& content )
+{
+	createNewForm();
+	mHostWidget->formWindow()->setFileName( filePath() );
+	mHostWidget->formWindow()->setContents( content );
+	mHostWidget->formWindow()->setDirty( true );
+	formChanged();
+	QTimer::singleShot( 500, this, SLOT( formFileBufferChanged() ) );
 }
 
 QString QtDesignerChild::fileBuffer() const

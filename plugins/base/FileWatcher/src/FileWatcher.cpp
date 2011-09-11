@@ -24,7 +24,7 @@
 
 #include "FileWatcher.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <coremanager/MonkeyCore.h>
 #include <workspace/pFileManager.h>
 #include <workspace/pAbstractChild.h>
@@ -32,15 +32,6 @@
 
 #include <QFileSystemWatcher>
 #include <QDebug>
-
-/*!
-	Get settings widget of plugin
-	\return Pointer to created settings widget for plugin
-*/
-QWidget* FileWatcher::settingsWidget()
-{
-	return 0;
-}
 
 void FileWatcher::fillPluginInfos()
 {

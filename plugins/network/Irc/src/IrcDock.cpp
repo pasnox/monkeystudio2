@@ -33,6 +33,7 @@
 IrcDock::IrcDock( QWidget * w )
 	: pDockWidget( w )
 {
+	setObjectName( metaObject()->className() );
 	mUiIrcMain = new IrcStatus(this);
 	connect(mUiIrcMain, SIGNAL(ircConnect(QString, bool)), this , SLOT(onIrcConnect(QString, bool)));
 	connect(mUiIrcMain, SIGNAL(ircJoinChannel(QString)), this , SLOT(onIrcJoinChannel(QString)));

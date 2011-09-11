@@ -36,7 +36,7 @@
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
@@ -46,7 +46,7 @@
 class pTreeComboBox;
 class QLineEdit;
 class QListView;
-class QFileSystemModel;
+class FileSystemModel;
 class QTreeView;
 
 /*!
@@ -103,7 +103,7 @@ public:
 protected:
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
-	QFileSystemModel* mDirsModel;
+	FileSystemModel* mDirsModel;
 	FileBrowserFilteredModel* mFilteredModel;
 	QStringList mBookmarks;
 	QMenu* mBookmarksMenu;

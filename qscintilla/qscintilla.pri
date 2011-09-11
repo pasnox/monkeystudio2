@@ -10,7 +10,8 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	QSCINTILLAVERSION	= QScintilla-gpl-snapshot
 
 	# include path
-	INCLUDEPATH	*= $${PWD}/$${QSCINTILLAVERSION}/Qt4 $${PWD}/$${QSCINTILLAVERSION}/Qt4/Qsci #$$getFolders( $${PWD}/$${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
+	INCLUDEPATH	*= $${PWD}/$${QSCINTILLAVERSION}/include $${PWD}/$${QSCINTILLAVERSION}/src $${PWD}/$${QSCINTILLAVERSION}/Qt4 $${PWD}/$${QSCINTILLAVERSION}/Qt4/Qsci
+	#INCLUDEPATH	*= $$getFolders( $${PWD}/$${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
 
 	# dependency
 	PRE_TARGETDEPS	*= $${PWD}
@@ -24,8 +25,12 @@ QSCINTILLA_TARGET	= qscintilla2
 contains( TEMPLATE, .*app ) {
 	CONFIG(debug, debug|release) {
 		#Debug
-		unix:LIBS	*= -l$${QSCINTILLA_TARGET}_debug
-		else:LIBS	*= -l$${QSCINTILLA_TARGET}d
+		isEqual( SYSTEM_QSCINTILLA, 1 ) {
+			LIBS	*= -l$${QSCINTILLA_TARGET}
+		} else {
+			unix:LIBS	*= -l$${QSCINTILLA_TARGET}_debug
+			else:LIBS	*= -l$${QSCINTILLA_TARGET}d
+		}
 	} else {
 		#Release
 		LIBS	*= -l$${QSCINTILLA_TARGET}

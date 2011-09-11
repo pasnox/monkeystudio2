@@ -5,7 +5,7 @@
 #include "SearchResultsDock.h"
 
 #include <coremanager/MonkeyCore.h>
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 #include <maininterface/UIMain.h>
 #include <workspace/pFileManager.h>
 #include <xupmanager/core/XUPProjectItem.h>
@@ -13,13 +13,13 @@
 #include <workspace/pAbstractChild.h>
 #include <workspace/pChild.h>
 #include <qscintillamanager/pEditor.h>
-#include <widgets/pQueuedMessageToolBar.h>
-#include <widgets/pMenuBar.h>
+#include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
+#include <shared/FileSystemModel.h>
 
 #include <QTextCodec>
 #include <QFileDialog>
 #include <QCompleter>
-#include <QDirModel>
 #include <QPainter>
 #include <QStatusBar>
 #include <QProgressBar>
@@ -36,10 +36,10 @@ SearchWidget::SearchWidget( SearchAndReplace* plugin, QWidget* parent )
 	setupUi( this );
 	cbSearch->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	cbReplace->completer()->setCaseSensitivity( Qt::CaseSensitive );
-	QDirModel* fsModel = new QDirModel( this );
+	FileSystemModel* fsModel = new FileSystemModel( this );
 	fsModel->setFilter( QDir::AllDirs | QDir::NoDotAndDotDot );
+	fsModel->setRootPath( QString::null );
 	cbPath->lineEdit()->setCompleter( new QCompleter( fsModel ) );
-#warning QDirModel is deprecated but QCompleter does not yet handle QFileSystemModel - please update when possible.
 	cbMask->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	pbSearchStop->setVisible( false );
 	pbReplaceCheckedStop->setVisible( false );
@@ -218,7 +218,7 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	{
 		if ( mProperties.project )
 		{
-			const QString codec = mProperties.project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+			const QString codec = mProperties.project->codec();
 			
 			mProperties.codec = codec;
 			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
@@ -836,15 +836,7 @@ void SearchWidget::replaceThread_stateChanged()
 void SearchWidget::replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec )
 {
 	pAbstractChild* document = MonkeyCore::fileManager()->openFile( fileName, codec );
-	pEditor* editor = document->editor();
-
-	Q_ASSERT( editor );
-
-	editor->beginUndoAction();
-	editor->selectAll();
-	editor->removeSelectedText();
-	editor->insert( content );
-	editor->endUndoAction();
+	document->setFileBuffer( content );
 }
 
 void SearchWidget::replaceThread_error( const QString& error )

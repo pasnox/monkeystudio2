@@ -19,22 +19,19 @@
 #define PHPQT_H
 
 #include <pluginsmanager/XUPPlugin.h>
-
-#include <QPointer>
+#include <xupmanager/core/ProjectTypesIndex.h>
 
 class PHPQt : public XUPPlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin XUPPlugin )
 
-protected:	
-	void fillPluginInfos();
+protected:
+	DocumentFilterMap mFilters;
+	
+	virtual void fillPluginInfos();
 	virtual bool install();
 	virtual bool uninstall();
-	virtual bool editProject( XUPProjectItem* project );
-
-protected:
-	QPointer<XUPProjectItem> mItem;
 };
 
 #endif // PHPQT_H

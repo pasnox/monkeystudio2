@@ -28,8 +28,6 @@
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
-#include <string.h>
-
 #include <qapplication.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -337,30 +335,10 @@ void ScintillaQt::NotifyParent(SCNotification scn)
         break;
 
     case SCN_MODIFIED:
-        {
-            char *text;
-
-            // Give some protection to the Python bindings.
-            if (scn.text && (scn.modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) != 0))
-            {
-                text = new char[scn.length + 1];
-                memcpy(text, scn.text, scn.length);
-                text[scn.length] = '\0';
-            }
-            else
-            {
-                text = 0;
-            }
-
-            emit qsb->SCN_MODIFIED(scn.position, scn.modificationType, text,
-                    scn.length, scn.linesAdded, scn.line, scn.foldLevelNow,
-                    scn.foldLevelPrev, scn.token, scn.annotationLinesAdded);
-
-            if (text)
-                delete[] text;
-
-            break;
-        }
+        emit qsb->SCN_MODIFIED(scn.position, scn.modificationType, scn.text,
+                scn.length, scn.linesAdded, scn.line, scn.foldLevelNow,
+                scn.foldLevelPrev, scn.token, scn.annotationLinesAdded);
+        break;
 
     case SCN_MODIFYATTEMPTRO:
         emit qsb->SCN_MODIFYATTEMPTRO();

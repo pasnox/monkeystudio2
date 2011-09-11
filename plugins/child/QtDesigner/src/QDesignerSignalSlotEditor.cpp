@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerSignalSlotEditor.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 #include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
@@ -33,7 +33,7 @@ QDesignerSignalSlotEditor::QDesignerSignalSlotEditor( QDesignerFormEditorInterfa
 	setWindowIcon( pIconManager::icon( "signal.png", ":/icons" ) );
 
 	// object name
-	setObjectName( "x-designer/signalsloteditor" );
+	setObjectName( metaObject()->className() );
 
 	// create interface
 	mInterface = QDesignerComponents::createSignalSlotEditor( core, this );

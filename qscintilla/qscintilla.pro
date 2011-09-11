@@ -13,21 +13,23 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 } else {
 	# define where is the official qscintilla folder
 	QSCINTILLAVERSION	= ./QScintilla-gpl-snapshot
-
+	
 	# include original project
 	include( $$QSCINTILLAVERSION/Qt4/qscintilla.pro )
-
+	
 	# include path
 	QSCINTILLA_SOURCES_PATHS = $$getFolders( $${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
 	INCLUDEPATH	-= .
 	INCLUDEPATH	-= ../include
 	INCLUDEPATH	-= ../src
-	INCLUDEPATH	*= $${QSCINTILLAVERSION}/Qt4 $${QSCINTILLAVERSION}/include $${QSCINTILLAVERSION}/src #$${QSCINTILLA_SOURCES_PATHS}
+	INCLUDEPATH	*= $${QSCINTILLAVERSION}/include $${QSCINTILLAVERSION}/src $${QSCINTILLAVERSION}/Qt4
+	#INCLUDEPATH	*= $${QSCINTILLA_SOURCES_PATHS}
 	DEPENDPATH	*= $${QSCINTILLA_SOURCES_PATHS}
 
 	# overwrite some values to made no lib
 	CONFIG	-= dll
-	CONFIG	*= staticlib
+	CONFIG	-= release
+	CONFIG	+= staticlib
 
 	# remove install script of qscintilla
 	INSTALLS	-= header trans qsci target
@@ -35,8 +37,5 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 
 # include config file
 include( ../config.pri )
-
-CONFIG	-= warn_on
-CONFIG	*= warn_off
 
 DESTDIR	= $${PACKAGE_BUILD_PATH}

@@ -1,9 +1,6 @@
 <!DOCTYPE XUPProject>
 <project version="1.1.0" name="cat_output_txt" >
     <scope nested="false" name="XUPProjectSettings" >
-        <variable operator="=" name="EDITOR" multiline="false" >
-            <value content="XUP" />
-        </variable>
         <scope nested="false" name="Commands" >
             <variable operator="=" name="Command" multiline="true" >
                 <value content="8" />

@@ -5,13 +5,13 @@
 #include "topicchooser.h"
 #include "bookmarkmanager.h"
 
-#include <objects/pIconManager.h>
-#include <widgets/pDockWidgetTitleBar.h>
-#include <widgets/pQueuedMessageToolBar.h>
+#include <pIconManager.h>
+#include <pDockWidgetTitleBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <coremanager/MonkeyCore.h>
 #include <qscintillamanager/pEditor.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 #include <QHelpEngine>
 #include <QHelpContentWidget>
@@ -32,7 +32,7 @@
 QtAssistantDock::QtAssistantDock( QWidget* parent )
 	: pDockWidget( parent )
 {
-	setObjectName( "QtAssistantDock" );
+	setObjectName( metaObject()->className() );
 	setWindowTitle( "Qt Assistant" );
 	setWindowIcon( pIconManager::icon( "QtAssistant.png", ":/assistant-icons" ) );
 	

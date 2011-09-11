@@ -31,7 +31,7 @@
 
 #include <coremanager/MonkeyCore.h>
 #include <maininterface/UIMain.h>
-#include <widgets/pMenuBar.h>
+#include <pMenuBar.h>
 
 #include <QTimer>
 

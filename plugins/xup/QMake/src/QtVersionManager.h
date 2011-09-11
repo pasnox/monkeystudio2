@@ -1,7 +1,7 @@
 #ifndef QTVERSIONMANAGER_H
 #define QTVERSIONMANAGER_H
 
-#include <objects/pSettings.h>
+#include <pSettings.h>
 
 #include <QFile>
 #include <QDomDocument>
@@ -10,7 +10,7 @@ class MkSShellInterpreter;
 
 struct QtVersion
 {
-	QtVersion() { Default = false; HasQt4Suffix = false; }
+	QtVersion( const QString& version = QString::null) { Version = version; Default = false; HasQt4Suffix = false; }
 	QtVersion( const QString& version, const QString& path, bool def, const QString& qmakeSpec, const QString& qmakeParams, bool haveSuffixe )
 	{ Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HasQt4Suffix = haveSuffixe; }
 
@@ -91,12 +91,12 @@ struct QtVersion
 
 struct QtItem
 {
-	QtItem() {}
+	QtItem( const QString& t = QString::null ) : Text( t ) {}
 	QtItem( const QString& t, const QString& v, const QString& s, const QString& h = QString::null )
 		: Text( t ), Value( v ), Variable( s ), Help( h ) {}
 
-	bool operator==( const QtItem& o ) { return Text == o.Text && Value == o.Value && Variable == o.Variable && Help == o.Help; }
-	bool operator!=( const QtItem& o ) { return !operator==( o ); }
+	bool operator==( const QtItem& o ) const { return Text == o.Text && Value == o.Value && Variable == o.Variable && Help == o.Help; }
+	bool operator!=( const QtItem& o ) const { return !operator==( o ); }
 
 	QString Text;
 	QString Value;

@@ -21,6 +21,7 @@ public:
 	QtAssistantChild( QHelpEngine* engine, QWidget* parent = 0 );
 	virtual ~QtAssistantChild();
 
+	virtual QString fileBuffer() const;
 	virtual QString context() const;
 	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
@@ -70,6 +71,7 @@ public slots:
 	virtual bool openFile( const QString& fileName, const QString& codec );
 	virtual void closeFile();
 	virtual void reload();
+	virtual void setFileBuffer( const QString& content );
 	virtual void printFile();
 	virtual void quickPrintFile();
 

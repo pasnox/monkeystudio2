@@ -25,8 +25,6 @@ class Pattern:
 		string = copy.copy(template)
 		string = string.replace('%0', match) # input string without \n
 		for i, val in enumerate(vars):
-			if val is None: # (blablabla)? pattern returns None, if not found
-				val = ''
 			string = string.replace('%%%d' % (i + 1), val)
 		return string
 	
@@ -38,7 +36,7 @@ class Pattern:
 		res = re.search(self.pattern, string)
 		
 		if res is None:
-			print >> sys.stderr, 'Failed pattern "%s", text <%s>\n' %(self.comment, string)
+			print 'Failed pattern %s, text <%s>\n' %(self.comment, string)
 			assert(None)
 		
 		match = string[res.start():res.end()]

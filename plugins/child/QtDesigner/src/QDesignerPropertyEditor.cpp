@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QDesignerPropertyEditor.h"
 
-#include <objects/pIconManager.h>
+#include <pIconManager.h>
 
 #include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
@@ -34,7 +34,7 @@ QDesignerPropertyEditor::QDesignerPropertyEditor( QDesignerFormEditorInterface* 
 	setWindowIcon( pIconManager::icon( "property.png", ":/icons" ) );
 
 	// object name 
-	setObjectName( "x-designer/propertyeditor" );
+	setObjectName( metaObject()->className() );
 
 	// create interface
 	mInterface = QDesignerComponents::createPropertyEditor( core, this );

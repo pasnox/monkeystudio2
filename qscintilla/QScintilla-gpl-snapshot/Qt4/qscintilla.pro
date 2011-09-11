@@ -29,7 +29,7 @@
 
 
 # This must be kept in sync with configure.py.
-!win32:VERSION = 5.4.1
+!win32:VERSION = 5.2.0
 
 TEMPLATE = lib
 TARGET = qscintilla2

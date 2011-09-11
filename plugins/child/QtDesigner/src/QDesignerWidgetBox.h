@@ -18,13 +18,15 @@
 #ifndef QDESIGNERWIDGETBOX_H
 #define QDESIGNERWIDGETBOX_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 class QDesignerFormEditorInterface;
 class QDesignerWidgetBoxInterface;
 
 class QDesignerWidgetBox : public pDockWidget
 {
+	Q_OBJECT
+	
 public:
 	QDesignerWidgetBox( QDesignerFormEditorInterface* core ) ;
 	~QDesignerWidgetBox();
