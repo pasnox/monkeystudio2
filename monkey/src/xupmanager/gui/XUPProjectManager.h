@@ -1,8 +1,7 @@
 #ifndef XUPPROJECTMANAGER_H
 #define XUPPROJECTMANAGER_H
 
-#include <objects/MonkeyExport.h>
-
+#include "MonkeyExport.h"
 #include "ui_XUPProjectManager.h"
 #include "xupmanager/core/XUPProjectItem.h"
 
@@ -10,14 +9,16 @@
 
 class XUPProjectModel;
 class XUPFilteredProjectModel;
+class XUPOpenedProjectsModel;
 class XUPItem;
 
 class Q_MONKEY_EXPORT XUPProjectManager : public pDockWidget, public Ui::XUPProjectManager
 {
 	Q_OBJECT
+	friend class DebugDockWidget;
 
 public:
-	enum ActionType { atNew = 0, atOpen, atClose, atCloseAll, atEdit, atAddFiles, atRemoveFiles };
+	enum ActionType { atNew = 0, atClose, atCloseAll, atEdit, atAddFiles, atRemoveFiles };
 	
 	XUPProjectManager( QWidget* parent = 0 );
 	virtual ~XUPProjectManager();
@@ -28,18 +29,19 @@ public:
 	XUPItem* currentItem() const;
 	XUPProjectItemList topLevelProjects() const;
 	
-	void addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op = QString::null );
+	void addFiles( const QStringList& files, XUPItem* scope = NULL);
 
 protected:
 	QMap<XUPProjectManager::ActionType, QAction*> mActions;
 	XUPFilteredProjectModel* mFilteredModel;
+	XUPOpenedProjectsModel* mOpenedProjectsModel;
 	
-	QString checkForBestAddOperator( const XUPItemList& variables ) const;
+	// debug member to be used by AppDebug plugin
+	void openProject( XUPProjectItem* project );
 
 public slots:
 	bool openProject( const QString& fileName, const QString& codec );
 	void newProject();
-	bool openProject();
 	void closeProject();
 	void closeAllProjects();
 	void editProject();

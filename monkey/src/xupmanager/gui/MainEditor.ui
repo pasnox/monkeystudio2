@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainEditor</class>
+ <widget class="XUPPageEditor" name="MainEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Project</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resources.qrc">
+    <normaloff>:/xupeditor/icons/xupeditor/project.png</normaloff>:/xupeditor/icons/xupeditor/project.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="gbProject">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Project</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lProjectName">
+        <property name="text">
+         <string>Name</string>
+        </property>
+        <property name="buddy">
+         <cstring>leProjectName</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leProjectName"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lMainFile">
+        <property name="text">
+         <string>Main File</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cbMainFile">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbDynamicFolder">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Dynamic Folder</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="hlDynamicFolder">
+        <item>
+         <widget class="QLabel" name="lDynamicFolder">
+          <property name="text">
+           <string>Folder</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="leDynamicFolder"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tbDynamicFolder">
+          <property name="icon">
+           <iconset resource="../../resources/resources.qrc">
+            <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>16</width>
+          <height>9</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="pStringListEditor" name="gbDynamicFilesPatterns">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolBar {
+	border: 0px;
+	background-color: transparent;
+}</string>
+        </property>
+        <property name="title">
+         <string>Files Patterns</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>XUPPageEditor</class>
+   <extends>QFrame</extends>
+   <header>xupmanager/gui/XUPPageEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>pStringListEditor</class>
+   <extends>QGroupBox</extends>
+   <header>pStringListEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

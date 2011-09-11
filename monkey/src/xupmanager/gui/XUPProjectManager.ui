@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
-    <height>383</height>
+    <width>290</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="allowedAreas">
@@ -66,7 +66,7 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header location="global">widgets/pDockWidget.h</header>
+   <header>pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
