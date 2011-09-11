@@ -1,11 +1,13 @@
 #ifndef XUPPROJECTMODELPROXY_H
 #define XUPPROJECTMODELPROXY_H
 
+#include "MonkeyExport.h"
+
 #include <QSortFilterProxyModel>
 
 class XUPProjectModel;
 
-class XUPProjectModelProxy : public QSortFilterProxyModel
+class Q_MONKEY_EXPORT XUPProjectModelProxy : public QSortFilterProxyModel
 {
 public:
 	XUPProjectModelProxy( QObject* parent = 0, bool showDisabled = true );

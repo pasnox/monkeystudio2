@@ -1,13 +1,12 @@
 #ifndef XUPPROJECTMODEL_H
 #define XUPPROJECTMODEL_H
 
-#include <objects/MonkeyExport.h>
+#include "MonkeyExport.h"
 
 #include <QAbstractItemModel>
 
 class XUPProjectItem;
 class XUPItem;
-class QFileSystemWatcher;
 
 class Q_MONKEY_EXPORT XUPProjectModel : public QAbstractItemModel
 {
@@ -15,10 +14,10 @@ class Q_MONKEY_EXPORT XUPProjectModel : public QAbstractItemModel
 	friend class XUPFilteredProjectModel;
 	friend class XUPProjectManager;
 	friend class XUPItem;
+	friend class XUPDynamicFolderItem;
 	
 public:
-	enum CustomRole
-	{
+	enum CustomRole {
 		TypeRole = Qt::UserRole
 	};
 	
@@ -33,6 +32,7 @@ public:
 	virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 	virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 	virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 	
 	//
 	QModelIndex indexFromItem( XUPItem* item ) const;
@@ -40,14 +40,7 @@ public:
 	XUPProjectItem* rootProject() const;
 	
 	// error handler
-	void setLastError( const QString& error );
-	QString lastError() const;
-	
-	// file watcher
-	void registerWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project );
-	void registerWithFileWatcher( QFileSystemWatcher* watcher );
-	void unregisterWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project );
-	void unregisterWithFileWatcher( QFileSystemWatcher* watcher );
+	void showError( const QString& error );
 	
 	// XUP Project members
 	virtual bool open( const QString& fileName, const QString& codec );
@@ -55,7 +48,8 @@ public:
 
 protected:
 	XUPProjectItem* mRootProject;
-	QString mLastError;
+	
+	void handleProject( XUPProjectItem* project );
 };
 
 Q_DECLARE_METATYPE( XUPProjectModel* )

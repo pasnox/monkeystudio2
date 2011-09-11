@@ -1,8 +1,9 @@
-#include "XUPProjectModel.h"
-#include "XUPProjectItem.h"
-#include "XUPProjectItemHelper.h"
+#include "xupmanager/core/XUPProjectModel.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "coremanager/MonkeyCore.h"
 
-#include <QFileSystemWatcher>
+#include <pQueuedMessageToolBar.h>
+
 #include <QDebug>
 
 XUPProjectModel::XUPProjectModel( QObject* parent )
@@ -134,78 +135,55 @@ QVariant XUPProjectModel::headerData( int section, Qt::Orientation orientation, 
 
 QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 {
-	if ( !index.isValid() )
-	{
+	if ( !index.isValid() ) {
 		return QVariant();
 	}
+	
+	XUPItem* item = static_cast<XUPItem*>( index.internalPointer() );
 
-	switch ( role )
-	{
+	switch ( role ) {
 		case Qt::DecorationRole:
+			return item->displayIcon();
 		case Qt::DisplayRole:
-		case Qt::ToolTipRole:
+			return item->displayText();
 		case XUPProjectModel::TypeRole:
+			return item->type();
+		case Qt::ToolTipRole:
 		{
-			XUPItem* item = static_cast<XUPItem*>( index.internalPointer() );
-			
-			if ( role == XUPProjectModel::TypeRole )
-			{
-				return item->type();
-			}
-
-			QDomNode node = item->node();
+			const QDomNode node = item->node();
+			const QDomNamedNodeMap attributeMap = node.attributes();
 			QStringList attributes;
-			QDomNamedNodeMap attributeMap = node.attributes();
 			
-			if ( role == Qt::DecorationRole )
-			{
-				return item->displayIcon();
+			if ( item->type() == XUPItem::Project ) {
+				attributes << QString( "Project: %1" ).arg( item->project()->fileName() );
 			}
-			else if ( role == Qt::DisplayRole )
-			{
-				return item->displayText();
-			}
-			else if ( role == Qt::ToolTipRole )
-			{
-				if ( item->type() == XUPItem::Project )
-				{
-					attributes << QString( "Project: %1" ).arg( item->project()->fileName() );
-				}
+			
+			for ( int i = 0; i < attributeMap.count(); i++ ) {
+				const QDomNode attribute = attributeMap.item( i );
+				const QString name = attribute.nodeName();
+				const QString value = attribute.nodeValue();
 				
-				for ( int i = 0; i < attributeMap.count(); i++ )
-				{
-					QDomNode attribute = attributeMap.item( i );
-					QString name = attribute.nodeName();
-					attributes << name +"=\"" +attribute.nodeValue() +"\"";
-					
-					switch ( item->type() )
-					{
-						case XUPItem::Value:
-						case XUPItem::File:
-						case XUPItem::Path:
-						{
-							if ( name == "content" )
-							{
-								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
-							}
-							break;
-						}
-						case XUPItem::Function:
-						{
-							if ( name == "parameters" )
-							{
-								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
-							}
-							break;
-						}
-						default:
-							break;
-					}
-				}
-				
-				return attributes.join( "\n" );
+				attributes << QString( "%1=\"%2\"" ).arg( name ).arg( value );
 			}
+			
+			switch ( item->type() ) {
+				case XUPItem::Value:
+					attributes << QString( "Value=\"%1\"" ).arg( item->content() );
+					break;
+				case XUPItem::File:
+					attributes << QString( "File=\"%1\"" ).arg( item->content() );
+					break;
+				case XUPItem::Path:
+					attributes << QString( "Path=\"%1\"" ).arg( item->content() );
+					break;
+				default:
+					break;
+			}
+			
+			return attributes.join( "\n" );
 		}
+		case Qt::SizeHintRole:
+			return QSize( -1, 18 );
 		default:
 			break;
 	}
@@ -223,83 +201,52 @@ Qt::ItemFlags XUPProjectModel::flags( const QModelIndex& index ) const
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void XUPProjectModel::setLastError( const QString& error )
+bool XUPProjectModel::hasChildren( const QModelIndex& parent ) const
 {
-	mLastError = error;
-}
-
-QString XUPProjectModel::lastError() const
-{
-	return mLastError;
-}
-
-void XUPProjectModel::registerWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project )
-{
-	const XUPDynamicFolderSettings folder = XUPProjectItemHelper::projectDynamicFolderSettings( project );
-	
-	if ( folder.isNull() || !folder.Active )
+	if ( parent.column() > 0 )
 	{
-		return;
+		return 0;
 	}
-	
-	connect( watcher, SIGNAL( directoryChanged( const QString& ) ), project, SLOT( directoryChanged( const QString& ) ) );
-	
-	const QString path = project->path();
-	
-	if ( !watcher->directories().contains( path ) )
+
+	if ( !parent.isValid() )
 	{
-		watcher->addPath( path );
+		return mRootProject ? 1 : 0;
 	}
-	
-	project->directoryChanged( path );
+
+	XUPItem* parentItem = static_cast<XUPItem*>( parent.internalPointer() );
+	return parentItem->hasChildren();
 }
 
-void XUPProjectModel::registerWithFileWatcher( QFileSystemWatcher* watcher )
+void XUPProjectModel::showError( const QString& error )
 {
-	foreach ( XUPProjectItem* project, mRootProject->childrenProjects( true ) )
-	{
-		registerWithFileWatcher( watcher, project );
+	if ( !error.trimmed().isEmpty() ) {
+		MonkeyCore::messageManager()->appendMessage( error );
 	}
 }
 
-void XUPProjectModel::unregisterWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project )
+void XUPProjectModel::handleProject( XUPProjectItem* project )
 {
-	disconnect( watcher, SIGNAL( directoryChanged( const QString& ) ), project, SLOT( directoryChanged( const QString& ) ) );
-	
-	const QString path = project->path();
-	
-	if ( watcher->directories().contains( path ) )
-	{
-		watcher->removePath( path );
-	}
-}
-
-void XUPProjectModel::unregisterWithFileWatcher( QFileSystemWatcher* watcher )
-{
-	foreach ( XUPProjectItem* project, mRootProject->childrenProjects( true ) )
-	{
-		unregisterWithFileWatcher( watcher, project );
-	}
+	mRootProject = project;
+	mRootProject->mModel = this;
 }
 
 bool XUPProjectModel::open( const QString& fileName, const QString& codec )
 {
-	XUPProjectItem* tmpProject = XUPProjectItem::projectInfos()->newProjectItem( fileName );
+	XUPProjectItem* tmpProject = MonkeyCore::projectTypesIndex()->newProjectItem( fileName );
+	
 	if ( !tmpProject )
 	{
-		setLastError( tr( "No project handler for this project file" ) );
+		showError( tr( "No project handler for this project file '%1'" ).arg( fileName ) );
 		return false;
 	}
 	
 	if ( tmpProject->open( fileName, codec ) )
 	{
-		setLastError( QString::null );
-		mRootProject = tmpProject;
-		mRootProject->mModel = this;
+		handleProject( tmpProject );
 		return true;
 	}
 	
-	setLastError( tr( "Can't open this project file: " ).append( tmpProject->lastError() ) );
+	showError( tr( "Can't open this project file '%1'" ).arg( fileName ) );
 	delete tmpProject;
 	return false;
 }
@@ -308,7 +255,6 @@ void XUPProjectModel::close()
 {
 	if ( mRootProject )
 	{
-		setLastError( QString::null );
 		delete mRootProject;
 		mRootProject = 0;
 	}

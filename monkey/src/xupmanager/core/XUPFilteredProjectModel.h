@@ -1,9 +1,8 @@
 #ifndef XUPFILTEREDPROJECTMODEL_H
 #define XUPFILTEREDPROJECTMODEL_H
 
-#include <objects/MonkeyExport.h>
-
-#include "XUPProjectModel.h"
+#include "MonkeyExport.h"
+#include "xupmanager/core/XUPProjectModel.h"
 #include "XUPItem.h"
 
 #include <QMap>
@@ -18,16 +17,15 @@ struct Q_MONKEY_EXPORT Mapping
 		mParent = 0;
 	}
 	
-	QModelIndex mProxyIndex;
 	XUPItem* mParent;
-	QList<XUPItem*> mMappedChildren;
+	XUPItemList mMappedChildren;
 	XUPItemMappingIterator mIterator;
 	
 	XUPItem* findVariable( const QString& name ) const
 	{
 		foreach ( XUPItem* item, mMappedChildren )
 		{
-			if ( ( item->type() == XUPItem::Variable || XUPItem::DynamicFolder ) &&
+			if ( ( item->type() == XUPItem::Variable ) &&
 				item->attribute( "name" ) == name )
 			{
 				return item;
@@ -36,18 +34,24 @@ struct Q_MONKEY_EXPORT Mapping
 		return 0;
 	}
 	
-	XUPItem* findValue( const QString& content ) const
+	XUPItem* findValue( XUPItem* item ) const
 	{
-		foreach ( XUPItem* item, mMappedChildren )
+		foreach ( XUPItem* child, mMappedChildren )
 		{
-			switch ( item->type() )
+			switch ( child->type() )
 			{
 				case XUPItem::Value:
 				case XUPItem::File:
 				case XUPItem::Path:
-					if ( item->attribute( "content" ) == content )
+					if ( child->content() == item->content() )
 					{
-						return item;
+						return child;
+					}
+					break;
+				case XUPItem::Folder:
+					if ( child->attribute( "name" ) == item->attribute( "name" ) )
+					{
+						return child;
 					}
 					break;
 				default:
@@ -74,6 +78,7 @@ public:
 	virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 	virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 	virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 	
 	XUPItemMappingIterator indexToIterator( const QModelIndex& proxyIndex ) const;
 	XUPItem* mapToSource( const QModelIndex& proxyIndex ) const;
@@ -82,9 +87,10 @@ public:
 	void setSourceModel( XUPProjectModel* model );
 	XUPProjectModel* sourceModel() const;
 	
-	XUPItemList getFilteredVariables( const XUPItem* root );
-	XUPItemList getValues( const XUPItem* root );
+	XUPItemList getFilteredVariables( XUPItem* root );
+	XUPItemList getValues( XUPItem* root );
 	
+	void populateDynamicFolder( XUPItem* folder );
 	void populateVariable( XUPItem* variable );
 	void populateProject( XUPProjectItem* item );
 	

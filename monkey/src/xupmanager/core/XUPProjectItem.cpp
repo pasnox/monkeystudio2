@@ -1,16 +1,19 @@
-#include "XUPProjectItem.h"
-#include "XUPProjectItemHelper.h"
-#include "XUPProjectModel.h"
-#include "pluginsmanager/BuilderPlugin.h"
-#include "pluginsmanager/DebuggerPlugin.h"
-#include "pluginsmanager/InterpreterPlugin.h"
+#include "xupmanager/core/XUPProjectItem.h"
+#include "xupmanager/core/XUPProjectModel.h"
 #include "coremanager/MonkeyCore.h"
+#include "pMenuBar.h"
 #include "pluginsmanager/PluginsManager.h"
 #include "pMonkeyStudio.h"
 #include "maininterface/UIMain.h"
+#include "pluginsmanager/XUPPlugin.h"
+#include "xupmanager/core/XUPProjectItemHelper.h"
+#include "xupmanager/core/XUPDynamicFolderItem.h"
+#include "xupmanager/core/XUPProjectItemCache.h"
+#include "workspace/pFileManager.h"
+#include "xupmanager/gui/UIXUPEditor.h"
+#include "consolemanager/pCommand.h"
 
-#include <objects/pIconManager.h>
-#include <widgets/pMenuBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextCodec>
 #include <QDir>
@@ -18,13 +21,14 @@
 #include <QProcess>
 #include <QFileDialog>
 #include <QLibrary>
+#include <QMessageBox>
+
+#include <pVersion.h>
 
 #include <QDebug>
 
-const QString XUP_VERSION = "1.1.0";
-
-XUPProjectItemInfos* XUPProjectItem::mXUPProjectInfos = new XUPProjectItemInfos();
-bool XUPProjectItem::mFoundCallerItem = false;
+XUPProjectItemCache XUPProjectItem::mProjectsCache;
+XUPProjectItemCacheBackend XUPProjectItem::mProjectsCacheBackend = XUPProjectItemCacheBackend( &XUPProjectItem::mProjectsCache );
 
 XUPProjectItem::XUPProjectItem()
 	: XUPItem( QDomElement(), 0 )
@@ -33,21 +37,19 @@ XUPProjectItem::XUPProjectItem()
 
 XUPProjectItem::~XUPProjectItem()
 {
+	XUPProjectItem::cache()->clear( this );
 }
 
-void XUPProjectItem::setLastError( const QString& error )
+void XUPProjectItem::showError( const QString& error )
 {
-	setTemporaryValue( "lastError", error );
-}
-
-QString XUPProjectItem::lastError() const
-{
-	return temporaryValue( "lastError" ).toString();
+	if ( !error.trimmed().isEmpty() ) {
+		MonkeyCore::messageManager()->appendMessage( error );
+	}
 }
 
 QString XUPProjectItem::fileName() const
 {
-	return temporaryValue( "fileName" ).toString();
+	return mFileName;
 }
 
 QString XUPProjectItem::path() const
@@ -55,214 +57,229 @@ QString XUPProjectItem::path() const
 	return QFileInfo( fileName() ).path();
 }
 
-QString XUPProjectItem::filePath( const QString& fn ) const
+QString XUPProjectItem::filePath( const QString& _fn ) const
 {
-	if ( fn.isEmpty() )
+	const QString fn = unquotedValue( _fn );
+	
+	if ( fn.isEmpty() ) {
 		return QString::null;
-	QString fname = QFileInfo( fn ).isRelative() ? path().append( "/" ).append( fn ) : fn;
-	return QDir::cleanPath( fname );
+	}
+	
+	return QDir::cleanPath(
+		QFileInfo( fn ).isRelative()
+			? QString( "%1/%2" ).arg( path() ).arg( fn )
+			: fn
+	);
 }
 
-QString XUPProjectItem::relativeFilePath( const QString& fileName ) const
+QString XUPProjectItem::relativeFilePath( const QString& _fn ) const
 {
+	const QString fn = unquotedValue( _fn );
+	
+	if ( fn.isEmpty() ) {
+		return QString::null;
+	}
+	
 	QDir dir( path() );
-	return dir.relativeFilePath( fileName );
+	
+	return QDir::cleanPath(
+		dir.relativeFilePath( fn )
+	);
 }
 
 QStringList XUPProjectItem::sourceFiles() const
 {
-	QStringList files;
-
-	// get variables that handle files
-	const QStringList fileVariables = mXUPProjectInfos->fileVariables( projectType() );
-
-	// get all variable that represent files
-	foreach ( const QString& variable, fileVariables )
-	{
-		const QStringList values = splitMultiLineValue( mVariableCache.value( variable ) );
-
-		foreach ( const QString& value, values )
-		{
-			const QString file = filePath( value );
-			const QFileInfo fi( file );
-
-			if ( fi.isDir() )
-			{
-				continue;
+	QSet<QString> entries;
+	
+	foreach ( const QString& name, documentFilters().fileVariables() ) {
+		XUPItemList variables = getVariables( this, name );
+		
+		foreach ( XUPItem* variable, variables ) {
+			foreach( XUPItem* item, variable->childrenList() ) {
+				if ( item->type() == XUPItem::File ) {
+					entries << filePath( item->cacheValue( "content" ) );
+				}
 			}
-
-			files << file;
 		}
 	}
 	
 	// get dynamic files
-	XUPItem* dynamicFolderItem = XUPProjectItemHelper::projectDynamicFolderItem( const_cast<XUPProjectItem*>( this ), false );
+	const XUPDynamicFolderSettings settings = XUPProjectItemHelper::projectDynamicFolderSettings( const_cast<XUPProjectItem*>( this ) );
 	
-	if ( dynamicFolderItem )
-	{
-		foreach ( XUPItem* valueItem, dynamicFolderItem->childrenList() )
-		{
-			if ( valueItem->type() == XUPItem::File )
-			{
-				files << valueItem->attribute( "content" );
-			}
+	if ( settings.Active && !settings.AbsolutePath.isEmpty() && QFile::exists( settings.AbsolutePath ) ) {
+		QDir dir( settings.AbsolutePath );
+		QFileInfoList files = pMonkeyStudio::getFiles( dir, settings.FilesPatterns, true );
+		
+		foreach ( const QFileInfo& fi, files ) {
+			entries << fi.absoluteFilePath();
 		}
 	}
-
-	return files;
+	
+	return entries.toList();
 }
 
 QStringList XUPProjectItem::topLevelProjectSourceFiles() const
 {
-	QSet<QString> files;
+	QStringList files;
 
-	XUPProjectItemList projects = childrenProjects( true );
-
-	foreach ( XUPProjectItem* project, projects )
-	{
-		const QStringList sources = project->sourceFiles();
-
-		foreach ( const QString& source, sources )
-		{
-			files << source;
-		}
+	foreach ( XUPProjectItem* project, childrenProjects( true ) ) {
+		files << project->sourceFiles();
 	}
 
-	return files.toList();
+	// remove duplicates
+	return files.toSet().toList();
 }
 
-QStringList XUPProjectItem::splitMultiLineValue( const QString& value )
+XUPPlugin* XUPProjectItem::driver() const
 {
-	QStringList tmpValues = value.split( " ", QString::SkipEmptyParts );
-	bool inStr = false;
-	QStringList multivalues;
-	QString ajout;
+	return MonkeyCore::pluginsManager()->plugin<XUPPlugin*>( PluginsManager::stAll, projectType() );
+}
 
-	for(int ku = 0;ku < tmpValues.size();ku++)
-	{
-		if(tmpValues.value(ku).startsWith('"') )
-				inStr = true;
-		if(inStr)
-		{
-			if(ajout != "")
-					ajout += " ";
-			ajout += tmpValues.value(ku);
-			if(tmpValues.value(ku).endsWith('"') )
-			{
-					multivalues += ajout;
-					ajout = "";
-					inStr = false;
+QStringList XUPProjectItem::autoActivatePlugins() const
+{
+	return driver()->infos().dependencies;
+}
+
+void XUPProjectItem::addFiles( const QStringList& files, XUPItem* _scope )
+{
+	const DocumentFilterMap& filters = documentFilters();
+	const QString op = defaultOperator();
+	XUPItem* scope = _scope ? _scope : this;
+	XUPProjectItem* project = scope ? scope->project() : this;
+	QStringList notImported;
+	
+	foreach ( const QString& file, files ) {
+		const QString variableName = filters.fileNameVariable( unquotedValue( file ) );
+		QString filePath = project->filePath( file );
+		
+		if ( filePath.isEmpty() ) {
+			continue;
+		}
+		
+		if ( variableName.isEmpty() || pMonkeyStudio::isSameFile( filePath, project->fileName() ) ) {
+			notImported << file;
+			continue;
+		}
+		
+		XUPItem* variableItem = project->getVariable( scope, variableName );
+		bool fileExists = false;
+		
+		if ( variableItem ) {
+			foreach ( XUPItem* item, variableItem->childrenList() ) {
+				switch ( item->type() ) {
+					case XUPItem::Value:
+					case XUPItem::File:
+					case XUPItem::Path:
+						fileExists = pMonkeyStudio::isSameFile( filePath, project->filePath( item->cacheValue( "content" ) ) );
+						break;
+					default:
+						break;
+				}
+				
+				if ( fileExists ) {
+					break;
+				}
 			}
 		}
-		else
-		{
-			multivalues += tmpValues.value(ku);
+		
+		if ( !fileExists ) {
+			if ( !variableItem ) {
+				variableItem = scope->addChild( XUPItem::Variable );
+				variableItem->setAttribute( "name", variableName );
+				
+				if ( !op.isEmpty() ) {
+					variableItem->setAttribute( "operator", op );
+				}
+			}
+			
+			filePath = quotedValue( project->relativeFilePath( file ) );
+			XUPItem* valueItem = variableItem->addChild( XUPItem::File );
+			valueItem->setContent( filePath );
 		}
 	}
-
-	return multivalues;
+	
+	if ( !notImported.isEmpty() ) {
+		showError( tr( "Don't know how to add files:\n%1" ).arg( notImported.join( "\n" ) ) );
+	}
 }
 
-QString XUPProjectItem::matchingPath( const QString& left, const QString& right ) const
+void XUPProjectItem::removeValue( XUPItem* item, bool deleteFiles )
 {
-	QString result;
-	for ( int i = 1; i < left.count() +1; i++ )
-	{
-		result = left.left( i );
-		if ( !right.startsWith( result ) )
-		{
-			result.chop( 1 );
+	switch ( item->type() ) {
+		case XUPItem::Variable: {
+			if ( deleteFiles ) {
+				item->setCacheValue( "markDeleted", "1" );
+				
+				foreach ( XUPItem* value, item->childrenList() ) {
+					removeValue( value, deleteFiles );
+				}
+			}
+			
 			break;
 		}
+		case XUPItem::File: {
+			if ( deleteFiles ) {
+				const QString content = item->cacheValue( "content" );
+				const QString filePath = this->filePath( content );
+				QFile file( filePath );
+				
+				if ( file.exists() ) {
+					MonkeyCore::fileManager()->closeFile( filePath );
+					
+					if ( !file.remove() ) {
+						MonkeyCore::messageManager()->appendMessage( tr( "Can't delete file '%1': %2" ).arg( filePath ).arg( file.errorString() ) );
+					}
+				}
+			}
+			
+			break;
+		}
+		case XUPItem::Path:
+		case XUPItem::Value: {
+			break;
+		}
+		default:
+			qWarning() << Q_FUNC_INFO << "Ask to remove bad item" << item->type() << item->displayText();
+			Q_ASSERT( 0 );
+			break;
 	}
-
-	if ( QDir::drives().contains( result ) || result.isEmpty() )
-	{
-		return QString::null;
+	
+	XUPItem* parentItem = item->parent();
+	parentItem->removeChild( item );
+	
+	if ( parentItem->type() == XUPItem::Variable && parentItem->cacheValue( "markDeleted" ) != "1" ) {
+		if ( !parentItem->hasChildren() ) {
+			parentItem->parent()->removeChild( parentItem );
+		}
 	}
-
-	return result;
 }
 
-QStringList XUPProjectItem::compressedPaths( const QStringList& paths ) const
+QString XUPProjectItem::quoteString() const
 {
-	QStringList pathsList = paths;
-	QStringList result;
+	return QString::null;
+}
 
-	qSort( pathsList );
-	foreach ( const QString& path, pathsList )
-	{
-		if ( result.isEmpty() )
-		{
-			result << path;
-		}
-		else
-		{
-			QString matching = matchingPath( path, result.last() );
-			if ( matching.isEmpty() )
-			{
-				result << path;
-			}
-			else
-			{
-				result.removeLast();
-				result << matching;
-			}
-		}
-	}
-
-	return result;
+QString XUPProjectItem::defaultOperator() const
+{
+	return QString::null;
 }
 
 QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 {
-	XUPProjectItem* riProject = rootIncludeProject();
-	const QString projectPath = path();
-	const QStringList variablesPath = mXUPProjectInfos->pathVariables( projectType() );
-	QStringList paths;
-
-	// add project path and variables content based on path
-	paths << projectPath;
-	foreach ( const QString& variable, variablesPath )
-	{
-		QString tmpPaths = riProject->variableCache().value( variable );
-
-		foreach ( QString path, splitMultiLineValue( tmpPaths ) )
-		{
-			path = filePath( path.remove( '"' ) );
-			if ( !paths.contains( path ) && !path.startsWith( projectPath ) )
-			{
-				paths << path;
+	const QString searchFileName = QFileInfo( partialFilePath ).fileName();
+	QFileInfoList files;
+	
+	foreach( XUPProjectItem* project, childrenProjects( true ) ) {
+		foreach( const QString& file, project->sourceFiles() ) {
+			const QFileInfo fileInfo( project->filePath( file ) );
+			
+			if ( fileInfo.exists() && fileInfo.fileName() == searchFileName ) {
+				files << fileInfo;
 			}
 		}
 	}
-
-	// get compressed path list
-	paths = compressedPaths( paths );
-
-	//qWarning() << "looking in" << paths;
-
-	// get all matching files in paths
-	QFileInfoList files;
-	QDir dir;
-
-	foreach ( const QString& path, paths )
-	{
-		dir.setPath( path );
-		files << pMonkeyStudio::getFiles( dir, QFileInfo( partialFilePath ).fileName(), true );
-	}
-
+	
 	return files;
-}
-
-XUPProjectItemInfos* XUPProjectItem::projectInfos()
-{
-	return mXUPProjectInfos;
-}
-
-QMap<QString, QString>&  XUPProjectItem::variableCache()
-{
-	return mVariableCache;
 }
 
 XUPProjectItem* XUPProjectItem::parentProject() const
@@ -311,679 +328,62 @@ XUPProjectItemList XUPProjectItem::childrenProjects( bool recursive ) const
 	return projects.values();
 }
 
-QString XUPProjectItem::iconFileName( XUPItem* item ) const
+XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& variableName, bool recursive, const XUPItem* caller ) const
 {
-	int pType = projectType();
-	QString fn;
-
-	if ( item->type() == XUPItem::Variable )
-	{
-		fn = mXUPProjectInfos->iconName( pType, item->attribute( "name" ) );
-	}
-
-	if ( fn.isEmpty() )
-	{
-		fn = item->mDomElement.nodeName();
-	}
-
-	if ( !fn.isEmpty() )
-	{
-		fn.append( ".png" );
-	}
-
-	return fn;
-}
-
-QString XUPProjectItem::iconsPath() const
-{
-	return mXUPProjectInfos->iconsPath( projectType() );
-}
-
-QString XUPProjectItem::variableDisplayText( const QString& variableName ) const
-{
-	return mXUPProjectInfos->displayText( projectType(), variableName );
-}
-
-QString XUPProjectItem::itemDisplayText( XUPItem* item )
-{
-	QString text;
-
-	if ( item->temporaryValue( "hasDisplayText", false ).toBool() )
-	{
-		text = item->temporaryValue( "displayText" ).toString();
-	}
-	else
-	{
-		item->setTemporaryValue( "hasDisplayText", true );
-		switch ( item->type() )
-		{
-			case XUPItem::Project:
-				text = item->attribute( "name" );
-				break;
-			case XUPItem::Comment:
-				text = item->attribute( "value" );
-				break;
-			case XUPItem::EmptyLine:
-				text = tr( "%1 empty line(s)" ).arg( item->attribute( "count" ) );
-				break;
-			case XUPItem::Variable:
-				text = variableDisplayText( item->attribute( "name" ) );
-				break;
-			case XUPItem::Value:
-				text = item->attribute( "content" );
-				break;
-			case XUPItem::Function:
-				text = QString( "%1(%2)" ).arg( item->attribute( "name" ) ).arg( item->attribute( "parameters" ) );
-				break;
-			case XUPItem::Scope:
-				text = item->attribute( "name" );
-				break;
-			case XUPItem::DynamicFolder:
-				text = tr( "Dynamic Folder" );
-				break;
-			case XUPItem::Folder:
-				text = item->attribute( "name" );
-				break;
-			case XUPItem::File:
-				text = QFileInfo( item->attribute( "content" ) ).fileName();
-				break;
-			case XUPItem::Path:
-				text = item->attribute( "content" );
-				break;
-			default:
-				text = "#Unknow";
-				break;
-		}
-		item->setTemporaryValue( "displayText", text );
-	}
-
-	return text;
-}
-
-QIcon XUPProjectItem::itemDisplayIcon( XUPItem* item )
-{
-	QIcon icon;
-
-	if ( item->temporaryValue( "hasDisplayIcon", false ).toBool() )
-	{
-		icon = item->temporaryValue( "displayIcon" ).value<QIcon>();
-	}
-	else
-	{
-		item->setTemporaryValue( "hasDisplayIcon", true );
-		QString path = iconsPath();
-		QString fn = pIconManager::filePath( iconFileName( item ), path );
-
-		if ( !QFile::exists( fn ) )
-		{
-			path = mXUPProjectInfos->pixmapsPath( XUPProjectItem::XUPProject );
-		}
-
-		icon = pIconManager::icon( iconFileName( item ), path );
-		item->setTemporaryValue( "displayIcon", icon );
-	}
-
-	return icon;
-}
-
-void XUPProjectItem::rebuildCache()
-{
-	XUPProjectItem* riProject = rootIncludeProject();
-	riProject->mVariableCache.clear();
-	analyze( riProject );
-}
-
-XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem, bool recursive ) const
-{
-	mFoundCallerItem = false;
 	XUPItemList variables;
 
-	for ( int i = 0; i < root->childCount(); i++ )
+	foreach(XUPItem* item, root->childrenList())
 	{
-		XUPItem* item = root->child( i );
-
-		switch ( item->type() )
+		if ( XUPItem::Variable ==  item->type() && variableName == item->attribute( "name" ) )
 		{
-			case XUPItem::Project:
-			{
-				if ( recursive )
-				{
-					XUPItem* pItem = item->parent();
-					if ( pItem->type() == XUPItem::Function && pItem->attribute( "name" ).toLower() == "include" )
-					{
-						variables << getVariables( item, variableName, callerItem );
-					}
-				}
-				break;
-			}
-			case XUPItem::Comment:
-				break;
-			case XUPItem::EmptyLine:
-				break;
-			case XUPItem::Variable:
-			{
-				if ( item->attribute( "name" ) == variableName )
-				{
-					variables << item;
-				}
-				break;
-			}
-			case XUPItem::Value:
-				break;
-			case XUPItem::Function:
-			{
-				if ( recursive )
-				{
-					variables << getVariables( item, variableName, callerItem );
-				}
-				break;
-			}
-			case XUPItem::Scope:
-			{
-				if ( recursive )
-				{
-					variables << getVariables( item, variableName, callerItem );
-				}
-				break;
-			}
-			default:
-				break;
+			variables << item;
 		}
-
-		if ( callerItem && item == callerItem )
+		else if ( XUPItem::Project == item->type() )
 		{
-			mFoundCallerItem = true;
+			if ( recursive )
+			{
+				XUPItem* pItem = item->parent();
+				if ( pItem->type() == XUPItem::Function)
+				{
+					variables << getVariables( item, variableName );
+				}
+			}
+		}
+		else if ( recursive )
+		{
+			variables << getVariables( item, variableName );
+		}
+		
+		if ( item == caller ) {
 			break;
 		}
-
-		if ( mFoundCallerItem )
-			break;
 	}
 
 	return variables;
 }
 
-QString XUPProjectItem::toString() const
+XUPItem* XUPProjectItem::getVariable( const XUPItem* root, const QString& variableName ) const
 {
-	return XUPProjectItemHelper::stripDynamicFolderFiles( mDocument ).toString( 4 );
-}
-
-XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
-{
-	XUPProjectItem* project = topLevelProject();
-
-	if ( project )
+	foreach( XUPItem* item, root->childrenList() )
 	{
-		const QString mScopeName = "XUPProjectSettings";
-		XUPItemList items = project->childrenList();
-
-		foreach ( XUPItem* child, items )
+		if ( XUPItem::Variable == item->type() && item->attribute( "name" ) == variableName )
 		{
-			if ( child->type() == XUPItem::Scope && child->attribute( "name" ) == mScopeName )
-			{
-				child->setAttribute( "nested", "false" );
-				return child;
-			}
-		}
-
-		if ( create )
-		{
-			XUPItem* scope = project->addChild( XUPItem::Scope, 0 );
-			scope->setAttribute( "name", mScopeName );
-			scope->setAttribute( "nested", "false" );
-
-			XUPItem* emptyline = project->addChild( XUPItem::EmptyLine, 1 );
-			emptyline->setAttribute( "count", "1" );
-
-			return scope;
+			return item;
 		}
 	}
 
 	return 0;
 }
 
-QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, const QStringList& defaultValues ) const
+QString XUPProjectItem::toXml() const
 {
-	QStringList values;
-	XUPProjectItem* project = topLevelProject();
-
-	if ( project )
-	{
-		XUPItem* scope = projectSettingsScope( false );
-
-		if ( scope )
-		{
-			XUPItemList variables = getVariables( scope, variableName, 0, false );
-
-			foreach ( const XUPItem* variable, variables )
-			{
-				foreach ( const XUPItem* child, variable->childrenList() )
-				{
-					if ( child->type() == XUPItem::Value )
-					{
-						values << child->attribute( "content" );
-					}
-				}
-			}
-		}
-	}
-
-	if ( values.isEmpty() )
-	{
-		// a hack that allow xupproejct settings variable to be added to project node
-		if ( defaultValues.isEmpty() )
-		{
-			values = QStringList( attribute( variableName.toLower() ) );
-		}
-		else
-		{
-			values = defaultValues;
-		}
-	}
-
-	return values;
+	return XUPProjectItemHelper::stripDynamicFolderFiles( mDocument ).toString( 4 );
+	//return mDocument.toString( 4 );
 }
 
-QString XUPProjectItem::projectSettingsValue( const QString& variableName, const QString& defaultValue ) const 
+QString XUPProjectItem::toNativeString() const
 {
-	const QStringList dvalue = defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue );
-	return projectSettingsValues(variableName, dvalue ).join( " " );
-}
-
-void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
-{
-	XUPProjectItem* project = topLevelProject();
-
-	if ( project )
-	{
-		XUPItem* scope = projectSettingsScope( !values.isEmpty() );
-
-		if ( !scope )
-		{
-			return;
-		}
-
-		XUPItemList variables = getVariables( scope, variableName, 0, false );
-		XUPItem* variable = variables.value( 0 );
-		bool haveVariable = variable;
-
-		if ( !haveVariable && values.isEmpty() )
-		{
-			return;
-		}
-
-		if ( haveVariable && values.isEmpty() )
-		{
-			scope->removeChild( variable );
-			return;
-		}
-
-		if ( !haveVariable )
-		{
-			variable = scope->addChild( XUPItem::Variable );
-			variable->setAttribute( "name", variableName );
-			variable->setAttribute( "multiline", "true" );
-		}
-
-		QStringList cleanValues = values;
-		foreach ( XUPItem* child, variable->childrenList() )
-		{
-			if ( child->type() == XUPItem::Value )
-			{
-				QString value = child->attribute( "content" );
-				if ( cleanValues.contains( value ) )
-				{
-					cleanValues.removeAll( value );
-				}
-				else if ( !cleanValues.contains( value ) )
-				{
-					variable->removeChild( child );
-				}
-			}
-		}
-
-		foreach ( const QString& value, cleanValues )
-		{
-			XUPItem* valueItem = variable->addChild( XUPItem::Value );
-			valueItem->setAttribute( "content", value );
-		}
-	}
-}
-
-void XUPProjectItem::setProjectSettingsValue( const QString& variable, const QString& value ) 
-{
-	setProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) );
-}
-
-void XUPProjectItem::addProjectSettingsValues( const QString& variableName, const QStringList& values )
-{
-	XUPProjectItem* project = topLevelProject();
-
-	if ( project )
-	{
-		XUPItem* scope = projectSettingsScope( !values.isEmpty() );
-
-		if ( !scope )
-		{
-			return;
-		}
-
-		XUPItemList variables = getVariables( scope, variableName, 0, false );
-		XUPItem* variable = variables.value( 0 );
-		bool haveVariable = variable;
-
-		if ( !haveVariable && values.isEmpty() )
-		{
-			return;
-		}
-
-		if ( haveVariable && values.isEmpty() )
-		{
-			return;
-		}
-
-		if ( !haveVariable )
-		{
-			variable = scope->addChild( XUPItem::Variable );
-			variable->setAttribute( "name", variableName );
-			variable->setAttribute( "multiline", "true" );
-		}
-
-		QStringList cleanValues = values;
-		foreach ( XUPItem* child, variable->childrenList() )
-		{
-			if ( child->type() == XUPItem::Value )
-			{
-				QString value = child->attribute( "content" );
-				if ( cleanValues.contains( value ) )
-				{
-					cleanValues.removeAll( value );
-				}
-			}
-		}
-
-		foreach ( const QString& value, cleanValues )
-		{
-			XUPItem* valueItem = variable->addChild( XUPItem::Value );
-			valueItem->setAttribute( "content", value );
-		}
-	}
-}
-
-void XUPProjectItem::addProjectSettingsValue( const QString& variable, const QString& value )
-{
-	addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) );
-}
-
-int XUPProjectItem::projectType() const
-{
-	return XUPProjectItem::XUPProject;
-}
-
-QString XUPProjectItem::targetTypeString( XUPProjectItem::TargetType type ) const
-{
-	switch ( type )
-	{
-		case XUPProjectItem::DefaultTarget:
-			return QLatin1String( "TARGET_DEFAULT" );
-			break;
-		case XUPProjectItem::DebugTarget:
-			return QLatin1String( "TARGET_DEBUG" );
-			break;
-		case XUPProjectItem::ReleaseTarget:
-			return QLatin1String( "TARGET_RELEASE" );
-			break;
-	}
-	
-	Q_ASSERT( 0 );
-	return QString::null;
-}
-
-XUPProjectItem::TargetType XUPProjectItem::projectTargetType() const
-{
-	return (XUPProjectItem::TargetType)projectSettingsValue( "TARGET_TYPE", QString::number( XUPProjectItem::DefaultTarget ) ).toInt();
-}
-
-QString XUPProjectItem::platformTypeString( XUPProjectItem::PlatformType type ) const
-{
-	switch ( type )
-	{
-		case XUPProjectItem::AnyPlatform:
-			return QLatin1String( "ANY_PLATFORM" );
-			break;
-		case XUPProjectItem::WindowsPlatform:
-			return QLatin1String( "WINDOWS_PLATFORM" );
-			break;
-		case XUPProjectItem::MacPlatform:
-			return QLatin1String( "MAC_PLATFORM" );
-			break;
-		case XUPProjectItem::OthersPlatform:
-			return QLatin1String( "OTHERS_PLATFORM" );
-			break;
-	}
-	
-	Q_ASSERT( 0 );
-	return QString::null;
-}
-
-void XUPProjectItem::registerProjectType() const
-{
-	// get proejct type
-	int pType = projectType();
-
-	// register it
-	mXUPProjectInfos->unRegisterType( pType );
-	mXUPProjectInfos->registerType( pType, const_cast<XUPProjectItem*>( this ) );
-
-	// values
-	const QString mPixmapsPath = ":/items";
-	const QStringList mOperators = QStringList( "=" ) << "+=" << "-=" << "*=";
-	const QStringList mFilteredVariables = QStringList( "FILES" );
-	const QStringList mFileVariables = QStringList( "FILES" );
-	const StringStringListList mSuffixes = StringStringListList()
-		<< qMakePair( tr( "XUP Project" ), QStringList( "*.xup" ) )
-		<< qMakePair( tr( "XUP Include Project" ), QStringList( "*.xui" ) );
-	const StringStringList mVariableLabels = StringStringList()
-		<< qMakePair( QString( "FILES" ), tr( "Files" ) );
-	const StringStringList mVariableIcons = StringStringList()
-		<< qMakePair( QString( "FILES" ), QString( "files" ) );
-	const StringStringListList mVariableSuffixes = StringStringListList()
-		<< qMakePair( QString( "FILES" ), QStringList( "*" ) );
-
-	// register values
-	mXUPProjectInfos->registerPixmapsPath( pType, mPixmapsPath );
-	mXUPProjectInfos->registerOperators( pType, mOperators );
-	mXUPProjectInfos->registerFilteredVariables( pType, mFilteredVariables );
-	mXUPProjectInfos->registerFileVariables( pType, mFileVariables );
-	mXUPProjectInfos->registerPathVariables( pType, mFileVariables );
-	mXUPProjectInfos->registerSuffixes( pType, mSuffixes );
-	mXUPProjectInfos->registerVariableLabels( pType, mVariableLabels );
-	mXUPProjectInfos->registerVariableIcons( pType, mVariableIcons );
-	mXUPProjectInfos->registerVariableSuffixes( pType, mVariableSuffixes );
-}
-
-void XUPProjectItem::unRegisterProjectType() const
-{
-	mXUPProjectInfos->unRegisterType( projectType() );
-}
-
-QString XUPProjectItem::getVariableContent( const QString& variableName )
-{
-	QString name = QString( variableName ).replace( '$', "" ).replace( '{', "" ).replace( '}', "" ).replace( '[', "" ).replace( ']', "" ).replace( '(', "" ).replace( ')', "" );
-
-	// environment var
-	if ( variableName.startsWith( "$$(" ) || variableName.startsWith( "$(" ) )
-	{
-		if ( name == "PWD" )
-		{
-			return rootIncludeProject()->path();
-		}
-		else
-		{
-			return QString::fromLocal8Bit( qgetenv( name.toLocal8Bit().constData() ) );
-		}
-	}
-	else
-	{
-		if ( name == "PWD" )
-		{
-			return project()->path();
-		}
-		else
-		{
-			return rootIncludeProject()->variableCache().value( name );
-		}
-	}
-
-	return QString::null;
-}
-
-QString XUPProjectItem::interpretContent( const QString& content )
-{
-	QRegExp rx( "\\$\\$?[\\{\\(\\[]?([\\w\\.]+(?!\\w*\\s*\\{\\[\\(\\)\\]\\}))[\\]\\)\\}]?" );
-	QString value = content;
-	int pos = 0;
-
-	while ( ( pos = rx.indexIn( content, pos ) ) != -1 )
-	{
-		value.replace( rx.cap( 0 ), getVariableContent( rx.cap( 0 ) ) );
-		pos += rx.matchedLength();
-	}
-
-	return value;
-}
-
-bool XUPProjectItem::handleIncludeFile( XUPItem* function )
-{
-	const QString parameters = function->cacheValue( "parameters" );
-	const QString fn = filePath( parameters );
-	QStringList projects;
-
-	foreach ( XUPItem* cit, function->childrenList() )
-	{
-		if ( cit->type() == XUPItem::Project )
-		{
-			projects << cit->project()->fileName();
-		}
-	}
-
-	// check if project is already handled
-	if ( projects.contains( fn ) )
-	{
-		return true;
-	}
-
-	// open project
-	XUPProjectItem* project = newProject();
-	function->addChild( project );
-
-	// remove and delete project if can't open
-	if ( !project->open( fn, temporaryValue( "codec" ).toString() ) )
-	{
-		function->removeChild( project );
-		topLevelProject()->setLastError( tr( "Failed to handle include file %1" ).arg( fn ) );
-		return false;
-	}
-
-	return true;
-}
-
-bool XUPProjectItem::analyze( XUPItem* item )
-{
-	QStringList values;
-	XUPProjectItem* project = item->project();
-	XUPProjectItem* riProject = rootIncludeProject();
-
-	foreach ( XUPItem* cItem, item->childrenList() )
-	{
-		switch ( cItem->type() )
-		{
-			case XUPItem::Value:
-			case XUPItem::File:
-			case XUPItem::Path:
-			{
-				QString content = interpretContent( cItem->attribute( "content" ) );
-
-				if ( cItem->type() != XUPItem::Value )
-				{
-					QString fn = project->filePath( content );
-
-					if ( QFile::exists( fn ) )
-					{
-						fn = riProject->relativeFilePath( fn );
-					}
-
-					content = fn;
-				}
-
-				values << content;
-
-				cItem->setCacheValue( "content", content );
-				break;
-			}
-			case XUPItem::Function:
-			{
-				QString parameters = interpretContent( cItem->attribute( "parameters" ) );
-
-				cItem->setCacheValue( "parameters", parameters );
-				break;
-			}
-			case XUPItem::Project:
-			case XUPItem::Comment:
-			case XUPItem::EmptyLine:
-			case XUPItem::Variable:
-			case XUPItem::Scope:
-			case XUPItem::DynamicFolder:
-			case XUPItem::Folder:
-			default:
-				break;
-		}
-
-		if ( !analyze( cItem ) )
-		{
-			return false;
-		}
-	}
-
-	if ( item->type() == XUPItem::Variable )
-	{
-		QString name = item->attribute( "name" );
-		QString op = item->attribute( "operator", "=" );
-
-		if ( op == "=" )
-		{
-			riProject->variableCache()[ name ] = values.join( " " );
-		}
-		else if ( op == "-=" )
-		{
-			foreach ( const QString& value, values )
-			{
-				riProject->variableCache()[ name ].replace( QRegExp( QString( "\\b%1\\b" ).arg( value ) ), QString::null );
-			}
-		}
-		else if ( op == "+=" )
-		{
-			riProject->variableCache()[ name ] += " " +values.join( " " );
-		}
-		else if ( op == "*=" )
-		{
-			//if ( !riProject->variableCache()[ name ].contains( content ) )
-			{
-				riProject->variableCache()[ name ] += " " +values.join( " " );
-			}
-		}
-	}
-
-	// handle include projects
-	if ( item->attribute( "name" ).toLower() == "include" )
-	{
-		if ( !handleIncludeFile( item ) )
-		{
-			return false;
-		}
-	}
-
-	return true;
+	return toXml();
 }
 
 bool XUPProjectItem::open( const QString& fileName, const QString& codec )
@@ -992,16 +392,14 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	QFile file( fileName );
 
 	// check existence
-	if ( !file.exists() )
-	{
-		topLevelProject()->setLastError( "file not exists" );
+	if ( !file.exists() ) {
+		showError( tr( "Can't open project '%1': file not exists" ).arg( fileName ) );
 		return false;
 	}
 
 	// try open it for reading
-	if ( !file.open( QIODevice::ReadOnly ) )
-	{
-		topLevelProject()->setLastError( "can't open file for reading" );
+	if ( !file.open( QIODevice::ReadOnly ) ) {
+		showError( tr( "can't open '%1' for reading" ).arg( fileName ) );
 		return false;
 	}
 
@@ -1013,36 +411,62 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	QString errorMsg;
 	int errorLine;
 	int errorColumn;
+	
 	if ( !mDocument.setContent( buffer, &errorMsg, &errorLine, &errorColumn ) )
 	{
-		topLevelProject()->setLastError( QString( "%1 on line: %2, column: %3" ).arg( errorMsg ).arg( errorLine ).arg( errorColumn ) );
+		showError(
+			tr( "Xml error in '%1':\n%2 on line: %3, column: %4" )
+				.arg( fileName )
+				.arg( errorMsg )
+				.arg( errorLine )
+				.arg( errorColumn )
+		);
 		return false;
 	}
 
 	// check project validity
 	mDomElement = mDocument.firstChildElement( "project" );
-	if ( mDomElement.isNull() )
-	{
-		topLevelProject()->setLastError( "no project node" );
+	
+	if ( mDomElement.isNull() ) {
+		showError( tr( "Invalid project '%1': no project node" ).arg( fileName ) );
+		return false;
+	}
+	
+	// check xup version
+	const QString docVersion = mDomElement.attribute( "version" );
+	
+	if ( pVersion( docVersion ) < XUP_VERSION ) {
+		showError(
+			tr( "The document format is too old, current version is '%1', your document is '%2' for '%3'" )
+				.arg( XUP_VERSION )
+				.arg( docVersion )
+				.arg( fileName )
+		);
 		return false;
 	}
 
 	// all is ok
-	setTemporaryValue( "codec", codec );
-	setTemporaryValue( "fileName", fileName );
-	topLevelProject()->setLastError( QString::null );
+	mCodec = codec;
+	mFileName = fileName;
 	file.close();
+	
+	const XUPDynamicFolderSettings dynamicFolderSettings = XUPProjectItemHelper::projectDynamicFolderSettings( this );
+	
+	if ( dynamicFolderSettings.Active && QFile::exists( dynamicFolderSettings.AbsolutePath ) ) {
+		XUPDynamicFolderItem* dynamicFolderItem = XUPProjectItemHelper::projectDynamicFolderItem( this, true );
+		dynamicFolderItem->setRootPath( dynamicFolderSettings.AbsolutePath, dynamicFolderSettings.FilesPatterns );
+	}
 
-	return analyze( this );
+	emitDataChanged();
+	return true;
 }
 
 bool XUPProjectItem::save()
 {
 	// try open file for writing
-	QFile file( temporaryValue( "fileName" ).toString() );
+	QFile file( mFileName );
 
-	if ( !file.open( QIODevice::WriteOnly ) )
-	{
+	if ( !file.open( QIODevice::WriteOnly ) ) {
 		return false;
 	}
 
@@ -1053,195 +477,222 @@ bool XUPProjectItem::save()
 	setAttribute( "version", XUP_VERSION );
 
 	// encode content
-	QTextCodec* codec = QTextCodec::codecForName( temporaryValue( "codec" ).toString().toUtf8() );
-	QByteArray content = codec->fromUnicode( toString() );
+	QTextCodec* codecObj = QTextCodec::codecForName( codec().toAscii ()  );
+	QByteArray content = codecObj->fromUnicode( toNativeString() );
 
 	// write content
 	bool result = file.write( content ) != -1;
 	file.close();
 
 	// set error message if needed
-	if ( result )
-	{
-		topLevelProject()->setLastError( QString::null );
+	if ( !result ) {
+		showError( tr( "Can't write content in project '%1'" ).arg( fileName() ) );
 	}
-	else
-	{
-		topLevelProject()->setLastError( tr( "Can't write content" ) );
-	}
+	
+	XUPProjectItem::cache()->build( rootIncludeProject() );
 
 	return result;
 }
 
-QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::TargetType targetType, XUPProjectItem::PlatformType platformType )
+QString XUPProjectItem::targetFilePath( XUPProjectItem::TargetType type )
 {
-	XUPProjectItem* tlProject = topLevelProject();
-	const QString targetTypeString = this->targetTypeString( targetType );
-	const QString platformTypeString = this->platformTypeString( platformType );
-	const QString key = QString( "%1_%2" ).arg( platformTypeString ).arg( targetTypeString );
-	QString target = tlProject->filePath( projectSettingsValue( key ) );
-	QFileInfo targetInfo( target );
-	
-	if ( !targetInfo.exists() || ( !targetInfo.isExecutable() && !QLibrary::isLibrary( target ) ) )
-	{
-		if ( allowToAskUser )
-		{
-			QString type;
-			
-			switch ( targetType )
-			{
-				case XUPProjectItem::DebugTarget:
-					type = tr( "debug" ) +" ";
-					break;
-				case XUPProjectItem::ReleaseTarget:
-					type = tr( "release" ) +" ";
-					break;
-				default:
-					break;
-			}
-			
-			const QString userTarget = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Point please project %1target" ).arg( type ), tlProject->path() );
-			targetInfo.setFile( userTarget );
-			
-			if ( !userTarget.isEmpty() )
-			{
-				target = userTarget;
-			}
-			
-			if ( targetInfo.exists() )
-			{
-				setProjectSettingsValue( key, tlProject->relativeFilePath( userTarget ) );
-				save();
-			}
-		}
+	Q_UNUSED( type );
+	return XUPProjectItemHelper::projectSettingsValue( this, "MAIN_FILE" );
+}
+
+void XUPProjectItem::addSeparator( const QString& mnu )
+{
+	static int i = 0;
+	QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( QString( "*separator%1*" ).arg( i++ ) ) );
+	action->setSeparator( true );
+	mInstalledActions[ -i ] = action;
+}
+
+void XUPProjectItem::addCommands( const QString& mnu, const QList<pCommand>& cmds )
+{
+	foreach ( const pCommand& cmd, cmds ) {
+		addCommand( mnu, cmd );
+	}
+}
+
+pCommand XUPProjectItem::command( int id ) const
+{
+	return mCommands.value( id );
+}
+
+pCommand XUPProjectItem::command( QAction* action ) const
+{
+	return action->data().value<pCommand>();
+}
+
+void XUPProjectItem::addCommand( const QString& mnu, const pCommand& cmd )
+{
+	if ( ( mCommands.contains( cmd.id() ) && cmd.id() != -1 ) || !cmd.isValid() ) {
+		return;
 	}
 	
-	return target;
-}
-
-QString XUPProjectItem::targetFilePath( const pCommandTargetExecution& execution )
-{
-	return targetFilePath( true, (XUPProjectItem::TargetType)execution.targetType, (XUPProjectItem::PlatformType)execution.platformType );
-}
-
-BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const
-{
-	return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, projectSettingsValue( "BUILDER", plugin ) );
-}
-
-DebuggerPlugin* XUPProjectItem::debugger( const QString& plugin ) const
-{
-	return MonkeyCore::pluginsManager()->plugin<DebuggerPlugin*>( PluginsManager::stAll, projectSettingsValue( "DEBUGGER", plugin ) );
-}
-
-InterpreterPlugin* XUPProjectItem::interpreter( const QString& plugin ) const
-{
-	return MonkeyCore::pluginsManager()->plugin<InterpreterPlugin*>( PluginsManager::stAll, projectSettingsValue( "INTERPRETER", plugin ) );
-}
-
-void XUPProjectItem::addCommand( pCommand& cmd, const QString& mnu )
-{
-	if ( cmd.isValid() )
-	{
-		cmd.setUserData( QVariant::fromValue( &mCommands ) );
-		cmd.setProject( this );
-		
-		if ( cmd.workingDirectory().isEmpty() )
-		{
-			cmd.setWorkingDirectory( path() );
-		}
-		
-		emit installCommandRequested( cmd, mnu );
-		mCommands.insertMulti( mnu, cmd );
+	static int i = 0;
+	QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ), cmd.text() );
+	pCommand c = cmd;
+	
+	if ( c.id() == -1 ) {
+		c.setId( i++ );
 	}
+	
+	action->setStatusTip( c.text() );
+	action->setData( QVariant::fromValue( c ) );
+	
+	mCommands[ c.id() ] = c;
+	mInstalledActions[ c.id() ] = action;
+	
+	connect( action, SIGNAL( triggered() ), this, SLOT( projectCustomActionTriggered() ) );
+	
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void XUPProjectItem::installCommands()
 {
-	// get plugins
-	BuilderPlugin* bp = builder();
-	//DebuggerPlugin* dp = debugger();
-	InterpreterPlugin* ip = interpreter();
-
-	bool emptyBuilderBuildMenu = MonkeyCore::menuBar()->menu( "mBuilder/mBuild" )->actions().isEmpty();
-	bool emptyInterpreterMenu = MonkeyCore::menuBar()->menu( "mInterpreter" )->actions().isEmpty();
-
-	// build command
-	if ( bp && emptyBuilderBuildMenu )
-	{
-		pCommand cmd = bp->buildCommand();
-
-		cmd.setSkipOnError( false );
-		addCommand( cmd, "mBuilder/mBuild" );
-
-		// clean
-		cmd.setText( tr( "Clean" ) );
-		cmd.setArguments( "clean" );
-		addCommand( cmd, "mBuilder/mClean" );
-
-		// distclean
-		cmd.setText( tr( "Distclean" ) );
-		cmd.setArguments( "distclean" );
-		addCommand( cmd, "mBuilder/mClean" );
-
-		// rebuild
-		cmd.setText( tr( "Rebuild" ) );
-		cmd.setCommand( ( QStringList() << tr( "Clean" ) << tr( "Build" ) ).join( ";" ) );
-		cmd.setArguments( QString() );
-		addCommand( cmd, "mBuilder/mRebuild" );
-	}
+	const MenuCommandListMap commands = XUPProjectItemHelper::projectCommands( this );
 	
-	// interprete file command
-	if ( ip && emptyInterpreterMenu )
-	{
-		pCommand cmd = ip->interpretCommand();
-		cmd.setSkipOnError( false );
-		addCommand( cmd, "mInterpreter" );
+	foreach ( const QString& menu, commands.keys() ) {
+		addCommands( menu, commands[ menu ] );
 	}
-
-	// install builder user command
-	if ( bp )
-	{
-		foreach ( pCommand cmd, bp->userCommands() )
-		{
-			cmd.setSkipOnError( false );
-			addCommand( cmd, "mBuilder/mUserCommands" );
-		}
-	}
-
-	/*
-	// install debugger user command
-	if ( dp )
-	{
-		foreach ( pCommand cmd, dp->userCommands() )
-		{
-			cmd.setSkipOnError( false );
-			addCommand( cmd, "mDebugger/mUserCommands" );
-		}
-	}
-	*/
-	// install interpreter user command
-	if ( ip )
-	{
-		foreach ( pCommand cmd, ip->userCommands() )
-		{
-			cmd.setSkipOnError( false );
-			addCommand( cmd, "mInterpreter/mUserCommands" );
-		}
-	}
-	
-	// install custom project commands
-	XUPProjectItemHelper::installProjectCommands( this );
 }
 
 void XUPProjectItem::uninstallCommands()
 {
-	foreach ( const pCommand& cmd, mCommands.values() )
-		emit uninstallCommandRequested( cmd, mCommands.key( cmd ) );
 	mCommands.clear();
+	qDeleteAll( mInstalledActions );
+	mInstalledActions.clear();
+
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
-void XUPProjectItem::directoryChanged( const QString& path )
+QString XUPProjectItem::codec() const
 {
-	XUPProjectItemHelper::updateDynamicFolder( this, path );
+	if (! mCodec.isNull())
+		return mCodec;
+	else
+		return pMonkeyStudio::defaultCodec();
+}
+
+bool XUPProjectItem::edit()
+{
+	UIXUPEditor* dlg = newEditDialog();
+	
+	if ( !dlg ) {
+		return false;
+	}
+	
+	dlg->setAttribute( Qt::WA_DeleteOnClose );
+	dlg->setupProject( this );
+	
+	return dlg->exec() == QDialog::Accepted;
+}
+
+bool XUPProjectItem::editProjectFiles()
+{
+	UIXUPEditor* dlg = newEditDialog();
+	
+	if ( !dlg ) {
+		return false;
+	}
+	
+	dlg->setAttribute( Qt::WA_DeleteOnClose );
+	dlg->setupProject( this );
+	dlg->showProjectFilesPage();
+	
+	return dlg->exec() == QDialog::Accepted;
+}
+
+const DocumentFilterMap& XUPProjectItem::documentFilters() const
+{
+	return MonkeyCore::projectTypesIndex()->documentFilters( projectType() );
+}
+
+XUPProjectItemCacheBackend* XUPProjectItem::cacheBackend() const
+{
+	return &XUPProjectItem::mProjectsCacheBackend;
+}
+
+QStringList XUPProjectItem::cachedVariableValues( const QString& variableName ) const
+{
+    return XUPProjectItem::cache()->values( rootIncludeProject(), variableName );
+}
+
+QString XUPProjectItem::cachedVariableValue( const QString& variableName ) const
+{
+    return cachedVariableValues( variableName ).join( " " );
+}
+
+XUPProjectItemCache* XUPProjectItem::cache()
+{
+	return &XUPProjectItem::mProjectsCache;
+}
+
+QString XUPProjectItem::quotedValue( const QString& value ) const
+{
+	const QString quote = quoteString();
+	
+	if ( !quote.isEmpty() && value.contains( " " ) && !value.startsWith( quote ) && !value.endsWith( quote ) ) {
+		return QString( "%1%2%1" ).arg( quote ).arg( value );
+	}
+	
+	return value;
+}
+
+QString XUPProjectItem::unquotedValue( const QString& _value ) const
+{
+	if ( _value.isEmpty() ) {
+		return QString::null;
+	}
+	
+	const QString quote = quoteString();
+	QString value = _value;
+	
+	if ( !quote.isEmpty() && value.startsWith( quote ) && value.endsWith( quote ) ) {
+		value.chop( 1 );
+		value.remove( 0, 1 );
+	}
+	
+	return value;
+}
+
+UIXUPEditor* XUPProjectItem::newEditDialog() const
+{
+	return new UIXUPEditor( MonkeyCore::mainWindow() );
+}
+
+void XUPProjectItem::executeCommand( int id )
+{
+	mInstalledActions.value( id )->trigger();
+}
+
+void XUPProjectItem::projectCustomActionTriggered()
+{
+	QAction* action = qobject_cast<QAction*>( sender() );
+	
+	// save opened files
+	if ( pMonkeyStudio::saveFilesOnCustomAction() ) {
+		MonkeyCore::workspace()->fileSaveAll_triggered();
+	}
+	
+	const pCommand acmd = command( action );
+	
+	if ( !acmd.isValid() ) {
+		return;
+	}
+	
+	pCommand::List cmds = acmd.childCommands();
+	
+	if ( acmd.childCommands().isEmpty() ) {
+		cmds << acmd;
+	}
+	
+	foreach ( pCommand cmd, cmds ) {
+		cmd = MonkeyCore::consoleManager()->processCommand( cmd );
+		MonkeyCore::consoleManager()->addCommand( cmd );
+	}
 }

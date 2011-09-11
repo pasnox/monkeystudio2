@@ -1,5 +1,5 @@
 #include "XUPProjectModelProxy.h"
-#include "XUPProjectModel.h"
+#include "xupmanager/core/XUPProjectModel.h"
 #include "XUPItem.h"
 
 XUPProjectModelProxy::XUPProjectModelProxy( QObject* parent, bool showDisabled )
