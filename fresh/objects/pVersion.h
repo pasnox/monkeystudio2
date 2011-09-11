@@ -1,7 +1,7 @@
 #ifndef PVERSION_H
 #define PVERSION_H
 
-#include "MonkeyExport.h"
+#include <MonkeyExport.h>
 
 #include <QString>
 
@@ -9,6 +9,7 @@ class Q_MONKEY_EXPORT pVersion
 {
 public:
 	pVersion( const QString& version );
+	pVersion( const char* version );
 	
 	const QString& toString() const;
 
@@ -26,6 +27,8 @@ protected:
 	int patch;
 	int build;
 	QString extra;
+	
+	void init();
 };
 
 #endif // PVERSION_H

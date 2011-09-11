@@ -1,5 +1,5 @@
 #include "pStylesToolButton.h"
-#include "objects/pStylesActionGroup.h"
+#include "pStylesActionGroup.h"
 
 #include <QMenu>
 

@@ -67,7 +67,7 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 {
 	Q_ASSERT ( mWorkspace );
 	setParent( mWorkspace );
-	setObjectName( "FilesListWidget" );
+	setObjectName( metaObject()->className() );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	//setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
 	setContextMenuPolicy( Qt::CustomContextMenu );

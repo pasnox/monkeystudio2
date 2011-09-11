@@ -24,7 +24,7 @@
 #ifndef PMENUBAR_H
 #define PMENUBAR_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 #include "pGroupPath.h"
 #include "pActionsManager.h"
 
@@ -68,6 +68,8 @@ public:
 	void clearMenu( const QString& path );
 	void deleteMenu( const QString& path );
 	void setMenuEnabled( QMenu* menu, bool enabled );
+	
+	QStringList rootMenusPath() const;
 	
 private:
 	pActionsManager* mActionsManager;

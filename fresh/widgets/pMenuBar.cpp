@@ -384,3 +384,21 @@ void pMenuBar::setMenuEnabled( QMenu* mnu, bool enabled )
 		//mnu->menuAction()->setEnabled( enabled );
 	}
 }
+
+QStringList pMenuBar::rootMenusPath() const
+{
+	QList<QAction*> actions = this->actions();
+	QStringList menus;
+	
+	foreach ( QAction* action, actions ) {
+		QMenu* menu = action->menu();
+		
+		if ( !menu || !mMenus.contains( menu->objectName() ) ) {
+			continue;
+		}
+		
+		menus << menu->objectName();
+	}
+	
+	return menus;
+}

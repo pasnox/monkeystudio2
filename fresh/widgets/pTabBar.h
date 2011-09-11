@@ -24,8 +24,6 @@
 #ifndef PTABBAR_H
 #define PTABBAR_H
 
-#include "objects/MonkeyExport.h"
-
 #include <QTabBar>
 #include <QList>
 #include <QUrl>
@@ -36,7 +34,7 @@ class QAction;
 	\brief A extended QTabBar
 	\details that allow tab drag and drop, shortcuts, text elided, tabs color, current tab color and close button
 */
-class Q_MONKEY_EXPORT pTabBar : public QTabBar
+class pTabBar : public QTabBar
 {
 	Q_OBJECT
 

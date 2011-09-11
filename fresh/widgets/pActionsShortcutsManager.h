@@ -18,7 +18,7 @@
 #ifndef PACTIONSSHORTCUTSMANAGER_H
 #define PACTIONSSHORTCUTSMANAGER_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QDialog>
 #include <QMap>

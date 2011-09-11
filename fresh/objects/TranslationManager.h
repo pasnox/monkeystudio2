@@ -1,8 +1,6 @@
 #ifndef TRANSLATIONMANAGER_H
 #define TRANSLATIONMANAGER_H
 
-#include "objects/MonkeyExport.h"
-
 #include <QObject>
 #include <QStringList>
 #include <QSet>
@@ -14,7 +12,7 @@ class QTranslator;
 
 typedef QList<QTranslator*> QTranslatorList;
 
-class Q_MONKEY_EXPORT TranslationManager : public QObject
+class TranslationManager : public QObject
 {
 	Q_OBJECT
 	

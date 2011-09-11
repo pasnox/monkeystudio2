@@ -24,7 +24,7 @@
 #ifndef PDOCKWIDGET_H
 #define PDOCKWIDGET_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QDockWidget>
 

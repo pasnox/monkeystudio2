@@ -1,7 +1,7 @@
 #ifndef PENVIRONMENTVARIABLESMODEL_H
 #define PENVIRONMENTVARIABLESMODEL_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QAbstractItemModel>
 

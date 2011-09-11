@@ -24,10 +24,9 @@
 #ifndef PQUEUEDSTATUSBAR_H
 #define PQUEUEDSTATUSBAR_H
 
-#include "objects/MonkeyExport.h"
-#include "pQueuedMessageWidget.h"
-
 #include <QStatusBar>
+
+#include "pQueuedMessageWidget.h"
 
 /*!
 	\brief A statusbar that handle a pQueuedMessageWidget

@@ -1,7 +1,7 @@
 #ifndef PSTYLESTOOLBUTTON_H
 #define PSTYLESTOOLBUTTON_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QToolButton>
 

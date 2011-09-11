@@ -1,7 +1,7 @@
 #ifndef PFILEDIALOG_H
 #define PFILEDIALOG_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QFileDialog>
 #include <QMap>

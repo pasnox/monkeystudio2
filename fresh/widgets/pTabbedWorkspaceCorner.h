@@ -24,7 +24,7 @@
 #ifndef PTABBEDWORKSPACECORNER_H
 #define PTABBEDWORKSPACECORNER_H
 
-#include "objects/MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QWidget>
 #include <QBoxLayout>

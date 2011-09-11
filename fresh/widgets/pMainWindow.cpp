@@ -16,7 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pMainWindow.h"
-#include "objects/pSettings.h"
+#include "../objects/pSettings.h"
 #include "pMenuBar.h"
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"

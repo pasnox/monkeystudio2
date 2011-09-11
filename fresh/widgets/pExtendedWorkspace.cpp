@@ -28,7 +28,6 @@
 #include <QMainWindow>
 #include <QStackedLayout>
 #include <QStackedWidget>
-#include <QDockWidget>
 #include <Qt>
 #include <QApplication>
 

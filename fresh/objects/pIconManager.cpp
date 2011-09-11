@@ -44,11 +44,24 @@ QString findFile( QDir& dir, const QString& fileName )
 	return QString::null;
 }
 
-QString pIconManager::filePath( const QString& fileName, const QString& prefix )
+QString pIconManager::filePath( const QString& _fileName, const QString& prefix )
 {
+	if ( _fileName.isEmpty() ) {
+		return QString::null;
+	}
+	
+	const QFileInfo fi( _fileName );
+	QString fileName = _fileName;
 	QString path = prefix;
-	if ( path.isEmpty() )
+	
+	if ( fi.isAbsolute() ) {
+		path = fi.absolutePath();
+		fileName = fi.fileName();
+	}
+	
+	if ( path.isEmpty() ) {
 		path = QLatin1String( ":/" );
+	}
 	
 	const FileNamePair pair = qMakePair( fileName, path );
 	QString fn = mFileNameCache.value( pair );

@@ -1,7 +1,7 @@
 #ifndef PENVIRONMENTVARIABLEEDITOR_H
 #define PENVIRONMENTVARIABLEEDITOR_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 #include "ui_pEnvironmentVariableEditor.h"
 
 class Q_MONKEY_EXPORT pEnvironmentVariableEditor : public QDialog, public Ui::pEnvironmentVariableEditor

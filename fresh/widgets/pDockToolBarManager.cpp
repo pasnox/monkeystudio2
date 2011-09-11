@@ -17,12 +17,14 @@
 ****************************************************************************/
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
-#include "objects/pSettings.h"
+#include "../objects/pSettings.h"
 
 #include <QMainWindow>
 #include <QDockWidget>
 #include <QAbstractButton>
 #include <QAction>
+#include <QSet>
+#include <QDebug>
 
 /*!
 	\details Create a new pDockToolBarManager
@@ -211,6 +213,9 @@ void pDockToolBarManager::restoreState( pDockToolBar* pbar )
 		areas = settings()->childGroups();
 		settings()->endGroup();
 	}
+	
+	const QSet<QString> verticalDocks = settings()->value( "MainWindow/Docks/Vertical" ).toStringList().toSet();
+	
 	// for docktoolbar
 	foreach ( QString area, areas )
 	{
@@ -229,8 +234,16 @@ void pDockToolBarManager::restoreState( pDockToolBar* pbar )
 				// get dock
 				QDockWidget* dock = mMain->findChild<QDockWidget*>( dockName );
 				// restore dock area
-				if ( dock )
+				if ( dock ) {
 					pbar->addDock( dock, dock->windowTitle(), dock->windowIcon() );
+					
+					if ( verticalDocks.contains( dockName ) ) {
+						dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+					}
+					else {
+						dock->setFeatures( dock->features() & ~QDockWidget::DockWidgetVerticalTitleBar );
+					}
+				}
 			}
 		}
 	}
@@ -251,16 +264,45 @@ void pDockToolBarManager::saveState( pDockToolBar* bar )
 		bars << bar;
 	else
 		bars << mBars.values();
+	
+	QSet<QString> verticalDocks;
+	
 	// for each docktoolbar
 	foreach ( pDockToolBar* tb, bars )
 	{
 		// list to stock checked button
 		QStringList mList;
 		// for each dock in docktoolbar
-		foreach ( QDockWidget* dock, tb->docks() )
+		foreach ( QDockWidget* dock, tb->docks() ) {
 			mList << dock->objectName();
+			
+			if ( dock->features() & QDockWidget::DockWidgetVerticalTitleBar ) {
+				verticalDocks << dock->objectName();
+			}
+		}
 		// write datas
 		settings()->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
 		settings()->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
 	}
+	
+	settings()->setValue( "MainWindow/Docks/Vertical", QStringList( verticalDocks.toList() ) );
+	
+#ifndef QT_NO_DEBUG
+	foreach ( QWidget* w, QApplication::allWidgets() ) {
+		QDockWidget* dw = qobject_cast<QDockWidget*>( w );
+		
+		if ( !dw ) {
+			continue;
+		}
+		
+		if ( dw->objectName().isEmpty() ) {
+			Q_ASSERT( !dw->objectName().isEmpty() );
+		}
+		
+		if ( dw->objectName() == "pDockWidget" ) {
+			qWarning() << dw << dw->objectName() << dw->windowTitle();
+			Q_ASSERT( dw->objectName() != "pDockWidget" );
+		}
+	}
+#endif
 }

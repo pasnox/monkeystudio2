@@ -5,6 +5,17 @@
 pVersion::pVersion( const QString& version )
 {
 	mVersion = version.trimmed();
+	init();
+}
+
+pVersion::pVersion( const char* version )
+{
+	mVersion = QString::fromAscii( version ).trimmed();
+	init();
+}
+
+void pVersion::init()
+{
 	const QStringList parts = mVersion.split( "." );
 	const int index = parts.value( 3 ).indexOf( QRegExp( "[A-Z|a-z]" ) );
 
