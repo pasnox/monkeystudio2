@@ -16,17 +16,12 @@
 ###########################################################################################
 -->
 <!DOCTYPE XUPProject>
-<project name="$Project Name$" >
-	<scope nested="false" name="XUPProjectSettings" >
-		<variable name="EDITOR" operator="=" multiline="false" >
-			<value content="PyQt" />
-		</variable>
-	</scope>
-    <variable name="FORMS" operator="=" multiline="true" >
-        <file content="$Form File Name$.ui" />
+<project name="$Project Name$" version="1.1.0" >
+    <variable name="FORMS">
+        <file>$Form File Name$.ui</file>
     </variable>
-	<variable name="PYTHON_FILES" operator="=" multiline="true" >
-		<file content="$Main File Name$" />
-		<file content="$Class File Name$.py" />
+	<variable name="PYTHON_FILES" >
+		<file>$Main File Name$</file>
+		<file>$Class File Name$.py</file>
 	</variable>
 </project>

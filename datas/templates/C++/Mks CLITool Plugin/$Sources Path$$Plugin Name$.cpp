@@ -1,15 +1,15 @@
 #include "$Plugin Name$.h"
 
-pCommand $Plugin Name$::defaultBuildCommand() const
+pCommand $Plugin Name$::defaultCommand() const
 {
 	// return your default command
 	return pCommand();
 }
 
-pCommandList $Plugin Name$::defaultCommands() const
+pCommand::List $Plugin Name$::defaultCommands() const
 {
 	// return the defaults user commands
-	return pCommandList();
+	return pCommand::List();
 }
 
 void $Plugin Name$::fillPluginInfos()
@@ -17,7 +17,7 @@ void $Plugin Name$::fillPluginInfos()
 	mPluginInfos.Caption = tr( "$Plugin Name$" );
 	mPluginInfos.Description = tr( "$Description$" );
 	mPluginInfos.Author = "$Authors$";
-	mPluginInfos.Type = BasePlugin::iBuilder;
+	mPluginInfos.Type = BasePlugin::iCLITool;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = false;
@@ -37,4 +37,4 @@ bool $Plugin Name$::uninstall()
 	return false;
 }
 
-Q_EXPORT_PLUGIN2( Builder$Plugin Name$, $Plugin Name$ )
+Q_EXPORT_PLUGIN2( Interpreter$Plugin Name$, $Plugin Name$ )
