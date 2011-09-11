@@ -1,13 +1,15 @@
 #ifndef PLUGINSMENU_H
 #define PLUGINSMENU_H
 
+#include "MonkeyExport.h"
+
 #include <QMenu>
 
-#include "BasePlugin.h"
+#include "pluginsmanager/BasePlugin.h"
 
 class PluginsManager;
 
-class PluginsMenu : public QObject
+class Q_MONKEY_EXPORT PluginsMenu : public QObject
 {
 	Q_OBJECT
 	

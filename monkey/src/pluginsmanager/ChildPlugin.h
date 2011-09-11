@@ -29,9 +29,7 @@
 #ifndef CHILDPLUGIN_H
 #define CHILDPLUGIN_H
 
-#include <objects/MonkeyExport.h>
-
-#include "BasePlugin.h"
+#include "pluginsmanager/BasePlugin.h"
 
 #include <QHash>
 #include <QStringList>
@@ -39,7 +37,7 @@
 
 class pAbstractChild;
 
-class Q_MONKEY_EXPORT ChildPlugin : public BasePlugin
+class Q_MONKEY_EXPORT ChildPlugin : virtual public BasePlugin
 {
 public:
 	// the suffixes this project can manage
@@ -49,10 +47,8 @@ public:
 	// tell if this plugin can open this file
 	virtual bool canOpen( const QString& fileName ) const
 	{
-		foreach ( const QStringList& suffixes, mSuffixes.values() )
-		{
-			if ( QDir::match( suffixes, fileName ) )
-			{
+		foreach ( const QStringList& suffixes, mSuffixes.values() ) {
+			if ( QDir::match( suffixes, fileName ) ) {
 				return true;
 			}
 		}

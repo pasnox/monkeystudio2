@@ -26,12 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "BasePlugin.h"
+#include "pluginsmanager/BasePlugin.h"
 #include "main.h"
 
-#include <QCoreApplication>
+#include <QApplication>
 
 BasePlugin::BasePlugin()
+	: QObject()
 {
 	// auto fill minimum version required using compil time version
 	mPluginInfos.ApplicationVersionRequired = PACKAGE_VERSION;
@@ -45,39 +46,22 @@ BasePlugin::~BasePlugin()
 
 QString BasePlugin::typeToString( BasePlugin::Type type )
 {
-	switch ( type )
-	{
-		case BasePlugin::iAll:
-			return QCoreApplication::translate( "BasePlugin", "All" );
-			break;
+	switch ( type )	{
 		case BasePlugin::iBase:
-			return QCoreApplication::translate( "BasePlugin", "Basic" );
-			break;
+			return tr( "Basic" );
 		case BasePlugin::iChild:
-			return QCoreApplication::translate( "BasePlugin", "Child" );
-			break;
+			return tr( "Child" );
 		case BasePlugin::iCLITool:
-			return QCoreApplication::translate( "BasePlugin", "Command Line Tool" );
-			break;
-		case BasePlugin::iBuilder:
-			return QCoreApplication::translate( "BasePlugin", "Builder" );
-			break;
+			return tr( "Command Line Tool" );
 		case BasePlugin::iDebugger:
-			return QCoreApplication::translate( "BasePlugin", "Debugger" );
-			break;
-		case BasePlugin::iInterpreter:
-			return QCoreApplication::translate( "BasePlugin", "Interpreter" );
-			break;
+			return tr( "Debugger" );
 		case BasePlugin::iXUP:
-			return QCoreApplication::translate( "BasePlugin", "XUP Project" );
-			break;
+			return tr( "XUP Project" );
 		case BasePlugin::iLast:
-			return QCoreApplication::translate( "BasePlugin", "NaN" );
-			break;
+			return tr( "NaN" );
 		default:
 			//Q_ASSERT( 0 ); // comment assert as in debug it will always assert as i do a loop that contains bad type in the compelteTypeToString() member.
 			return QString::null;
-			break;
 	}
 }
 
@@ -85,15 +69,12 @@ QString BasePlugin::completeTypeToString( BasePlugin::Types _type )
 {
 	QStringList types;
 	
-	for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
-	{
+	for ( int i = BasePlugin::iBase; i < BasePlugin::iLast; i++ ) {
 		const BasePlugin::Type type = (BasePlugin::Type)i;
 		const QString typeString = typeToString( type );
 		
-		if ( !typeString.isEmpty() && !types.contains( typeString ) )
-		{
-			if ( _type.testFlag( type ) )
-			{
+		if ( !typeString.isEmpty() && !types.contains( typeString ) ) {
+			if ( type == BasePlugin::iBase || _type.testFlag( type ) ) {
 				types << typeString;
 			}
 		}
@@ -156,7 +137,7 @@ void BasePlugin::setSettingsValue( const QString& key, const QVariant& value ) c
 void BasePlugin::saveCodeCoverage( const QString& n, const QString& s )
 {
 	// set path
-	QString s = QCoreApplication::applicationDirPath();
+	QString s = QApplication::applicationDirPath();
 #ifndef Q_OS_WIN
 	s = QDir::homePath();
 #endif

@@ -26,14 +26,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "PluginsManager.h"
+#include "pluginsmanager/PluginsManager.h"
 #include "PluginsMenu.h"
 #include "pMonkeyStudio.h"
 #include "ui/UIPluginsSettings.h"
 #include "coremanager/MonkeyCore.h"
 #include "main.h"
 
-#include <objects/pVersion.h>
+#include <pVersion.h>
 
 #include <QPluginLoader>
 
@@ -43,9 +43,6 @@ PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
 {
 	mMenuHandler = new PluginsMenu( this );
-	mBuilder = 0;
-	mDebugger = 0;
-	mInterpreter = 0;
 }
 
 QList<BasePlugin*> PluginsManager::plugins() const
@@ -131,8 +128,13 @@ bool PluginsManager::addPlugin( QObject* o )
 	// show plugin infos
 	qWarning("%s", tr( "Found plugin: %1, type: %2" ).arg( bp->infos().Name ).arg( bp->infos().Type ).toLocal8Bit().constData() );
 	
-	// add it to plugins list
-	mPlugins << bp;
+	// add it to plugins list, AppDebug is prepend as first plugin to allow track quicker
+	if ( bp->infos().Name == "AppDebug" ) {
+		mPlugins.prepend( bp );
+	}
+	else {
+		mPlugins << bp;
+	}
 	
 	mMenuHandler->addPlugin( bp );
 	
@@ -212,73 +214,23 @@ QString PluginsManager::childFilters() const
 	return f;
 }
 
-void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
-{
-	// if same cancel
-	if ( mBuilder == b )
-		return;
-	
-	// disabled all builder
-	foreach ( BuilderPlugin* bp, plugins<BuilderPlugin*>( PluginsManager::stAll ) )
-		bp->setEnabled( false );
-	
-	// enabled the one we choose
-	mBuilder = b;
-	if ( mBuilder )
-		mBuilder->setEnabled( true );
-}
-
-BuilderPlugin* PluginsManager::currentBuilder()
-{ return mBuilder; }
-
-void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
-{
-	// if same cancel
-	if ( mDebugger == d )
-		return;
-	
-	// disabled all debugger
-	foreach ( DebuggerPlugin* dp, plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
-		dp->setEnabled( false );
-	
-	// enabled the one we choose
-	mDebugger = d;
-	if ( mDebugger )
-		mDebugger->setEnabled( true );
-}
-
-DebuggerPlugin* PluginsManager::currentDebugger()
-{ return mDebugger; }
-	
-void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
-{
-	// if same cancel
-	if ( mInterpreter == i )
-		return;
-	
-	// disabled all debugger
-	foreach ( InterpreterPlugin* ip, plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
-		ip->setEnabled( false );
-	
-	// enabled the one we choose
-	mInterpreter = i;
-	if ( mInterpreter )
-		mInterpreter->setEnabled( true );
-}
-
-InterpreterPlugin* PluginsManager::currentInterpreter()
-{ return mInterpreter; }
-
 void PluginsManager::manageRequested()
 { ( new UIPluginsSettings() )->show(); }
 
 void PluginsManager::clearPlugins()
 {
+	BasePlugin* appDebug = plugin<BasePlugin*>( stAll, "AppDebug" );
+	
+	if ( appDebug ) {
+		mPlugins.move( mPlugins.indexOf( appDebug ), mPlugins.count() -1 );
+	}
+	
 	foreach ( BasePlugin* bp, mPlugins )
 	{
 		qWarning( "Clearing plugin...%s", bp->infos().Name.toLocal8Bit().constData() );
 		bp->setEnabled( false );
 	}
+	
 	qDeleteAll( mPlugins );
 	mPlugins.clear();
 }

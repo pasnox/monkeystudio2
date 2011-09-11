@@ -29,8 +29,8 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
 
-#include <objects/MonkeyExport.h>
-#include <objects/pIconManager.h>
+#include <MonkeyExport.h>
+#include <pIconManager.h>
 
 #include "main.h"
 #include "coremanager/MonkeyCore.h"
@@ -56,15 +56,12 @@ public:
 	// plugin type enums
 	enum Type
 	{
-		iAll = 0x0,
-		iBase = 0x1,
-		iChild = 0x2,
-		iCLITool = 0x4,
-		iBuilder = 0x8,
-		iDebugger = 0x20,
-		iInterpreter = 0x40,
-		iXUP = 0x80,
-		iLast = 0x100
+		iBase = 0x0,
+		iChild = 0x1,
+		iCLITool = 0x2,
+		iDebugger = 0x4,
+		iXUP = 0x20,
+		iLast = 0x80
 	};
 	
 	Q_DECLARE_FLAGS( Types, Type )
@@ -74,9 +71,10 @@ public:
 	{
 		PluginInfos()
 		{
-			Type = BasePlugin::iAll;
+			Type = BasePlugin::iBase;
 			FirstStartEnabled = false;
 			HaveSettingsWidget = false;
+			Pixmap = pIconManager::pixmap( "monkey2.png", ":/application" );
 			ApplicationVersionRequired = PACKAGE_VERSION;
 		}
 		
@@ -92,6 +90,7 @@ public:
 		bool HaveSettingsWidget; // plugin has settings widget
 		QPixmap Pixmap; // plugin icon
 		QString ApplicationVersionRequired; // the minimum mks version this plugin require, plugin must not enable itself if minimum version is not reached !
+		QStringList dependencies; // the plugin to enable as dependency for this plugin
 	};
 	
 	BasePlugin();
@@ -113,7 +112,7 @@ public:
 	void setNeverEnable( bool never )
 	{ return setSettingsValue( "NeverEnable", never ); }
 	
-	virtual QWidget* settingsWidget()
+	virtual QWidget* settingsWidget() const
 	{ return 0; }
 	
 	virtual bool isEnabled() const
