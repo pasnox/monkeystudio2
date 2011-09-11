@@ -19,7 +19,7 @@ DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 INCLUDEPATH	*= src
 RESOURCES	= src/resources/SearchAndReplace.qrc
 
-FORMS	+= src/SearchWidget.ui \
+FORMS	= src/SearchWidget.ui \
 	src/SearchAndReplaceSettings.ui
 
 HEADERS	= src/SearchAndReplace.h \

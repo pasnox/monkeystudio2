@@ -21,9 +21,15 @@ QT	*= network webkit
 INCLUDEPATH	*= src \
 	src/3rdparty
 
-RESOURCES	+= src/resources/QtAssistant.qrc
+RESOURCES	= src/resources/QtAssistant.qrc
 
-HEADERS	+= src/QtAssistant.h \
+FORMS	= src/3rdparty/bookmarkdialog.ui \
+	src/3rdparty/filternamedialog.ui \
+	src/3rdparty/installdialog.ui \
+	src/3rdparty/preferencesdialog.ui \
+	src/3rdparty/topicchooser.ui
+	
+HEADERS	= src/QtAssistant.h \
 	src/QtAssistantDock.h \
 	src/MkSQtDocInstaller.h \
 	src/3rdparty/bookmarkmanager.h \
@@ -36,7 +42,7 @@ HEADERS	+= src/QtAssistant.h \
 	src/QtAssistantViewer.h \
 	src/QtAssistantInlineSearch.h
 
-SOURCES	+= src/QtAssistant.cpp \
+SOURCES	= src/QtAssistant.cpp \
 	src/QtAssistantDock.cpp \
 	src/MkSQtDocInstaller.cpp \
 	src/3rdparty/bookmarkmanager.cpp \
@@ -50,8 +56,3 @@ SOURCES	+= src/QtAssistant.cpp \
 	src/QtAssistantInlineSearch.cpp
 
 include( src/3rdparty/fontpanel/fontpanel.pri )
-FORMS	+= src/3rdparty/bookmarkdialog.ui \
-	src/3rdparty/filternamedialog.ui \
-	src/3rdparty/installdialog.ui \
-	src/3rdparty/preferencesdialog.ui \
-	src/3rdparty/topicchooser.ui

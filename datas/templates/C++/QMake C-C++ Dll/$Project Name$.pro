@@ -22,17 +22,17 @@ TEMPLATE = lib
 LANGUAGE	= C++/Qt4
 TARGET	= $$quote($Project Name$)
 CONFIG	-= qt
-CONFIG	+= debug_and_release dll
+CONFIG	*= debug_and_release dll
 BUILD_PATH	 =  $Build Path$
 
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE -= -O2
-QMAKE_CFLAGS_RELEASE += -O3
-QMAKE_CXXFLAGS_RELEASE += -O3
+QMAKE_CFLAGS_RELEASE *= -O3
+QMAKE_CXXFLAGS_RELEASE *= -O3
 
 CONFIG(debug, debug|release) {
 	#Debug
-	CONFIG	+= console
+	CONFIG	*= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
 	else:TARGET	= $$join(TARGET,,,d)
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix

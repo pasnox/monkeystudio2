@@ -34,6 +34,6 @@ SOURCES	= src/Tools.cpp \
 	src/ui/UIDesktopTools.cpp \
 	src/ui/UIToolsEdit.cpp
 
-mac:SOURCES	+= src/DesktopApplications_mac.cpp
-else:unix:SOURCES	+= src/DesktopApplications_unix.cpp
-win32:SOURCES	+= src/DesktopApplications_win.cpp
+mac:SOURCES	*= src/DesktopApplications_mac.cpp
+else:unix:SOURCES	*= src/DesktopApplications_unix.cpp
+win32:SOURCES	*= src/DesktopApplications_win.cpp

@@ -21,12 +21,12 @@ XUPProjectSettings {
 TEMPLATE = app
 LANGUAGE	= C++/Qt4
 TARGET	= $$quote($Project Name$)
-CONFIG	+= debug_and_release
+CONFIG	*= debug_and_release
 BUILD_PATH	 =  $Build Path$
 
 CONFIG(debug, debug|release) {
 	#Debug
-	CONFIG	+= console
+	CONFIG	*= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
 	else:TARGET	= $$join(TARGET,,,d)
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix

@@ -15,12 +15,12 @@ include( config.pri )
 	# datas
 	monkey_datas.path	= $${PACKAGE_DATAS}
 	monkey_datas.files	= datas/*
-	monkey_datas.CONFIG += no_check_exist
+	monkey_datas.CONFIG *= no_check_exist
 
 	# debugger know_list_and_id
 	#monkey_debuggerIniFile.path	= $${PACKAGE_PLUGINS}/GNUdbg
 	#monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
-	#monkey_debuggerIniFile.CONFIG += no_check_exist
+	#monkey_debuggerIniFile.CONFIG *= no_check_exist
 
 	INSTALLS	= monkey_datas
 
@@ -28,12 +28,12 @@ include( config.pri )
 		# plugins
 		monkey_plugins.path	= $${PACKAGE_PLUGINS}
 		monkey_plugins.files	= bin/plugins/*
-		monkey_plugins.CONFIG += no_check_exist
+		monkey_plugins.CONFIG *= no_check_exist
 
 		# binary
 		monkey_target.path	= $${PACKAGE_PREFIX}
 		monkey_target.files	= bin/$${PACKAGE_TARGET}
-		monkey_target.CONFIG += no_check_exist
+		monkey_target.CONFIG *= no_check_exist
 
 		# desktop file
 		monkey_desktop.path	= $${prefix}/share/applications
@@ -43,6 +43,6 @@ include( config.pri )
 		monkey_desktopicon.path	= $${prefix}/share/pixmaps
 		monkey_desktopicon.files	= links/monkeystudio.png
 
-		INSTALLS	+= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
+		INSTALLS	*= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
 	}
 }
