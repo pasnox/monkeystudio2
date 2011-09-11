@@ -7,11 +7,12 @@ from string import Template
 
 file_name = r"[\w\d\./\\\-]+"
 number = "\d+"
-compiler = "(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*" #on Mac version could be included, such as g++-4.0
+#compiler = Template("(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*") # /usr/local/i386-mingw32-3.4.5/bin/i386-mingw32-gcc-4.0
+compiler = Template("($file_name)?(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*").substitute(file_name=file_name)
 source_file = file_name + "\.[cpmh]{1,3}" # .cpp .c .h .m .mm
 
 ## Error
-regEx = Template("^($file_name):($number):[\d:]* (error:|undefined reference) [^\\n]+")
+regEx = Template("^($file_name):($number):[\d:]* ((fatal )?error:|undefined reference) [^\\n]+")
 error =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'error',
 								   file = "%1",
@@ -64,14 +65,22 @@ error.test(	text,
 					text = text[:-1],
 					hint = text[:-1])
 
-## Warning
-regEx = Template("^($file_name):($number): warning: [^\\n]+")
+text = "src/gui/pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory\n"
+error.test(	text,
+					type = 'error',
+					file = 'src/gui/pIconManager.cpp',
+					line = '2',
+					text = text[:-1],
+					hint = text[:-1])
+
+## Warning or Note
+regEx = Template("^($file_name):($number):($number:)? (warning|note): [^\\n]+")
 warning =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'warning',
 								   file = "%1",
 								   line = "%2")
 
-warning.setComment('Warning')
+warning.setComment('Warning or Note')
 
 warning.test("src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
 				type = 'warning',
@@ -80,6 +89,20 @@ warning.test("src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
 				text = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’",
 				hint = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’")
 
+warning.test("qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)\n",
+				type = 'warning',
+				file = 'qnetworkrequest.h',
+				line = '93',
+				text = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
+				hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)")
+warning.test("src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+				type = 'warning',
+				file = 'src/QMake.h',
+				line = '30',
+				text = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+				hint = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:")
+			 
+
 # windows specific
 warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
 					 type = 'warning',
@@ -87,6 +110,22 @@ warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
 					 line = '11',
 					 text = "src\CmlLineManager.cpp:11: warning: unused variable 'z'",
 					 hint = "src\CmlLineManager.cpp:11: warning: unused variable 'z'")
+
+## Multiply definition
+
+regEx = Template("^($file_name):($number): (multiple definition of [^\\n]+)")
+multipleDefinition = parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
+									 type = 'error',
+									 file = "%1",
+									 line = "%2",
+									 text = "%3")
+multipleDefinition.setComment('#warning preprocessor dirrective')
+multipleDefinition.test("/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'\n",
+						type = 'error',
+						text = "multiple definition of `toto(int, int)'",
+						file = '/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h',
+						line = '9',
+						hint = "/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'")
 
 ## Linking failed, probably undefined reference
 regEx = "^collect2: ld returned 1 exit status"
@@ -104,8 +143,8 @@ link_failed.test('collect2: ld returned 1 exit status\n',
 regEx = Template("^$compiler[^\\n]+ ($source_file)")
 compiling =parsing.Pattern(regEx.substitute(compiler=compiler, source_file=source_file),
 										   type = 'compiling',
-										   text = 'Compiling %2...',
-										   file = '%2')
+										   text = 'Compiling %3...',
+										   file = '%3')
 
 compiling.setComment('Compiling')
 
@@ -129,6 +168,19 @@ compiling.test(text,
 					text = 'Compiling src/MSVCMake.cpp...',
 					hint = text[:-1],
 					file = 'src/MSVCMake.cpp')
+text = \
+'/usr/local/i386-mingw32-3.4.5/bin/i386-mingw32-gcc -c -O2 -Wall -DUNICODE -DQT_LARGEFILE_SUPPORT -DLARGE_FILES '+ \
+'-D_FILE_OFFSET_BITS=64 -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -DQT_NO_DYNAMIC_CAST ' + \
+'-I"/usr/local/Trolltech/win32/4.6.0/include/QtCore" -I"/usr/local/Trolltech/win32/4.6.0/include/QtGui" ' + \
+'-I"/usr/local/Trolltech/win32/4.6.0/include" -I"." -I"/Users/pasnox/Win32Libraries/include" -I"libwbfs" ' + \
+'-I"/usr/local/Trolltech/win32/4.6.0/include/ActiveQt" -I"../build/release/moc" ' + \
+'-I"/usr/local/i386-mingw32-3.4.5/i386-mingw32/include" -I"../../../intuisphere/trunk/mkspecs/4.6.x/win32-osx-g++" ' + \
+'-o ../build/release/obj/win32/tools.o tools.c\n'
+compiling.test(text,
+					type = 'compiling',
+					text = 'Compiling tools.c...',
+					hint = text[:-1],
+					file = 'tools.c')
 #g++
 text = "g++ -c -pipe -Wall -g -Wall -W -D_REENTRANT -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtXml -I/usr/include/qt4 -Ieditor-src -Ieditor-src/branche1 -Ieditor-src -I/branche2 -Ibuild/debug/.moc -Ibuild/debug/.ui -o build/debug/.obj/unix/SourceFile.o editor-src/branche2/SourceFile.cpp"
 compiling.test(text,
@@ -158,7 +210,7 @@ compiling.test(	text,
 						text = 'Compiling src\main.cpp...',
 						file = 'src\main.cpp',
 						hint = text[:-1])
-# Mac
+# Mac, compiling file
 text = 'g++-4.0 -c -pipe -g -gdwarf-2 -arch i386 -Wall -W -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/local/Trolltech/Qt-4.6.0-universal/mkspecs/macx-g++ -I. -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtCore.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtCore -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtGui.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtGui -I/usr/local/Trolltech/Qt-4.6.0-universal/include -Ibuild/debug/.moc -Ibuild/debug/.ui -F/usr/local/Trolltech/Qt-4.6.0-universal/lib -o build/debug/.obj/mac/UIMarketOptions.o src/UIMarketOptions.cpp'
 compiling.test(	text,
 						type = 'compiling',
@@ -200,6 +252,7 @@ print '# It is a machine generated file. Do not edit it manualy!\n'
 
 print error.generateMkSScript('GCC')
 print warning.generateMkSScript('GCC')
+print multipleDefinition.generateMkSScript('GCC')
 print compiling.generateMkSScript('GCC')
 print no_lib.generateMkSScript('GCC')
 print link_failed.generateMkSScript('GCC')
