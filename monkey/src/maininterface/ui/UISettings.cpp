@@ -578,7 +578,7 @@ void UISettings::tbFonts_clicked()
 {
 	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
 	bool b;
-	QFont f = QFontDialog::getFont( &b, tb->font(), window() );
+	QFont f = QFontDialog::getFont( &b, tb->font(), window(),  tr( "Choose a font" ), QFontDialog::DontUseNativeDialog );
 	if ( b )
 		tb->setFont( f );
 }
@@ -844,7 +844,7 @@ void UISettings::lexersHighlightingFont_clicked()
 		if ( !it )
 			return;
 		// get font
-		f = QFontDialog::getFont( &b, it->font(), window() );
+		f = QFontDialog::getFont( &b, it->font(), window(), tr( "Choose a font" ), QFontDialog::DontUseNativeDialog );
 		// apply
 		if ( b )
 		{
@@ -858,7 +858,7 @@ void UISettings::lexersHighlightingFont_clicked()
 		// get lexer
 		QsciLexer* l = mLexers.value( cbLexersHighlightingLanguages->currentText() );
 		// get font
-		f = QFontDialog::getFont( &b, l->font( -1 ), window() );
+		f = QFontDialog::getFont( &b, l->font( -1 ), window(), tr( "Choose a font" ), QFontDialog::DontUseNativeDialog );
 		// apply
 		if ( b )
 		{
