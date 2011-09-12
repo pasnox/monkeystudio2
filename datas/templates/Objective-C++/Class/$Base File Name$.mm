@@ -28,7 +28,6 @@ $Class Name$& $Class Name$::operator=( const $Class Name$& other )
 bool $Class Name$::operator==( const $Class Name$& other ) const
 {
     // Comparaison of datas here
-
     return false;   // Change it
 }
 

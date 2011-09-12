@@ -17,6 +17,4 @@
 -->
 <!DOCTYPE XUPProject>
 <project name="$Project Name$" version="1.1.0" >
-    <scope nested="false" name="XUPProjectSettings" >
-    </scope>
 </project>
