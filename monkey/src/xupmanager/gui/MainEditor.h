@@ -14,23 +14,23 @@ class XUPItemVariableEditorModel;
 
 class Q_MONKEY_EXPORT MainEditor : public XUPPageEditor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MainEditor( QWidget* parent = 0 );
-	virtual ~MainEditor();
-	
-	virtual void setup( XUPProjectItem* project );
-	virtual void finalize();
+    MainEditor( QWidget* parent = 0 );
+    virtual ~MainEditor();
+    
+    virtual void setup( XUPProjectItem* project );
+    virtual void finalize();
 
 protected:
-	Ui_MainEditor* ui;
-	XUPProjectItem* mProject;
-	
-	void updateMainFileComboBox( const QString& selectFile );
+    Ui_MainEditor* ui;
+    XUPProjectItem* mProject;
+    
+    void updateMainFileComboBox( const QString& selectFile );
 
 protected slots:
-	void on_tbDynamicFolder_clicked();
+    void on_tbDynamicFolder_clicked();
 };
 
 #endif // MAINEDITOR_H

@@ -5,6 +5,6 @@ using namespace std;
 
 int main( int argc, char** argv )
 {
-	cout << "$Message To Print$" << endl;
-	return 0;
+    cout << "$Message To Print$" << endl;
+    return 0;
 }

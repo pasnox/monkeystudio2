@@ -1,13 +1,13 @@
-TARGET	= MakefileProject
+TARGET  = MakefileProject
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
+DESTDIR = $$MONKEY_PLUGINS_DIR/xup
 
-#RESOURCES	= src/resources/MakefileProject.qrc
+#RESOURCES  = src/resources/MakefileProject.qrc
 
 
-HEADERS	= MakefileProject.h \
-	MakefileProjectItem.h
+HEADERS = MakefileProject.h \
+    MakefileProjectItem.h
 
-SOURCES	= MakefileProject.cpp \
-	MakefileProjectItem.cpp
+SOURCES = MakefileProject.cpp \
+    MakefileProjectItem.cpp
 

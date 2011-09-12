@@ -1,8 +1,8 @@
-TEMPLATE	= subdirs
+TEMPLATE    = subdirs
 
-SUBDIRS	= xup \
-	base \
-	clitool \
-	child \
-	debugger \
-	network
+SUBDIRS = xup \
+    base \
+    clitool \
+    child \
+    debugger \
+    network

@@ -1,22 +1,22 @@
 <?php
-	// loads phpqt module if needed
-	if ( !extension_loaded( 'php_qt' ) )
-	{
-		dl( 'php_qt.' . PHP_SHLIB_SUFFIX );
-	}
+    // loads phpqt module if needed
+    if ( !extension_loaded( 'php_qt' ) )
+    {
+        dl( 'php_qt.' . PHP_SHLIB_SUFFIX );
+    }
 
-	// create application
-	$app = new QApplication( $argc, $argv );
-	$app->setApplicationName( "$Project Name$" );
-	
-	// create test widget
-	$widget = new QWidget();
-	$widget->setWindowTitle( "$Project Name$" );
-	$widget->show();
-	
-	// connection
-	QObject::connect( $app, SIGNAL( 'lastWindowClosed()' ), $app, SLOT( 'quit()' ) );
-	
-	// execute application
-	$app->exec();
+    // create application
+    $app = new QApplication( $argc, $argv );
+    $app->setApplicationName( "$Project Name$" );
+    
+    // create test widget
+    $widget = new QWidget();
+    $widget->setWindowTitle( "$Project Name$" );
+    $widget->show();
+    
+    // connection
+    QObject::connect( $app, SIGNAL( 'lastWindowClosed()' ), $app, SLOT( 'quit()' ) );
+    
+    // execute application
+    $app->exec();
 ?>

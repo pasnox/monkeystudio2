@@ -33,12 +33,12 @@ static void installMatLabRegex (const langType language)
 
 extern parserDefinition* MatLabParser ()
 {
-	static const char *const extensions [] = { "m", NULL };
-	parserDefinition* const def = parserNew ("MatLab");
-	def->extensions = extensions;
-	def->initialize = installMatLabRegex;
-	def->regex      = TRUE;
-	return def;
+    static const char *const extensions [] = { "m", NULL };
+    parserDefinition* const def = parserNew ("MatLab");
+    def->extensions = extensions;
+    def->initialize = installMatLabRegex;
+    def->regex      = TRUE;
+    return def;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

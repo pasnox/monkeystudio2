@@ -1,24 +1,24 @@
 ###########################################################################################
-##		Created using $editor_version_string$
+##      Created using $editor_version_string$
 ##
-##	Author      : $Authors$
-##	Project     : $Plugin Name$
-##	FileName    : $Plugin Name$.pro
-##	Date        : $date$
-##	Description : $Description$
+##  Author      : $Authors$
+##  Project     : $Plugin Name$
+##  FileName    : $Plugin Name$.pro
+##  Date        : $date$
+##  Description : $Description$
 ##
-##	This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-##	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
 
-TARGET	= $Plugin Name$
+TARGET  = $Plugin Name$
 
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/debugger
-INCLUDEPATH	*= src
-RESOURCES	= $Resources Path$$Plugin Name$.qrc
+DESTDIR = $$MONKEY_PLUGINS_DIR/debugger
+INCLUDEPATH *= src
+RESOURCES   = $Resources Path$$Plugin Name$.qrc
 
-HEADERS	= $Sources Path$$Plugin Name$.h
+HEADERS = $Sources Path$$Plugin Name$.h
 
-SOURCES	= $Sources Path$$Plugin Name$.cpp
+SOURCES = $Sources Path$$Plugin Name$.cpp

@@ -7,16 +7,16 @@ class CLIToolPlugin;
 
 class PyQtProjectItem : public XUPProjectItem
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	Q_INVOKABLE PyQtProjectItem();
-	
-	virtual QString projectType() const;
-	virtual void installCommands();
-	
+    Q_INVOKABLE PyQtProjectItem();
+    
+    virtual QString projectType() const;
+    virtual void installCommands();
+    
 protected:
-	CLIToolPlugin* interpreter() const;
+    CLIToolPlugin* interpreter() const;
 };
 
 #endif // PYQTPROJECTITEM_H

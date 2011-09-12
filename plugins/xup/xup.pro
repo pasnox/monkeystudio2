@@ -1,2 +1,2 @@
-TEMPLATE	= subdirs
-SUBDIRS	= QMake PHP-Qt PyQt MakefileProject
+TEMPLATE    = subdirs
+SUBDIRS = QMake PHP-Qt PyQt MakefileProject

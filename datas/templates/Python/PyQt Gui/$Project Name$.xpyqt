@@ -1,17 +1,17 @@
 <!--
 ###########################################################################################
-##		Created using $editor_version_string$
+##      Created using $editor_version_string$
 ##
-##	Author    : $Authors$
-##	Project   : $Project Name$
-##	FileName  : $Project Name$.xpythonqt
-##	Date      : $date$
-##	License   : $License$
-##	Comment   : $Comment$
-##	Home Page   : $Home Page$
+##  Author    : $Authors$
+##  Project   : $Project Name$
+##  FileName  : $Project Name$.xpythonqt
+##  Date      : $date$
+##  License   : $License$
+##  Comment   : $Comment$
+##  Home Page   : $Home Page$
 ##
-##	This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-##	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
 -->
@@ -20,8 +20,8 @@
     <variable name="FORMS">
         <file>$Form File Name$.ui</file>
     </variable>
-	<variable name="PYTHON_FILES" >
-		<file>$Main File Name$</file>
-		<file>$Class File Name$.py</file>
-	</variable>
+    <variable name="PYTHON_FILES" >
+        <file>$Main File Name$</file>
+        <file>$Class File Name$.py</file>
+    </variable>
 </project>

@@ -1,2 +1,2 @@
-TEMPLATE	= subdirs
-SUBDIRS	= Irc
+TEMPLATE    = subdirs
+SUBDIRS = Irc

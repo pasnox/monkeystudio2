@@ -1,23 +1,23 @@
 <!--
 ###########################################################################################
-##		Created using $editor_version_string$
+##      Created using $editor_version_string$
 ##
-##	Author    : $Authors$
-##	Project   : $Project Name$
-##	FileName  : $Project Name$.xpythonqt
-##	Date      : $date$
-##	License   : $License$
-##	Comment   : $Comment$
-##	Home Page   : $Home Page$
+##  Author    : $Authors$
+##  Project   : $Project Name$
+##  FileName  : $Project Name$.xpythonqt
+##  Date      : $date$
+##  License   : $License$
+##  Comment   : $Comment$
+##  Home Page   : $Home Page$
 ##
-##	This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-##	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
 -->
 <!DOCTYPE XUPProject>
 <project name="$Project Name$" version="1.1.0" >
-	<variable name="PYTHON_FILES" >
-		<file>$Main File Name$</file>
-	</variable>
+    <variable name="PYTHON_FILES" >
+        <file>$Main File Name$</file>
+    </variable>
 </project>

@@ -5,15 +5,15 @@
 
 class QMakeVariablesEditor : public VariablesEditor
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	QMakeVariablesEditor( QWidget* parent = 0 );
-	virtual ~QMakeVariablesEditor();
-	
-	virtual XUPItemVariableEditorModel::FilterMode filterMode() const;
-	virtual bool isFriendlyDisplayText() const;
-	virtual QStringList filteredVariables() const;
+    QMakeVariablesEditor( QWidget* parent = 0 );
+    virtual ~QMakeVariablesEditor();
+    
+    virtual XUPItemVariableEditorModel::FilterMode filterMode() const;
+    virtual bool isFriendlyDisplayText() const;
+    virtual QStringList filteredVariables() const;
 };
 
 #endif // QMAKEVARIABLESEDITOR_H

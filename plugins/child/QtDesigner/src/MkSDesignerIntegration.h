@@ -7,12 +7,12 @@ class QDesignerFormEditorInterface;
 
 class MkSDesignerIntegration : public qdesigner_internal::QDesignerIntegration
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	MkSDesignerIntegration( QDesignerFormEditorInterface* core, QObject* parent = 0 );
-	
-	virtual QWidget* containerWindow( QWidget* widget ) const;
+    MkSDesignerIntegration( QDesignerFormEditorInterface* core, QObject* parent = 0 );
+    
+    virtual QWidget* containerWindow( QWidget* widget ) const;
 };
 
 #endif // MKSDESIGNERINTEGRATION_H

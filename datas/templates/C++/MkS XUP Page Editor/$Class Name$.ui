@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0" >
-	<class>$Class Name$</class>
-	<widget class="XUPPageEditor" name="$Class Name$" >
-		<property name="geometry" >
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>400</width>
-				<height>300</height>
-			</rect>
-		</property>
-		<property name="windowTitle" >
-			<string>$Window Title$</string>
-		</property>
-	</widget>
-	<customwidgets>
-		<customwidget>
-			<class>XUPPageEditor</class>
-			<extends>QFrame</extends>
-			<header>XUPPageEditor.h</header>
-			<container>1</container>
-		</customwidget>
-	</customwidgets>
-	<resources />
-	<connections />
+    <class>$Class Name$</class>
+    <widget class="XUPPageEditor" name="$Class Name$" >
+        <property name="geometry" >
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="windowTitle" >
+            <string>$Window Title$</string>
+        </property>
+    </widget>
+    <customwidgets>
+        <customwidget>
+            <class>XUPPageEditor</class>
+            <extends>QFrame</extends>
+            <header>XUPPageEditor.h</header>
+            <container>1</container>
+        </customwidget>
+    </customwidgets>
+    <resources />
+    <connections />
 </ui>

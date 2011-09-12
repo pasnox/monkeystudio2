@@ -5,17 +5,17 @@
 
 class $Plugin Name$ : public XUPPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin XUPPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin XUPPlugin )
 
 public:
-	virtual bool editProject( XUPProjectItem* project );
+    virtual bool editProject( XUPProjectItem* project );
 
 protected:
-	virtual void fillPluginInfos();
+    virtual void fillPluginInfos();
 
-	virtual bool install();
-	virtual bool uninstall();
+    virtual bool install();
+    virtual bool uninstall();
 };
 
 #endif // $Plugin Name.upper$_H

@@ -1,12 +1,12 @@
 # monkey includes path to include in plugins/core project
 
 # include path
-INCLUDEPATH	*= $${PWD}/src
-#INCLUDEPATH	*= $$getFolders( $${PWD}/src, resources )
+INCLUDEPATH *= $${PWD}/src
+#INCLUDEPATH    *= $$getFolders( $${PWD}/src, resources )
 
 # dependency
-PRE_TARGETDEPS	*= $${PWD}
+PRE_TARGETDEPS  *= $${PWD}
 
 # library integration
-LIBS	*= -L$${PACKAGE_BUILD_PATH}
-win32:LIBS	*= -l$${PACKAGE_TARGET}
+LIBS    *= -L$${PACKAGE_BUILD_PATH}
+win32:LIBS  *= -l$${PACKAGE_TARGET}

@@ -1,9 +1,9 @@
-TARGET	= PHP
+TARGET  = PHP
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/interpreter
+DESTDIR = $$MONKEY_PLUGINS_DIR/interpreter
 
-RESOURCES	= src/resources/PHP.qrc
+RESOURCES   = src/resources/PHP.qrc
 
-HEADERS	= src/PHP.h
+HEADERS = src/PHP.h
 
-SOURCES	= src/PHP.cpp
+SOURCES = src/PHP.cpp

@@ -4,7 +4,7 @@ echo "You can give as first parameter the Qt version to use, eg: 4.5.1"
 QT_WIN32_VERSION="4.6.1"
 
 if [ '!' -z "$1" ]; then
-	QT_WIN32_VERSION=$1
+    QT_WIN32_VERSION=$1
 fi
 
 export QT_WIN32_VERSION

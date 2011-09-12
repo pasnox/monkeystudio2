@@ -7,16 +7,16 @@ class CLIToolPlugin;
 
 class PHPQtProjectItem : public XUPProjectItem
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	Q_INVOKABLE PHPQtProjectItem();
-	
-	virtual QString projectType() const;
-	virtual void installCommands();
-	
+    Q_INVOKABLE PHPQtProjectItem();
+    
+    virtual QString projectType() const;
+    virtual void installCommands();
+    
 protected:
-	CLIToolPlugin* interpreter() const;
+    CLIToolPlugin* interpreter() const;
 };
 
 #endif // PHPQTPROJECTITEM_H

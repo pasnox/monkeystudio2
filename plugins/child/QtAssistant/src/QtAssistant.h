@@ -7,23 +7,23 @@
 
 class QtAssistant : public ChildPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin ChildPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin ChildPlugin )
 
 public:
-	virtual QWidget* settingsWidget() const;
-	virtual pAbstractChild* createDocument( const QString& fileName );
+    virtual QWidget* settingsWidget() const;
+    virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:
-	QPointer<class QtAssistantDock> mDock;
-	
-	virtual void fillPluginInfos();
+    QPointer<class QtAssistantDock> mDock;
+    
+    virtual void fillPluginInfos();
 
-	virtual bool install();
-	virtual bool uninstall();
+    virtual bool install();
+    virtual bool uninstall();
 
 protected slots:
-	void helpShown();
+    void helpShown();
 };
 
 #endif // QTASSISTANT_H

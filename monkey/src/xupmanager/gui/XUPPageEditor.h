@@ -9,14 +9,14 @@ class XUPProjectItem;
 
 class Q_MONKEY_EXPORT XUPPageEditor : public QFrame
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	XUPPageEditor( QWidget* parent = 0 );
-	virtual ~XUPPageEditor();
-	
-	virtual void setup( XUPProjectItem* project ) = 0;
-	virtual void finalize() = 0;
+    XUPPageEditor( QWidget* parent = 0 );
+    virtual ~XUPPageEditor();
+    
+    virtual void setup( XUPProjectItem* project ) = 0;
+    virtual void finalize() = 0;
 };
 
 #endif // XUPPAGEEDITOR_H

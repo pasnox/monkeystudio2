@@ -2,8 +2,8 @@
 # reset associations
 association clear
 # introduce new ones per language
-# association add	language/type	Suffixes
-# association set	language/type	Suffixes
+# association add   language/type   Suffixes
+# association set   language/type   Suffixes
 # Bash
 association set "Bash" "*.sh"
 # Batch

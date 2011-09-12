@@ -2,7 +2,7 @@
 # reset abbreviations
 abbreviation clear
 # introduce new ones per language
-# abbreviation	add	Macro	Description	Language	Snippet
+# abbreviation  add Macro   Description Language    Snippet
 # C++
 abbreviation add "whileb" "while statement" "C++" "while ( | )\n{\n}"
 abbreviation add "switchb" "switch statement" "C++" "switch ( | )\n{\n}"

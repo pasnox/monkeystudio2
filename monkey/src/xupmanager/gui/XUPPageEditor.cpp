@@ -1,7 +1,7 @@
 #include "XUPPageEditor.h"
 
 XUPPageEditor::XUPPageEditor( QWidget* parent )
-	: QFrame( parent )
+    : QFrame( parent )
 {
 }
 

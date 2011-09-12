@@ -1,9 +1,9 @@
-TARGET	= Python
+TARGET  = Python
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/interpreter
+DESTDIR = $$MONKEY_PLUGINS_DIR/interpreter
 
-RESOURCES	= src/resources/Python.qrc
+RESOURCES   = src/resources/Python.qrc
 
-HEADERS	= src/Python.h
+HEADERS = src/Python.h
 
-SOURCES	= src/Python.cpp
+SOURCES = src/Python.cpp

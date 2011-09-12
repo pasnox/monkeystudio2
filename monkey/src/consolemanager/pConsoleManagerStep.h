@@ -11,40 +11,40 @@
 class Q_MONKEY_EXPORT pConsoleManagerStep
 {
 public:
-	enum Type
-	{
-		Invalid = -1,
-		Error,
-		Warning,
-		Compiling,
-		Finish,
-		Unknown,
-		Good,
-		Bad
-	};
-	
-	enum CustomRoles
-	{
-		TypeRole = Qt::UserRole,
-		FileNameRole,
-		PositionRole
-	};
-	
-	typedef QMap<int, QVariant> Data;
-	
-	pConsoleManagerStep( pConsoleManagerStep::Data data = pConsoleManagerStep::Data() );
-	
-	bool operator==( const pConsoleManagerStep& other ) const;
-	
-	pConsoleManagerStep::Type type() const;
-	
-	QVariant roleValue( int role ) const;
-	void setRoleValue( int role, const QVariant& value );
+    enum Type
+    {
+        Invalid = -1,
+        Error,
+        Warning,
+        Compiling,
+        Finish,
+        Unknown,
+        Good,
+        Bad
+    };
+    
+    enum CustomRoles
+    {
+        TypeRole = Qt::UserRole,
+        FileNameRole,
+        PositionRole
+    };
+    
+    typedef QMap<int, QVariant> Data;
+    
+    pConsoleManagerStep( pConsoleManagerStep::Data data = pConsoleManagerStep::Data() );
+    
+    bool operator==( const pConsoleManagerStep& other ) const;
+    
+    pConsoleManagerStep::Type type() const;
+    
+    QVariant roleValue( int role ) const;
+    void setRoleValue( int role, const QVariant& value );
 
 protected:
-	Data mData;
-	
-	static QVariant defaultRoleValue( int role, pConsoleManagerStep::Type type );
+    Data mData;
+    
+    static QVariant defaultRoleValue( int role, pConsoleManagerStep::Type type );
 };
 
 typedef QList<pConsoleManagerStep> pConsoleManagerStepList;

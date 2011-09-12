@@ -5,11 +5,11 @@
 
 class QMakeFilesEditor : public FilesEditor
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	QMakeFilesEditor( QWidget* parent = 0 );
-	virtual ~QMakeFilesEditor();
+    QMakeFilesEditor( QWidget* parent = 0 );
+    virtual ~QMakeFilesEditor();
 };
 
 #endif // QMAKEFILESEDITOR_H

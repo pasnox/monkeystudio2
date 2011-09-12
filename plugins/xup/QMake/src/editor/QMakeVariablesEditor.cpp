@@ -4,10 +4,10 @@
 #include <xupmanager/core/XUPProjectItem.h>
 
 QMakeVariablesEditor::QMakeVariablesEditor( QWidget* parent )
-	: VariablesEditor( parent )
+    : VariablesEditor( parent )
 {
-	/*setQuoteSpacedValuesChecked( false );
-	setQuoteSpacedValuesVisible( false );*/
+    /*setQuoteSpacedValuesChecked( false );
+    setQuoteSpacedValuesVisible( false );*/
 }
 
 QMakeVariablesEditor::~QMakeVariablesEditor()
@@ -17,21 +17,21 @@ QMakeVariablesEditor::~QMakeVariablesEditor()
 
 XUPItemVariableEditorModel::FilterMode QMakeVariablesEditor::filterMode() const
 {
-	return XUPItemVariableEditorModel::Out;
+    return XUPItemVariableEditorModel::Out;
 }
 
 bool QMakeVariablesEditor::isFriendlyDisplayText() const
 {
-	return false;
+    return false;
 }
 
 QStringList QMakeVariablesEditor::filteredVariables() const
 {
-	QStringList variables = UIQMakeEditor::handledVariables();
-	
-	if ( mProject ) {
-		variables << mProject->documentFilters().fileVariables();
-	}
-	
-	return variables;
+    QStringList variables = UIQMakeEditor::handledVariables();
+    
+    if ( mProject ) {
+        variables << mProject->documentFilters().fileVariables();
+    }
+    
+    return variables;
 }

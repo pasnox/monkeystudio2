@@ -22,9 +22,9 @@
 *   DATA DECLARATIONS
 */
 typedef struct sStringList {
-	unsigned int max;
-	unsigned int count;
-	vString    **list;
+    unsigned int max;
+    unsigned int count;
+    vString    **list;
 } stringList;
 
 /*

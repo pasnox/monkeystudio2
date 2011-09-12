@@ -1,14 +1,14 @@
-TARGET	= PyQt
+TARGET  = PyQt
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
+DESTDIR = $$MONKEY_PLUGINS_DIR/xup
 
-INCLUDEPATH	*= src .
+INCLUDEPATH *= src .
 
-RESOURCES	*= src/resources/PyQt.qrc
+RESOURCES   *= src/resources/PyQt.qrc
 
 
-HEADERS	*= src/PyQt.h \
-	src/PyQtProjectItem.h
+HEADERS *= src/PyQt.h \
+    src/PyQtProjectItem.h
 
-SOURCES	= src/PyQt.cpp \
-	src/PyQtProjectItem.cpp
+SOURCES = src/PyQt.cpp \
+    src/PyQtProjectItem.cpp

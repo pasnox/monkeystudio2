@@ -9,21 +9,21 @@
 class Q_MONKEY_EXPORT CommandLineManager
 {
 public:
-	CommandLineManager();
-	~CommandLineManager();
-	
-	void parse();
-	void process();
-	const QMap<QString, QStringList>& arguments() const;
-	
-	void showVersion();
-	void showHelp();
-	void openProjects( const QStringList& fileNames );
-	void openFiles( const QStringList& fileNames );
+    CommandLineManager();
+    ~CommandLineManager();
+    
+    void parse();
+    void process();
+    const QMap<QString, QStringList>& arguments() const;
+    
+    void showVersion();
+    void showHelp();
+    void openProjects( const QStringList& fileNames );
+    void openFiles( const QStringList& fileNames );
 
 protected:
-	QMap<QString, QStringList> mArguments;
-	bool mVersionShown;
+    QMap<QString, QStringList> mArguments;
+    bool mVersionShown;
 };
 
 #endif // COMMANDLINEMANAGER_H

@@ -1,16 +1,16 @@
-TARGET	= AppDebug
+TARGET  = AppDebug
 
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
+DESTDIR = $$MONKEY_PLUGINS_DIR/base
 
-INCLUDEPATH	*= src
+INCLUDEPATH *= src
 
-RESOURCES	= src/resources/AppDebug.qrc
+RESOURCES   = src/resources/AppDebug.qrc
 
-FORMS	= src/DebugDockWidget.ui
+FORMS   = src/DebugDockWidget.ui
 
-HEADERS	= src/AppDebug.h \
-	src/DebugDockWidget.h
+HEADERS = src/AppDebug.h \
+    src/DebugDockWidget.h
 
-SOURCES	= src/AppDebug.cpp \
-	src/DebugDockWidget.cpp
+SOURCES = src/AppDebug.cpp \
+    src/DebugDockWidget.cpp

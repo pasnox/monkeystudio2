@@ -35,21 +35,21 @@
 **********************************************************************/
 
 /****************************************************************************
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
 #ifndef GETOPT_H
@@ -63,77 +63,77 @@
 
 class Q_MONKEY_EXPORT GetOpt {
 public:
-	GetOpt();
-	GetOpt( int offset );
-	GetOpt( int argc, char *argv[] );
-	GetOpt( const QStringList &a );
+    GetOpt();
+    GetOpt( int offset );
+    GetOpt( int argc, char *argv[] );
+    GetOpt( const QStringList &a );
 
-	QString appName() const { return aname; }
+    QString appName() const { return aname; }
 
-	// switch (no arguments)
-	void addSwitch( const QString &lname, bool *b );
+    // switch (no arguments)
+    void addSwitch( const QString &lname, bool *b );
 
-	// options (with arguments, sometimes optional)
-	void addOption( char s, const QString &l, QString *v );
-	void addVarLengthOption( const QString &l, QStringList *v );
-	void addRepeatableOption( char s, QStringList *v );
-	void addRepeatableOption( const QString &l, QStringList *v );
-	void addOptionalOption( const QString &l, QString *v, const QString &def );
-	void addOptionalOption( char s, const QString &l, QString *v, const QString &def );
+    // options (with arguments, sometimes optional)
+    void addOption( char s, const QString &l, QString *v );
+    void addVarLengthOption( const QString &l, QStringList *v );
+    void addRepeatableOption( char s, QStringList *v );
+    void addRepeatableOption( const QString &l, QStringList *v );
+    void addOptionalOption( const QString &l, QString *v, const QString &def );
+    void addOptionalOption( char s, const QString &l, QString *v, const QString &def );
 
-	// bare arguments
-	void addArgument( const QString &name, QString *v );
-	void addOptionalArgument( const QString &name, QString *v );
+    // bare arguments
+    void addArgument( const QString &name, QString *v );
+    void addOptionalArgument( const QString &name, QString *v );
 
-	bool parse( bool untilFirstSwitchOnly );
-	bool parse() { return parse( false ); }
+    bool parse( bool untilFirstSwitchOnly );
+    bool parse() { return parse( false ); }
 
-	bool isSet( const QString &name ) const;
+    bool isSet( const QString &name ) const;
 
-	int currentArgument() const { return currArg; }
+    int currentArgument() const { return currArg; }
 
 private:
-	enum OptionType { OUnknown, OEnd, OSwitch, OArg1, OOpt, ORepeat, OVarLen };
+    enum OptionType { OUnknown, OEnd, OSwitch, OArg1, OOpt, ORepeat, OVarLen };
 
-	struct Option;
-	friend struct Option;
+    struct Option;
+    friend struct Option;
 
-	struct Option {
-		Option( OptionType t = OUnknown, char s = 0, const QString &l = QString::null )
-			: type( t ),
-				sname( s ),
-				lname( l ),
-				boolValue( 0 )
-		{}
+    struct Option {
+        Option( OptionType t = OUnknown, char s = 0, const QString &l = QString::null )
+            : type( t ),
+                sname( s ),
+                lname( l ),
+                boolValue( 0 )
+        {}
 
-		OptionType type;
-		char sname; // short option name (0 if none)
-		QString lname; // long option name  (null if none)
-		union {
-			bool *boolValue;
-			QString *stringValue;
-			QStringList *listValue;
-		};
-		QString def;
-	};
+        OptionType type;
+        char sname; // short option name (0 if none)
+        QString lname; // long option name  (null if none)
+        union {
+            bool *boolValue;
+            QString *stringValue;
+            QStringList *listValue;
+        };
+        QString def;
+    };
 
-	QList<Option> options;
-	typedef QList<Option>::const_iterator OptionConstIterator;
-	QMap<QString, int> setOptions;
+    QList<Option> options;
+    typedef QList<Option>::const_iterator OptionConstIterator;
+    QMap<QString, int> setOptions;
 
-	void init( int argc, char *argv[], int offset = 1 );
-	void addOption( Option o );
-	void setSwitch( const Option &o );
+    void init( int argc, char *argv[], int offset = 1 );
+    void addOption( Option o );
+    void setSwitch( const Option &o );
 
-	QStringList args;
-	QString aname;
+    QStringList args;
+    QString aname;
 
-	int numReqArgs;
-	int numOptArgs;
-	Option reqArg;
-	Option optArg;
+    int numReqArgs;
+    int numOptArgs;
+    Option reqArg;
+    Option optArg;
 
-	int currArg;
+    int currArg;
 };
 
 #endif

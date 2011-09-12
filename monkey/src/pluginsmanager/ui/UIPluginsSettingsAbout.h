@@ -9,13 +9,13 @@ class BasePlugin;
 
 class Q_MONKEY_EXPORT UIPluginsSettingsAbout : public QDialog, public Ui::UIPluginsSettingsAbout
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	UIPluginsSettingsAbout( BasePlugin* plugin, QWidget* parent = 0 );
+    UIPluginsSettingsAbout( BasePlugin* plugin, QWidget* parent = 0 );
 
 protected:
-	QStringList trimmedSplitedString( const QString& string ) const;
+    QStringList trimmedSplitedString( const QString& string ) const;
 };
 
 #endif // UIPLUGINSSETTINGSABOUT_H

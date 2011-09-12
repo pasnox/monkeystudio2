@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : UIAddAbbreviation.h
@@ -37,19 +37,19 @@ class QTreeWidget;
 
 class Q_MONKEY_EXPORT UIAddAbbreviation : public QDialog, public Ui::UIAddAbbreviation
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	static void edit( QTreeWidget* );
+    static void edit( QTreeWidget* );
 
 private:
-	UIAddAbbreviation( QWidget*, QTreeWidget* );
-	~UIAddAbbreviation();
+    UIAddAbbreviation( QWidget*, QTreeWidget* );
+    ~UIAddAbbreviation();
 
-	QTreeWidget* mTree;
+    QTreeWidget* mTree;
 
 private slots:
-	void accept();
+    void accept();
 
 };
 

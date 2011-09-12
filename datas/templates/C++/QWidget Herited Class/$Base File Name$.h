@@ -5,11 +5,11 @@
 
 class $Class Name$ : $Herits Type$ $Parent Class$
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	$Class Name$( QWidget* parent = 0 );
-	virtual ~$Class Name$();
+    $Class Name$( QWidget* parent = 0 );
+    virtual ~$Class Name$();
 };
 
 #endif // $Base File Name.upper$_H

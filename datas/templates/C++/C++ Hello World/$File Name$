@@ -2,6 +2,6 @@
 
 int main ( int argc, char** argv )
 {
-	printf( "$What To Print$\n" );
-	return 0;
+    printf( "$What To Print$\n" );
+    return 0;
 }

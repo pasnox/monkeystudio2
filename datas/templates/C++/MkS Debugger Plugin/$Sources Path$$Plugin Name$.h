@@ -5,14 +5,14 @@
 
 class $Plugin Name$ : public DebuggerPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin DebuggerPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin DebuggerPlugin )
 
 protected:
-	virtual void fillPluginInfos();
+    virtual void fillPluginInfos();
 
-	virtual bool install();
-	virtual bool uninstall();
+    virtual bool install();
+    virtual bool uninstall();
 };
 
 #endif // $Plugin Name.upper$_H

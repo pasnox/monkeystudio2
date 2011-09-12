@@ -1,29 +1,29 @@
 #include "pEnvironmentVariableEditor.h"
 
 pEnvironmentVariableEditor::pEnvironmentVariableEditor( QWidget* parent, const QString& name, const QString& value )
-	: QDialog( parent )
+    : QDialog( parent )
 {
-	setupUi( this );
-	leName->setReadOnly( !name.isEmpty() );
-	leName->setText( name );
-	leValue->setText( value );
+    setupUi( this );
+    leName->setReadOnly( !name.isEmpty() );
+    leName->setText( name );
+    leValue->setText( value );
 
-	if ( name.isEmpty() )
-	{
-		leName->setFocus();
-	}
-	else
-	{
-		leValue->setFocus();
-	}
+    if ( name.isEmpty() )
+    {
+        leName->setFocus();
+    }
+    else
+    {
+        leValue->setFocus();
+    }
 }
 
 QString pEnvironmentVariableEditor::name() const
 {
-	return leName->text();
+    return leName->text();
 }
 
 QString pEnvironmentVariableEditor::value() const
 {
-	return leValue->text();
+    return leValue->text();
 }

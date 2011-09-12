@@ -2,16 +2,16 @@
 #include "ui_$Class Name$.h"
 
 $Class Name$::$Class Name$( QWidget* parent )
-	: XUPPageEditor( parent )
+    : XUPPageEditor( parent )
 {
-	ui = new Ui_$Class Name$;
-	ui->setupUi( this );
-	mProject = 0;
+    ui = new Ui_$Class Name$;
+    ui->setupUi( this );
+    mProject = 0;
 }
 
 $Class Name$::~$Class Name$()
 {
-	delete ui;
+    delete ui;
 }
 
 void $Class Name$::setup( XUPProjectItem* project )

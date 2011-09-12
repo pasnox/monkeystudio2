@@ -8,35 +8,35 @@ class Ui_QMakeMainEditor;
 
 class QMakeMainEditor : public XUPPageEditor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum Template {
-		Solution = 0,
-		Application,
-		StaticLibrary,
-		SharedLibrary,
-		QtPlugin,
-		QtDesignerPlugin
-	};
-	
-	QMakeMainEditor( UIQMakeEditor::ProjectValues& positive, UIQMakeEditor::ProjectValues& negative, QWidget* parent = 0 );
-	virtual ~QMakeMainEditor();
+    enum Template {
+        Solution = 0,
+        Application,
+        StaticLibrary,
+        SharedLibrary,
+        QtPlugin,
+        QtDesignerPlugin
+    };
+    
+    QMakeMainEditor( UIQMakeEditor::ProjectValues& positive, UIQMakeEditor::ProjectValues& negative, QWidget* parent = 0 );
+    virtual ~QMakeMainEditor();
 
-	virtual void setup( XUPProjectItem* project );
-	virtual void finalize();
+    virtual void setup( XUPProjectItem* project );
+    virtual void finalize();
 
 protected:
-	UIQMakeEditor::ProjectValues& mPositiveValues;
-	UIQMakeEditor::ProjectValues& mNegativeValues;
-	Ui_QMakeMainEditor* ui;
-	XUPProjectItem* mProject;
-	
-	bool isSolution() const;
+    UIQMakeEditor::ProjectValues& mPositiveValues;
+    UIQMakeEditor::ProjectValues& mNegativeValues;
+    Ui_QMakeMainEditor* ui;
+    XUPProjectItem* mProject;
+    
+    bool isSolution() const;
 
 protected slots:
-	void projectTypeChanged();
-	void on_tbProjectTarget_clicked();
+    void projectTypeChanged();
+    void on_tbProjectTarget_clicked();
 };
 
 #endif // QMAKEMAINEDITOR_H
