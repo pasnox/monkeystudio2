@@ -1,7 +1,7 @@
 #ifndef $Plugin Name.upper$_H
 #define $Plugin Name.upper$_H
 
-#include <ChildPlugin.h>
+#include <pluginsmanager/ChildPlugin.h>
 
 class $Plugin Name$ : public ChildPlugin
 {

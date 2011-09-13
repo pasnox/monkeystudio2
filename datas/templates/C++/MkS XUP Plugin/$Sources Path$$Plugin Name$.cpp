@@ -1,11 +1,5 @@
 #include "$Plugin Name$.h"
 
-bool $Plugin Name$::editProject( XUPProjectItem* project )
-{
-    // edit your project and return the state
-    return false
-}
-
 void $Plugin Name$::fillPluginInfos()
 {
     mPluginInfos.Caption = tr( "$Plugin Name$" );

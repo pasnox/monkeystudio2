@@ -1,7 +1,7 @@
 #ifndef $Plugin Name.upper$_H
 #define $Plugin Name.upper$_H
 
-#include <DebuggerPlugin.h>
+#include <pluginsmanager/DebuggerPlugin.h>
 
 class $Plugin Name$ : public DebuggerPlugin
 {

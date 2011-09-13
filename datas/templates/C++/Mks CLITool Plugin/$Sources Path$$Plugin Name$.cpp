@@ -6,12 +6,6 @@ pCommand $Plugin Name$::defaultCommand() const
     return pCommand();
 }
 
-pCommand::List $Plugin Name$::defaultCommands() const
-{
-    // return the defaults user commands
-    return pCommand::List();
-}
-
 void $Plugin Name$::fillPluginInfos()
 {
     mPluginInfos.Caption = tr( "$Plugin Name$" );

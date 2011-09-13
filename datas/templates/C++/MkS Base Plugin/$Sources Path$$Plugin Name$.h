@@ -1,7 +1,7 @@
 #ifndef $Plugin Name.upper$_H
 #define $Plugin Name.upper$_H
 
-#include <BasePlugin.h>
+#include <pluginsmanager/BasePlugin.h>
 
 class $Plugin Name$ : public BasePlugin
 {

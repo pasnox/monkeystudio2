@@ -1,7 +1,7 @@
 #ifndef $Plugin Name.upper$_H
 #define $Plugin Name.upper$_H
 
-#include <CLIToolPlugin.h>
+#include <pluginsmanager/CLIToolPlugin.h>
 
 class $Plugin Name$ : public CLIToolPlugin
 {
@@ -10,7 +10,6 @@ class $Plugin Name$ : public CLIToolPlugin
 
 public:
     virtual pCommand defaultCommand() const;
-    virtual pCommand::List defaultCommands() const;
 
 protected:
     virtual void fillPluginInfos();
