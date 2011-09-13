@@ -9,16 +9,16 @@ from $Class File Name$ import $Class Name$
 if __name__ == '__main__':
 
     # create application
-    app = QApplication(sys.argv)
-    app.setApplicationName('$Project Name$')
+    app = QApplication( sys.argv )
+    app.setApplicationName( '$Project Name$' )
 
     # create widget
     w = $Class Name$()
-    w.setWindowTitle('$Project Name$')
+    w.setWindowTitle( '$Project Name$' )
     w.show()
 
     # connection
-    QObject.connect(app, SIGNAL('lastWindowClosed()'), app, SLOT('quit()'))
+    QObject.connect( app, SIGNAL( 'lastWindowClosed()' ), app, SLOT( 'quit()' ) )
 
     # execute application
-    sys.exit(app.exec_())
+    sys.exit( app.exec_() )
