@@ -3,6 +3,8 @@
 
 #include <$Parent Class$>
 
+class QEvent;
+
 class $Class Name$ : $Herits Type$ $Parent Class$
 {
     Q_OBJECT
@@ -10,6 +12,12 @@ class $Class Name$ : $Herits Type$ $Parent Class$
 public:
     $Class Name$( QWidget* parent = 0 );
     virtual ~$Class Name$();
+
+public slots:
+    virtual void retranslateUi();
+    
+protected:
+    virtual void changeEvent( QEvent* event );
 };
 
 #endif // $Base File Name.upper$_H

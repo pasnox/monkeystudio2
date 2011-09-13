@@ -17,7 +17,7 @@
 TEMPLATE = lib
 LANGUAGE    = C++/Qt4
 TARGET  = $$quote($Project Name$)
-CONFIG  *= debug_and_release dll plugin
+CONFIG  *= debug_and_release shared plugin
 BUILD_PATH   =  $Build Path$
 
 CONFIG(debug, debug|release) {

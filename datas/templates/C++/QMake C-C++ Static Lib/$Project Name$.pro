@@ -18,7 +18,7 @@ TEMPLATE = lib
 LANGUAGE    = C++/Qt4
 TARGET  = $$quote($Project Name$)
 CONFIG  -= qt
-CONFIG  *= debug_and_release staticlib
+CONFIG  *= debug_and_release static
 BUILD_PATH   =  $Build Path$
 
 QMAKE_CFLAGS_RELEASE -= -O2
