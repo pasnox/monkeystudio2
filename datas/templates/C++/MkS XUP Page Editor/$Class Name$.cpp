@@ -16,6 +16,7 @@ $Class Name$::~$Class Name$()
 
 void $Class Name$::setup( XUPProjectItem* project )
 {
+    mProject = project;
 }
 
 void $Class Name$::finalize()

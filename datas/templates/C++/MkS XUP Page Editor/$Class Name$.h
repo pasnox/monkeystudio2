@@ -1,7 +1,7 @@
 #ifndef $Class Name.upper$_H
 #define $Class Name.upper$_H
 
-#include "XUPPageEditor.h"
+#include "xupmanager/gui/XUPPageEditor.h"
 
 class Ui_$Class Name$;
 
