@@ -10,7 +10,7 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
     QSCINTILLAVERSION   = QScintilla-gpl-snapshot
 
     # include path
-    INCLUDEPATH *= $${PWD}/$${QSCINTILLAVERSION}/include $${PWD}/$${QSCINTILLAVERSION}/src $${PWD}/$${QSCINTILLAVERSION}/Qt4 $${PWD}/$${QSCINTILLAVERSION}/Qt4/Qsci
+    INCLUDEPATH *= $${PWD}/$${QSCINTILLAVERSION}/include $${PWD}/$${QSCINTILLAVERSION}/src $${PWD}/$${QSCINTILLAVERSION}/lexers $${PWD}/$${QSCINTILLAVERSION}/lexlib $${PWD}/$${QSCINTILLAVERSION}/Qt4 $${PWD}/$${QSCINTILLAVERSION}/Qt4/Qsci
     #INCLUDEPATH    *= $$getFolders( $${PWD}/$${QSCINTILLAVERSION}, designer-Qt3 designer-Qt4 example-Qt3 example-Qt4 Qt3 doc Python python api )
 
     # dependency
