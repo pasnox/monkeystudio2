@@ -225,7 +225,7 @@ QString pConsoleManager::variablesHelp()
         "<b>Console Manager Variables</b><br><br>"
         "<b>$cpp$</b> : Current project path<br>"
         "<b>$cp$</b> : Current project filepath<br>"
-        "<b>$target$</b> : Current project target"
+        "<b>$target$</b> : Current project target<br>"
         "<b>$cfp$</b> : Current tab path<br>"
         "<b>$cf$</b> : Current tab filepath<br>"
         "<b>$cip$</b> : Current item path<br>"

@@ -211,6 +211,10 @@ XUPProjectItem* ProjectTypesIndex::newProjectItem( const QString& fileName ) con
 {
     foreach ( const QString& projectType, mFilters.keys() ) {
         foreach ( const DocumentFilter& filter, *( mFilters[ projectType ] ) ) {
+            if ( filter.type != DocumentFilter::Project ) {
+                continue;
+            }
+            
             if ( QDir::match( filter.filters, fileName ) ) {
                 return qobject_cast<XUPProjectItem*>( mRegisteredProjectItems[ projectType ]->newInstance() );
             }
