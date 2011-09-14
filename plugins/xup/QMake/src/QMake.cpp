@@ -102,13 +102,13 @@ bool QMake::install()
     }
     
     mFilters[ "PROJECT" ].weight = weight++;
-    mFilters[ "PROJECT" ].label = tr( "Qt Project" );
+    mFilters[ "PROJECT" ].label = tr( "Qt Projects" );
     mFilters[ "PROJECT" ].icon = "project.png";
     mFilters[ "PROJECT" ].type = DocumentFilter::Project;
     mFilters[ "PROJECT" ].filters << "*.pro";
     
     mFilters[ "INCLUDE_PROJECT" ].weight = weight++;
-    mFilters[ "INCLUDE_PROJECT" ].label = tr( "Qt Include Project" );
+    mFilters[ "INCLUDE_PROJECT" ].label = tr( "Qt Include Projects" );
     mFilters[ "INCLUDE_PROJECT" ].icon = "project.png";
     mFilters[ "INCLUDE_PROJECT" ].type = DocumentFilter::Project;
     mFilters[ "INCLUDE_PROJECT" ].filters << "*.pri";

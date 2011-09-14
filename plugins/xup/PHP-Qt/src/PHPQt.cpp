@@ -39,7 +39,7 @@ bool PHPQt::install()
     int weight = 0;
     
     mFilters[ "PROJECT" ].weight = weight++;
-    mFilters[ "PROJECT" ].label = tr( "PHP-Qt Project" );
+    mFilters[ "PROJECT" ].label = tr( "PHP-Qt Projects" );
     mFilters[ "PROJECT" ].icon = "project.png";
     mFilters[ "PROJECT" ].type = DocumentFilter::Project;
     mFilters[ "PROJECT" ].filters << "*.xphpqt";

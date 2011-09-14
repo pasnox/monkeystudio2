@@ -41,7 +41,7 @@ bool MakefileProject::install()
     int weight = 0;
     
     mFilters[ "PROJECT" ].weight = weight++;
-    mFilters[ "PROJECT" ].label = tr( "Makefile Project" );
+    mFilters[ "PROJECT" ].label = tr( "Makefile Projects" );
     mFilters[ "PROJECT" ].icon = "project.png";
     mFilters[ "PROJECT" ].type = DocumentFilter::Project;
     mFilters[ "PROJECT" ].filters << "*Makefile*";

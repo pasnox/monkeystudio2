@@ -40,7 +40,7 @@ bool PyQt::install()
     int weight = 0;
     
     mFilters[ "PROJECT" ].weight = weight++;
-    mFilters[ "PROJECT" ].label = tr( "PyQt Project" );
+    mFilters[ "PROJECT" ].label = tr( "PyQt Projects" );
     mFilters[ "PROJECT" ].icon = "project.png";
     mFilters[ "PROJECT" ].type = DocumentFilter::Project;
     mFilters[ "PROJECT" ].filters << "*.xpyqt";
