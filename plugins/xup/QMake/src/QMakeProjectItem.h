@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE QMakeProjectItem();
     virtual ~QMakeProjectItem();
     
+    virtual void addFiles( const QStringList& files, XUPItem* scope = 0 );
     virtual void removeValue( XUPItem* item, bool deleteFiles );
     virtual QString quoteString() const;
     virtual QString defaultOperator() const;

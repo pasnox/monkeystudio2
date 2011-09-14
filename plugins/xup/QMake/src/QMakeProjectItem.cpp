@@ -265,6 +265,70 @@ QMakeProjectItem::~QMakeProjectItem()
 {
 }
 
+void QMakeProjectItem::addFiles( const QStringList& _files, XUPItem* _scope )
+{
+    const DocumentFilterMap& filters = documentFilters();
+    const QString op = defaultOperator();
+    XUPItem* scope = _scope ? _scope : this;
+    XUPProjectItem* project = scope ? scope->project() : this;
+    QSet<QString> files = _files.toSet();
+    
+    foreach ( const QString& _file, files ) {
+        const QString file = unquotedValue( _file );
+        const QString variableName = filters.fileNameVariable( file );
+        
+        if ( variableName != "SUBDIRS" || file.isEmpty() ) {
+            continue;
+        }
+        
+        files.remove( _file );
+        
+        QString filePath = project->filePath( file );
+        
+        if ( pMonkeyStudio::isSameFile( filePath, project->fileName() ) ) {
+            continue;
+        }
+        
+        XUPItem* variableItem = project->getVariable( scope, variableName );
+        bool fileExists = false;
+        
+        if ( variableItem ) {
+            foreach ( XUPItem* item, variableItem->childrenList() ) {
+                switch ( item->type() ) {
+                    case XUPItem::Value:
+                    case XUPItem::File:
+                    case XUPItem::Path:
+                        fileExists = pMonkeyStudio::isSameFile( filePath, project->filePath( item->cacheValue( "content" ) ) );
+                        break;
+                    default:
+                        break;
+                }
+                
+                if ( fileExists ) {
+                    break;
+                }
+            }
+        }
+        
+        if ( !fileExists ) {
+            if ( !variableItem ) {
+                variableItem = scope->addChild( XUPItem::Variable );
+                variableItem->setAttribute( "name", variableName );
+                
+                if ( !op.isEmpty() ) {
+                    variableItem->setAttribute( "operator", op );
+                }
+            }
+            
+            filePath = quotedValue( project->relativeFilePath( QFileInfo( file ).absolutePath() ) );
+            XUPItem* valueItem = variableItem->addChild( XUPItem::File );
+            valueItem->setContent( filePath );
+        }
+    }
+    
+    XUPProjectItem::addFiles( files.toList(), _scope );
+}
+
 void QMakeProjectItem::removeValue( XUPItem* item, bool deleteFiles )
 {
     switch ( item->type() ) {
