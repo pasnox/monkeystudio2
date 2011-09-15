@@ -13,6 +13,7 @@ public:
 	Q_INVOKABLE GenericXUPProjectItem();
 	
 	virtual QString projectType() const;
+	virtual void installCommands();
 };
 
 class XUP : public XUPPlugin

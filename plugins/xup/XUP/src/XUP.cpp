@@ -1,6 +1,7 @@
 #include "XUP.h"
 
 #include <coremanager/MonkeyCore.h>
+#include <consolemanager/pCommand.h>
 
 GenericXUPProjectItem::GenericXUPProjectItem()
     : XUPProjectItem()
@@ -10,6 +11,25 @@ GenericXUPProjectItem::GenericXUPProjectItem()
 QString GenericXUPProjectItem::projectType() const
 {
     return PLUGIN_NAME;
+}
+
+void GenericXUPProjectItem::installCommands()
+{
+	pCommand cmd;
+	
+    cmd.setProject( this );
+    cmd.setSkipOnError( false );
+	cmd.setText( tr( "Execute project main file" ) );
+	cmd.setCommand( "$target$" );
+	cmd.setArguments( QString() );
+	cmd.setWorkingDirectory( path() );
+	cmd.setParsers( QStringList() );
+	cmd.setTryAllParsers( true );
+	cmd.setExecutableCheckingType( XUPProjectItem::DefaultTarget );
+	
+	addCommand( "mBuilder", cmd );
+	
+	XUPProjectItem::installCommands();
 }
 
 void XUP::fillPluginInfos()

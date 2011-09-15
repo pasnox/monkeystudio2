@@ -35,6 +35,7 @@
 
 #include <QTimer>
 #include <QDir>
+#include <QLibrary>
 #include <QDebug>
 
 #include "pConsoleManager.h"
@@ -460,7 +461,20 @@ void pConsoleManager::executeProcess()
                     continue;
                 }
                 
-                c.setCommand( c.command().replace( "$target$", quotedString( filePath ) ) );
+                QString commandLine = c.command().replace( "$target$", quotedString( filePath ) );
+                const QFileInfo fi( c.project()->filePath( filePath ) );
+                
+                if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
+#if defined( Q_OS_WIN )
+                    //
+#elif defined( Q_OS_MAC )
+                    commandLine = QString( "open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+#elif defined( Q_OS_UNIX )
+                    commandLine = QString( "xdg-open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+#endif
+                }
+                
+                c.setCommand( commandLine );
                 
                 if ( c.workingDirectory().isEmpty() ) {
                     c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
@@ -499,8 +513,10 @@ void pConsoleManager::executeProcess()
         }
         
         setEnvironment( variables );
+        
+        mCommands.first() = c;
 
-        start( QString( "%1 %2" ).arg( quotedString( c.command() ) ).arg( c.arguments() ) );
+        start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ).trimmed() );
 
         mBuffer.open( QBuffer::ReadOnly );
         // exit
