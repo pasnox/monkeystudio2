@@ -51,11 +51,11 @@ void MakefileProjectItem::installCommands()
     baseCmd.setSkipOnError( false );
     baseCmd.setTryAllParsers( true );
     
-    QString makeFileArg = QString( "-f %1 " ).arg( QFileInfo( fileName() ).fileName() );
+    QString makeFileArg = QString( "-f \"%1\" " ).arg( QFileInfo( fileName() ).fileName() );
     
     foreach( const QString& target, targets ) {
         baseCmd.setText( target );
-        baseCmd.setArguments( makeFileArg +target );
+        baseCmd.setCommand( QString( "%1 %2 %3" ).arg( baseCmd.command() ).arg( makeFileArg ).arg( target ) );
         addCommand( "mBuilder", baseCmd );
     }
 }

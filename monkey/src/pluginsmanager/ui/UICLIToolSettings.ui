@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>398</width>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,26 +67,16 @@
           </widget>
          </item>
          <item row="4" column="0" colspan="2">
-          <widget class="QLabel" name="lBuildCommandArguments">
-           <property name="text">
-            <string>Arguments :</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="2">
-          <widget class="QLineEdit" name="leBuildCommandArguments"/>
-         </item>
-         <item row="6" column="0" colspan="2">
           <widget class="QLabel" name="lBuildCommandWorkingDirectory">
            <property name="text">
             <string>Working Directory :</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
+         <item row="5" column="0">
           <widget class="QLineEdit" name="leBuildCommandWorkingDirectory"/>
          </item>
-         <item row="7" column="1">
+         <item row="5" column="1">
           <widget class="QToolButton" name="tbBuildCommandWorkingDirectory">
            <property name="icon">
             <iconset resource="../../resources/resources.qrc">
@@ -94,14 +84,14 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0" colspan="2">
+         <item row="6" column="0" colspan="2">
           <widget class="QCheckBox" name="cbBuildCommandSkipOnError">
            <property name="text">
             <string>Skip On Error</string>
            </property>
           </widget>
          </item>
-         <item row="9" column="0" colspan="2">
+         <item row="7" column="0" colspan="2">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>

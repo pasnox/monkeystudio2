@@ -31,7 +31,6 @@ pCommand CLIToolPlugin::command() const
     
     cmd.setText( settings->value( settingsKey( "command/Text" ) ).toString() );
     cmd.setCommand( settings->value( settingsKey( "command/Command" ) ).toString() );
-    cmd.setArguments( settings->value( settingsKey( "command/Arguments" ) ).toString() );
     cmd.setWorkingDirectory( settings->value( settingsKey( "command/WorkingDirectory" ) ).toString() );
     cmd.setParsers( settings->value( settingsKey( "command/Parsers" ) ).toStringList() );
     cmd.setTryAllParsers( settings->value( settingsKey( "command/TryAll" ), false ).toBool() );
@@ -52,7 +51,6 @@ void CLIToolPlugin::setCommand( const pCommand& cmd )
     
     settings->setValue( settingsKey( "command/Text" ), cmd.text() );
     settings->setValue( settingsKey( "command/Command" ), cmd.command() );
-    settings->setValue( settingsKey( "command/Arguments" ), cmd.arguments() );
     settings->setValue( settingsKey( "command/WorkingDirectory" ), cmd.workingDirectory() );
     settings->setValue( settingsKey( "command/Parsers" ), cmd.parsers() );
     settings->setValue( settingsKey( "command/TryAll" ), cmd.tryAllParsers() );

@@ -43,7 +43,7 @@ bool Python::uninstall()
 pCommand Python::defaultCommand() const
 {
     const QString mPython = "python";
-    return pCommand( "Interpret", mPython, QString::null, false, availableParsers(), "$cpp$" );
+    return pCommand( "Interpret", mPython, false, availableParsers(), "$cpp$" );
 }
 
 Q_EXPORT_PLUGIN2( InterpreterPython, Python )

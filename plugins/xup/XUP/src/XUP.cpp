@@ -21,7 +21,6 @@ void GenericXUPProjectItem::installCommands()
     cmd.setSkipOnError( false );
 	cmd.setText( tr( "Execute project main file" ) );
 	cmd.setCommand( "$target$" );
-	cmd.setArguments( QString() );
 	cmd.setWorkingDirectory( path() );
 	cmd.setParsers( QStringList() );
 	cmd.setTryAllParsers( true );

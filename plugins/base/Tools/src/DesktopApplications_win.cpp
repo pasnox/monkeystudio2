@@ -83,9 +83,9 @@ void DesktopApplications::scan()
             {
                 DesktopApplication da( df );
                 da.name = applicationFile.completeBaseName();
-                da.icon = QString();
-                da.genericName = QString();
-                da.comment = QString();
+                da.icon = QString::null;
+                da.genericName = QString::null;
+                da.comment = QString::null;
                 df->applications[ applicationFile.absoluteFilePath() ] = da;
             }
         }

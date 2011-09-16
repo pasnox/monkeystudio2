@@ -43,7 +43,7 @@ bool PHP::uninstall()
 pCommand PHP::defaultCommand() const
 {
     const QString php = "php";
-    return pCommand( "Interpret", php, QString::null, false, availableParsers(), "$cpp$" );
+    return pCommand( "Interpret", php, false, availableParsers(), "$cpp$" );
 }
 
 Q_EXPORT_PLUGIN2( InterpreterPHP, PHP )

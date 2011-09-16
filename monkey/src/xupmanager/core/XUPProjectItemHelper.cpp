@@ -123,7 +123,6 @@ void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const Me
             addCommandProperty( variable, menu );
             addCommandProperty( variable, command.text() );
             addCommandProperty( variable, command.command() );
-            addCommandProperty( variable, command.arguments() );
             addCommandProperty( variable, command.workingDirectory() );
             addCommandProperty( variable, command.parsers().join( ";" ) );
             addCommandProperty( variable, command.skipOnError() ? "1" : "0" );
@@ -149,7 +148,7 @@ MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
                 values << commandValue->content();
             }
             
-            if ( values.count() != 8 ) {
+            if ( values.count() != 7 ) {
                 qWarning() << "Skip reading incomplete command";
                 Q_ASSERT( 0 );
                 continue;
@@ -159,11 +158,10 @@ MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
             
             command.setText( values.at( 1 ).toString() );
             command.setCommand( values.at( 2 ).toString() );
-            command.setArguments( values.at( 3 ).toString() );
-            command.setWorkingDirectory( values.at( 4 ).toString() );
-            command.setParsers( values.at( 5 ).toString().split( ";", QString::SkipEmptyParts ) );
-            command.setSkipOnError( values.at( 6 ).toBool() );
-            command.setTryAllParsers( values.at( 7 ).toBool() );
+            command.setWorkingDirectory( values.at( 3 ).toString() );
+            command.setParsers( values.at( 4 ).toString().split( ";", QString::SkipEmptyParts ) );
+            command.setSkipOnError( values.at( 5 ).toBool() );
+            command.setTryAllParsers( values.at( 6 ).toBool() );
             command.setUserData( Qt::Checked );
             
             commands[ values.at( 0 ).toString() ] << command;

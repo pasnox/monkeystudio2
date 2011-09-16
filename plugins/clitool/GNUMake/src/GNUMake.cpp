@@ -65,11 +65,11 @@ QStringList GNUMake::availableParsers() const
 pCommand GNUMake::defaultCommand() const
 {
 #ifdef Q_OS_WIN
-    const QString mMake = "mingw32-make";
+    const QString mMake = "mingw32-make -w";
 #else
-    const QString mMake = "make";
+    const QString mMake = "make -w";
 #endif
-    return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$", true );
+    return pCommand( "Build", mMake, false, availableParsers(), "$cpp$", true );
 }
 
 Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )

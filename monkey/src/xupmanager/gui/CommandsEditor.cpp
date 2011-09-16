@@ -68,7 +68,6 @@ void CommandsEditor::setCommand( const QModelIndex& commandIndex )
     
     command.setText( ui->leCommandText->text() );
     command.setCommand( ui->leCommandCommand->text() );
-    command.setArguments( ui->leCommandArguments->text() );
     command.setWorkingDirectory( ui->leCommandWorkingDirectory->text() );
     command.setParsers( parsers );
     command.setSkipOnError( ui->cbCommandSkipOnError->isChecked() );
@@ -84,7 +83,6 @@ void CommandsEditor::getCommand( const QModelIndex& commandIndex )
     
     ui->leCommandText->setText( command.text() );
     ui->leCommandCommand->setText( command.command() );
-    ui->leCommandArguments->setText( command.arguments() );
     ui->leCommandWorkingDirectory->setText( command.workingDirectory() );
     ui->cbCommandSkipOnError->setChecked( command.skipOnError() );
     ui->cbCommandTryAll->setChecked( command.tryAllParsers() );

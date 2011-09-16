@@ -29,7 +29,14 @@ class Q_MONKEY_EXPORT XUPProjectItem : public QObject, public XUPItem
     
 public:
     // target type
-    enum TargetType { NoTarget = 0, DefaultTarget, DebugTarget, ReleaseTarget };
+    enum TargetType {
+        NoTarget = 0,
+        ServicesTarget, // use QDesktopServices::openUrl()
+        DesktopTarget, // use open or similar thing (open on mac, xdg-open on unix...)
+        DefaultTarget,
+        DebugTarget,
+        ReleaseTarget
+    };
     
     // ctor
     XUPProjectItem();

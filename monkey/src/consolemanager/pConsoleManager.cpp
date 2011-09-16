@@ -36,6 +36,8 @@
 #include <QTimer>
 #include <QDir>
 #include <QLibrary>
+#include <QDesktopServices>
+#include <QUrl>
 #include <QDebug>
 
 #include "pConsoleManager.h"
@@ -186,7 +188,6 @@ pCommand pConsoleManager::processCommand( pCommand c )
 {
     // process variables
     c.setCommand( processInternalVariables( c.command() ) );
-    c.setArguments( processInternalVariables( c.arguments() ) );
     c.setWorkingDirectory( processInternalVariables( c.workingDirectory() ) );
     // return command
     return c;
@@ -350,7 +351,7 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
     \param s Command to execute
 */
 void pConsoleManager::sendRawCommand( const QString& s )
-{ addCommand( pCommand( tr( "User Raw Command" ), s, QString::null, false ) ); }
+{ addCommand( pCommand( tr( "User Raw Command" ), s, false ) ); }
 
 void pConsoleManager::sendRawData( const QByteArray& a )
 {
@@ -444,55 +445,78 @@ void pConsoleManager::executeProcess()
             continue;
         }
         
-        // some check to taget file path if needed
-        if ( c.executableCheckingType() != XUPProjectItem::NoTarget ) {
-            if ( !c.project() && !c.command().contains( "$target$" ) ) {
-                emit commandSkipped( c );
-                removeCommand( c );
-                continue;
+        switch ( c.executableCheckingType() ) {
+            case XUPProjectItem::NoTarget: {
+                break;
             }
-            
-            if ( c.command().contains( "$target$" ) ) {
-                const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
+            case XUPProjectItem::ServicesTarget: {
+                if ( QDesktopServices::openUrl( QUrl( c.command() ) ) ) {
+                    finished( 0, QProcess::NormalExit );
+                    return;
+                }
                 
-                if ( filePath.isEmpty() ) {
+                break;
+            }
+            case XUPProjectItem::DesktopTarget: {
+#if defined( Q_OS_WIN )
+                c.setCommand( QString( "start %1" ).arg( c.command() ) );
+#elif defined( Q_OS_MAC )
+                c.setCommand( QString( "open %1" ).arg( c.command() ) );
+#elif defined( Q_OS_UNIX )
+                c.setCommand( QString( "xdg-open %1" ).arg( c.command() ) );
+#endif
+                break;
+            }
+            case XUPProjectItem::DefaultTarget:
+            case XUPProjectItem::DebugTarget:
+            case XUPProjectItem::ReleaseTarget: {
+                if ( !c.project() && !c.command().contains( "$target$" ) ) {
                     emit commandSkipped( c );
                     removeCommand( c );
                     continue;
                 }
                 
-                QString commandLine = c.command().replace( "$target$", quotedString( filePath ) );
-                const QFileInfo fi( c.project()->filePath( filePath ) );
-                
-                if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
+                if ( c.command().contains( "$target$" ) ) {
+                    const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
+                    
+                    if ( filePath.isEmpty() ) {
+                        emit commandSkipped( c );
+                        removeCommand( c );
+                        continue;
+                    }
+                    
+                    QString commandLine = c.command().replace( "$target$", quotedString( filePath ) );
+                    const QFileInfo fi( c.project()->filePath( filePath ) );
+                    
+                    if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
 #if defined( Q_OS_WIN )
-                    //
+                        commandLine = QString( "start %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_MAC )
-                    commandLine = QString( "open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+                        commandLine = QString( "open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_UNIX )
-                    commandLine = QString( "xdg-open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+                        commandLine = QString( "xdg-open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
 #endif
+                    }
+                    
+                    c.setCommand( commandLine );
+                    
+                    if ( c.workingDirectory().isEmpty() ) {
+                        c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
+                    }
                 }
-                
-                c.setCommand( commandLine );
-                
-                if ( c.workingDirectory().isEmpty() ) {
-                    c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
-                }
+                break;
+            }
+            default: {
+                Q_ASSERT( 0 );
+                break;
             }
         }
 
-        // set current parsers list
-        // parsers comamnd want to test/check
-        mCurrentParsers = c.parsers();
-        
-        // check if need tryall, and had all other parsers if needed at end
         if ( c.tryAllParsers() ) {
-            foreach ( const QString& s, parsersName() ) {
-                if ( !mCurrentParsers.contains( s ) ) {
-                    mCurrentParsers << s;
-                }
-            }
+            mCurrentParsers = parsersName();
+        }
+        else {
+            mCurrentParsers = c.parsers();
         }
         
         // execute command
@@ -516,10 +540,10 @@ void pConsoleManager::executeProcess()
         
         mCommands.first() = c;
 
-        start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ).trimmed() );
+        start( c.command().trimmed() );
 
         mBuffer.open( QBuffer::ReadOnly );
-        // exit
+        
         return;
     }
 }

@@ -67,11 +67,10 @@ public:
         mId = -1;
     }
     
-    pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
+    pCommand( const QString& t, const QString& c, bool b, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
     {
         mText = t;
         mCommand = c;
-        mArguments = a;
         mSkipOnError = b;
         mParsers = p;
         mWorkingDirectory = d;
@@ -100,7 +99,7 @@ public:
     }
     
     bool operator==( const pCommand& t ) const
-    { return mText == t.mText && mCommand == t.mCommand && mArguments == t.mArguments &&
+    { return mText == t.mText && mCommand == t.mCommand &&
             mWorkingDirectory == t.mWorkingDirectory && mParsers == t.mParsers && mSkipOnError == t.mSkipOnError &&
             mTryAllParsers == t.mTryAllParsers && mUserData == t.mUserData && mProject == t.mProject &&
             mExecutableCheckingType == t.mExecutableCheckingType && mId == t.mId
@@ -109,7 +108,6 @@ public:
 
     QString text() const { return mText; }
     QString command() const { return mCommand; }
-    QString arguments() const { return mArguments; }
     QString workingDirectory() const { return mWorkingDirectory; }
     QStringList parsers() const { return mParsers; }
     bool skipOnError() const { return mSkipOnError; }
@@ -117,16 +115,11 @@ public:
     QVariant userData() const { return mUserData; }
     XUPProjectItem* project() const { return mProject; }
     pCommand::List childCommands() const { return mChildCommands; }
-    /* If true, MkS core will check if executable file exists, and warn user, if it not.
-       File searched in the working dirrectory.
-       This parameter could be usable for execute project targets
-     */
     int executableCheckingType() { return mExecutableCheckingType; }
     int id() const { return mId; }
 
     void setText( const QString& s ) { mText = s; }
     void setCommand( const QString& s ) { mCommand = s; }
-    void setArguments( const QString& s ) { mArguments = s; }
     void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
     void addParser( const QString& p ) { if ( !mParsers.contains( p ) ) mParsers << p; }
     void setParsers( const QStringList& p ) { mParsers = p; }
@@ -137,10 +130,6 @@ public:
     void setProject( XUPProjectItem* project ) { mProject = project; }
     void setChildCommands( const pCommand::List& commands ) { mChildCommands = commands; }
     void addChildCommand( const pCommand& command ) { mChildCommands << command; }
-    /* If true, MkS core will check if executable file exists, and warn user, if it not.
-       File searched in the working dirrectory.
-       This parameter could be usable for execute project targets
-     */
     void setExecutableCheckingType( int type ) { mExecutableCheckingType = type; }
     void setId( int id ) { mId = id; }
     
@@ -149,7 +138,6 @@ public:
         QString s;
         s += QString( "mText: %1\n" ).arg( mText );
         s += QString( "mCommand: %1\n" ).arg( mCommand );
-        s += QString( "mArguments: %1\n" ).arg( mArguments );
         s += QString( "mWorkingDirectory: %1\n" ).arg( mWorkingDirectory );
         s += QString( "mSkipOnError: %1\n" ).arg( mSkipOnError );
         s += QString( "mParsers: %1\n" ).arg( mParsers.join( " " ) );
@@ -166,8 +154,7 @@ public:
 
 protected:
     QString mText;                              /**< Comment about command */
-    QString mCommand;                           /**< Console command */
-    QString mArguments;                         /**< Arguments */
+    QString mCommand;                           /**< Console command line */
     QString mWorkingDirectory;                  /**< Working dirrectory of process */
     bool mSkipOnError;                          /**< Skip command, if error ocurred */
     QStringList mParsers;                       /**< List of parsers, which should be used for command. Position in the list is not ignored */

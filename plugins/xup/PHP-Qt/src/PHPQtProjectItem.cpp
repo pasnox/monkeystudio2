@@ -49,7 +49,7 @@ void PHPQtProjectItem::installCommands()
         // execute project
         cmd = cmdInterpret;
         cmd.setText( tr( "Run" ) );
-        cmd.setArguments( mainFile );
+        cmd.setCommand( QString( "%1 \"%2\"" ).arg( cmd.command() ).arg( mainFile ) );
         cmd.setParsers( QStringList() );
         cmd.setTryAllParsers( false );
         addCommand( "mInterpreter", cmd );
@@ -58,8 +58,7 @@ void PHPQtProjectItem::installCommands()
     // phpqtuic4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current form implementation" ) );
-    cmd.setCommand( "phpqtuic4" );
-    cmd.setArguments( "\"$cf$\" -o \"$cf$.php\"" );
+    cmd.setCommand( "phpqtuic4 \"$cf$\" -o \"$cf$.php\"" );
     cmd.setWorkingDirectory( "$cfp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );
@@ -69,8 +68,7 @@ void PHPQtProjectItem::installCommands()
     // pyrcc4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current resource implementation" ) );
-    cmd.setCommand( "phpqtrcc4" );
-    cmd.setArguments( "\"$cf$\" -o \"$cf$.php\"" );
+    cmd.setCommand( "phpqtrcc4 \"$cf$\" -o \"$cf$.php\"" );
     cmd.setWorkingDirectory( "$cfp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );
@@ -80,8 +78,7 @@ void PHPQtProjectItem::installCommands()
     // pylupdate4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current project translation files" ) );
-    cmd.setCommand( "phpqtlupdate4" );
-    cmd.setArguments( "\"$cp$\"" );
+    cmd.setCommand( "phpqtlupdate4 \"$cp$\"" );
     cmd.setWorkingDirectory( "$cpp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );

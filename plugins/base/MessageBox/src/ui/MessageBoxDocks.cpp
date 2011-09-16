@@ -353,7 +353,6 @@ void MessageBoxDocks::commandError( const pCommand& command, QProcess::ProcessEr
 {
     QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( command.text() ) ) );
     s.append( tr( "* Command          : %1<br />" ).arg( colourText( command.command() ) ) );
-    s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( command.arguments() ) ) );
     s.append( tr( "* Working Directory: %1<br />" ).arg( colourText( command.workingDirectory() ) ) );
     s.append( tr( "* Error            : #%1<br />" ).arg( colourText( QString::number( error ) ) ) );
     s.append( colourText( pConsoleManager::errorToString( error ), Qt::darkGreen ) );
@@ -446,7 +445,6 @@ void MessageBoxDocks::commandStarted( const pCommand& c )
 {
     QString s( tr( "* Started          : '%1'<br />" ).arg( colourText( c.text() ) ) );
     s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
-    s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
     s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
     // appendOutput to console log
     appendInBox( colourText( s, Qt::blue ), Qt::red );
@@ -493,7 +491,6 @@ void MessageBoxDocks::commandSkipped( const pCommand& c )
 {
     QString s( tr( "* Skipped          : '%1'<br />" ).arg( colourText( c.text() ) ) );
     s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
-    s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
     s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
     s.append( colourText( tr( "The command has been skipped due to previous error." ), Qt::darkGreen ) );
     // appendOutput to console log

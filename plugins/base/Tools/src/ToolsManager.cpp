@@ -205,8 +205,7 @@ void ToolsManager::toolsMenu_triggered( QAction* action )
         pCommand cmd;
         cmd.setText( tool.caption );
         QStringList commandAndArgs = filePath.split( ' ' );
-        cmd.setCommand( commandAndArgs.takeFirst() );
-        cmd.setArguments( commandAndArgs.join( " " ) );
+        cmd.setCommand( commandAndArgs.join( " " ).prepend( " " ).prepend( commandAndArgs.takeFirst() ) );
         cmd.setWorkingDirectory( workingPath );
         cmd.setTryAllParsers( true );
         cm->addCommand( cmd );

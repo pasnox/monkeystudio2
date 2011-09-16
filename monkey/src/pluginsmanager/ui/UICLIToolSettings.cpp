@@ -65,7 +65,6 @@ void UICLIToolSettings::updateCommand()
 {
     ui->leBuildCommandText->setText( mCommand.text() );
     ui->leBuildCommandCommand->setText( mCommand.command() );
-    ui->leBuildCommandArguments->setText( mCommand.arguments() );
     ui->leBuildCommandWorkingDirectory->setText( mCommand.workingDirectory() );
     ui->cbBuildCommandSkipOnError->setChecked( mCommand.skipOnError() );
     
@@ -93,7 +92,6 @@ void UICLIToolSettings::save()
 {
     mCommand.setText( ui->leBuildCommandText->text() );
     mCommand.setCommand( ui->leBuildCommandCommand->text() );
-    mCommand.setArguments( ui->leBuildCommandArguments->text() );
     mCommand.setWorkingDirectory( ui->leBuildCommandWorkingDirectory->text() );
     mCommand.setSkipOnError( ui->cbBuildCommandSkipOnError->isChecked() );
     QStringList parsers;

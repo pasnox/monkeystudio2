@@ -685,7 +685,7 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Build Debug" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "debug" );
+                cmd.setCommand( QString( "%1 debug" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::BuildDebug ] = cmd;
         }
@@ -695,7 +695,7 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Build Release" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "release" );
+                cmd.setCommand( QString( "%1 release" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::BuildRelease ] = cmd;
         }
@@ -704,7 +704,7 @@ void QMakeProjectItem::installCommands()
         if ( haveDebugRelease ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Build All" ) );
-            cmd.setArguments( "all" );
+            cmd.setCommand( QString( "%1 all" ).arg( cmd.command() ) );
             cmds[ QMakeProjectItem::BuildAll ] = cmd;
         }
         
@@ -720,10 +720,10 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Clean Debug" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "debug-clean" );
+                cmd.setCommand( QString( "%1 debug-clean" ).arg( cmd.command() ) );
             }
             else {
-                cmd.setArguments( "clean" );
+                cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::CleanDebug ] = cmd;
         }
@@ -733,10 +733,10 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Clean Release" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "release-clean" );
+                cmd.setCommand( QString( "%1 release-clean" ).arg( cmd.command() ) );
             }
             else {
-                cmd.setArguments( "clean" );
+                cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::CleanRelease ] = cmd;
         }
@@ -745,7 +745,7 @@ void QMakeProjectItem::installCommands()
         if ( haveDebugRelease ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Clean All" ) );
-            cmd.setArguments( "clean" );
+            cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
             cmds[ QMakeProjectItem::CleanAll ] = cmd;
         }
         
@@ -753,7 +753,7 @@ void QMakeProjectItem::installCommands()
         if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Clean" ) );
-            cmd.setArguments( "clean" );
+            cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
             cmds[ QMakeProjectItem::Clean ] = cmd;
         }
         
@@ -762,10 +762,10 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Distclean Debug" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "debug-distclean" );
+                cmd.setCommand( QString( "%1 debug-distclean" ).arg( cmd.command() ) );
             }
             else {
-                cmd.setArguments( "distclean" );
+                cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::DistcleanDebug ] = cmd;
         }
@@ -775,10 +775,10 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Distclean Release" ) );
             if ( haveDebugRelease ) {
-                cmd.setArguments( "release-distclean" );
+                cmd.setCommand( QString( "%1 release-distclean" ).arg( cmd.command() ) );
             }
             else {
-                cmd.setArguments( "distclean" );
+                cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
             }
             cmds[ QMakeProjectItem::DistcleanRelease ] = cmd;
         }
@@ -787,7 +787,7 @@ void QMakeProjectItem::installCommands()
         if ( haveDebugRelease ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Distclean All" ) );
-            cmd.setArguments( "distclean" );
+            cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
             cmds[ QMakeProjectItem::DistcleanAll ] = cmd;
         }
         
@@ -795,7 +795,7 @@ void QMakeProjectItem::installCommands()
         if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Distclean" ) );
-            cmd.setArguments( "distclean" );
+            cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
             cmds[ QMakeProjectItem::Distclean ] = cmd;
         }
         
@@ -803,8 +803,7 @@ void QMakeProjectItem::installCommands()
             // qmake command
             cmd = pCommand();
             cmd.setText( tr( "QMake" ) );
-            cmd.setCommand( version.qmake() );
-            cmd.setArguments( version.qmakeParameters() );
+            cmd.setCommand( QString( "%1 %2" ).arg( version.qmake() ).arg( version.qmakeParameters() ) );
             cmd.setWorkingDirectory( "$cpp$" );
             cmd.setProject( this );
             cmd.setSkipOnError( false );
@@ -853,7 +852,6 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Execute Debug" ) );
             cmd.setCommand( "$target$" );
-            cmd.setArguments( QString() );
             cmd.setWorkingDirectory( QString::null);
             cmd.setParsers( QStringList() );
             cmd.setTryAllParsers( false );
@@ -866,7 +864,6 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Execute Release" ) );
             cmd.setCommand( "$target$" );
-            cmd.setArguments( QString() );
             cmd.setWorkingDirectory( QString::null );
             cmd.setParsers( QStringList() );
             cmd.setTryAllParsers( false );
@@ -879,7 +876,6 @@ void QMakeProjectItem::installCommands()
             cmd = cmdBuild;
             cmd.setText( tr( "Execute" ) );
             cmd.setCommand( "$target$" );
-            cmd.setArguments( QString() );
             cmd.setWorkingDirectory( QString::null );
             cmd.setParsers( QStringList() );
             cmd.setTryAllParsers( false );
@@ -892,8 +888,7 @@ void QMakeProjectItem::installCommands()
             // lupdate command
             cmd = pCommand();
             cmd.setText( tr( "lupdate" ) );
-            cmd.setCommand( version.lupdate() );
-            cmd.setArguments( "\"$cp$\"" );
+            cmd.setCommand( QString( "%1 \"$cp$\"" ).arg( version.lupdate() ) );
             cmd.setWorkingDirectory( "$cpp$" );
             cmd.setProject( this );
             cmd.setSkipOnError( false );
@@ -903,8 +898,7 @@ void QMakeProjectItem::installCommands()
             // lrelease command
             cmd = pCommand();
             cmd.setText( tr( "lrelease" ) );
-            cmd.setCommand( version.lrelease() );
-            cmd.setArguments( "\"$cp$\"" );
+            cmd.setCommand( QString( "%1 \"$cp$\"" ).arg( version.lrelease() ) );
             cmd.setWorkingDirectory( "$cpp$" );
             cmd.setProject( this );
             cmd.setSkipOnError( false );
