@@ -26,10 +26,17 @@ int pGenericTableModel::rowCount( const QModelIndex& parent ) const
 QVariant pGenericTableModel::data( const QModelIndex& index, int role ) const
 {
     switch ( role ) {
-        case pGenericTableModel::ItemFlags:
+        case pGenericTableModel::ItemFlagsRole:
             return QVariant::fromValue( flags( index ) );
-        default:
-            return indexInternalData( index ).value( role );
+        default: {
+            QVariant value = indexInternalData( index ).value( role );
+            
+            if ( value.isNull() && role == Qt::DisplayRole ) {
+                value = indexInternalData( index ).value( Qt::EditRole );
+            }
+            
+            return value;
+        }
     }
 }
 
@@ -47,9 +54,17 @@ bool pGenericTableModel::setData( const QModelIndex& index, const QVariant& valu
     }
     
     if ( value.isNull() ) {
+        if ( !map->contains( role ) ) {
+            return true;
+        }
+        
         map->remove( role );
     }
     else {
+        if ( map->value( role ) == value ) {
+            return true;
+        }
+        
         (*map)[ role ] = value;
     }
     
@@ -72,7 +87,7 @@ bool pGenericTableModel::setHeaderData( int section, Qt::Orientation orientation
 
 Qt::ItemFlags pGenericTableModel::flags( const QModelIndex& index ) const
 {
-    const QVariant variant = indexInternalData( index ).value( pGenericTableModel::ItemFlags );
+    const QVariant variant = indexInternalData( index ).value( pGenericTableModel::ItemFlagsRole );
     return variant.isNull() ? QAbstractTableModel::flags( index ) : variant.value<Qt::ItemFlags>();
 }
 
@@ -103,7 +118,7 @@ bool pGenericTableModel::removeColumns( int column, int count, const QModelIndex
 
 bool pGenericTableModel::insertRows( int row, int count, const QModelIndex& parent )
 {
-    if ( parent != QModelIndex() || row < 0 || row > mRowCount || count <= 0 ) {
+    if ( parent != QModelIndex() || row < 0 || row > mRowCount || count <= 0 || mColumnCount == 0 ) {
         return false;
     }
     

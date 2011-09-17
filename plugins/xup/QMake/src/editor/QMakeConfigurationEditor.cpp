@@ -108,9 +108,9 @@ void QMakeConfigurationEditor::setup( XUPProjectItem* project )
                 negativeState = Qt::Checked;
             }
             
-            mPositiveQtModulesModel->setData( positiveIndex, QVariant::fromValue( positiveFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlags );
+            mPositiveQtModulesModel->setData( positiveIndex, QVariant::fromValue( positiveFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlagsRole );
             mPositiveQtModulesModel->setData( positiveIndex, positiveState, Qt::CheckStateRole );
-            mNegativeQtModulesModel->setData( negativeIndex, QVariant::fromValue( negativeFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlags );
+            mNegativeQtModulesModel->setData( negativeIndex, QVariant::fromValue( negativeFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlagsRole );
             mNegativeQtModulesModel->setData( negativeIndex, negativeState, Qt::CheckStateRole );
         }
     }
@@ -165,9 +165,9 @@ void QMakeConfigurationEditor::setup( XUPProjectItem* project )
                 negativeState = Qt::Checked;
             }
             
-            mPositiveConfigurationModel->setData( positiveIndex, QVariant::fromValue( positiveFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlags );
+            mPositiveConfigurationModel->setData( positiveIndex, QVariant::fromValue( positiveFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlagsRole );
             mPositiveConfigurationModel->setData( positiveIndex, positiveState, Qt::CheckStateRole );
-            mNegativeConfigurationModel->setData( negativeIndex, QVariant::fromValue( negativeFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlags );
+            mNegativeConfigurationModel->setData( negativeIndex, QVariant::fromValue( negativeFlags | Qt::ItemIsUserCheckable ), pGenericTableModel::ItemFlagsRole );
             mNegativeConfigurationModel->setData( negativeIndex, negativeState, Qt::CheckStateRole );
         }
     }

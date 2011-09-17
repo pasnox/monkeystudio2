@@ -11,8 +11,8 @@ class Q_MONKEY_EXPORT pGenericTableModel : public QAbstractTableModel
     
 public:
     enum ExtendedRole {
-        ItemFlags = Qt::UserRole,
-        ExtendedUserRole = pGenericTableModel::ItemFlags +1
+        ItemFlagsRole = Qt::UserRole,
+        ExtendedUserRole = pGenericTableModel::ItemFlagsRole +1
     };
     
     pGenericTableModel( QObject* parent = 0 );

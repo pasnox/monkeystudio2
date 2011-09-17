@@ -16,44 +16,21 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pluginsmanager/ui/UICLIToolSettings.h"
-#include "pluginsmanager/CLIToolPlugin.h"
-#include "consolemanager/pConsoleManager.h"
-#include "pMonkeyStudio.h"
-#include "coremanager/MonkeyCore.h"
-#include "maininterface/UIMain.h"
-
 #include "ui_UICLIToolSettings.h"
-
-#include <QInputDialog>
-#include <QFileDialog>
-#include <QPushButton>
-
-using namespace pMonkeyStudio;
+#include "pluginsmanager/CLIToolPlugin.h"
 
 UICLIToolSettings::UICLIToolSettings( CLIToolPlugin* p, QWidget* w )
     : QWidget( w ), ui( new Ui_UICLIToolSettings ), mPlugin( p )
 {
     Q_ASSERT( mPlugin );
-    ui->setupUi( this );
     
-    // delete widget when close
+    mDefault = mPlugin->defaultCommand();
+    mReset = mPlugin->command();
+    
     setAttribute( Qt::WA_DeleteOnClose );
     
-    // memorize defaults and user commands
-    mDefault = mPlugin->defaultCommand();
-    mCommand = mPlugin->command();
-    mReset = mCommand;
-    
-    // add parsers
-    ui->lwBuildCommandParsers->addItems( MonkeyCore::consoleManager()->parsersName() );
-    
-    // set uncheck state for parser items
-    for ( int i = 0; i < ui->lwBuildCommandParsers->count(); i++ ) {
-        ui->lwBuildCommandParsers->item( i )->setCheckState( Qt::Unchecked );
-    }
-    
-    // load commands
-    updateCommand();
+    ui->setupUi( this );
+    ui->ceCommand->setCommand( mReset );
 }
 
 UICLIToolSettings::~UICLIToolSettings()
@@ -61,70 +38,19 @@ UICLIToolSettings::~UICLIToolSettings()
     delete ui;
 }
 
-void UICLIToolSettings::updateCommand()
-{
-    ui->leBuildCommandText->setText( mCommand.text() );
-    ui->leBuildCommandCommand->setText( mCommand.command() );
-    ui->leBuildCommandWorkingDirectory->setText( mCommand.workingDirectory() );
-    ui->cbBuildCommandSkipOnError->setChecked( mCommand.skipOnError() );
-    
-    for ( int i = 0; i < ui->lwBuildCommandParsers->count(); i++ ) {
-        QListWidgetItem* it = ui->lwBuildCommandParsers->item( i );
-        it->setCheckState( mCommand.parsers().contains( it->text() ) ? Qt::Checked : Qt::Unchecked );
-    }
-    
-    ui->cbBuildCommandTryAll->setChecked( mCommand.tryAllParsers() );
-}
-
 void UICLIToolSettings::restoreDefault()
 {
-    mCommand = mDefault;
-    updateCommand();
+    ui->ceCommand->setCommand( mDefault );
 }
 
 void UICLIToolSettings::reset()
 {
-    mCommand = mReset;
-    updateCommand();
+    ui->ceCommand->setCommand( mReset );
 }
 
 void UICLIToolSettings::save()
 {
-    mCommand.setText( ui->leBuildCommandText->text() );
-    mCommand.setCommand( ui->leBuildCommandCommand->text() );
-    mCommand.setWorkingDirectory( ui->leBuildCommandWorkingDirectory->text() );
-    mCommand.setSkipOnError( ui->cbBuildCommandSkipOnError->isChecked() );
-    QStringList parsers;
-    
-    for ( int i = 0; i < ui->lwBuildCommandParsers->count(); i++ ) {
-        QListWidgetItem* it = ui->lwBuildCommandParsers->item( i );
-        
-        if ( it->checkState() == Qt::Checked ) {
-            parsers << it->text();
-        }
-    }
-    
-    mCommand.setParsers( parsers );
-    mCommand.setTryAllParsers( ui->cbBuildCommandTryAll->isChecked() );
-    mPlugin->setCommand( mCommand );
-}
-
-void UICLIToolSettings::on_tbBuildCommandCommand_clicked()
-{
-    const QString filePath = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Select an executable" ), ui->leBuildCommandCommand->text() );
-    
-    if ( !filePath.isNull() ) {
-        ui->leBuildCommandCommand->setText( filePath );
-    }
-}
-
-void UICLIToolSettings::on_tbBuildCommandWorkingDirectory_clicked()
-{
-    const QString path = QFileDialog::getExistingDirectory( this, tr( "Select a folder" ), ui->leBuildCommandWorkingDirectory->text() );
-    
-    if ( !path.isEmpty() ) {
-        ui->leBuildCommandWorkingDirectory->setText( path );
-    }
+    mPlugin->setCommand( ui->ceCommand->command() );
 }
 
 void UICLIToolSettings::on_dbbButtons_clicked( QAbstractButton* button )

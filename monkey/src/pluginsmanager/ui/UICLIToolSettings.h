@@ -44,13 +44,10 @@ protected:
     pCommand mCommand;
     
 protected slots:
-    void updateCommand();
     void restoreDefault();
     void reset();
     void save();
     
-    void on_tbBuildCommandCommand_clicked();
-    void on_tbBuildCommandWorkingDirectory_clicked();
     void on_dbbButtons_clicked( QAbstractButton* );
 };
 
