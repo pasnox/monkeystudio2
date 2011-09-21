@@ -42,7 +42,10 @@ public:
     bool isSeparator( int index );
     void setSeparator( int index, bool set = true );
     
+    QList<int> checkedRows() const;
     QStringList checkedStringList() const;
+    QModelIndexList checkedIndexes() const;
+    void clearCheckStates();
 
 public slots:
     virtual void retranslateUi();

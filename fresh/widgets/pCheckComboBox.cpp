@@ -4,7 +4,6 @@
 #include <QEvent>
 #include <QHelpEvent>
 #include <QListView>
-#include <QStandardItemModel>
 #include <QStylePainter>
 #include <QToolTip>
 #include <QWhatsThis>
@@ -26,19 +25,8 @@ void pCheckComboBoxDelegate::setSeparator( QAbstractItemModel* model, const QMod
 {
     model->setData( index, set ? QLatin1String( "separator" ) : QVariant(), Qt::AccessibleDescriptionRole );
     
-    if ( QStandardItemModel* m = qobject_cast<QStandardItemModel*>( model ) ) {
-        if ( QStandardItem* item = m->itemFromIndex( index ) ) {
-            if ( set ) {
-                item->setFlags( item->flags() & ~( Qt::ItemIsSelectable | Qt::ItemIsEnabled ) );
-            }
-            else {
-                item->setFlags( item->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-            }
-        }
-    }
-    
-    if ( pGenericTableModel* m = qobject_cast<pGenericTableModel*>( model ) ) {
-        Qt::ItemFlags flags = m->data( index, pGenericTableModel::ItemFlagsRole ).value<Qt::ItemFlags>();
+    if ( model->inherits( "pGenericTableModel" ) ) {
+        Qt::ItemFlags flags = model->data( index, pGenericTableModel::ItemFlagsRole ).value<Qt::ItemFlags>();
         
         if ( set ) {
             flags = flags & ~( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
@@ -47,7 +35,7 @@ void pCheckComboBoxDelegate::setSeparator( QAbstractItemModel* model, const QMod
             flags = flags | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         }
         
-        m->setData( index, QVariant::fromValue( flags ), pGenericTableModel::ItemFlagsRole );
+        model->setData( index, QVariant::fromValue( flags ), pGenericTableModel::ItemFlagsRole );
     }
 }
 
@@ -115,6 +103,12 @@ pCheckComboBox::~pCheckComboBox()
 
 void pCheckComboBox::showPopup()
 {
+    if ( !model() ) {
+        return;
+    }
+    
+    Q_ASSERT( model()->inherits( "pGenericTableModel" ) );
+    
     const Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     
     for ( int i = 0; i < model()->rowCount( rootModelIndex() ); i++ ) {
@@ -125,12 +119,6 @@ void pCheckComboBox::showPopup()
         }
         
         model()->setData( index, QSize( 0, 21 ), Qt::SizeHintRole );
-        
-        if ( QStandardItemModel* m = qobject_cast<QStandardItemModel*>( model() ) ) {
-            if ( QStandardItem* item = m->itemFromIndex( index ) ) {
-                item->setFlags( flags );
-            }
-        }
         
         if ( model()->inherits( "pGenericTableModel" ) ) {
             model()->setData( index, QVariant::fromValue( flags ),  pGenericTableModel::ItemFlagsRole );
@@ -174,28 +162,29 @@ void pCheckComboBox::setSeparator( int index, bool set )
     mDelegate->setSeparator( model(), modelIndex( index ), set );
 }
 
+QList<int> pCheckComboBox::checkedRows() const
+{
+    return mModel->checkedRows( modelColumn() );
+}
+
 QStringList pCheckComboBox::checkedStringList() const
 {
-    QStringList strings;
-    
-    if ( model() ) {
-        for ( int i = 0; i < model()->rowCount( rootModelIndex() ); i++ ) {
-            const QModelIndex index = model()->index( i, modelColumn(), rootModelIndex() );
-            const QVariant value = index.data( Qt::CheckStateRole );
-            const Qt::CheckState state = value.isNull() ? Qt::Unchecked : Qt::CheckState( value.toInt() );
-            
-            if ( state == Qt::Checked ) {
-                strings << index.data().toString();
-            }
-        }
-    }
-    
-    return strings;
+    return mModel->checkedStringList( modelColumn() );
+}
+
+QModelIndexList pCheckComboBox::checkedIndexes() const
+{
+    return mModel->checkedIndexes( modelColumn() );
+}
+
+void pCheckComboBox::clearCheckStates()
+{
+    mModel->clearCheckStates( modelColumn() );
 }
 
 void pCheckComboBox::retranslateUi()
 {
-    // do your custom retranslate here
+    update();
 }
 
 QModelIndex pCheckComboBox::modelIndex( int index ) const
