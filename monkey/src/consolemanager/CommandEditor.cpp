@@ -7,13 +7,15 @@
 #include <QFileDialog>
 #include <QDebug>
 
+#define TryAll QT_TRANSLATE_NOOP( "CommandEditor", "Try All" )
+
 CommandEditor::CommandEditor( QWidget* parent )
     : QFrame( parent ), ui( new Ui_CommandEditor )
 {
     ui->setupUi( this );
     
     // populate parsers combobox
-    ui->ccParsers->addItem( tr( "Try all" ) );
+    ui->ccParsers->addItem( tr( TryAll ) );
     ui->ccParsers->addSeparator();
     ui->ccParsers->addItems( MonkeyCore::consoleManager()->parsersName() );
 }
@@ -25,14 +27,22 @@ CommandEditor::~CommandEditor()
 
 pCommand CommandEditor::command() const
 {
+    const QStringList parsers = ui->ccParsers->checkedStringList();
     pCommand command;
     
     command.setText( ui->leText->text() );
     command.setCommand( ui->leCommand->text() );
     command.setWorkingDirectory( ui->leWorkDir->text() );
     command.setSkipOnError( ui->cbSkipOnError->isChecked() );
-    //command.setParsers( ui->ccParsers->checkedList() );
-    //command.setTryAllParsers( ui->cbTryAll->isChecked() );
+    
+    foreach ( const QString& parser, parsers ) {
+        if ( parser == tr( TryAll ) ) {
+            command.setTryAllParsers( true );
+        }
+        else {
+            command.addParser( parser );
+        }
+    }
     
     return command;
 }
@@ -43,14 +53,20 @@ void CommandEditor::setCommand( const pCommand& command )
     ui->leCommand->setText( command.command() );
     ui->leWorkDir->setText( command.workingDirectory() );
     ui->cbSkipOnError->setChecked( command.skipOnError() );
-    //ui->ccParsers->setCheckedList( command.parsers() );
-    //ui->cbTryAll->setChecked( command.tryAllParsers() );
+    ui->ccParsers->clearCheckStates();
+    
+    foreach ( const QString& parser, command.parsers() ) {
+        const int row = ui->ccParsers->findText( parser );
+        ui->ccParsers->setItemData( row, Qt::Checked, Qt::CheckStateRole );
+    }
+    
+    const int row = ui->ccParsers->findText( tr( TryAll ) );
+    ui->ccParsers->setItemData( row, command.tryAllParsers() ? Qt::Checked : QVariant(), Qt::CheckStateRole );
 }
 
 void CommandEditor::retranslateUi()
 {
     ui->retranslateUi( this );
-    // do your custom retranslate here
 }
 
 void CommandEditor::changeEvent( QEvent* event )
