@@ -30,12 +30,6 @@ CommandsEditor::~CommandsEditor()
 void CommandsEditor::setup( XUPProjectItem* project )
 {
     mProject = project;
-    
-    foreach ( const QString& parser, MonkeyCore::consoleManager()->parsersName() ) {
-        QListWidgetItem* item = new QListWidgetItem( parser, ui->lwCommandParsers );
-        item->setCheckState( Qt::Unchecked );
-    }
-    
     mModel->setCommands( XUPProjectItemHelper::projectCommands( mProject ), MonkeyCore::menuBar() );
     tvCommands_selectionModel_selectionChanged( QItemSelection(), QItemSelection() );
 }
@@ -55,42 +49,15 @@ void CommandsEditor::setCommand( const QModelIndex& commandIndex )
         return;
     }
     
-    pCommand command = mModel->command( commandIndex );
-    QStringList parsers;
-    
-    for ( int i = 0; i < ui->lwCommandParsers->count(); i++ ) {
-        QListWidgetItem* item = ui->lwCommandParsers->item( i );
-        
-        if ( item->checkState() == Qt::Checked ) {
-            parsers << item->text();
-        }
-    }
-    
-    command.setText( ui->leCommandText->text() );
-    command.setCommand( ui->leCommandCommand->text() );
-    command.setWorkingDirectory( ui->leCommandWorkingDirectory->text() );
-    command.setParsers( parsers );
-    command.setSkipOnError( ui->cbCommandSkipOnError->isChecked() );
-    command.setTryAllParsers( ui->cbCommandTryAll->isChecked() );
-    
+    pCommand command = ui->ceCommand->command();
+    command.setUserData( commandIndex.data( Qt::CheckStateRole ) );
     mModel->setData( commandIndex, QVariant::fromValue( command ), Qt::EditRole );
 }
 
 void CommandsEditor::getCommand( const QModelIndex& commandIndex )
 {
     const pCommand command = mModel->command( commandIndex );
-    const QSet<QString> parsers = command.parsers().toSet();
-    
-    ui->leCommandText->setText( command.text() );
-    ui->leCommandCommand->setText( command.command() );
-    ui->leCommandWorkingDirectory->setText( command.workingDirectory() );
-    ui->cbCommandSkipOnError->setChecked( command.skipOnError() );
-    ui->cbCommandTryAll->setChecked( command.tryAllParsers() );
-    
-    for ( int i = 0; i < ui->lwCommandParsers->count(); i++ ) {
-        QListWidgetItem* item = ui->lwCommandParsers->item( i );
-        item->setCheckState( parsers.contains( item->text() ) ? Qt::Checked : Qt::Unchecked );
-    }
+    ui->ceCommand->setCommand( command );
 }
 
 void CommandsEditor::updateState()
@@ -102,7 +69,7 @@ void CommandsEditor::updateState()
     ui->tbCommandAdd->setEnabled( index.isValid() );
     ui->tbCommandUp->setEnabled( isAction && index.row() > 0 && count > 1 );
     ui->tbCommandDown->setEnabled( isAction && index.row() < count -1 && count > 1 );
-    ui->fEditor->setEnabled( isAction );
+    ui->ceCommand->setEnabled( isAction );
 }
 
 void CommandsEditor::tvCommands_selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )
