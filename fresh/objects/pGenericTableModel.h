@@ -4,6 +4,7 @@
 #include "MonkeyExport.h"
 
 #include <QAbstractTableModel>
+#include <QPoint>
 
 class Q_MONKEY_EXPORT pGenericTableModel : public QAbstractTableModel
 {
@@ -37,13 +38,14 @@ public:
     bool swapRows( int fromRow, int toRow );
     void clear( bool onlyData );
     
-    QModelIndexList checkedIndexes() const;
-    QList<int> checkedRows() const;
+    QModelIndexList checkedIndexes( int column = -1 ) const;
+    QList<int> checkedRows( int column = -1 ) const;
+    QStringList checkedStringList( int column = -1 ) const;
+    void clearCheckStates( int column = -1 );
     
 protected:
     typedef QMap<int, QVariant> IntVariantMap; // represent an index
-    typedef QPair<int, int> Point; // represent an index position as column, row.
-    typedef QMap<pGenericTableModel::Point, pGenericTableModel::IntVariantMap> PointIntVariantMap; // represent an index data
+    typedef QMap<QPoint, pGenericTableModel::IntVariantMap> PointIntVariantMap; // represent an index data
     
     int mColumnCount;
     int mRowCount;
@@ -56,6 +58,8 @@ protected:
     pGenericTableModel::IntVariantMap* headerInternalData( int section, Qt::Orientation orientation );
     pGenericTableModel::IntVariantMap headerInternalData( int section, Qt::Orientation orientation ) const;
 };
+
+bool operator<( const QPoint& left, const QPoint& right );
 
 Q_DECLARE_METATYPE( Qt::ItemFlags )
 

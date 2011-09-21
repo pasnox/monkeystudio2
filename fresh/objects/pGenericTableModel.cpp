@@ -1,6 +1,12 @@
 #include "pGenericTableModel.h"
 
+#include <QStringList>
 #include <QDebug>
+
+bool operator<( const QPoint& left, const QPoint& right )
+{
+    return qMakePair( left.x(), left.y() ) < qMakePair( right.x(), right.y() );
+}
 
 pGenericTableModel::pGenericTableModel( QObject* parent )
     : QAbstractTableModel( parent )
@@ -124,9 +130,9 @@ bool pGenericTableModel::insertRows( int row, int count, const QModelIndex& pare
     
     beginInsertRows( parent, row, row +count -1 );
     mRowCount += count;
-    foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-        if ( point.second >= row ) {
-            mData[ pGenericTableModel::Point( point.first, point.second +count ) ] = mData.take( point );
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( point.y() >= row ) {
+            mData[ QPoint( point.x(), point.y() +count ) ] = mData.take( point );
         }
     }
     endInsertRows();
@@ -141,12 +147,12 @@ bool pGenericTableModel::removeRows( int row, int count, const QModelIndex& pare
     
     beginRemoveRows( parent, row, row +count -1 );
     mRowCount -= count;
-    foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-        if ( point.second >= row && point.second < row +count ) {
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( point.y() >= row && point.y() < row +count ) {
             mData.remove( point );
         }
-        else if ( point.second >= row +count ) {
-            mData[ pGenericTableModel::Point( point.first, point.second -count ) ] = mData.take( point );
+        else if ( point.y() >= row +count ) {
+            mData[ QPoint( point.x(), point.y() -count ) ] = mData.take( point );
         }
     }
     endRemoveRows();
@@ -168,13 +174,13 @@ void pGenericTableModel::setColumnCount( int count )
     else {
         beginRemoveColumns( QModelIndex(), count, mColumnCount -1 );
         mColumnCount = count;
-        foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-            if ( point.first >= mColumnCount ) {
+        foreach ( const QPoint& point, mData.keys() ) {
+            if ( point.x() >= mColumnCount ) {
                 mData.remove( point );
             }
         }
-        foreach ( const pGenericTableModel::Point& point, mHeaderData.keys() ) {
-            if ( point.first == Qt::Horizontal && point.second >= mColumnCount ) {
+        foreach ( const QPoint& point, mHeaderData.keys() ) {
+            if ( point.x() == Qt::Horizontal && point.y() >= mColumnCount ) {
                 mHeaderData.remove( point );
             }
         }
@@ -196,13 +202,13 @@ void pGenericTableModel::setRowCount( int count )
     else {
         beginRemoveRows( QModelIndex(), count, mRowCount -1 );
         mRowCount = count;
-        foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-            if ( point.second >= mRowCount ) {
+        foreach ( const QPoint& point, mData.keys() ) {
+            if ( point.y() >= mRowCount ) {
                 mData.remove( point );
             }
         }
-        foreach ( const pGenericTableModel::Point& point, mHeaderData.keys() ) {
-            if ( point.first == Qt::Vertical && point.second >= mRowCount ) {
+        foreach ( const QPoint& point, mHeaderData.keys() ) {
+            if ( point.x() == Qt::Vertical && point.y() >= mRowCount ) {
                 mHeaderData.remove( point );
             }
         }
@@ -236,23 +242,23 @@ bool pGenericTableModel::swapRows( int fromRow, int toRow )
     pGenericTableModel::PointIntVariantMap toData;
     
     // keep backup data
-    foreach( const pGenericTableModel::Point& point, mData.keys() ) {
-        if ( point.second == fromRow ) {
+    foreach( const QPoint& point, mData.keys() ) {
+        if ( point.y() == fromRow ) {
             fromData[ point ] = mData.take( point );
         }
-        else if ( point.second == toRow ) {
+        else if ( point.y() == toRow ) {
             toData[ point ] = mData.take( point );
         }
     }
     
     // move from data
-    foreach( const pGenericTableModel::Point& point, fromData.keys() ) {
-        mData[ pGenericTableModel::Point( point.first, toRow ) ] = fromData.take( point );
+    foreach( const QPoint& point, fromData.keys() ) {
+        mData[ QPoint( point.x(), toRow ) ] = fromData.take( point );
     }
     
     // move to data
-    foreach( const pGenericTableModel::Point& point, toData.keys() ) {
-        mData[ pGenericTableModel::Point( point.first, fromRow ) ] = toData.take( point );
+    foreach( const QPoint& point, toData.keys() ) {
+        mData[ QPoint( point.x(), fromRow ) ] = toData.take( point );
     }
     
     // update persistent indexes
@@ -277,21 +283,21 @@ bool pGenericTableModel::swapRows( int fromRow, int toRow )
 
 pGenericTableModel::IntVariantMap* pGenericTableModel::indexInternalData( const QModelIndex& index )
 {
-    return index.isValid() ? &mData[ pGenericTableModel::Point( index.column(), index.row() ) ] : 0;
+    return index.isValid() ? &mData[ QPoint( index.column(), index.row() ) ] : 0;
 }
 
 pGenericTableModel::IntVariantMap pGenericTableModel::indexInternalData( const QModelIndex& index ) const
 {
-    return mData.value( pGenericTableModel::Point( index.column(), index.row() ) );
+    return mData.value( QPoint( index.column(), index.row() ) );
 }
 
 pGenericTableModel::IntVariantMap* pGenericTableModel::headerInternalData( int section, Qt::Orientation orientation )
 {
     switch ( orientation ) {
         case Qt::Horizontal:
-            return section >= 0 && section < mColumnCount ? &mHeaderData[ pGenericTableModel::Point( (int)orientation, section ) ] : 0;
+            return section >= 0 && section < mColumnCount ? &mHeaderData[ QPoint( (int)orientation, section ) ] : 0;
         case Qt::Vertical:
-            return section >= 0 && section < mRowCount ? &mHeaderData[ pGenericTableModel::Point( (int)orientation, section ) ] : 0;
+            return section >= 0 && section < mRowCount ? &mHeaderData[ QPoint( (int)orientation, section ) ] : 0;
     }
     
     return 0;
@@ -299,7 +305,7 @@ pGenericTableModel::IntVariantMap* pGenericTableModel::headerInternalData( int s
 
 pGenericTableModel::IntVariantMap pGenericTableModel::headerInternalData( int section, Qt::Orientation orientation ) const
 {
-    return mHeaderData.value( pGenericTableModel::Point( (int)orientation, section ) );
+    return mHeaderData.value( QPoint( (int)orientation, section ) );
 }
 
 void pGenericTableModel::clear( bool onlyData )
@@ -326,32 +332,89 @@ void pGenericTableModel::clear( bool onlyData )
     }
 }
 
-QModelIndexList pGenericTableModel::checkedIndexes() const
+QModelIndexList pGenericTableModel::checkedIndexes( int column ) const
 {
     QModelIndexList indexes;
     
-    foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-        const pGenericTableModel::IntVariantMap& map = mData[ point ];
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( column != -1 && column != point.x() ) {
+            continue;
+        }
         
-        if ( map.value( Qt::CheckStateRole ).toInt() != Qt::Unchecked ) {
-            indexes << index( point.second, point.first );
+        const pGenericTableModel::IntVariantMap& map = mData[ point ];
+        const QVariant value = map.value( Qt::CheckStateRole );
+        const Qt::CheckState state = value.isNull() ? Qt::Unchecked : Qt::CheckState( value.toInt() );
+        
+        if ( state == Qt::Checked ) {
+            indexes << index( point.y(), point.x() );
         }
     }
     
     return indexes;
 }
 
-QList<int> pGenericTableModel::checkedRows() const
+QList<int> pGenericTableModel::checkedRows( int column ) const
 {
     QList<int> rows;
     
-    foreach ( const pGenericTableModel::Point& point, mData.keys() ) {
-        const pGenericTableModel::IntVariantMap& map = mData[ point ];
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( column != -1 && column != point.x() ) {
+            continue;
+        }
         
-        if ( map.value( Qt::CheckStateRole ).toInt() != Qt::Unchecked ) {
-            rows << point.second;
+        const pGenericTableModel::IntVariantMap& map = mData[ point ];
+        const QVariant value = map.value( Qt::CheckStateRole );
+        const Qt::CheckState state = value.isNull() ? Qt::Unchecked : Qt::CheckState( value.toInt() );
+        
+        if ( state == Qt::Checked ) {
+            rows << point.y();
         }
     }
     
     return rows;
+}
+
+QStringList pGenericTableModel::checkedStringList( int column ) const
+{
+    QStringList strings;
+    
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( column != -1 && column != point.x() ) {
+            continue;
+        }
+        
+        const pGenericTableModel::IntVariantMap& map = mData[ point ];
+        const QVariant value = map.value( Qt::CheckStateRole );
+        const Qt::CheckState state = value.isNull() ? Qt::Unchecked : Qt::CheckState( value.toInt() );
+        
+        if ( state == Qt::Checked ) {
+            QVariant value = map.value( Qt::DisplayRole );
+            
+            if ( value.isNull() ) {
+                value = map.value( Qt::EditRole );
+            }
+            
+            strings << value.toString();
+        }
+    }
+    
+    return strings;
+}
+
+void pGenericTableModel::clearCheckStates( int column )
+{
+    if ( rowCount() == 0 ) {
+        return;
+    }
+    
+    foreach ( const QPoint& point, mData.keys() ) {
+        if ( column != -1 && column != point.x() ) {
+            continue;
+        }
+        
+        pGenericTableModel::IntVariantMap& map = mData[ point ];
+        map.remove( Qt::CheckStateRole );
+    }
+    
+    emit dataChanged( index( 0, 0 ), index( rowCount() -1, columnCount() -1 ) );
 }
