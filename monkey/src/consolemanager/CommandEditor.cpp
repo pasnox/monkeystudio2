@@ -36,6 +36,7 @@ pCommand CommandEditor::command() const
     command.setCommand( ui->leCommand->text() );
     command.setWorkingDirectory( ui->leWorkDir->text() );
     command.setSkipOnError( ui->cbSkipOnError->isChecked() );
+    command.setTryAllParsers( false );
     
     foreach ( const QString& parser, parsers ) {
         if ( parser == tr( TryAll ) ) {
