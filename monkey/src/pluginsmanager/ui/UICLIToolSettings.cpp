@@ -18,9 +18,6 @@
 #include "pluginsmanager/ui/UICLIToolSettings.h"
 #include "ui_UICLIToolSettings.h"
 #include "pluginsmanager/CLIToolPlugin.h"
-#include "consolemanager/pConsoleManager.h"
-
-#include <QWhatsThis>
 
 UICLIToolSettings::UICLIToolSettings( CLIToolPlugin* p, QWidget* w )
     : QWidget( w ), ui( new Ui_UICLIToolSettings ), mPlugin( p )
@@ -56,11 +53,6 @@ void UICLIToolSettings::save()
     mPlugin->setCommand( ui->ceCommand->command() );
 }
 
-void UICLIToolSettings::help()
-{
-    QWhatsThis::showText( mapToGlobal( QPoint( rect().center().x(), 0 ) ), pConsoleManager::variablesHelp() );
-}
-
 void UICLIToolSettings::on_dbbButtons_clicked( QAbstractButton* button )
 {
     switch ( ui->dbbButtons->standardButton( button ) ) {
@@ -72,9 +64,6 @@ void UICLIToolSettings::on_dbbButtons_clicked( QAbstractButton* button )
             break;
         case QDialogButtonBox::Save:
             save();
-            break;
-        case QDialogButtonBox::Help:
-            help();
             break;
         default:
             break;

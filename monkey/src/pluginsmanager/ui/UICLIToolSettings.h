@@ -46,7 +46,6 @@ protected slots:
     void restoreDefault();
     void reset();
     void save();
-    void help();
     
     void on_dbbButtons_clicked( QAbstractButton* );
 };
