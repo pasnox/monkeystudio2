@@ -37,7 +37,6 @@ protected slots:
     void on_tbCommandAdd_clicked();
     void on_tbCommandUp_clicked();
     void on_tbCommandDown_clicked();
-    void on_tbHelp_clicked();
 };
 
 #endif // COMMANDSEDITOR_H

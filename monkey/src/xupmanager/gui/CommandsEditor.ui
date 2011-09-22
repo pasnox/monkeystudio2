@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>396</width>
-    <height>316</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="3" column="1">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -79,10 +79,10 @@
         </property>
        </spacer>
       </item>
-      <item row="5" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="CommandEditor" name="ceCommand"/>
       </item>
-      <item row="0" column="0" rowspan="5">
+      <item row="0" column="0" rowspan="4">
        <widget class="QTreeView" name="tvCommands">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -92,17 +92,6 @@
         </property>
         <property name="headerHidden">
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QToolButton" name="tbHelp">
-        <property name="text">
-         <string>Help</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/tools/icons/tools/help.png</normaloff>:/tools/icons/tools/help.png</iconset>
         </property>
        </widget>
       </item>

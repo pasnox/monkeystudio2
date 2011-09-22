@@ -3,10 +3,8 @@
 #include "CommandsEditorModel.h"
 #include "coremanager/MonkeyCore.h"
 
-#include "consolemanager/pConsoleManager.h"
 #include <pMenuBar.h>
 
-#include <QWhatsThis>
 #include <QDebug>
 
 CommandsEditor::CommandsEditor( QWidget* parent )
@@ -107,9 +105,4 @@ void CommandsEditor::on_tbCommandDown_clicked()
     const QModelIndex index = ui->tvCommands->selectionModel()->selectedIndexes().value( 0 );
     mModel->swapCommand( index.parent(), index.row(), index.row() +1 );
     updateState();
-}
-
-void CommandsEditor::on_tbHelp_clicked()
-{
-    QWhatsThis::showText( ui->tbHelp->mapToGlobal( ui->tbHelp->rect().bottomLeft() ), pConsoleManager::variablesHelp() );
 }
