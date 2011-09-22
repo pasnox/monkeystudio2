@@ -130,9 +130,9 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
     // replace values in files/projects to open
     QStringList fo, po;
     for ( int i = 0; i < temp.FilesToOpen.count(); i++ )
-        fo << VariablesManager::instance()->replaceAllVariables( temp.FilesToOpen.at( i ), dictionnary );
+        fo << VariablesManager::instance()->replaceAllVariables( temp.FilesToOpen.at( i ), false, dictionnary );
     for ( int i = 0; i < temp.ProjectsToOpen.count(); i++ )
-        po << VariablesManager::instance()->replaceAllVariables( temp.ProjectsToOpen.at( i ), dictionnary );
+        po << VariablesManager::instance()->replaceAllVariables( temp.ProjectsToOpen.at( i ), false, dictionnary );
     
     // get files
     QHash<QString, QString> files;
@@ -149,7 +149,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
         }
         
         // process variables
-        QString s = VariablesManager::instance()->replaceAllVariables( df, dictionnary );
+        QString s = VariablesManager::instance()->replaceAllVariables( df, false, dictionnary );
         
         // check value validity
         if ( s.isEmpty() )
@@ -166,7 +166,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
     foreach( QString f, files.keys() )
     {
         // get source file
-        QString k = QFile::exists( QString( "%1%2" ).arg( temp.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, dictionnary );
+        QString k = QFile::exists( QString( "%1%2" ).arg( temp.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, false, dictionnary );
         
         // get file name
         QString s = QString( "%1%2" ).arg( dest, files[f] );
@@ -203,7 +203,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
         
         // write process contents
         QTextCodec* textCodec = QTextCodec::codecForName( codec.toUtf8() );
-        c = VariablesManager::instance()->replaceAllVariables( c, dictionnary );
+        c = VariablesManager::instance()->replaceAllVariables( c, false, dictionnary );
         
         if ( originalData != c )
         {
