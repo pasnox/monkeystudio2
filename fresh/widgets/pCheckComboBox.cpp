@@ -41,21 +41,22 @@ void pCheckComboBoxDelegate::setSeparator( QAbstractItemModel* model, const QMod
 
 void pCheckComboBoxDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    QStyleOptionViewItemV4 opt = *qstyleoption_cast<const QStyleOptionViewItemV4*>( &option );
+    opt.state = opt.state & ~QStyle::State_HasFocus;
+    
     if ( isSeparator( index ) ) {
         QRect rect = option.rect;
         
-        if ( const QStyleOptionViewItemV3* v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>( &option ) ) {
-            if ( const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>( v3->widget ) ) {
-                rect.setWidth( view->viewport()->width() );
-            }
+        if ( const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>( opt.widget ) ) {
+            rect.setWidth( view->viewport()->width() );
         }
         
-        QStyleOption opt;
-        opt.rect = rect;
-        mCombo->style()->drawPrimitive( QStyle::PE_IndicatorToolBarSeparator, &opt, painter, mCombo );
+        QStyleOption o;
+        o.rect = rect;
+        mCombo->style()->drawPrimitive( QStyle::PE_IndicatorToolBarSeparator, &o, painter, mCombo );
     }
     else {
-        QStyledItemDelegate::paint( painter, option, index );
+        QStyledItemDelegate::paint( painter, opt, index );
     }
 }
 
@@ -87,13 +88,21 @@ pCheckComboBox::pCheckComboBox( QWidget* parent )
     setModel( mModel );
     setItemDelegate( mDelegate );
     
-    // some styles force alternating...
+    // some styles force alternating rows color bypassing the QPelette colors...
     mView->setStyleSheet( QString(
         "QListView {"
             "background-color: %1;"
             "alternate-background-color: %1;"
         "}"
-        ).arg( palette().color( QPalette::Base ).name() )
+        "QListView::item:hover {"
+            "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 %2, stop: 1 %3);"
+            "color: %4;"
+        "}"
+        )
+        .arg( palette().color( QPalette::Window ).name() )
+        .arg( palette().color( QPalette::Active, QPalette::Highlight ).name() )
+        .arg( palette().color( QPalette::Active, QPalette::Highlight ).darker( 130 ).name() )
+        .arg( palette().color( QPalette::Active, QPalette::HighlightedText ).name() )
     );
 }
 
