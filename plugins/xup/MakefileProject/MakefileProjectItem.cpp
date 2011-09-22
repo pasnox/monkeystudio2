@@ -46,17 +46,17 @@ void MakefileProjectItem::installCommands()
     }
     
     pCommand baseCmd = make->command();
+    const QString makeFileArg = QString( "-f $cp$ " );
     
     baseCmd.setProject( this );
     baseCmd.setSkipOnError( false );
     baseCmd.setTryAllParsers( true );
     
-    QString makeFileArg = QString( "-f \"%1\" " ).arg( QFileInfo( fileName() ).fileName() );
-    
     foreach( const QString& target, targets ) {
-        baseCmd.setText( target );
-        baseCmd.setCommand( QString( "%1 %2 %3" ).arg( baseCmd.command() ).arg( makeFileArg ).arg( target ) );
-        addCommand( "mBuilder", baseCmd );
+        pCommand cmd = baseCmd;
+        cmd.setText( target );
+        cmd.setCommand( QString( "%1 %2 %3" ).arg( cmd.command() ).arg( makeFileArg ).arg( target ) );
+        addCommand( "mBuilder", cmd );
     }
 }
 

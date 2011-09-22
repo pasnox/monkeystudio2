@@ -432,7 +432,7 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
             sysQt.Path = qpath;
             sysQt.Default = hasDefaultVersion ? false : true;
             sysQt.QMakeSpec = QString::null;
-            sysQt.QMakeParameters = "\"$cp$\"";
+            sysQt.QMakeParameters = "$cp$";
             sysQt.HasQt4Suffix = hasSuffix;
 
             if ( !hasDefaultVersion )

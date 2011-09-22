@@ -32,24 +32,16 @@ void PyQtProjectItem::installCommands()
         cmd = ip->command();
     }
     
-    //cmd.setUserData( QVariant::fromValue( &mCommands ) );
     cmd.setProject( this );
     cmd.setSkipOnError( false );
     const pCommand cmdInterpret = cmd;
-    
-    // get qt version
-    QString mainFile = relativeFilePath( XUPProjectItemHelper::projectSettingsValue( this, "MAIN_FILE" ) );
-    
-    if ( mainFile.isEmpty() ) {
-        mainFile = relativeFilePath( findFile( "main.py" ).value( 0 ).absoluteFilePath() );
-    }
     
     // available commands
     if ( ip ) {
         // execute project
         cmd = cmdInterpret;
         cmd.setText( tr( "Run" ) );
-        cmd.setCommand( QString( "%1 \"%2\"" ).arg( cmd.command() ).arg( mainFile ) );
+        cmd.setCommand( QString( "%1 $target$" ).arg( cmd.command() ) );
         cmd.setParsers( QStringList() );
         cmd.setTryAllParsers( false );
         addCommand( "mInterpreter", cmd );
@@ -58,7 +50,7 @@ void PyQtProjectItem::installCommands()
     // pyuic4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current form implementation" ) );
-    cmd.setCommand( "pyuic4 \"$cf$\" -o \"$cf$.py\"" );
+    cmd.setCommand( "pyuic4 $cf$ -o $cf$.py" );
     cmd.setWorkingDirectory( "$cfp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );
@@ -68,7 +60,7 @@ void PyQtProjectItem::installCommands()
     // pyrcc4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current resource implementation" ) );
-    cmd.setCommand( "pyrcc4 \"$cf$\" -o \"$cf$.py\"" );
+    cmd.setCommand( "pyrcc4 $cf$ -o $cf$.py" );
     cmd.setWorkingDirectory( "$cfp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );
@@ -78,7 +70,7 @@ void PyQtProjectItem::installCommands()
     // pylupdate4 on current file
     cmd = cmdInterpret;
     cmd.setText( tr( "Generate current project translation files" ) );
-    cmd.setCommand( "pylupdate4 \"$cp$\"" );
+    cmd.setCommand( "pylupdate4 $cp$" );
     cmd.setWorkingDirectory( "$cpp$" );
     cmd.setParsers( QStringList() );
     cmd.setSkipOnError( false );

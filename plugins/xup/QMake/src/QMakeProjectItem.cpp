@@ -888,7 +888,7 @@ void QMakeProjectItem::installCommands()
             // lupdate command
             cmd = pCommand();
             cmd.setText( tr( "lupdate" ) );
-            cmd.setCommand( QString( "%1 \"$cp$\"" ).arg( version.lupdate() ) );
+            cmd.setCommand( QString( "%1 $cp$" ).arg( version.lupdate() ) );
             cmd.setWorkingDirectory( "$cpp$" );
             cmd.setProject( this );
             cmd.setSkipOnError( false );
@@ -898,7 +898,7 @@ void QMakeProjectItem::installCommands()
             // lrelease command
             cmd = pCommand();
             cmd.setText( tr( "lrelease" ) );
-            cmd.setCommand( QString( "%1 \"$cp$\"" ).arg( version.lrelease() ) );
+            cmd.setCommand( QString( "%1 $cp$" ).arg( version.lrelease() ) );
             cmd.setWorkingDirectory( "$cpp$" );
             cmd.setProject( this );
             cmd.setSkipOnError( false );
