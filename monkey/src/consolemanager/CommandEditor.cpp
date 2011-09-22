@@ -2,9 +2,11 @@
 #include "ui_CommandEditor.h"
 #include "coremanager/MonkeyCore.h"
 #include "consolemanager/pConsoleManager.h"
+#include "pConsoleManager.h"
 
 #include <QEvent>
 #include <QFileDialog>
+#include <QWhatsThis>
 #include <QDebug>
 
 #define TryAll QT_TRANSLATE_NOOP( "CommandEditor", "Try All" )
@@ -94,4 +96,9 @@ void CommandEditor::on_tbWorkDir_clicked()
     if ( !path.isEmpty() ) {
         ui->leWorkDir->setText( path );
     }
+}
+
+void CommandEditor::on_tbHelp_clicked()
+{
+    QWhatsThis::showText( mapToGlobal( QPoint( rect().center().x(), 0 ) ), pConsoleManager::variablesHelp() );
 }

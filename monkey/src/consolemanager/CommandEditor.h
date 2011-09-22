@@ -30,6 +30,7 @@ protected:
 protected slots:
     void on_tbCommand_clicked();
     void on_tbWorkDir_clicked();
+    void on_tbHelp_clicked();
 };
 
 #endif // COMMANDEDITOR_H
