@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "VariablesManager.h"
 #include "main.h"
-
+#include "consolemanager/pConsoleManager.h"
 #include "workspace/pFileManager.h"
 #include "coremanager/MonkeyCore.h"
 
@@ -41,7 +41,7 @@ VariablesManager::VariablesManager( QObject* o )
     \param locals Local dictionary of variables
     \return Value of variable. Empty string, if variable is unknown
 */
-QString VariablesManager::getVariable( QString name, Dictionary locals )
+QString VariablesManager::getVariable( const QString& name, bool quotedValue, const VariablesManager::Dictionary& locals ) const
 {
     QString result = QString::null;
 
@@ -90,18 +90,18 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
     {
         result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentItemFile() );
     }
-
-    if ( !result.isEmpty() )
-    {
-        return result;
+    
+    if ( result.isEmpty() ) {
+        if ( globals.contains( name ) ) {
+            result = globals.value( name );
+        }
+        else if ( locals.contains( name ) ) {
+            result = locals.value( name );
+        }
     }
-    else if ( globals.contains( name ) )
-    {
-        return globals[ name ];
-    }
-    else if ( locals.contains( name ) )
-    {
-        return locals[ name ];
+    
+    if ( !result.isEmpty() ) {
+        return quotedValue ? pConsoleManager::quotedFilePath( result ) : result;
     }
 
     return QString( "$%1$" ).arg( name ); // was QString::null if not found, it's not a variable to replace! ( ie: php script that contains $variables )
@@ -114,13 +114,13 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
     \retval true Variable is set
     \retval false Variable is not set
 */
-bool VariablesManager::isSet (QString name, Dictionary& locals)
+bool VariablesManager::isSet( const QString& name, const VariablesManager::Dictionary& locals ) const
 {
     if (    name == "editor_version" ||
             name == "editor_version_string" ||
             name == "date" )
         return true;
-    return (globals.contains(name) || locals.contains(name));
+    return globals.contains( name ) || locals.contains( name );
 }
 
 /*!
@@ -129,22 +129,22 @@ bool VariablesManager::isSet (QString name, Dictionary& locals)
     \param locals Local dictionary of variables
     return New string
 */
-QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
+QString VariablesManager::replaceAllVariables( const QString& _text, bool quotedValues, const VariablesManager::Dictionary& locals ) const
 {
+    QString text = _text;
     int p = 0;
-    QString s;
-    QRegExp rex( "(\\$(?:\\w|\\s|'|\\.)+\\$)" );
+    QRegExp rex( "(\\$(?:\\w|\\s|'|\\._-)+\\$)" );
     // search and interpret values
     QList<QString> findedVariables;
     while ( ( p = rex.indexIn( text, p ) ) != -1 )
     {
         // got keyword
-        s = rex.capturedTexts().value( 1 );
-        findedVariables.append (s);
+        const QString s = rex.capturedTexts().value( 1 );
+        findedVariables.append( s );
         p += rex.matchedLength();
     }
     // replace occurences
-    foreach ( QString s, findedVariables )
+    foreach ( const QString& s, findedVariables )
     {
         QString fuckDollar = QString(s).remove(s.size()-1,1).remove(0,1);
         bool toup = false;
@@ -159,7 +159,7 @@ QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
             tolow = true;
             fuckDollar.remove (".lower");
         }
-        QString replaceWith = getVariable(fuckDollar,locals);
+        QString replaceWith = getVariable(fuckDollar,quotedValues,locals);
         if (toup)
             replaceWith = replaceWith.toUpper();
         else if (tolow)

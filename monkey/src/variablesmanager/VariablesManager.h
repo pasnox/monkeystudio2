@@ -42,24 +42,23 @@ class Q_MONKEY_EXPORT VariablesManager : public QObject, public QSingleton<Varia
     friend class QSingleton<VariablesManager>;
     
 private:
-    VariablesManager( QObject* = QApplication::instance() );
+    VariablesManager( QObject* parent = QApplication::instance() );
 
 public:
     typedef QHash<QString, QString> Dictionary;
-    //Returns variable. 
-    //Default value = QString::null used, if variable is not set
-    QString getVariable( QString name, Dictionary locals ); 
+    //Returns variable value
+    QString getVariable( const QString& name, bool quotedValue, const VariablesManager::Dictionary& locals ) const;
 
     //Is variable set
-    bool isSet( QString name, Dictionary& locals ); 
+    bool isSet( const QString& name, const VariablesManager::Dictionary& locals ) const;
 
     //Will replace all variables in the string with values
     //If locals are presented, variables will be searched there too
-    QString replaceAllVariables( QString str, Dictionary locals = Dictionary() );
+    QString replaceAllVariables( const QString& str, bool quotedValues = false, const VariablesManager::Dictionary& locals = Dictionary() ) const;
 
 private:
     //Hash for storing global constand variables. (Kernel version for example)
-    Dictionary globals;
+    VariablesManager::Dictionary globals;
 };
 
 #endif //VARIABLESMANAGER_H
