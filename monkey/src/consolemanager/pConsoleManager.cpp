@@ -52,6 +52,7 @@
     Defines maximum count of lines, which are storing in the buffer for parsing
 */
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
+#define QUOTE_STRING "\""
 
 /*!
     Constructor of class
@@ -146,24 +147,9 @@ void pConsoleManager::removeParser( const QString& s )
 /*!
     Returns pointer to parser, or NULL if not found
  */
-AbstractCommandParser* pConsoleManager::getParser(const QString& name)
+AbstractCommandParser* pConsoleManager::getParser(const QString& name) const
 {
     return mParsers.value(name);
-}
-
-/*!
-    Check, if string contains spaces, and, if it do - add quotes <"> to start and end of it
-    \param s Source string
-    \return Result string
-*/
-QString pConsoleManager::quotedString( const QString& s )
-{
-    if ( s.contains( " " ) && !s.startsWith( '"' ) && !s.endsWith( '"' ) )
-    {
-        return QString( s ).prepend( '"' ).append( '"' );
-    }
-    
-    return s;
 }
 
 /*!
@@ -172,9 +158,9 @@ QString pConsoleManager::quotedString( const QString& s )
     \param s Source string
     \return Result string
 */
-QString pConsoleManager::processInternalVariables( const QString& s )
+QString pConsoleManager::processInternalVariables( const QString& string, bool quoteValues ) const
 {
-    return VariablesManager::instance()->replaceAllVariables( s );
+    return VariablesManager::instance()->replaceAllVariables( string, quoteValues );
 }
 
 /*!
@@ -184,13 +170,38 @@ QString pConsoleManager::processInternalVariables( const QString& s )
     \return Command for execution
     \retval Command, gived as parameter
 */
-pCommand pConsoleManager::processCommand( pCommand c )
+pCommand pConsoleManager::processCommand( const pCommand& command ) const
 {
-    // process variables
-    c.setCommand( processInternalVariables( c.command() ) );
-    c.setWorkingDirectory( processInternalVariables( c.workingDirectory() ) );
-    // return command
-    return c;
+    pCommand cmd = command;
+    cmd.setCommand( processInternalVariables( cmd.command(), true ) );
+    cmd.setWorkingDirectory( processInternalVariables( cmd.workingDirectory(), false ) );
+    return cmd;
+}
+
+/*!
+    Check, if string contains spaces, and, if it do - add quotes <"> to start and end of it
+    \param s Source string
+    \return Result string
+*/
+QString pConsoleManager::quotedFilePath( const QString& filePath )
+{
+    if ( filePath.contains( " " ) && !filePath.startsWith( QUOTE_STRING ) && !filePath.endsWith( QUOTE_STRING ) ) {
+        return QString( filePath ).prepend( QUOTE_STRING ).append( QUOTE_STRING );
+    }
+    
+    return filePath;
+}
+
+QString pConsoleManager::unquotedFilePath( const QString& filePath )
+{
+    if ( filePath.contains( " " ) && filePath.startsWith( QUOTE_STRING ) && filePath.endsWith( QUOTE_STRING ) ) {
+        QString s = filePath;
+        s.remove( 0, 1 );
+        s.chop( 1 );
+        return s;
+    }
+    
+    return filePath;
 }
 
 /*!
@@ -485,16 +496,16 @@ void pConsoleManager::executeProcess()
                         continue;
                     }
                     
-                    QString commandLine = c.command().replace( "$target$", quotedString( filePath ) );
+                    QString commandLine = c.command().replace( "$target$", quotedFilePath( filePath ) );
                     const QFileInfo fi( c.project()->filePath( filePath ) );
                     
                     if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
 #if defined( Q_OS_WIN )
-                        commandLine = QString( "start %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+                        commandLine = QString( "start %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_MAC )
-                        commandLine = QString( "open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+                        commandLine = QString( "open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_UNIX )
-                        commandLine = QString( "xdg-open %1" ).arg( quotedString( c.project()->filePath( filePath ) ) );
+                        commandLine = QString( "xdg-open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #endif
                     }
                     

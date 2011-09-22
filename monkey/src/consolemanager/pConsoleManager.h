@@ -69,15 +69,16 @@ public:
     inline QAction* stopAction() const { return mStopAction; }
     inline EnvironmentVariablesManager* environmentVariablesManager() const { return &mEnvironmentVariablesManager; }
     
-    void addParser( AbstractCommandParser* );
-    void removeParser( AbstractCommandParser* );
-    void removeParser( const QString& );
-    AbstractCommandParser* getParser(const QString& name);
+    void addParser( AbstractCommandParser* parser );
+    void removeParser( AbstractCommandParser* parser );
+    void removeParser( const QString& parser );
+    AbstractCommandParser* getParser( const QString& name ) const;
     
-    QString quotedString( const QString& );
-    QString processInternalVariables( const QString& );
-    pCommand processCommand( pCommand );
+    QString processInternalVariables( const QString& string, bool quoteValues ) const;
+    pCommand processCommand( const pCommand& command ) const;
     
+    static QString quotedFilePath( const QString& filePath );
+    static QString unquotedFilePath( const QString& filePath );
     static QString errorToString( QProcess::ProcessError error );
     static QString variablesHelp();
 
