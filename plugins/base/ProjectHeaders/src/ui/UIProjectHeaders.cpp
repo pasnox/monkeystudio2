@@ -267,7 +267,7 @@ void UIProjectHeaders::accept()
         v[ "filename" ] = fi.fileName();
         v[ "date" ] = fi.created().toString( Qt::ISODate );
         // replaces variables
-        b = b.trimmed().prepend( vm->replaceAllVariables( templatesHeader( l ), v ) ).append( pMonkeyStudio::getEol() );
+        b = b.trimmed().prepend( vm->replaceAllVariables( templatesHeader( l ), false, v ) ).append( pMonkeyStudio::getEol() );
         // write buffer
         f.resize( 0 );
         f.write( targetCodec->fromUnicode( b ) );
