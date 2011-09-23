@@ -618,8 +618,212 @@ bool QMakeProjectItem::handleSubdirs( XUPItem* subdirs )
     return created;
 }
 
+QList<QByteArray> QMakeProjectItem::makefileRules( const QString& filePath ) const
+{
+    QFile file( filePath );
+    
+    if ( !file.open( QIODevice::ReadOnly ) ) {
+        return QList<QByteArray>();
+    }
+    
+    const QSet<QString> keepRules = QSet<QString>()
+        << QT_TR_NOOP( "all" )
+        << QT_TR_NOOP( "clean" )
+        << QT_TR_NOOP( "distclean" )
+        << QT_TR_NOOP( "install" )
+        << QT_TR_NOOP( "uninstall" )
+        ;
+    const QRegExp targetRex( "^([\\w\\-_\\d]+):.*" );
+    QList<QByteArray> rules;
+    
+    while ( !file.atEnd() ) {
+        const QString line = file.readLine();
+        const int pos = targetRex.indexIn( line );
+        const QString rule = targetRex.cap( 1 );
+        
+        if ( pos != -1 && keepRules.contains( rule ) ) {
+            rules << rule.toAscii();
+        }
+    }
+    
+    rules.prepend( QByteArray() ); // default make rule
+    
+    return rules;
+}
+
+QString QMakeProjectItem::toTitleCase( const QString& string ) const
+{
+    QString s = string.trimmed().toLower();
+    
+    if ( !s.isEmpty() ) {
+        s[ 0 ] = s[ 0 ].toTitleCase();
+    }
+    
+    return s;
+}
+
+void QMakeProjectItem::installCommandsV2()
+{
+    XUPProjectItem* tlProject = topLevelProject();
+    const CLIToolPlugin* bp = builder();
+    const QtVersionManager* manager = QMake::versionManager();
+    const QtVersion version = manager->version( XUPProjectItemHelper::projectSettingsValue( tlProject, "QT_VERSION" ) );
+    const bool showQtWarning = XUPProjectItemHelper::projectSettingsValue( tlProject, "SHOW_QT_VERSION_WARNING", "1" ) == "1";
+    pCommand builderCommand = bp ? bp->command() : pCommand();
+    
+    // Qt tools commands
+    if ( version.isValid() ) {
+        QAction* action = addSeparator( "mBuilder" );
+        action->setSeparator( false );
+        action->setText( tr( "Qt Tools" ) );
+        action->setEnabled( false );
+        
+        pCommand cmd;
+        
+        // qmake command
+        cmd = pCommand();
+        cmd.setId( QMakeProjectItem::QMake );
+        cmd.setText( tr( "qmake" ) );
+        cmd.setCommand( QString( "%1 %2 $cp$" ).arg( version.qmake() ).arg( version.qmakeParameters() ).trimmed() );
+        cmd.setWorkingDirectory( "$cpp$" );
+        cmd.setProject( this );
+        cmd.setSkipOnError( false );
+        cmd.addParser( "QMake" );
+        addCommand( "mBuilder", cmd );
+        
+        // lupdate command
+        cmd = pCommand();
+        cmd.setId( QMakeProjectItem::LUpdate );
+        cmd.setText( tr( "lupdate" ) );
+        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lupdate() ).trimmed() );
+        cmd.setWorkingDirectory( "$cpp$" );
+        cmd.setProject( this );
+        cmd.setSkipOnError( false );
+        cmd.addParser( "QMake" );
+        addCommand( "mBuilder", cmd );
+        
+        // lrelease command
+        cmd = pCommand();
+        cmd.setId( QMakeProjectItem::LRelease );
+        cmd.setText( tr( "lrelease" ) );
+        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lrelease() ).trimmed() );
+        cmd.setWorkingDirectory( "$cpp$" );
+        cmd.setProject( this );
+        cmd.setSkipOnError( false );
+        cmd.addParser( "QMake" );
+        addCommand( "mBuilder", cmd );
+    }
+    else if ( showQtWarning ) {
+        XUPProjectItemHelper::setProjectSettingsValue( tlProject, "SHOW_QT_VERSION_WARNING", "0" );
+        tlProject->save();
+        MonkeyCore::messageManager()->appendMessage( tr( "Qt was not found, some actions have been disabled.\n"
+            "Edit the QMake plugin configuration to fix the problem." ) );
+    }
+    
+    if ( !bp || !builderCommand.isValid() ) {
+        return;
+    }
+    
+    builderCommand.setProject( this );
+    builderCommand.setWorkingDirectory( path() );
+    builderCommand.setProject( this );
+    builderCommand.setSkipOnError( false );
+    builderCommand.setExecutableCheckingType( XUPProjectItem::NoTarget );
+    
+    QDir dir( path() );
+    const pCommand makeCommand = builderCommand;
+    const QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
+    
+    // iterate each makefiles
+    foreach ( const QFileInfo& file, files ) {
+        const QList<QByteArray> rules = makefileRules( file.absoluteFilePath() );
+        
+        if ( rules.isEmpty() ) {
+            continue;
+        }
+        
+        const QString fileName = file.fileName();
+        const QString filePath = pConsoleManager::quotedFilePath( file.absoluteFilePath() );
+        QMakeProjectItem::ActionType type = QMakeProjectItem::None;
+        
+        if ( fileName.contains( "release", Qt::CaseInsensitive ) ) {
+            type |= QMakeProjectItem::ReleaseFlag;
+        }
+        else if ( fileName.contains( "debug", Qt::CaseInsensitive ) ) {
+            type |= QMakeProjectItem::DebugFlag;
+        }
+        
+        QAction* action = addSeparator( "mBuilder" );
+        action->setSeparator( false );
+        action->setText( fileName );
+        action->setEnabled( false );
+        
+        // iterate each rules
+        foreach ( const QByteArray& rule, rules ) {
+            QMakeProjectItem::ActionType actionType = type;
+            pCommand cmd = makeCommand;
+            
+            if ( rule.isNull() ) {
+                actionType |= QMakeProjectItem::BuildFlag;
+            }
+            else if ( rule == "all" ) {
+                //actionType |= QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag;
+                continue;
+            }
+            else if ( rule == "clean" ) {
+                actionType |= QMakeProjectItem::CleanFlag;
+            }
+            else if ( rule == "distclean" ) {
+                actionType |= QMakeProjectItem::DistcleanFlag;
+            }
+            else if ( rule == "install" ) {
+                actionType |= QMakeProjectItem::InstallFlag;
+            }
+            else if ( rule == "uninstall" ) {
+                actionType |= QMakeProjectItem::UninstallFlag;
+            }
+            
+            cmd.setId( actionType );
+            cmd.setText( rule.isNull() ? tr( "Build" ) : toTitleCase( tr( rule ) ) );
+            cmd.setCommand( QString( "%1 -f %2 %3" ).arg( cmd.command() ).arg( filePath ).arg( QString::fromAscii( rule ) ).trimmed() );
+            addCommand( "mBuilder", cmd );
+        }
+        
+        if ( version.isValid() && rules.contains( QByteArray() ) && rules.contains( "distclean" ) ) {
+            if ( type & QMakeProjectItem::DebugFlag ) {
+                pCommand cmd = pCommand( tr( "Rebuild" ) );
+                cmd.setId( QMakeProjectItem::RebuildDebug );
+                cmd.addChildCommand( command( QMakeProjectItem::DistcleanDebug ) );
+                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
+                cmd.addChildCommand( command( QMakeProjectItem::BuildDebug ) );
+                addCommand( "mBuilder", cmd );
+            }
+            else if ( type & QMakeProjectItem::ReleaseFlag ) {
+                pCommand cmd = pCommand( tr( "Rebuild" ) );
+                cmd.setId( QMakeProjectItem::RebuildRelease );
+                cmd.addChildCommand( command( QMakeProjectItem::DistcleanRelease ) );
+                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
+                cmd.addChildCommand( command( QMakeProjectItem::BuildRelease ) );
+                addCommand( "mBuilder", cmd );
+            }
+            else {
+                pCommand cmd = pCommand( tr( "Rebuild" ) );
+                cmd.setId( QMakeProjectItem::Rebuild );
+                cmd.addChildCommand( command( QMakeProjectItem::Distclean ) );
+                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
+                cmd.addChildCommand( command( QMakeProjectItem::Build ) );
+                addCommand( "mBuilder", cmd );
+            }
+        }
+    }
+}
+
 void QMakeProjectItem::installCommands()
 {
+    installCommandsV2();
+    return;
+    
+//read makefile commands directly to avoid creation of bad commands.
     // get plugins
     CLIToolPlugin* bp = builder();
     
@@ -996,7 +1200,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
         case QMakeProjectItem::BuildRelease:
         case QMakeProjectItem::BuildAll:
         case QMakeProjectItem::Build: {
-            const QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "Makefile*" ), false );
+            const QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
             
             if ( files.isEmpty() ) {
                 executeCommand( QMakeProjectItem::QMake );
