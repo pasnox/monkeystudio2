@@ -1,6 +1,8 @@
 #include "SearchResultsModel.h"
 #include "SearchThread.h"
 
+#include <QDebug>
+
 SearchResultsModel::SearchResultsModel( SearchThread* searchThread, QObject* parent )
     : QAbstractItemModel( parent )
 {
@@ -71,7 +73,7 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 
 QModelIndex SearchResultsModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if ( row >= rowCount( parent ) || column >= columnCount( parent ) )
+    if ( row < 0 || row >= rowCount( parent ) || column < 0 || column >= columnCount( parent ) )
     {
         return QModelIndex();
     }
