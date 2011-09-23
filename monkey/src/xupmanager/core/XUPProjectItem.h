@@ -132,7 +132,7 @@ public:
      * If more than one command set for the menu - commands will be executed one by one
      * XUPProjectItem remembers create QAction's and deletes it by uninstallCommands()
      */
-    void addSeparator( const QString& mnu );
+    QAction* addSeparator( const QString& mnu );
     void addCommands( const QString& mnu, const QList<pCommand>& cmds );
     pCommand command( int id ) const;
     pCommand command( QAction* action ) const;

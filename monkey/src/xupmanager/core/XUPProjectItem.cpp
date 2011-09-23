@@ -500,12 +500,13 @@ QString XUPProjectItem::targetFilePath( XUPProjectItem::TargetType type )
     return XUPProjectItemHelper::projectSettingsValue( this, "MAIN_FILE" );
 }
 
-void XUPProjectItem::addSeparator( const QString& mnu )
+QAction* XUPProjectItem::addSeparator( const QString& mnu )
 {
     static int i = 0;
     QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( QString( "*separator%1*" ).arg( i++ ) ) );
     action->setSeparator( true );
     mInstalledActions[ -i ] = action;
+    return action;
 }
 
 void XUPProjectItem::addCommands( const QString& mnu, const QList<pCommand>& cmds )
@@ -532,7 +533,7 @@ void XUPProjectItem::addCommand( const QString& mnu, const pCommand& cmd )
     }
     
     static int i = 0;
-    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ), cmd.text() );
+    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2_%3" ).arg( mnu ).arg( cmd.id() ).arg( cmd.text() ), cmd.text() );
     pCommand c = cmd;
     
     if ( c.id() == -1 ) {
