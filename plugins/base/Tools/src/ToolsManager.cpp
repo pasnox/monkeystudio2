@@ -194,8 +194,8 @@ void ToolsManager::toolsMenu_triggered( QAction* action )
 {
     pConsoleManager* cm = MonkeyCore::consoleManager();
     const ToolsManager::Tool tool = action->data().value<ToolsManager::Tool>();
-    const QString filePath = cm->processInternalVariables( tool.filePath );
-    const QString workingPath = cm->processInternalVariables( tool.workingPath );
+    const QString filePath = cm->processInternalVariables( tool.filePath, false );
+    const QString workingPath = cm->processInternalVariables( tool.workingPath, false );
     bool ok = false;
     
     if ( filePath.isEmpty() ) {
