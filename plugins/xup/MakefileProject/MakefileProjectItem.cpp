@@ -26,7 +26,7 @@ void MakefileProjectItem::installCommands()
         return;
     }
     
-    const QRegExp targetRex( "^([\\w\\-\\d]+):.*" );
+    const QRegExp targetRex( "^([\\w\\-_\\d]+):.*" );
     QStringList targets;
     
     while ( !file.atEnd() ) {
