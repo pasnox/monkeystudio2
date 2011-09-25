@@ -503,9 +503,10 @@ QString XUPProjectItem::targetFilePath( XUPProjectItem::TargetType type )
 QAction* XUPProjectItem::addSeparator( const QString& mnu )
 {
     static int i = 0;
-    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( QString( "*separator%1*" ).arg( i++ ) ) );
+    const QString name = QString( "%1_generated_separator" ).arg( i++ );
+    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( name ) );
     action->setSeparator( true );
-    mInstalledActions[ -i ] = action;
+    mInstalledActions[ name ] = action;
     return action;
 }
 
@@ -516,9 +517,9 @@ void XUPProjectItem::addCommands( const QString& mnu, const QList<pCommand>& cmd
     }
 }
 
-pCommand XUPProjectItem::command( int id ) const
+pCommand XUPProjectItem::command( const QString& name ) const
 {
-    return mCommands.value( id );
+    return mCommands.value( name );
 }
 
 pCommand XUPProjectItem::command( QAction* action ) const
@@ -528,23 +529,24 @@ pCommand XUPProjectItem::command( QAction* action ) const
 
 void XUPProjectItem::addCommand( const QString& mnu, const pCommand& cmd )
 {
-    if ( ( mCommands.contains( cmd.id() ) && cmd.id() != -1 ) || !cmd.isValid() ) {
+    if ( ( mCommands.contains( cmd.name() ) && !cmd.name().isNull() ) || !cmd.isValid() ) {
         return;
     }
     
     static int i = 0;
-    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2_%3" ).arg( mnu ).arg( cmd.id() ).arg( cmd.text() ), cmd.text() );
+    const QString& name = cmd.name().isNull() ? cmd.text() : cmd.name();
+    QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( name ), cmd.text() );
     pCommand c = cmd;
     
-    if ( c.id() == -1 ) {
-        c.setId( i++ );
+    if ( c.name().isNull() ) {
+        c.setName( QString( "%1_generated_name" ).arg( i++ ) );
     }
     
     action->setStatusTip( c.text() );
     action->setData( QVariant::fromValue( c ) );
     
-    mCommands[ c.id() ] = c;
-    mInstalledActions[ c.id() ] = action;
+    mCommands[ c.name() ] = c;
+    mInstalledActions[ c.name() ] = action;
     
     connect( action, SIGNAL( triggered() ), this, SLOT( projectCustomActionTriggered() ) );
     
@@ -666,9 +668,9 @@ UIXUPEditor* XUPProjectItem::newEditDialog() const
     return new UIXUPEditor( MonkeyCore::mainWindow() );
 }
 
-void XUPProjectItem::executeCommand( int id )
+void XUPProjectItem::executeCommand( const QString& name )
 {
-    mInstalledActions.value( id )->trigger();
+    mInstalledActions.value( name )->trigger();
 }
 
 void XUPProjectItem::projectCustomActionTriggered()
