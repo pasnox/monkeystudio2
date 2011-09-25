@@ -64,7 +64,6 @@ public:
         mTryAllParsers = false;
         mProject = 0;
         mExecutableCheckingType = XUPProjectItem::NoTarget;
-        mId = -1;
     }
     
     pCommand( const QString& t, const QString& c, bool b, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
@@ -77,13 +76,12 @@ public:
         mTryAllParsers = bb;
         mProject = 0;
         mExecutableCheckingType = XUPProjectItem::NoTarget;
-        mId = -1;
     }
     ~pCommand() {}
     
     bool isValid() const
     {
-        bool valid = !text().isEmpty() && !command().isEmpty();
+        bool valid = !name().isEmpty() && !text().isEmpty() && !command().isEmpty();
         
         if ( !valid ) {
             foreach ( const pCommand& cmd, mChildCommands ) {
@@ -99,13 +97,14 @@ public:
     }
     
     bool operator==( const pCommand& t ) const
-    { return mText == t.mText && mCommand == t.mCommand &&
+    { return mName == t.mName && mText == t.mText && mCommand == t.mCommand &&
             mWorkingDirectory == t.mWorkingDirectory && mParsers == t.mParsers && mSkipOnError == t.mSkipOnError &&
             mTryAllParsers == t.mTryAllParsers && mUserData == t.mUserData && mProject == t.mProject &&
-            mExecutableCheckingType == t.mExecutableCheckingType && mId == t.mId
+            mExecutableCheckingType == t.mExecutableCheckingType;
         ;
     }
 
+    QString name() const { return mName; }
     QString text() const { return mText; }
     QString command() const { return mCommand; }
     QString workingDirectory() const { return mWorkingDirectory; }
@@ -116,14 +115,14 @@ public:
     XUPProjectItem* project() const { return mProject; }
     pCommand::List childCommands() const { return mChildCommands; }
     int executableCheckingType() { return mExecutableCheckingType; }
-    int id() const { return mId; }
 
-    void setText( const QString& s ) { mText = s; }
-    void setCommand( const QString& s ) { mCommand = s; }
-    void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
-    void addParser( const QString& p ) { if ( !mParsers.contains( p ) ) mParsers << p; }
-    void setParsers( const QStringList& p ) { mParsers = p; }
-    void addParsers( const QStringList& p ) { foreach ( QString s, p ) addParser( s ); }
+    void setName( const QString& s ) { mName = s; }
+    void setText( const QString& s ) { mText = s.trimmed(); }
+    void setCommand( const QString& s ) { mCommand = s.trimmed(); }
+    void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s.trimmed(); }
+    void addParser( const QString& p ) { if ( !mParsers.contains( p ) ) mParsers << p.trimmed(); }
+    void setParsers( const QStringList& p ) { mParsers.clear(); addParsers( p ); }
+    void addParsers( const QStringList& p ) { foreach ( const QString& s, p ) addParser( s ); }
     void setSkipOnError( bool b ) { mSkipOnError = b; }
     void setTryAllParsers( bool b ) { mTryAllParsers = b; }
     void setUserData( const QVariant& data ) { mUserData = data; }
@@ -131,11 +130,11 @@ public:
     void setChildCommands( const pCommand::List& commands ) { mChildCommands = commands; }
     void addChildCommand( const pCommand& command ) { mChildCommands << command; }
     void setExecutableCheckingType( int type ) { mExecutableCheckingType = type; }
-    void setId( int id ) { mId = id; }
     
     QString toString() const
     {
         QString s;
+        s += QString( "mName: %1\n" ).arg( mName );
         s += QString( "mText: %1\n" ).arg( mText );
         s += QString( "mCommand: %1\n" ).arg( mCommand );
         s += QString( "mWorkingDirectory: %1\n" ).arg( mWorkingDirectory );
@@ -145,7 +144,6 @@ public:
         s += QString( "mUserData: %1\n" ).arg( mUserData.toString() );
         s += QString( "mProject: %1\n" ).arg( (quintptr)mProject.data() );
         s += QString( "mExecutableCheckingType: %1" ).arg( mExecutableCheckingType );
-        s += QString( "mId: %1" ).arg( mId );
         return s;
     }
     
@@ -153,7 +151,8 @@ public:
     { qWarning( "%s", toString().toLocal8Bit().constData() ); }
 
 protected:
-    QString mText;                              /**< Comment about command */
+    QString mName;                              /**< Command name/id */
+    QString mText;                              /**< Command text */
     QString mCommand;                           /**< Console command line */
     QString mWorkingDirectory;                  /**< Working dirrectory of process */
     bool mSkipOnError;                          /**< Skip command, if error ocurred */
@@ -163,7 +162,6 @@ protected:
     pCommand::List mChildCommands;              /**< This command is a fake command executing the child commands */
     QVariant mUserData;                         /**< User custom placeholder to stock customdata, currently it's internally used to store commands map */
     int mExecutableCheckingType;                /**< Warn user, if executable file does not exist and propose to select a file */
-    int mId;                                    /**< An id for the command */
 };
 
 Q_DECLARE_METATYPE( pCommand );
