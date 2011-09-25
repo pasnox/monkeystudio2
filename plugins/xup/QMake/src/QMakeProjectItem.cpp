@@ -15,6 +15,7 @@
 #include <QProcess>
 #include <QLibrary>
 #include <QFileDialog>
+#include <QMetaEnum>
 #include <QDebug>
 
 #if defined( Q_OS_WIN )
@@ -626,29 +627,39 @@ QList<QByteArray> QMakeProjectItem::makefileRules( const QString& filePath ) con
         return QList<QByteArray>();
     }
     
-    const QSet<QString> keepRules = QSet<QString>()
-        << QT_TR_NOOP( "all" )
-        << QT_TR_NOOP( "clean" )
-        << QT_TR_NOOP( "distclean" )
-        << QT_TR_NOOP( "install" )
-        << QT_TR_NOOP( "uninstall" )
-        ;
+    int i = 0;
+    QHash<QByteArray, int> orderedKeepRules;
+    orderedKeepRules[ QT_TR_NOOP( "build" ) ] = i++; // fake
+    orderedKeepRules[ QT_TR_NOOP( "clean" ) ] = i++;
+    orderedKeepRules[ QT_TR_NOOP( "distclean" ) ] = i++;
+    orderedKeepRules[ QT_TR_NOOP( "rebuild" ) ] = i++; // fake
+    orderedKeepRules[ QT_TR_NOOP( "execute" ) ] = i++; // fake
+    orderedKeepRules[ QT_TR_NOOP( "install" ) ] = i++;
+    orderedKeepRules[ QT_TR_NOOP( "uninstall" ) ] = i++;
+    //orderedKeepRules[ QT_TR_NOOP( "all" ) ] = i++;
+    
+    const QSet<QByteArray> keepRules = orderedKeepRules.keys().toSet();
     const QRegExp targetRex( "^([\\w\\-_\\d]+):.*" );
-    QList<QByteArray> rules;
+    QHash<int, QByteArray> rules;
     
     while ( !file.atEnd() ) {
-        const QString line = file.readLine();
+        const QByteArray line = file.readLine();
         const int pos = targetRex.indexIn( line );
-        const QString rule = targetRex.cap( 1 );
+        const QByteArray rule = pos != -1 ? targetRex.cap( 1 ).toAscii() : QByteArray();
+        const int id = orderedKeepRules.value( rule, -1 );
         
-        if ( pos != -1 && keepRules.contains( rule ) ) {
-            rules << rule.toAscii();
+        if ( id != -1 ) {
+            rules[ id ] = rule;
         }
     }
     
-    rules.prepend( QByteArray() ); // default make rule
+    if ( !rules.isEmpty() ) {
+        rules[ orderedKeepRules.value( "build" ) ] = "build";
+        rules[ orderedKeepRules.value( "rebuild" ) ] = "rebuild";
+        rules[ orderedKeepRules.value( "execute" ) ] = "execute";
+    }
     
-    return rules;
+    return rules.values();
 }
 
 QString QMakeProjectItem::toTitleCase( const QString& string ) const
@@ -662,6 +673,105 @@ QString QMakeProjectItem::toTitleCase( const QString& string ) const
     return s;
 }
 
+QString QMakeProjectItem::actionTypeToString( QMakeProjectItem::ActionType type ) const
+{
+    const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
+    const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
+    const QMetaEnum me = mo->enumerator( index );
+    return QString::fromAscii( me.valueToKeys( type ) ).replace( "|", "_" );
+}
+
+QString QMakeProjectItem::defaultActionTypeToString( QMakeProjectItem::DefaultActionType type ) const
+{
+    return actionTypeToString( QMakeProjectItem::ActionType( type ) );
+}
+
+QMakeProjectItem::ActionType QMakeProjectItem::stringToActionType( const QString& string ) const
+{
+    const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
+    const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
+    const QMetaEnum me = mo->enumerator( index );
+    return QMakeProjectItem::ActionType( me.keysToValue( QString( string ).replace( "_", "|" ).toAscii() ) );
+}
+
+QString QMakeProjectItem::actionTypeToText( QMakeProjectItem::ActionType type ) const
+{
+    switch ( type ) {
+        // Qt tools
+        case QMakeProjectItem::QMake:
+            return tr( "Qt qmake" );
+        case QMakeProjectItem::LUpdate:
+            return tr( "Qt lupdate" );
+        case QMakeProjectItem::LRelease:
+            return tr( "Qt lrelease" );
+        // Generic
+        case QMakeProjectItem::Build:
+            return tr( "Build" );
+        case QMakeProjectItem::Clean:
+            return tr( "Clean" );
+        case QMakeProjectItem::Distclean:
+            return tr( "Distclean" );
+        case QMakeProjectItem::Install:
+            return tr( "Install" );
+        case QMakeProjectItem::Uninstall:
+            return tr( "Uninstall" );
+        case QMakeProjectItem::Rebuild:
+            return tr( "Rebuild" );
+        case QMakeProjectItem::Execute:
+            return tr( "Execute" );
+        // Release
+        case QMakeProjectItem::BuildRelease:
+            return tr( "Build Release" );
+        case QMakeProjectItem::CleanRelease:
+            return tr( "Clean Release" );
+        case QMakeProjectItem::DistcleanRelease:
+            return tr( "Distclean Release" );
+        case QMakeProjectItem::InstallRelease:
+            return tr( "Install Release" );
+        case QMakeProjectItem::UninstallRelease:
+            return tr( "Uninstall Release" );
+        case QMakeProjectItem::RebuildRelease:
+            return tr( "Rebuild Release" );
+        case QMakeProjectItem::ExecuteRelease:
+            return tr( "Execute Release" );
+        // Debug
+        case QMakeProjectItem::BuildDebug:
+            return tr( "Build Debug" );
+        case QMakeProjectItem::CleanDebug:
+            return tr( "Clean Debug" );
+        case QMakeProjectItem::DistcleanDebug:
+            return tr( "Distclean Debug" );
+        case QMakeProjectItem::InstallDebug:
+            return tr( "Install Debug" );
+        case QMakeProjectItem::UninstallDebug:
+            return tr( "Uninstall Debug" );
+        case QMakeProjectItem::RebuildDebug:
+            return tr( "Rebuild Debug" );
+        case QMakeProjectItem::ExecuteDebug:
+            return tr( "Execute Debug" );
+        //
+        /*case QMakeProjectItem::BuildAll:
+        case QMakeProjectItem::CleanAll:
+        case QMakeProjectItem::DistcleanAll:
+        case QMakeProjectItem::InstallAll:
+        case QMakeProjectItem::UninstallAll:
+        case QMakeProjectItem::RebuildAll:
+            break;*/
+        default:
+            break;
+    }
+    
+    const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
+    const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
+    const QMetaEnum me = mo->enumerator( index );
+    return QString::fromAscii( me.valueToKeys( type ) ).replace( "|", "_" );
+}
+
+QString QMakeProjectItem::defaultActionTypeToText( QMakeProjectItem::DefaultActionType type ) const
+{
+    return actionTypeToText( QMakeProjectItem::ActionType( type ) );
+}
+
 void QMakeProjectItem::installCommandsV2()
 {
     XUPProjectItem* tlProject = topLevelProject();
@@ -673,18 +783,13 @@ void QMakeProjectItem::installCommandsV2()
     
     // Qt tools commands
     if ( version.isValid() ) {
-        QAction* action = addSeparator( "mBuilder" );
-        action->setSeparator( false );
-        action->setText( tr( "Qt Tools" ) );
-        action->setEnabled( false );
-        
         pCommand cmd;
         
         // qmake command
         cmd = pCommand();
-        cmd.setId( QMakeProjectItem::QMake );
-        cmd.setText( tr( "qmake" ) );
-        cmd.setCommand( QString( "%1 %2 $cp$" ).arg( version.qmake() ).arg( version.qmakeParameters() ).trimmed() );
+        cmd.setName( defaultActionTypeToString( QMakeProjectItem::QMake ) );
+        cmd.setText( defaultActionTypeToText( QMakeProjectItem::QMake ) );
+        cmd.setCommand( QString( "%1 %2 $cp$" ).arg( version.qmake() ).arg( version.qmakeParameters() ) );
         cmd.setWorkingDirectory( "$cpp$" );
         cmd.setProject( this );
         cmd.setSkipOnError( false );
@@ -693,9 +798,9 @@ void QMakeProjectItem::installCommandsV2()
         
         // lupdate command
         cmd = pCommand();
-        cmd.setId( QMakeProjectItem::LUpdate );
-        cmd.setText( tr( "lupdate" ) );
-        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lupdate() ).trimmed() );
+        cmd.setName( defaultActionTypeToString( QMakeProjectItem::LUpdate ) );
+        cmd.setText( defaultActionTypeToText( QMakeProjectItem::LUpdate ) );
+        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lupdate() ) );
         cmd.setWorkingDirectory( "$cpp$" );
         cmd.setProject( this );
         cmd.setSkipOnError( false );
@@ -704,9 +809,9 @@ void QMakeProjectItem::installCommandsV2()
         
         // lrelease command
         cmd = pCommand();
-        cmd.setId( QMakeProjectItem::LRelease );
-        cmd.setText( tr( "lrelease" ) );
-        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lrelease() ).trimmed() );
+        cmd.setName( defaultActionTypeToString( QMakeProjectItem::LRelease ) );
+        cmd.setText( defaultActionTypeToText( QMakeProjectItem::LRelease ) );
+        cmd.setCommand( QString( "%1 $cp$" ).arg( version.lrelease() ) );
         cmd.setWorkingDirectory( "$cpp$" );
         cmd.setProject( this );
         cmd.setSkipOnError( false );
@@ -726,13 +831,16 @@ void QMakeProjectItem::installCommandsV2()
     
     builderCommand.setProject( this );
     builderCommand.setWorkingDirectory( path() );
-    builderCommand.setProject( this );
     builderCommand.setSkipOnError( false );
-    builderCommand.setExecutableCheckingType( XUPProjectItem::NoTarget );
     
     QDir dir( path() );
     const pCommand makeCommand = builderCommand;
-    const QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
+    QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
+    
+    if ( files.isEmpty() && version.isValid() ) {
+        executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );
+        files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
+    }
     
     // iterate each makefiles
     foreach ( const QFileInfo& file, files ) {
@@ -744,7 +852,7 @@ void QMakeProjectItem::installCommandsV2()
         
         const QString fileName = file.fileName();
         const QString filePath = pConsoleManager::quotedFilePath( file.absoluteFilePath() );
-        QMakeProjectItem::ActionType type = QMakeProjectItem::None;
+        QMakeProjectItem::ActionType type = QMakeProjectItem::NoFlag;
         
         if ( fileName.contains( "release", Qt::CaseInsensitive ) ) {
             type |= QMakeProjectItem::ReleaseFlag;
@@ -753,22 +861,16 @@ void QMakeProjectItem::installCommandsV2()
             type |= QMakeProjectItem::DebugFlag;
         }
         
-        QAction* action = addSeparator( "mBuilder" );
-        action->setSeparator( false );
-        action->setText( fileName );
-        action->setEnabled( false );
+        addSeparator( "mBuilder" );
         
         // iterate each rules
-        foreach ( const QByteArray& rule, rules ) {
+        foreach ( QByteArray rule, rules ) {
             QMakeProjectItem::ActionType actionType = type;
             pCommand cmd = makeCommand;
             
-            if ( rule.isNull() ) {
+            if ( rule == "build" ) {
                 actionType |= QMakeProjectItem::BuildFlag;
-            }
-            else if ( rule == "all" ) {
-                //actionType |= QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag;
-                continue;
+                rule.clear();
             }
             else if ( rule == "clean" ) {
                 actionType |= QMakeProjectItem::CleanFlag;
@@ -776,44 +878,76 @@ void QMakeProjectItem::installCommandsV2()
             else if ( rule == "distclean" ) {
                 actionType |= QMakeProjectItem::DistcleanFlag;
             }
+            else if ( rule == "rebuild" ) {
+                actionType |= QMakeProjectItem::DistcleanFlag | QMakeProjectItem::QMakeFlag | QMakeProjectItem::BuildFlag;
+                
+                if ( version.isValid() ) {
+                    cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::QMake ) ) );
+                    
+                    cmd.setName( actionTypeToString( actionType ) );
+                    cmd.setText( actionTypeToText( actionType ) );
+                    cmd.setCommand( QString::null );
+                    cmd.setWorkingDirectory( QString::null );
+                    
+                    if ( type & QMakeProjectItem::DebugFlag ) {
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::DistcleanDebug ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::QMake ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::BuildDebug ) ) );
+                    }
+                    else if ( type & QMakeProjectItem::ReleaseFlag ) {
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::DistcleanRelease ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::QMake ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::BuildRelease ) ) );
+                    }
+                    else {
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::Distclean ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::QMake ) ) );
+                        cmd.addChildCommand( command( defaultActionTypeToString( QMakeProjectItem::Build ) ) );
+                    }
+                    
+                    addCommand( "mBuilder", cmd );
+                }
+                
+                continue;
+            }
+            else if ( rule == "execute" ) {
+                actionType |= QMakeProjectItem::ExecuteFlag;
+                
+                cmd.setName( actionTypeToString( actionType ) );
+                cmd.setText( actionTypeToText( actionType ) );
+                cmd.setCommand( "$target$" );
+                cmd.setWorkingDirectory( QString::null );
+                cmd.setParsers( QStringList() );
+                cmd.setTryAllParsers( false );
+                
+                if ( actionType & QMakeProjectItem::ReleaseFlag ) {
+                    cmd.setExecutableCheckingType( XUPProjectItem::ReleaseTarget );
+                }
+                else if ( actionType & QMakeProjectItem::DebugFlag ) {
+                    cmd.setExecutableCheckingType( XUPProjectItem::DebugTarget );
+                }
+                else {
+                    cmd.setExecutableCheckingType( XUPProjectItem::DefaultTarget );
+                }
+                
+                addCommand( "mBuilder", cmd );
+                continue;
+            }
             else if ( rule == "install" ) {
                 actionType |= QMakeProjectItem::InstallFlag;
             }
             else if ( rule == "uninstall" ) {
                 actionType |= QMakeProjectItem::UninstallFlag;
             }
+            /*else if ( rule == "all" ) {
+                actionType |= QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag;
+                continue;
+            }*/
             
-            cmd.setId( actionType );
-            cmd.setText( rule.isNull() ? tr( "Build" ) : toTitleCase( tr( rule ) ) );
-            cmd.setCommand( QString( "%1 -f %2 %3" ).arg( cmd.command() ).arg( filePath ).arg( QString::fromAscii( rule ) ).trimmed() );
+            cmd.setName( actionTypeToString( actionType ) );
+            cmd.setText( actionTypeToText( actionType ) );
+            cmd.setCommand( QString( "%1 -f %2 %3" ).arg( cmd.command() ).arg( filePath ).arg( QString::fromAscii( rule ) ) );
             addCommand( "mBuilder", cmd );
-        }
-        
-        if ( version.isValid() && rules.contains( QByteArray() ) && rules.contains( "distclean" ) ) {
-            if ( type & QMakeProjectItem::DebugFlag ) {
-                pCommand cmd = pCommand( tr( "Rebuild" ) );
-                cmd.setId( QMakeProjectItem::RebuildDebug );
-                cmd.addChildCommand( command( QMakeProjectItem::DistcleanDebug ) );
-                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
-                cmd.addChildCommand( command( QMakeProjectItem::BuildDebug ) );
-                addCommand( "mBuilder", cmd );
-            }
-            else if ( type & QMakeProjectItem::ReleaseFlag ) {
-                pCommand cmd = pCommand( tr( "Rebuild" ) );
-                cmd.setId( QMakeProjectItem::RebuildRelease );
-                cmd.addChildCommand( command( QMakeProjectItem::DistcleanRelease ) );
-                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
-                cmd.addChildCommand( command( QMakeProjectItem::BuildRelease ) );
-                addCommand( "mBuilder", cmd );
-            }
-            else {
-                pCommand cmd = pCommand( tr( "Rebuild" ) );
-                cmd.setId( QMakeProjectItem::Rebuild );
-                cmd.addChildCommand( command( QMakeProjectItem::Distclean ) );
-                cmd.addChildCommand( command( QMakeProjectItem::QMake ) );
-                cmd.addChildCommand( command( QMakeProjectItem::Build ) );
-                addCommand( "mBuilder", cmd );
-            }
         }
     }
 }
@@ -839,7 +973,7 @@ void QMakeProjectItem::installCommands()
     const QtVersion version = manager->version( XUPProjectItemHelper::projectSettingsValue( tlProject, "QT_VERSION" ) );
     const bool showQtWarning = XUPProjectItemHelper::projectSettingsValue( tlProject, "SHOW_QT_VERSION_WARNING", "1" ) == "1";
     // temp variables
-    QMap<QMakeProjectItem::ActionType, pCommand> cmds; // all created commands
+    QMap<QMakeProjectItem::DefaultActionType, pCommand> cmds; // all created commands
     pCommand cmd;
     QString s;
     
@@ -1117,7 +1251,7 @@ void QMakeProjectItem::installCommands()
         }
     }
     
-    const QList<QMakeProjectItem::ActionType> typesOrder = QList<QMakeProjectItem::ActionType>()
+    const QList<QMakeProjectItem::DefaultActionType> typesOrder = QList<QMakeProjectItem::DefaultActionType>()
         // Default
         << QMakeProjectItem::Build
         << QMakeProjectItem::Clean
@@ -1147,13 +1281,13 @@ void QMakeProjectItem::installCommands()
         << QMakeProjectItem::LRelease
         ;
     
-    foreach ( const QMakeProjectItem::ActionType& type, typesOrder ) {
+    foreach ( const QMakeProjectItem::DefaultActionType& type, typesOrder ) {
         if ( !cmds.contains( type ) ) {
             continue;
         }
         
         pCommand& cmd = cmds[ type ];
-        cmd.setId( type );
+        cmd.setName( defaultActionTypeToString( type ) );
         addCommand( "mBuilder", cmd );
         
         if ( ( type & QMakeProjectItem::ExecuteFlag ) || type == QMakeProjectItem::RebuildAll ) {
@@ -1195,7 +1329,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
     const pCommand cmd = command( action );
     QDir dir( path() );
     
-    switch ( cmd.id() ) {
+    switch ( stringToActionType( cmd.name() ) ) {
         case QMakeProjectItem::BuildDebug:
         case QMakeProjectItem::BuildRelease:
         case QMakeProjectItem::BuildAll:
@@ -1203,7 +1337,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             const QFileInfoList files = pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
             
             if ( files.isEmpty() ) {
-                executeCommand( QMakeProjectItem::QMake );
+                executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );
             }
             
             break;
@@ -1212,7 +1346,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             const QString executable = targetFilePath( XUPProjectItem::DebugTarget );
             
             if ( !QFile::exists( executable ) ) {
-                executeCommand( QMakeProjectItem::BuildDebug );
+                executeCommand( defaultActionTypeToString( QMakeProjectItem::BuildDebug ) );
             }
             
             break;
@@ -1221,7 +1355,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             const QString executable = targetFilePath( XUPProjectItem::ReleaseTarget );
             
             if ( !QFile::exists( executable ) ) {
-                executeCommand( QMakeProjectItem::BuildRelease );
+                executeCommand( defaultActionTypeToString( QMakeProjectItem::BuildRelease ) );
             }
             
             break;
@@ -1230,7 +1364,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             const QString executable = targetFilePath( XUPProjectItem::DefaultTarget );
             
             if ( !QFile::exists( executable ) ) {
-                executeCommand( QMakeProjectItem::Build );
+                executeCommand( defaultActionTypeToString( QMakeProjectItem::Build ) );
             }
             
             break;

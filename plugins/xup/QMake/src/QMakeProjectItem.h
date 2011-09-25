@@ -20,6 +20,7 @@ public:
 class QMakeProjectItem : public XUPProjectItem
 {
     Q_OBJECT
+    Q_ENUMS( ActionTypeFlag )
     friend class QMakeProjectItemCacheBackend;
     
 public:
@@ -52,8 +53,9 @@ public:
         QMakeFlag = 0x200,
         LUpdateFlag = 0x400,
         LReleaseFlag = 0x800,
-        
-        None = QMakeProjectItem::NoFlag,
+    };
+    
+    enum DefaultActionType {
         BuildDebug = QMakeProjectItem::BuildFlag | QMakeProjectItem::DebugFlag,
         BuildRelease = QMakeProjectItem::BuildFlag | QMakeProjectItem::ReleaseFlag,
         BuildAll = QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag,
@@ -88,32 +90,6 @@ public:
     
     Q_DECLARE_FLAGS( ActionType, ActionTypeFlag )
     
-    /*enum DefaultActionType {
-        None = QMakeProjectItem::NoFlag,
-        BuildDebug = QMakeProjectItem::BuildFlag | QMakeProjectItem::DebugFlag,
-        BuildRelease = QMakeProjectItem::BuildFlag | QMakeProjectItem::ReleaseFlag,
-        BuildAll = QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag,
-        Build = QMakeProjectItem::BuildFlag,
-        CleanDebug = QMakeProjectItem::CleanFlag | QMakeProjectItem::DebugFlag,
-        CleanRelease = QMakeProjectItem::CleanFlag | QMakeProjectItem::ReleaseFlag,
-        CleanAll = QMakeProjectItem::CleanFlag | QMakeProjectItem::AllFlag,
-        Clean = QMakeProjectItem::CleanFlag,
-        DistcleanDebug = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::DebugFlag,
-        DistcleanRelease = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::ReleaseFlag,
-        DistcleanAll = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::AllFlag,
-        Distclean = QMakeProjectItem::DistcleanFlag,
-        RebuildDebug = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::QMakeFlag | QMakeProjectItem::BuildFlag | QMakeProjectItem::DebugFlag,
-        RebuildRelease = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::QMakeFlag | QMakeProjectItem::BuildFlag | QMakeProjectItem::ReleaseFlag,
-        RebuildAll = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::QMakeFlag | QMakeProjectItem::BuildFlag | QMakeProjectItem::AllFlag,
-        Rebuild = QMakeProjectItem::DistcleanFlag | QMakeProjectItem::QMakeFlag | QMakeProjectItem::BuildFlag,
-        ExecuteDebug = QMakeProjectItem::ExecuteFlag | QMakeProjectItem::DebugFlag,
-        ExecuteRelease = QMakeProjectItem::ExecuteFlag | QMakeProjectItem::ReleaseFlag,
-        Execute = QMakeProjectItem::ExecuteFlag,
-        QMake = QMakeProjectItem::QMakeFlag,
-        LUpdate = QMakeProjectItem::LUpdateFlag,
-        LRelease = QMakeProjectItem::LReleaseFlag
-    };*/
-    
 protected:
     static QMakeProjectItemCacheBackend mCacheBackend;
     
@@ -129,6 +105,14 @@ protected:
     QList<QByteArray> makefileRules( const QString& filePath ) const;
     // return a title cased string
     QString toTitleCase( const QString& string ) const;
+    // return string version of flags
+    QString actionTypeToString( QMakeProjectItem::ActionType type ) const;
+    QString defaultActionTypeToString( QMakeProjectItem::DefaultActionType type ) const;
+    // return a flag version of string
+    QMakeProjectItem::ActionType stringToActionType( const QString& string ) const;
+    // return a string text for command text based on type flags
+    QString actionTypeToText( QMakeProjectItem::ActionType type ) const;
+    QString defaultActionTypeToText( QMakeProjectItem::DefaultActionType type ) const;
     
     CLIToolPlugin* builder() const;
 
