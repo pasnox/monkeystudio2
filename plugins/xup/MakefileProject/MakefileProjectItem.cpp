@@ -54,6 +54,7 @@ void MakefileProjectItem::installCommands()
     
     foreach( const QString& target, targets ) {
         pCommand cmd = baseCmd;
+        cmd.setName( target );
         cmd.setText( target );
         cmd.setCommand( QString( "%1 %2 %3" ).arg( cmd.command() ).arg( makeFileArg ).arg( target ) );
         addCommand( "mBuilder", cmd );

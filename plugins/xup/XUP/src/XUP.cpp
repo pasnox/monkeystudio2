@@ -19,6 +19,7 @@ void GenericXUPProjectItem::installCommands()
 	
     cmd.setProject( this );
     cmd.setSkipOnError( false );
+	cmd.setName( "execute_project_main_file" );
 	cmd.setText( tr( "Execute project main file" ) );
 	cmd.setCommand( "$target$" );
 	cmd.setWorkingDirectory( path() );

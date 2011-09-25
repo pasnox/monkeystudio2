@@ -40,6 +40,7 @@ void PHPQtProjectItem::installCommands()
     if ( ip ) {
         // execute project
         cmd = cmdInterpret;
+        cmd.setName( "run" );
         cmd.setText( tr( "Run" ) );
         cmd.setCommand( QString( "%1 $target$" ).arg( cmd.command() ) );
         cmd.setParsers( QStringList() );
@@ -49,6 +50,7 @@ void PHPQtProjectItem::installCommands()
     
     // phpqtuic4 on current file
     cmd = cmdInterpret;
+    cmd.setName( "generate_form" );
     cmd.setText( tr( "Generate current form implementation" ) );
     cmd.setCommand( "phpqtuic4 $cf$ -o $cf$.php" );
     cmd.setWorkingDirectory( "$cfp$" );
@@ -59,6 +61,7 @@ void PHPQtProjectItem::installCommands()
     
     // pyrcc4 on current file
     cmd = cmdInterpret;
+    cmd.setName( "generate_resource" );
     cmd.setText( tr( "Generate current resource implementation" ) );
     cmd.setCommand( "phpqtrcc4 $cf$ -o $cf$.php" );
     cmd.setWorkingDirectory( "$cfp$" );
@@ -69,6 +72,7 @@ void PHPQtProjectItem::installCommands()
     
     // pylupdate4 on current file
     cmd = cmdInterpret;
+    cmd.setName( "generate_translation" );
     cmd.setText( tr( "Generate current project translation files" ) );
     cmd.setCommand( "phpqtlupdate4 $cp$" );
     cmd.setWorkingDirectory( "$cpp$" );
