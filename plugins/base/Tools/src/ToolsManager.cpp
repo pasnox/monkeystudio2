@@ -203,6 +203,7 @@ void ToolsManager::toolsMenu_triggered( QAction* action )
     }
     else if ( tool.useConsoleManager ) {
         pCommand cmd;
+        cmd.setName( tool.caption );
         cmd.setText( tool.caption );
         QStringList commandAndArgs = filePath.split( ' ' );
         cmd.setCommand( commandAndArgs.join( " " ).prepend( " " ).prepend( commandAndArgs.takeFirst() ) );
