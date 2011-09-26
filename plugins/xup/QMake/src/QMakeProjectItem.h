@@ -3,6 +3,7 @@
 
 #include "xupmanager/core/XUPProjectItem.h"
 #include <xupmanager/core/XUPProjectItemCache.h>
+#include <consolemanager/pConsoleManager.h>
 
 class CLIToolPlugin;
 
@@ -35,7 +36,7 @@ public:
     virtual QString projectType() const;
     virtual bool open( const QString& fileName, const QString& codec );
     virtual QString targetFilePath( XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget );
-    void installCommandsV2();
+    virtual void installCommandsV2();
     virtual void installCommands();
     virtual XUPProjectItemCacheBackend* cacheBackend() const;
     
@@ -103,6 +104,8 @@ protected:
     bool handleSubdirs( XUPItem* subdirs );
     // return the makefile rules
     QList<QByteArray> makefileRules( const QString& filePath ) const;
+    // return a list of QFileFo pointing to makefile files
+    QFileInfoList makefiles() const;
     // return a title cased string
     QString toTitleCase( const QString& string ) const;
     // return string version of flags
@@ -118,6 +121,7 @@ protected:
 
 protected slots:
     virtual void projectCustomActionTriggered();
+    void consoleManager_commandFinished( const pCommand& cmd, int exitCode, QProcess::ExitStatus exitStatus );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( QMakeProjectItem::ActionType )
