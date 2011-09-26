@@ -175,6 +175,14 @@ pCommand pConsoleManager::processCommand( const pCommand& command ) const
     pCommand cmd = command;
     cmd.setCommand( processInternalVariables( cmd.command(), true ) );
     cmd.setWorkingDirectory( processInternalVariables( cmd.workingDirectory(), false ) );
+    
+    if ( cmd.project() ) {
+        const QString filePath = cmd.project()->targetFilePath( XUPProjectItem::TargetType( cmd.executableCheckingType() ) );
+        const QString qFilePath = quotedFilePath( filePath );
+        cmd.setCommand( cmd.command().replace( "$target$", qFilePath, Qt::CaseInsensitive ) );
+        cmd.setWorkingDirectory( cmd.workingDirectory().replace( "$target$", filePath, Qt::CaseInsensitive ) );
+    }
+    
     return cmd;
 }
 
@@ -481,13 +489,13 @@ void pConsoleManager::executeProcess()
             case XUPProjectItem::DefaultTarget:
             case XUPProjectItem::DebugTarget:
             case XUPProjectItem::ReleaseTarget: {
-                if ( !c.project() && !c.command().contains( "$target$" ) ) {
+                if ( !c.project() /*&& !c.command().contains( "$target$" )*/ ) {
                     emit commandSkipped( c );
                     removeCommand( c );
                     continue;
                 }
                 
-                if ( c.command().contains( "$target$" ) ) {
+                /*if ( c.command().contains( "$target$" ) )*/ {
                     const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
                     
                     if ( filePath.isEmpty() ) {
