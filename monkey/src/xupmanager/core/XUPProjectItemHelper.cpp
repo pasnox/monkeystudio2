@@ -121,6 +121,7 @@ void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const Me
             variable->setAttribute( "name", CommandScopeName );
             
             addCommandProperty( variable, menu );
+            addCommandProperty( variable, command.name() );
             addCommandProperty( variable, command.text() );
             addCommandProperty( variable, command.command() );
             addCommandProperty( variable, command.workingDirectory() );
@@ -148,7 +149,7 @@ MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
                 values << commandValue->content();
             }
             
-            if ( values.count() != 7 ) {
+            if ( values.count() != 8 ) {
                 qWarning() << "Skip reading incomplete command";
                 Q_ASSERT( 0 );
                 continue;
@@ -156,12 +157,13 @@ MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
             
             pCommand command;
             
-            command.setText( values.at( 1 ).toString() );
-            command.setCommand( values.at( 2 ).toString() );
-            command.setWorkingDirectory( values.at( 3 ).toString() );
-            command.setParsers( values.at( 4 ).toString().split( ";", QString::SkipEmptyParts ) );
-            command.setSkipOnError( values.at( 5 ).toBool() );
-            command.setTryAllParsers( values.at( 6 ).toBool() );
+            command.setName( values.at( 1 ).toString() );
+            command.setText( values.at( 2 ).toString() );
+            command.setCommand( values.at( 3 ).toString() );
+            command.setWorkingDirectory( values.at( 4 ).toString() );
+            command.setParsers( values.at( 5 ).toString().split( ";", QString::SkipEmptyParts ) );
+            command.setSkipOnError( values.at( 6 ).toBool() );
+            command.setTryAllParsers( values.at( 7 ).toBool() );
             command.setUserData( Qt::Checked );
             
             commands[ values.at( 0 ).toString() ] << command;
