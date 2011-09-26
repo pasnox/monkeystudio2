@@ -32,6 +32,7 @@ pCommand CommandEditor::command() const
     const QStringList parsers = ui->ccParsers->checkedStringList();
     pCommand command;
     
+    command.setName( ui->leName->text() );
     command.setText( ui->leText->text() );
     command.setCommand( ui->leCommand->text() );
     command.setWorkingDirectory( ui->leWorkDir->text() );
@@ -52,6 +53,7 @@ pCommand CommandEditor::command() const
 
 void CommandEditor::setCommand( const pCommand& command )
 {
+    ui->leName->setText( command.name() );
     ui->leText->setText( command.text() );
     ui->leCommand->setText( command.command() );
     ui->leWorkDir->setText( command.workingDirectory() );
