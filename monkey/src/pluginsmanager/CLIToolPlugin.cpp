@@ -29,6 +29,7 @@ pCommand CLIToolPlugin::command() const
     pSettings* settings = MonkeyCore::settings();
     pCommand cmd;
     
+    cmd.setName( settings->value( settingsKey( "command/Name" ) ).toString() );
     cmd.setText( settings->value( settingsKey( "command/Text" ) ).toString() );
     cmd.setCommand( settings->value( settingsKey( "command/Command" ) ).toString() );
     cmd.setWorkingDirectory( settings->value( settingsKey( "command/WorkingDirectory" ) ).toString() );
@@ -49,6 +50,7 @@ void CLIToolPlugin::setCommand( const pCommand& cmd )
 {
     pSettings* settings = MonkeyCore::settings();
     
+    settings->setValue( settingsKey( "command/Name" ), cmd.name() );
     settings->setValue( settingsKey( "command/Text" ), cmd.text() );
     settings->setValue( settingsKey( "command/Command" ), cmd.command() );
     settings->setValue( settingsKey( "command/WorkingDirectory" ), cmd.workingDirectory() );
