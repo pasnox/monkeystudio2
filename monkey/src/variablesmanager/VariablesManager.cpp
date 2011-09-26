@@ -133,7 +133,7 @@ QString VariablesManager::replaceAllVariables( const QString& _text, bool quoted
 {
     QString text = _text;
     int p = 0;
-    QRegExp rex( "(\\$(?:\\w|\\s|'|\\._-)+\\$)" );
+    QRegExp rex( "(\\$(?:\\w|\\s|'|\\.|_|-)+\\$)" );
     // search and interpret values
     QList<QString> findedVariables;
     while ( ( p = rex.indexIn( text, p ) ) != -1 )
