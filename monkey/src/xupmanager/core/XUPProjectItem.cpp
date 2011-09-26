@@ -559,6 +559,10 @@ void XUPProjectItem::installCommands()
     const MenuCommandListMap commands = XUPProjectItemHelper::projectCommands( this );
     
     foreach ( const QString& menu, commands.keys() ) {
+        if ( MonkeyCore::menuBar()->menu( menu )->actions().count() > 0 ) {
+            addSeparator( menu );
+        }
+        
         addCommands( menu, commands[ menu ] );
     }
 }
