@@ -12,8 +12,8 @@ parser add "QMake" "^\s*(Reading\s+([^\n]+))" "%2" "-1" "-1" "warning" "%0" "%1"
 # Warning: potential duplicate alias detected
 parser add "QMake" "^([^\n]+):\s+Warning:\s+(potential duplicate alias detected:\s+'[^\n]+')" "%1" "-1" "-1" "warning" "%2" "%0"
         
-# lupdate warning: no TS files specified
-parser add "QMake" "^lupdate warning:\s+(no TS files specified\. Only diagnostics will be produced for '([^\n]+)')\." "%2" "-1" "-1" "warning" "%1" "%0"
+# lupdate/lrelease warning
+parser add "QMake" "^(?:lupdate|lrelease) warning:\s*(.*'([^\n]+)')\.?" "%2" "-1" "-1" "warning" "%1" "%0"
         
 # cannot open
 parser add "QMake" "^Cannot open [^:]+:\s*([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"

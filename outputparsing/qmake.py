@@ -42,15 +42,21 @@ duplicateAlias.test( 'src/resources/resources.qrc: Warning: potential duplicate 
                         text = 'potential duplicate alias detected: \'license.gpl\'',
                         hint = 'src/resources/resources.qrc: Warning: potential duplicate alias detected: \'license.gpl\'' )
 
-# lupdate warning: no TS files specified.
-noTS = parsing.Pattern( r"^lupdate warning:\s+(no TS files specified\. Only diagnostics will be produced for '([^\n]+)')\.", file = '%2', type = 'warning', text = '%1' )
-noTS.setComment( 'lupdate warning: no TS files specified' )
+# lupdate/lrelease warning
+warning = parsing.Pattern( r"^(?:lupdate|lrelease) warning:\s*(.*'([^\n]+)')\.?", file = '%2', type = 'warning', text = '%1' )
+warning.setComment( 'lupdate/lrelease warning' )
 
-noTS.test( 'lupdate warning: no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'.',
+warning.test( 'lupdate warning: no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'.',
                 file = '/home/pasnox/Temporaire/qtgui/qtgui.pro',
                 type = 'warning',
                 text = 'no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'',
                 hint = 'lupdate warning: no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'.' )
+
+warning.test( "lrelease warning: Met no 'TRANSLATIONS' entry in project file '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro'",
+                file = '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro',
+                type = 'warning',
+                text = "Met no 'TRANSLATIONS' entry in project file '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro'",
+                hint = "lrelease warning: Met no 'TRANSLATIONS' entry in project file '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro'" )
 
 # cannot open
 cannotOpen = parsing.Pattern( r"^Cannot open [^:]+:\s*([^\n]+)", type = 'warning', text = '%1' )
@@ -164,7 +170,7 @@ print missingFile.generateMkSScript( 'QMake' )
 print message.generateMkSScript( 'QMake' )
 print reading.generateMkSScript( 'QMake' )
 print duplicateAlias.generateMkSScript( 'QMake' )
-print noTS.generateMkSScript( 'QMake' )
+print warning.generateMkSScript( 'QMake' )
 print cannotOpen.generateMkSScript( 'QMake' )
 print tsUpdate.generateMkSScript( 'QMake' )
 print tsUpdateInfo.generateMkSScript( 'QMake' )
