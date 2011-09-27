@@ -7,7 +7,7 @@ parser add "QMake" "^WARNING:\s+(Failure to find:\s+([^\n]+))" "%2" "-1" "-1" "e
 parser add "QMake" "^Project MESSAGE:\s+([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
         
 # Reading
-parser add "QMake" "^\s*Reading\s+([^\n]+)" "%1" "-1" "-1" "warning" "%0" "%0"
+parser add "QMake" "^\s*(Reading\s+([^\n]+))" "%2" "-1" "-1" "warning" "%0" "%1"
         
 # Warning: potential duplicate alias detected
 parser add "QMake" "^([^\n]+):\s+Warning:\s+(potential duplicate alias detected:\s+'[^\n]+')" "%1" "-1" "-1" "warning" "%2" "%0"
@@ -15,12 +15,18 @@ parser add "QMake" "^([^\n]+):\s+Warning:\s+(potential duplicate alias detected:
 # lupdate warning: no TS files specified
 parser add "QMake" "^lupdate warning:\s+(no TS files specified\. Only diagnostics will be produced for '([^\n]+)')\." "%2" "-1" "-1" "warning" "%1" "%0"
         
-# Function is not implemented
-parser add "QMake" "^([^\n]+)\((\d+)\):Function '[^\n]+' is not implemented" "%1" "-1" "%2" "warning" "%0" "%0"
+# cannot open
+parser add "QMake" "^Cannot open [^:]+:\s*([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
         
-# Test function is not recognized
-parser add "QMake" "^([^\n]+)\((\d+)\):'[^\n]+' is not a recognized test function" "%1" "-1" "%2" "warning" "%0" "%0"
+# Updating TS/QM file
+parser add "QMake" "^Updating '([^']+)'..." "%1" "-1" "-1" "warning" "%0" "%0"
         
-# Circular inclusion
-parser add "QMake" "^([^\n]+):(\d+): circular inclusion of [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"
+# Updating TS/QM file info
+parser add "QMake" "^\s*((?:Found|Generated|Kept|Same-text)(?:\s+\d+)?[^\n]+)" "" "-1" "-1" "warning" "%0" "%1"
+        
+# Generic filename + line + message
+parser add "QMake" "^([^\n:(]+):?\(?(\d+)\)?:\s*([^\n]+)" "%1" "-1" "%2" "warning" "%3" "%0"
+        
+# Generic filename + message
+parser add "QMake" "^([^\n:]+):\s*(?:[^\n:]+):\s*([^\n]+)" "%1" "-1" "-1" "warning" "%2" "%0"
         

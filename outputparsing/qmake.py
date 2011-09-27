@@ -23,13 +23,13 @@ message.test( 'Project MESSAGE: this is my qmake project message',
                 hint = 'Project MESSAGE: this is my qmake project message' )
 
 # Reading
-reading = parsing.Pattern( r"^\s*Reading\s+([^\n]+)", file = '%1', type = 'warning' )
+reading = parsing.Pattern( r"^\s*(Reading\s+([^\n]+))", file = '%2', type = 'warning', hint = '%1' )
 reading.setComment( 'Reading' )
 
-reading.test( 'Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
+reading.test( '  Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 file = '/home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 type = 'warning',
-                text = 'Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
+                text = '  Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 hint = 'Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro' )
 
 # Warning: potential duplicate alias detected
@@ -52,39 +52,110 @@ noTS.test( 'lupdate warning: no TS files specified. Only diagnostics will be pro
                 text = 'no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'',
                 hint = 'lupdate warning: no TS files specified. Only diagnostics will be produced for \'/home/pasnox/Temporaire/qtgui/qtgui.pro\'.' )
 
-# Function is not implemented
-noFunction = parsing.Pattern( r"^([^\n]+)\((\d+)\):Function '[^\n]+' is not implemented", file = '%1', type = 'warning', line = '%2' )
-noFunction.setComment( 'Function is not implemented' )
+# cannot open
+cannotOpen = parsing.Pattern( r"^Cannot open [^:]+:\s*([^\n]+)", type = 'warning', text = '%1' )
+cannotOpen.setComment( 'cannot open' )
 
-noFunction.test( '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):Function \'fromfile\' is not implemented',
+cannotOpen.test( 'Cannot open dependencies/intuisphere/core: file to open is a directory',
+                type = 'warning',
+                text = 'file to open is a directory',
+                hint = 'Cannot open dependencies/intuisphere/core: file to open is a directory' )
+
+# Updating TS/QM file
+tsUpdate = parsing.Pattern( r"^Updating '([^']+)'...", file = '%1', type = 'warning' )
+tsUpdate.setComment( 'Updating TS/QM file' )
+
+tsUpdate.test( "Updating 'datas/languages/references/numento_en.ts'...",
+                    file = 'datas/languages/references/numento_en.ts',
+                    type = 'warning',
+                    text = "Updating 'datas/languages/references/numento_en.ts'...",
+                    hint = "Updating 'datas/languages/references/numento_en.ts'..." )
+
+tsUpdate.test( "Updating 'datas/languages/references/numento_dependencies_it.qm'...",
+                    file = 'datas/languages/references/numento_dependencies_it.qm',
+                    type = 'warning',
+                    text = "Updating 'datas/languages/references/numento_dependencies_it.qm'...",
+                    hint = "Updating 'datas/languages/references/numento_dependencies_it.qm'..." )
+
+# Updating TS/QM file info
+tsUpdateInfo = parsing.Pattern( r"^\s*((?:Found|Generated|Kept|Same-text)(?:\s+\d+)?[^\n]+)", type = 'warning', hint = '%1' )
+tsUpdateInfo.setComment( 'Updating TS/QM file info' )
+
+tsUpdateInfo.test( '    Found 680 source text(s) (0 new and 680 already existing)',
+                    type = 'warning',
+                    text = '    Found 680 source text(s) (0 new and 680 already existing)',
+                    hint = 'Found 680 source text(s) (0 new and 680 already existing)' )
+
+tsUpdateInfo.test( '    Generated 123 translation(s) (123 finished and 0 unfinished)',
+                    type = 'warning',
+                    text = '    Generated 123 translation(s) (123 finished and 0 unfinished)',
+                    hint = 'Generated 123 translation(s) (123 finished and 0 unfinished)' )
+
+tsUpdateInfo.test( '    Kept 118 obsolete entries',
+                        type = 'warning',
+                        text = '    Kept 118 obsolete entries',
+                        hint = 'Kept 118 obsolete entries' )
+
+tsUpdateInfo.test( '    Same-text heuristic provided 9 translation(s)',
+                        type = 'warning',
+                        text = '    Same-text heuristic provided 9 translation(s)',
+                        hint = 'Same-text heuristic provided 9 translation(s)' )
+
+# generic filename + line + message
+fileNameLine = parsing.Pattern( r"^([^\n:(]+):?\(?(\d+)\)?:\s*([^\n]+)", file = '%1', type = 'warning', line = '%2', text ='%3' )
+fileNameLine.setComment( 'Generic filename + line + message' )
+
+fileNameLine.test( '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):Function \'fromfile\' is not implemented',
                 file = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri',
                 type = 'warning',
                 line = '7',
-                text = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):Function \'fromfile\' is not implemented',
+                text = 'Function \'fromfile\' is not implemented',
                 hint = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):Function \'fromfile\' is not implemented' )
 
-# Test function is not a recognized
-noTestFunction = parsing.Pattern( r"^([^\n]+)\((\d+)\):'[^\n]+' is not a recognized test function", file = '%1', type = 'warning', line = '%2' )
-noTestFunction.setComment( 'Test function is not recognized' )
+fileNameLine.test( '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):\'!contains\' is not a recognized test function',
+                file = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri',
+                type = 'warning',
+                line = '7',
+                text = '\'!contains\' is not a recognized test function',
+                hint = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):\'!contains\' is not a recognized test function' )
 
-noTestFunction.test( '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):\'!contains\' is not a recognized test function',
-                        file = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri',
-                        type = 'warning',
-                        line = '7',
-                        text = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):\'!contains\' is not a recognized test function',
-                        hint = '/usr/share/qt4/mkspecs/modules/qt_phonon.pri(7):\'!contains\' is not a recognized test function' )
+fileNameLine.test( '/usr/include/qt4/QtCore/qstringbuilder.h:45: circular inclusion of /usr/include/qt4/QtCore/qstring.h',
+                file = '/usr/include/qt4/QtCore/qstringbuilder.h',
+                type = 'warning',
+                line = '45',
+                text = 'circular inclusion of /usr/include/qt4/QtCore/qstring.h',
+                hint = '/usr/include/qt4/QtCore/qstringbuilder.h:45: circular inclusion of /usr/include/qt4/QtCore/qstring.h' )
 
-# Circular inclusion
-circularInclusion = parsing.Pattern( r"^([^\n]+):(\d+): circular inclusion of [^\n]+", file = '%1', type = 'warning', line = '%2' )
-circularInclusion.setComment( 'Circular inclusion' )
+fileNameLine.test( 'Qt4/qscilexerbash.cpp:209: Qualifying with unknown namespace/class ::QsciLexerBash',
+                file = 'Qt4/qscilexerbash.cpp',
+                type = 'warning',
+                line = '209',
+                text = 'Qualifying with unknown namespace/class ::QsciLexerBash',
+                hint = 'Qt4/qscilexerbash.cpp:209: Qualifying with unknown namespace/class ::QsciLexerBash' )
 
-circularInclusion.test( '/usr/include/qt4/QtCore/qstringbuilder.h:45: circular inclusion of /usr/include/qt4/QtCore/qstring.h',
-                            file = '/usr/include/qt4/QtCore/qstringbuilder.h',
-                            type = 'warning',
-                            line = '45',
-                            text = '/usr/include/qt4/QtCore/qstringbuilder.h:45: circular inclusion of /usr/include/qt4/QtCore/qstring.h',
-                            hint = '/usr/include/qt4/QtCore/qstringbuilder.h:45: circular inclusion of /usr/include/qt4/QtCore/qstring.h' )
+fileNameLine.test( 'src/LexEScript.cpp:179: Discarding unconsumed meta data',
+                file = 'src/LexEScript.cpp',
+                type = 'warning',
+                line = '179',
+                text = 'Discarding unconsumed meta data',
+                hint = 'src/LexEScript.cpp:179: Discarding unconsumed meta data' )
 
+fileNameLine.test( 'sqlite3_unicode.c:2743: Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)',
+                file = 'sqlite3_unicode.c',
+                type = 'warning',
+                line = '2743',
+                text = 'Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)',
+                hint = 'sqlite3_unicode.c:2743: Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)' )
+
+# generic filename + message
+fileName = parsing.Pattern( r"^([^\n:]+):\s*(?:[^\n:]+):\s*([^\n]+)", file = '%1', type = 'warning', text ='%2' )
+fileName.setComment( 'Generic filename + message' )
+
+fileName.test( "src/settings/UISettings.ui: Warning: Z-order assignment: 'horizontalLayoutWidget' is not a valid widget.",
+                file = 'src/settings/UISettings.ui',
+                type = 'warning',
+                text = "Z-order assignment: 'horizontalLayoutWidget' is not a valid widget.",
+                hint = "src/settings/UISettings.ui: Warning: Z-order assignment: 'horizontalLayoutWidget' is not a valid widget." )
 
 # Generation of script file
 print '# It is a machine generated file. Do not edit it manualy!'
@@ -94,6 +165,8 @@ print message.generateMkSScript( 'QMake' )
 print reading.generateMkSScript( 'QMake' )
 print duplicateAlias.generateMkSScript( 'QMake' )
 print noTS.generateMkSScript( 'QMake' )
-print noFunction.generateMkSScript( 'QMake' )
-print noTestFunction.generateMkSScript( 'QMake' )
-print circularInclusion.generateMkSScript( 'QMake' )
+print cannotOpen.generateMkSScript( 'QMake' )
+print tsUpdate.generateMkSScript( 'QMake' )
+print tsUpdateInfo.generateMkSScript( 'QMake' )
+print fileNameLine.generateMkSScript( 'QMake' )
+print fileName.generateMkSScript( 'QMake' )
