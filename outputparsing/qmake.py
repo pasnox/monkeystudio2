@@ -1,8 +1,5 @@
 import parsing
 
-# parser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>
-# def __init__(self, pattern, file = '', line = '-1', column = '-1', type = 'error', text = '%0', hint = '%0'):
-
 # WARNING: Failure to find
 missingFile = parsing.Pattern( r"^WARNING:\s*(Failure to find:\s*([^\n]+))", file = '%2', type = 'error', text = '%1' )
 missingFile.setComment( 'WARNING: Failure to find file' )
