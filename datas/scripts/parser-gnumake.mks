@@ -1,7 +1,8 @@
 # It is a machine generated file. Do not edit it manualy!
-# No rule for make target
-parser add "GNU Make" "^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop." "" "-1" "-1" "error" "%1" "%0"
+
+# Generic error make message
+parser add "GNU Make" "^(?:mingw32-)?make(?:\[\d+\])?\s*:(?:\s*\*+)\s*([^\n]+)" "" "-1" "-1" "error" "%1" "%0"
         
-# Entering dirrectory
-parser add "GNU Make" "^(mingw32\-)?make\[\d\]: Entering directory\s`([^\n]*)'" "" "-1" "-1" "compiling" "make: Building %2" "%0"
+# Generic warning make message
+parser add "GNU Make" "^(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
         

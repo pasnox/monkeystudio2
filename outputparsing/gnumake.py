@@ -1,26 +1,39 @@
 import parsing
 
-# No rule for make target
+# generic error rule for make + message
+genericErrorMake = parsing.Pattern( r"^(?:mingw32-)?make(?:\[\d+\])?\s*:(?:\s*\*+)\s*([^\n]+)",
+                                    type = 'error',
+                                    text = '%1' )
+genericErrorMake.setComment('Generic error make message')
 
-noRule = parsing.Pattern(r"^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop.",
-                                type = 'error',
-                                text = '%1')
-noRule.setComment('No rule for make target')
-
-noRule.test("mingw32-make: *** No rule to make target `release'.  Stop.\n", 
+genericErrorMake.test("mingw32-make: *** No rule to make target `release'.  Stop.\n", 
                 type = 'error', 
-                text = "mingw32-make: *** No rule to make target `release'.",
+                text = "No rule to make target `release'.  Stop.",
                 hint = "mingw32-make: *** No rule to make target `release'.  Stop.")
 
-# Entering directory
+# generic warning rule for make + message
+genericWarningMake = parsing.Pattern( r"^(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n]+)",
+                                    type = 'warning',
+                                    text = '%1' )
+genericWarningMake.setComment('Generic warning make message')
 
-entering = parsing.Pattern(r"^(mingw32\-)?make\[\d\]: Entering directory\s`([^\n]*)'",
-                                        type = 'compiling',
-                                        text = 'make: Building %2')
-entering.setComment('Entering dirrectory')
-#TODO create test
+genericWarningMake.test( "make: Entering directory `/home/pasnox/Temporaire/cppqtgui'\n",
+                type = 'warning',
+                text = "Entering directory `/home/pasnox/Temporaire/cppqtgui'",
+                hint = "make: Entering directory `/home/pasnox/Temporaire/cppqtgui'" )
 
+genericWarningMake.test( "make: Leaving directory `/home/pasnox/Temporaire/cppqtgui'\n",
+                type = 'warning',
+                text = "Leaving directory `/home/pasnox/Temporaire/cppqtgui'",
+                hint = "make: Leaving directory `/home/pasnox/Temporaire/cppqtgui'" )
+
+genericWarningMake.test( "make: Nothing to be done for `first'.\n",
+                type = 'warning',
+                text = "Nothing to be done for `first'.",
+                hint = "make: Nothing to be done for `first'." )
+
+# Generation of script file
 print '# It is a machine generated file. Do not edit it manualy!'
-
-print noRule.generateMkSScript('GNU Make')
-print entering.generateMkSScript('GNU Make')
+print ''
+print genericErrorMake.generateMkSScript('GNU Make')
+print genericWarningMake.generateMkSScript('GNU Make')
