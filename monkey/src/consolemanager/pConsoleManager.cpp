@@ -547,11 +547,15 @@ void pConsoleManager::executeProcess()
         // unset some variables environments when parsers is defined
         if ( !mCurrentParsers.isEmpty() )
         {
-            const int index = variables.indexOf( QRegExp( "^LANG=.*$" ) );
+            const QStringList names = QStringList() << "LANG" << "LANGUAGE" << "LC_MESSAGES" << "LC_ALL";
             
-            if ( index != -1 )
-            {
-                variables.removeAt( index );
+            foreach ( const QString& name, names ) {
+                const int index = variables.indexOf( QRegExp( QString( "^%1=.*$" ).arg( name ) ) );
+                
+                if ( index != -1 )
+                {
+                    variables.removeAt( index );
+                }
             }
         }
         
