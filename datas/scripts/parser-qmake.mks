@@ -30,3 +30,9 @@ parser add "QMake" "^([^\n:(]+):?\(?(\d+)\)?:\s*([^\n]+)" "%1" "-1" "%2" "warnin
 # Generic filename + message
 parser add "QMake" "^([^\n:]+):\s*(?:[^\n:]+):\s*([^\n]+)" "%1" "-1" "-1" "warning" "%2" "%0"
         
+# uic command line
+parser add "QMake" "^(?:[^\n]+)?uic(?:-[\w\d\.]+)?\s+[^\n]+\s+-o\s+([^\n]+)" "%1" "-1" "-1" "compiling" "Generating %1..." "%0"
+        
+# moc command line
+parser add "QMake" "^(?:[^\n]+)?moc(?:-[\w\d\.]+)?\s+[^\n]+\s+-o\s+([^\n]+)" "%1" "-1" "-1" "compiling" "Generating %1..." "%0"
+        

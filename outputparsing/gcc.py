@@ -1,152 +1,211 @@
 # coding=utf8
-
 import sys
-
 import parsing
 from string import Template
 
-file_name = r"[\w\d\./\\\-]+"
-number = "\d+"
-#compiler = Template("(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*") # /usr/local/i386-mingw32-3.4.5/bin/i386-mingw32-gcc-4.0
-compiler = Template("($file_name)?(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*").substitute(file_name=file_name)
-source_file = file_name + "\.[cpmh]{1,3}" # .cpp .c .h .m .mm
+# filename:line: warning: message
+# filename:line:column: warning: message
+# filename:line: note: message
+genericWarning = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:warning|note):\s*([^\n]+)",
+                                    type = 'warning',
+                                    file = '%1',
+                                    line = '%2',
+                                    text = '%3' )
 
-## Error
-regEx = Template("^($file_name):($number):[\d:]* ((fatal )?error:|undefined reference) [^\\n]+")
-error =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
-                                   type = 'error',
-                                   file = "%1",
-                                   line = "%2")
+genericWarning.setComment( 'Generic warning message' )
 
-error.setComment('Error (usualy syntax)')
+genericWarning.test( "src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
+                        type = 'warning',
+                        file = 'src/MSVCMake.cpp',
+                        line = '122',
+                        text = "unused parameter ‘s’",
+                        hint = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’" )
 
-error.test("src/main.cpp:20: error: expected initializer before 's'",
-                type = 'error',
-                file = 'src/main.cpp',
-                line = '20',
-                text = "src/main.cpp:20: error: expected initializer before 's'",
-                hint = "src/main.cpp:20: error: expected initializer before 's'")
+genericWarning.test( "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)\n",
+                        type = 'warning',
+                        file = 'qnetworkrequest.h',
+                        line = '93',
+                        text = "candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
+                        hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)" )
 
-error.test("/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/main.cpp:30: undefined reference to `fake()'\n",
-                type = 'error',
-                file = '/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/main.cpp',
-                line = '30',
-                text = "/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/main.cpp:30: undefined reference to `fake()'",
-                hint = "/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/main.cpp:30: undefined reference to `fake()'")
+genericWarning.test("src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+                        type = 'warning',
+                        file = 'src/QMake.h',
+                        line = '30',
+                        text = "because the following virtual functions are pure within ‘QMake’:",
+                        hint = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:")
 
-error.test("src/ui/UIMonkeyProjectSettings.cpp:26: error: expected `;' before 'setWindowTitle'\n",
-                type = 'error',
-                file = 'src/ui/UIMonkeyProjectSettings.cpp',
-                line = '26',
-                text = "src/ui/UIMonkeyProjectSettings.cpp:26: error: expected `;' before 'setWindowTitle'",
-                hint = "src/ui/UIMonkeyProjectSettings.cpp:26: error: expected `;' before 'setWindowTitle'")
+genericWarning.test( "src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
+                        type = 'warning',
+                        file = 'src\CmlLineManager.cpp',
+                        line = '11',
+                        text = "unused variable 'z'",
+                        hint = "src\CmlLineManager.cpp:11: warning: unused variable 'z'" )
 
-text = "/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/xupmanager/ui/UIXUPManager.cpp:313: undefined reference to `pRecentsManager::recentProjectOpenPath() const'\n"
-error.test( text,
+genericWarning.test( "c:\src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
+                        type = 'warning',
+                        file = 'c:\src\CmlLineManager.cpp',
+                        line = '11',
+                        text = "unused variable 'z'",
+                        hint = "c:\src\CmlLineManager.cpp:11: warning: unused variable 'z'" )
+
+genericWarning.test( 'test.c:4:2: warning: #warning This is bad code!!!\n',
+                        type = 'warning',
+                        file = 'test.c',
+                        line = '4',
+                        text = '#warning This is bad code!!!',
+                        hint = 'test.c:4:2: warning: #warning This is bad code!!!' )
+
+# filename: message
+genericWarningNoLine = parsing.Pattern( r"^(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*]+):\s*([^\n]+)",
+                                    type = 'warning',
+                                    file = '%1',
+                                    text = '%2' )
+
+genericWarningNoLine.setComment( 'Generic warning message' )
+
+genericWarningNoLine.test( "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
+                        type = 'warning',
+                        file = 'SessionIconDelegate.cpp',
+                        text = "In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
+                        hint = "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':" )
+
+# this is a case that must not match to avoid conflict between gnumake and gcc parsers.
+#genericWarningNoLine.test( "mingw32-make: *** No rule to make target `release'.  Stop.\n", 
+#                type = 'warning', 
+#                file = 'mingw32-make',
+#                text = "*** No rule to make target `release'.  Stop.",
+#                hint = "mingw32-make: *** No rule to make target `release'.  Stop." )
+
+# filename:line: error: message
+# filename:line:column: error: message
+# filename:line: fatal error: message
+genericError = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:fatal)?\s*(?:error):\s*([^\n]+)",
+                                type = 'error',
+                                file = '%1',
+                                line = '%2',
+                                text = '%3' )
+
+genericError.setComment( 'Generic error message' )
+
+genericError.test( "src/main.cpp:20: error: expected initializer before 's'\n",
                     type = 'error',
-                    file = '/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/xupmanager/ui/UIXUPManager.cpp',
-                    line = '313',
-                    text = text[:-1],
-                    hint = text[:-1])
+                    file = 'src/main.cpp',
+                    line = '20',
+                    text = "expected initializer before 's'",
+                    hint = "src/main.cpp:20: error: expected initializer before 's'" )
 
-text = "src/views/TreeView.cpp:20: error: cannot allocate an object of abstract type 'TreeViewModel'\n"
-error.test( text,
+genericError.test( "src/ui/UIMonkeyProjectSettings.cpp:26: error: expected `;' before 'setWindowTitle'\n",
+                    type = 'error',
+                    file = 'src/ui/UIMonkeyProjectSettings.cpp',
+                    line = '26',
+                    text = "expected `;' before 'setWindowTitle'",
+                    hint = "src/ui/UIMonkeyProjectSettings.cpp:26: error: expected `;' before 'setWindowTitle'" )
+
+genericError.test( "src/views/TreeView.cpp:20: error: cannot allocate an object of abstract type 'TreeViewModel'\n",
                     type = 'error',
                     file = 'src/views/TreeView.cpp',
                     line = '20',
-                    text = text[:-1],
-                    hint = text[:-1])
+                    text = "cannot allocate an object of abstract type 'TreeViewModel'",
+                    hint = "src/views/TreeView.cpp:20: error: cannot allocate an object of abstract type 'TreeViewModel'" )
 
-text = "src/SearchWidgetModel.h:6:35: error: AbstractSearchBackend.h: No such file or directory\n"
-error.test( text,
+genericError.test( "src/SearchWidgetModel.h:6:35: error: AbstractSearchBackend.h: No such file or directory\n",
                     type = 'error',
                     file = 'src/SearchWidgetModel.h',
                     line = '6',
-                    text = text[:-1],
-                    hint = text[:-1])
+                    text = "AbstractSearchBackend.h: No such file or directory",
+                    hint = "src/SearchWidgetModel.h:6:35: error: AbstractSearchBackend.h: No such file or directory" )
 
-text = "src/gui/pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory\n"
-error.test( text,
+genericError.test( "src/gui/pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory\n",
                     type = 'error',
                     file = 'src/gui/pIconManager.cpp',
                     line = '2',
-                    text = text[:-1],
-                    hint = text[:-1])
+                    text = "core/FileSystemUtils.h: No such file or directory",
+                    hint = "src/gui/pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory" )
 
-## Warning or Note
-regEx = Template("^($file_name):($number):($number:)? (warning|note): [^\\n]+")
-warning =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
-                                   type = 'warning',
-                                   file = "%1",
-                                   line = "%2")
+genericError.test( "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory\n",
+                    type = 'error',
+                    file = 'z:\src\gui\pIconManager.cpp',
+                    line = '2',
+                    text = "core/FileSystemUtils.h: No such file or directory",
+                    hint = "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory" )
 
-warning.setComment('Warning or Note')
+# filename:line: message (maybe error aka undefined reference, multiple definition)
+genericMessage = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*([^\n]+)",
+                                type = 'error',
+                                file = '%1',
+                                line = '%2',
+                                text = '%3' )
 
-warning.test("src/MSVCMake.cpp:122: warning: unused parameter ‘s’\n",
-                type = 'warning',
-                file = 'src/MSVCMake.cpp',
-                line = '122',
-                text = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’",
-                hint = "src/MSVCMake.cpp:122: warning: unused parameter ‘s’")
+genericMessage.setComment( 'Generic message mostly error as i can see' )
 
-warning.test("qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)\n",
-                type = 'warning',
-                file = 'qnetworkrequest.h',
-                line = '93',
-                text = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
-                hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)")
-warning.test("src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
-                type = 'warning',
-                file = 'src/QMake.h',
-                line = '30',
-                text = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
-                hint = "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:")
-             
+genericMessage.test( "/monkey/src/main.cpp:30: undefined reference to `fake()'\n",
+                        type = 'error',
+                        file = '/monkey/src/main.cpp',
+                        line = '30',
+                        text = "undefined reference to `fake()'",
+                        hint = "/monkey/src/main.cpp:30: undefined reference to `fake()'" )
 
-# windows specific
-warning.test("src\CmlLineManager.cpp:11: warning: unused variable 'z'\n",
-                     type = 'warning',
-                     file = 'src\CmlLineManager.cpp',
-                     line = '11',
-                     text = "src\CmlLineManager.cpp:11: warning: unused variable 'z'",
-                     hint = "src\CmlLineManager.cpp:11: warning: unused variable 'z'")
+genericMessage.test( "z:\monkey\src\main.cpp:30: undefined reference to `fake()'\n",
+                        type = 'error',
+                        file = 'z:\monkey\src\main.cpp',
+                        line = '30',
+                        text = "undefined reference to `fake()'",
+                        hint = "z:\monkey\src\main.cpp:30: undefined reference to `fake()'" )
 
-## Multiply definition
+genericMessage.test( "/xupmanager/ui/UIXUPManager.cpp:313: undefined reference to `pRecentsManager::recentProjectOpenPath() const'\n",
+                        type = 'error',
+                        file = '/xupmanager/ui/UIXUPManager.cpp',
+                        line = '313',
+                        text = "undefined reference to `pRecentsManager::recentProjectOpenPath() const'",
+                        hint = "/xupmanager/ui/UIXUPManager.cpp:313: undefined reference to `pRecentsManager::recentProjectOpenPath() const'" )
 
-regEx = Template("^($file_name):($number): (multiple definition of [^\\n]+)")
-multipleDefinition = parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
-                                     type = 'error',
-                                     file = "%1",
-                                     line = "%2",
-                                     text = "%3")
-multipleDefinition.setComment('#warning preprocessor dirrective')
-multipleDefinition.test("/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'\n",
+genericMessage.test( "/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'\n",
                         type = 'error',
                         text = "multiple definition of `toto(int, int)'",
-                        file = '/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h',
+                        file = '/src/exercisesdialog.h',
                         line = '9',
-                        hint = "/home/pasnox/Development/Qt4/bodeasy/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'")
+                        hint = "/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'" )
 
-## Linking failed, probably undefined reference
-regEx = "^collect2: ld returned 1 exit status"
-link_failed =parsing.Pattern(regEx,
-                                    type = 'error',
-                                    text = 'Linking failed. Check Output dock for more info')
+# Linking failed, probably undefined reference
+link_failed = parsing.Pattern( r"^collect\d+:\s*ld returned \d+ exit[^\n]+",
+                                type = 'error',
+                                text = 'Linking failed. Check Output dock for more info' )
 
-link_failed.setComment('Linking failed')
-link_failed.test('collect2: ld returned 1 exit status\n',
-                 type = 'error',
-                 text = 'Linking failed. Check Output dock for more info',
-                 hint = 'collect2: ld returned 1 exit status')
+link_failed.setComment( 'Linking failed' )
 
-## Building file
-regEx = Template("^$compiler[^\\n]+ ($source_file)")
-compiling =parsing.Pattern(regEx.substitute(compiler=compiler, source_file=source_file),
-                                           type = 'compiling',
-                                           text = 'Compiling %3...',
-                                           file = '%3')
+link_failed.test( 'collect2: ld returned 1 exit status\n',
+                    type = 'error',
+                    text = 'Linking failed. Check Output dock for more info',
+                    hint = 'collect2: ld returned 1 exit status' )
 
-compiling.setComment('Compiling')
+# Cannot find library
+no_lib = parsing.Pattern( r"^(?:\w+:[\\/])?[^:]+:\s*cannot find -l([^\n]+)",
+                            type = 'error',
+                            text = 'Cannot find library "%1"' )
+
+no_lib.setComment( 'Linker cannot find library' )
+
+no_lib.test( '/usr/bin/ld: cannot find -lqscintilla2d\n',
+                type = 'error',
+                text = 'Cannot find library "qscintilla2d"',
+                hint = '/usr/bin/ld: cannot find -lqscintilla2d' )
+
+no_lib.test( 'c:\usr\bin\ld.exe: cannot find -lqscintilla2d\n',
+                type = 'error',
+                text = 'Cannot find library "qscintilla2d"',
+                hint = 'c:\usr\bin\ld.exe: cannot find -lqscintilla2d' )
+
+# building command line
+# g++, gcc, mingw32-g++, mingw32-gcc, i386-mingw32-gcc, i386-mingw32-g++, gcc-4.0.0, c++-4.0.0
+# g++ .... -o *.o filename
+#compiling = parsing.Pattern( r"^(?:[\w\d]+-)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\s+([^\n]+)",
+compiling = parsing.Pattern( r"^(?:(?:\w+:[\\/])?[^\s]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\s+([^\n]+)",
+                                type = 'compiling',
+                                text = 'Compiling %1...',
+                                file = '%1' )
+
+compiling.setComment( "Building command line" )
 
 text = \
 'g++ -c -pipe -g -D_REENTRANT -Wall -W -fPIC -DQT_SHARED -DPLUGIN_NAME="\"MSVCMake\"" -DQT_PLUGIN -DQT_GUI_LIB -DQT_CORE_LIB' + \
@@ -218,42 +277,13 @@ compiling.test( text,
                         file = 'src/UIMarketOptions.cpp',
                         hint = text)
 
-
-# Cannot find library
-regEx = "^%sld: cannot find -l([\w]+)" % file_name
-no_lib =parsing.Pattern(regEx,
-                                    type = 'error',
-                                    text = 'Cannot find library "%1"')
-
-no_lib.setComment('Linker cannot find library')
-no_lib.test('/usr/bin/ld: cannot find -lqscintilla2d\n',
-                 type = 'error',
-                 text = 'Cannot find library "qscintilla2d"',
-                 hint = '/usr/bin/ld: cannot find -lqscintilla2d')
-
-
-#   #warning blablabla...
-regEx = "^(%s):(\d+):\d+: warning: #warning ([^\\n]*)" % file_name
-preprocessor_warning = parsing.Pattern(regEx,
-                                    type = 'warning',
-                                    file = '%1',
-                                    line = '%2',
-                                    text = '%3')
-
-preprocessor_warning.setComment('#warning preprocessor dirrective')
-preprocessor_warning.test('test.c:4:2: warning: #warning This is bad code!!!\n',
-                 type = 'warning',
-                 text = 'This is bad code!!!',
-                 file = 'test.c',
-                 line = '4',
-                 hint = 'test.c:4:2: warning: #warning This is bad code!!!')
-
-print '# It is a machine generated file. Do not edit it manualy!\n'
-
-print error.generateMkSScript('GCC')
-print warning.generateMkSScript('GCC')
-print multipleDefinition.generateMkSScript('GCC')
-print compiling.generateMkSScript('GCC')
-print no_lib.generateMkSScript('GCC')
-print link_failed.generateMkSScript('GCC')
-print preprocessor_warning.generateMkSScript('GCC')
+# Generation of script file
+print '# It is a machine generated file. Do not edit it manualy!'
+print ''
+print genericWarning.generateMkSScript( 'GCC' )
+print genericWarningNoLine.generateMkSScript( 'GCC' )
+print genericError.generateMkSScript( 'GCC' )
+print genericMessage.generateMkSScript( 'GCC' )
+print link_failed.generateMkSScript( 'GCC' )
+print no_lib.generateMkSScript( 'GCC' )
+print compiling.generateMkSScript( 'GCC' )

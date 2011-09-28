@@ -160,6 +160,35 @@ fileName.test( "src/settings/UISettings.ui: Warning: Z-order assignment: 'horizo
                 text = "Z-order assignment: 'horizontalLayoutWidget' is not a valid widget.",
                 hint = "src/settings/UISettings.ui: Warning: Z-order assignment: 'horizontalLayoutWidget' is not a valid widget." )
 
+
+# uic call
+uic = parsing.Pattern( r"^(?:[^\n]+)?uic(?:-[\w\d\.]+)?\s+[^\n]+\s+-o\s+([^\n]+)",
+                        type = 'compiling',
+                        file = '%1',
+                        text = 'Generating %1...' )
+
+uic.setComment( "uic command line" )
+
+uic.test( '/usr/bin/uic-qt4 src/usersdialog.ui -o /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h',
+                    type = 'compiling',
+                    file = '/media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h',
+                    text = 'Generating /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h...',
+                    hint = '/usr/bin/uic-qt4 src/usersdialog.ui -o /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h' )
+
+# moc call
+moc = parsing.Pattern( r"^(?:[^\n]+)?moc(?:-[\w\d\.]+)?\s+[^\n]+\s+-o\s+([^\n]+)",
+                        type = 'compiling',
+                        file = '%1',
+                        text = 'Generating %1...' )
+
+moc.setComment( "moc command line" )
+
+moc.test( '/usr/bin/moc-qt4 -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtSql -I/usr/include/qt4 -I/usr/include/qt4/QtTest -I. -Isrc -I/usr/local/qwt-6.0.1/include -I/media/ramdisk/bodeasy/debug/moc -I/media/ramdisk/bodeasy/debug/ui src/sql/models/exercisesmodel.h -o /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp',
+                    type = 'compiling',
+                    file = '/media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp',
+                    text = 'Generating /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp...',
+                    hint = '/usr/bin/moc-qt4 -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtSql -I/usr/include/qt4 -I/usr/include/qt4/QtTest -I. -Isrc -I/usr/local/qwt-6.0.1/include -I/media/ramdisk/bodeasy/debug/moc -I/media/ramdisk/bodeasy/debug/ui src/sql/models/exercisesmodel.h -o /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp' )
+
 # Generation of script file
 print '# It is a machine generated file. Do not edit it manualy!'
 print ''
@@ -173,3 +202,5 @@ print tsUpdate.generateMkSScript( 'QMake' )
 print tsUpdateInfo.generateMkSScript( 'QMake' )
 print fileNameLine.generateMkSScript( 'QMake' )
 print fileName.generateMkSScript( 'QMake' )
+print uic.generateMkSScript( 'QMake' )
+print moc.generateMkSScript( 'QMake' )
