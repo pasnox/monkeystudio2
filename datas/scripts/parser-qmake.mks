@@ -1,16 +1,16 @@
 # It is a machine generated file. Do not edit it manualy!
 
 # WARNING: Failure to find file
-parser add "QMake" "^WARNING:\s+(Failure to find:\s+([^\n]+))" "%2" "-1" "-1" "error" "%1" "%0"
+parser add "QMake" "^WARNING:\s*(Failure to find:\s*([^\n]+))" "%2" "-1" "-1" "error" "%1" "%0"
         
 # Project MESSAGE
-parser add "QMake" "^Project MESSAGE:\s+([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
+parser add "QMake" "^Project MESSAGE:\s*([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
         
 # Reading
 parser add "QMake" "^\s*(Reading\s+([^\n]+))" "%2" "-1" "-1" "warning" "%0" "%1"
         
 # Warning: potential duplicate alias detected
-parser add "QMake" "^([^\n]+):\s+Warning:\s+(potential duplicate alias detected:\s+'[^\n]+')" "%1" "-1" "-1" "warning" "%2" "%0"
+parser add "QMake" "^([^\n]+):\s*Warning:\s*(potential duplicate alias detected:\s*'[^\n]+')" "%1" "-1" "-1" "warning" "%2" "%0"
         
 # lupdate/lrelease warning
 parser add "QMake" "^(?:lupdate|lrelease) warning:\s*(.*'([^\n]+)')\.?" "%2" "-1" "-1" "warning" "%1" "%0"
@@ -19,10 +19,10 @@ parser add "QMake" "^(?:lupdate|lrelease) warning:\s*(.*'([^\n]+)')\.?" "%2" "-1
 parser add "QMake" "^Cannot open [^:]+:\s*([^\n]+)" "" "-1" "-1" "warning" "%1" "%0"
         
 # Updating TS/QM file
-parser add "QMake" "^Updating '([^']+)'..." "%1" "-1" "-1" "warning" "%0" "%0"
+parser add "QMake" "^Updating\s*'([^']+)'..." "%1" "-1" "-1" "warning" "%0" "%0"
         
 # Updating TS/QM file info
-parser add "QMake" "^\s*((?:Found|Generated|Kept|Same-text)(?:\s+\d+)?[^\n]+)" "" "-1" "-1" "warning" "%0" "%1"
+parser add "QMake" "^\s*((?:Found|Generated|Kept|Same-text)(?:\s*\d+)?[^\n]+)" "" "-1" "-1" "warning" "%0" "%1"
         
 # Generic filename + line + message
 parser add "QMake" "^([^\n:(]+):?\(?(\d+)\)?:\s*([^\n]+)" "%1" "-1" "%2" "warning" "%3" "%0"

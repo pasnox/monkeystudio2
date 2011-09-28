@@ -4,7 +4,7 @@ import parsing
 # def __init__(self, pattern, file = '', line = '-1', column = '-1', type = 'error', text = '%0', hint = '%0'):
 
 # WARNING: Failure to find
-missingFile = parsing.Pattern( r"^WARNING:\s+(Failure to find:\s+([^\n]+))", file = '%2', type = 'error', text = '%1' )
+missingFile = parsing.Pattern( r"^WARNING:\s*(Failure to find:\s*([^\n]+))", file = '%2', type = 'error', text = '%1' )
 missingFile.setComment( 'WARNING: Failure to find file' )
 
 missingFile.test( 'WARNING: Failure to find: file.ext',
@@ -14,7 +14,7 @@ missingFile.test( 'WARNING: Failure to find: file.ext',
                     hint = 'WARNING: Failure to find: file.ext' )
 
 # Project MESSAGE
-message = parsing.Pattern( r"^Project MESSAGE:\s+([^\n]+)", type = 'warning', text = '%1' )
+message = parsing.Pattern( r"^Project MESSAGE:\s*([^\n]+)", type = 'warning', text = '%1' )
 message.setComment( 'Project MESSAGE' )
 
 message.test( 'Project MESSAGE: this is my qmake project message',
@@ -33,7 +33,7 @@ reading.test( '  Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 hint = 'Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro' )
 
 # Warning: potential duplicate alias detected
-duplicateAlias = parsing.Pattern( r"^([^\n]+):\s+Warning:\s+(potential duplicate alias detected:\s+'[^\n]+')", file = '%1', type = 'warning', text = '%2' )
+duplicateAlias = parsing.Pattern( r"^([^\n]+):\s*Warning:\s*(potential duplicate alias detected:\s*'[^\n]+')", file = '%1', type = 'warning', text = '%2' )
 duplicateAlias.setComment( 'Warning: potential duplicate alias detected' )
 
 duplicateAlias.test( 'src/resources/resources.qrc: Warning: potential duplicate alias detected: \'license.gpl\'',
@@ -68,7 +68,7 @@ cannotOpen.test( 'Cannot open dependencies/intuisphere/core: file to open is a d
                 hint = 'Cannot open dependencies/intuisphere/core: file to open is a directory' )
 
 # Updating TS/QM file
-tsUpdate = parsing.Pattern( r"^Updating '([^']+)'...", file = '%1', type = 'warning' )
+tsUpdate = parsing.Pattern( r"^Updating\s*'([^']+)'...", file = '%1', type = 'warning' )
 tsUpdate.setComment( 'Updating TS/QM file' )
 
 tsUpdate.test( "Updating 'datas/languages/references/numento_en.ts'...",
@@ -84,7 +84,7 @@ tsUpdate.test( "Updating 'datas/languages/references/numento_dependencies_it.qm'
                     hint = "Updating 'datas/languages/references/numento_dependencies_it.qm'..." )
 
 # Updating TS/QM file info
-tsUpdateInfo = parsing.Pattern( r"^\s*((?:Found|Generated|Kept|Same-text)(?:\s+\d+)?[^\n]+)", type = 'warning', hint = '%1' )
+tsUpdateInfo = parsing.Pattern( r"^\s*((?:Found|Generated|Kept|Same-text)(?:\s*\d+)?[^\n]+)", type = 'warning', hint = '%1' )
 tsUpdateInfo.setComment( 'Updating TS/QM file info' )
 
 tsUpdateInfo.test( '    Found 680 source text(s) (0 new and 680 already existing)',
