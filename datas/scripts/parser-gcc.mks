@@ -4,7 +4,7 @@
 parser add "GCC" "^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:warning|note):\s*([^\n]+)" "%1" "-1" "%2" "warning" "%3" "%0"
         
 # Generic warning message
-parser add "GCC" "^(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*]+):\s*([^\n]+)" "%1" "-1" "-1" "warning" "%2" "%0"
+parser add "GCC" "^(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*\n]+):\s*([^\n]+)" "%1" "-1" "-1" "warning" "%2" "%0"
         
 # Generic error message
 parser add "GCC" "^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:fatal)?\s*(?:error):\s*([^\n]+)" "%1" "-1" "%2" "error" "%3" "%0"
@@ -19,5 +19,5 @@ parser add "GCC" "^collect\d+:\s*ld returned \d+ exit[^\n]+" "" "-1" "-1" "error
 parser add "GCC" "^(?:\w+:[\\/])?[^:]+:\s*cannot find -l([^\n]+)" "" "-1" "-1" "error" "Cannot find library \"%1\"" "%0"
         
 # Building command line
-parser add "GCC" "^(?:(?:\w+:[\\/])?[^\s]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\s+([^\n]+)" "%1" "-1" "-1" "compiling" "Compiling %1..." "%0"
+parser add "GCC" "^(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\.o(?:[bjects]+)?\s+([^\n]+)" "%1" "-1" "-1" "compiling" "Compiling %1..." "%0"
         
