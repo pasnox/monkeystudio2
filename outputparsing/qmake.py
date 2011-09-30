@@ -11,21 +11,21 @@ missingFile.test( 'WARNING: Failure to find: file.ext',
                     hint = 'WARNING: Failure to find: file.ext' )
 
 # Project MESSAGE
-message = parsing.Pattern( r"(?:^|\n)Project MESSAGE:\s*([^\n$]+)", type = 'warning', text = '%1' )
+message = parsing.Pattern( r"(?:^|\n)Project MESSAGE:\s*([^\n$]+)", type = 'message', text = '%1' )
 message.setComment( 'Project MESSAGE' )
 
 message.test( 'Project MESSAGE: this is my qmake project message',
-                type = 'warning',
+                type = 'message',
                 text = 'this is my qmake project message',
                 hint = 'Project MESSAGE: this is my qmake project message' )
 
 # Reading
-reading = parsing.Pattern( r"(?:^|\n)\s*(Reading\s*([^\n$]+))", file = '%2', type = 'warning', hint = '%1' )
+reading = parsing.Pattern( r"(?:^|\n)\s*(Reading\s*([^\n$]+))", file = '%2', type = 'message', hint = '%1' )
 reading.setComment( 'Reading' )
 
 reading.test( '  Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 file = '/home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
-                type = 'warning',
+                type = 'message',
                 text = '  Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro',
                 hint = 'Reading /home/pasnox/Temporaire/qtsol/sub1/sub1.pro' )
 
@@ -66,42 +66,42 @@ cannotOpen.test( 'Cannot open dependencies/intuisphere/core: file to open is a d
                 hint = 'Cannot open dependencies/intuisphere/core: file to open is a directory' )
 
 # Updating TS/QM file
-tsUpdate = parsing.Pattern( r"(?:^|\n)Updating\s*'([^']+)'[^\n$]+", file = '%1', type = 'warning' )
+tsUpdate = parsing.Pattern( r"(?:^|\n)Updating\s*'([^']+)'[^\n$]+", file = '%1', type = 'message' )
 tsUpdate.setComment( 'Updating TS/QM file' )
 
 tsUpdate.test( "Updating 'datas/languages/references/numento_en.ts'...",
                     file = 'datas/languages/references/numento_en.ts',
-                    type = 'warning',
+                    type = 'message',
                     text = "Updating 'datas/languages/references/numento_en.ts'...",
                     hint = "Updating 'datas/languages/references/numento_en.ts'..." )
 
 tsUpdate.test( "Updating 'datas/languages/references/numento_dependencies_it.qm'...",
                     file = 'datas/languages/references/numento_dependencies_it.qm',
-                    type = 'warning',
+                    type = 'message',
                     text = "Updating 'datas/languages/references/numento_dependencies_it.qm'...",
                     hint = "Updating 'datas/languages/references/numento_dependencies_it.qm'..." )
 
 # Updating TS/QM file info
-tsUpdateInfo = parsing.Pattern( r"(?:^|\n)\s*((?:Found|Generated|Kept|Same-text)(?:\s*\d+)?[^\n$]+)", type = 'warning', hint = '%1' )
+tsUpdateInfo = parsing.Pattern( r"(?:^|\n)\s*((?:Found|Generated|Kept|Same-text)(?:\s*\d+)?[^\n$]+)", type = 'message', hint = '%1' )
 tsUpdateInfo.setComment( 'Updating TS/QM file info' )
 
 tsUpdateInfo.test( '    Found 680 source text(s) (0 new and 680 already existing)',
-                    type = 'warning',
+                    type = 'message',
                     text = '    Found 680 source text(s) (0 new and 680 already existing)',
                     hint = 'Found 680 source text(s) (0 new and 680 already existing)' )
 
 tsUpdateInfo.test( '    Generated 123 translation(s) (123 finished and 0 unfinished)',
-                    type = 'warning',
+                    type = 'message',
                     text = '    Generated 123 translation(s) (123 finished and 0 unfinished)',
                     hint = 'Generated 123 translation(s) (123 finished and 0 unfinished)' )
 
 tsUpdateInfo.test( '    Kept 118 obsolete entries',
-                        type = 'warning',
+                        type = 'message',
                         text = '    Kept 118 obsolete entries',
                         hint = 'Kept 118 obsolete entries' )
 
 tsUpdateInfo.test( '    Same-text heuristic provided 9 translation(s)',
-                        type = 'warning',
+                        type = 'message',
                         text = '    Same-text heuristic provided 9 translation(s)',
                         hint = 'Same-text heuristic provided 9 translation(s)' )
 
@@ -164,28 +164,28 @@ fileName.test( "src/settings/UISettings.ui: Warning: Z-order assignment: 'horizo
 
 # uic call
 uic = parsing.Pattern( r"(?:^|\n)(?:[^\n$]+)?uic(?:-[\w\d\.]+)?\s+[^\n$]+\s+-o\s+([^\n$]+)",
-                        type = 'compiling',
+                        type = 'action',
                         file = '%1',
                         text = 'Generating %1...' )
 
 uic.setComment( "uic command line" )
 
 uic.test( '/usr/bin/uic-qt4 src/usersdialog.ui -o /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h',
-                    type = 'compiling',
+                    type = 'action',
                     file = '/media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h',
                     text = 'Generating /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h...',
                     hint = '/usr/bin/uic-qt4 src/usersdialog.ui -o /media/ramdisk/bodeasy/debug/ui/ui_usersdialog.h' )
 
 # moc call
 moc = parsing.Pattern( r"(?:^|\n)(?:[^\n$]+)?moc(?:-[\w\d\.]+)?\s+[^\n$]+\s+-o\s+([^\n$]+)",
-                        type = 'compiling',
+                        type = 'action',
                         file = '%1',
                         text = 'Generating %1...' )
 
 moc.setComment( "moc command line" )
 
 moc.test( '/usr/bin/moc-qt4 -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtSql -I/usr/include/qt4 -I/usr/include/qt4/QtTest -I. -Isrc -I/usr/local/qwt-6.0.1/include -I/media/ramdisk/bodeasy/debug/moc -I/media/ramdisk/bodeasy/debug/ui src/sql/models/exercisesmodel.h -o /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp',
-                    type = 'compiling',
+                    type = 'action',
                     file = '/media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp',
                     text = 'Generating /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp...',
                     hint = '/usr/bin/moc-qt4 -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtSql -I/usr/include/qt4 -I/usr/include/qt4/QtTest -I. -Isrc -I/usr/local/qwt-6.0.1/include -I/media/ramdisk/bodeasy/debug/moc -I/media/ramdisk/bodeasy/debug/ui src/sql/models/exercisesmodel.h -o /media/ramdisk/bodeasy/debug/moc/moc_exercisesmodel.cpp' )

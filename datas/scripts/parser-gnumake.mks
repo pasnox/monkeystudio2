@@ -4,5 +4,5 @@
 parser add "GNU Make" "(?:^|\n)(?:mingw32-)?make(?:\[\d+\])?\s*:(?:\s*\*+)\s*([^\n$]+)" "" "-1" "-1" "error" "%1" "%0"
         
 # Generic warning make message
-parser add "GNU Make" "(?:^|\n)(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n$]+)" "" "-1" "-1" "warning" "%1" "%0"
+parser add "GNU Make" "(?:^|\n)(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n$]+)" "" "-1" "-1" "message" "%1" "%0"
         

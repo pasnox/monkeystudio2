@@ -22,5 +22,8 @@ parser add "GCC" "(?:^|\n)collect\d+:\s*ld returned \d+ exit[^\n$]+" "" "-1" "-1
 parser add "GCC" "(?:^|\n)(?:\w+:[\\/])?[^:]+:\s*cannot find -l([^\n$]+)" "" "-1" "-1" "error" "Cannot find library \"%1\"" "%0"
         
 # Building command line
-parser add "GCC" "(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n$]+\s+-o\s+[^\n$]+\.o(?:[bjects]+)?\s+([^\n$]+)" "%1" "-1" "-1" "compiling" "Compiling %1..." "%0"
+parser add "GCC" "(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n$]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n$]+\s+-o\s+[^\n$]+\.o(?:[bjects]+)?\s+([^\n$]+)" "%1" "-1" "-1" "action" "Compiling %1..." "%0"
+        
+# Linking command line
+parser add "GCC" "(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+-o\s+([^\s\n$]+)\s+[^\n$]+" "%1" "-1" "-1" "action" "Linking %1..." "%0"
         

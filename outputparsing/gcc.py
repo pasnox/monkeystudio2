@@ -68,7 +68,7 @@ genericWarning.test( "qnetworkrequest.h:93: note: candidates are: QNetworkReques
                         text = "candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)",
                         hint = "qnetworkrequest.h:93: note: candidates are: QNetworkRequest::QNetworkRequest(const QNetworkRequest&)" )
 
-genericWarning.test("src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
+genericWarning.test( "src/QMake.h:30:1: note:   because the following virtual functions are pure within ‘QMake’:",
                         type = 'warning',
                         file = 'src/QMake.h',
                         line = '30',
@@ -163,13 +163,6 @@ genericWarningNoLine.test( "SessionIconDelegate.cpp: In member function 'void Se
                         text = "In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
                         hint = "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':" )
 
-# this is a case that must not match to avoid conflict between gnumake and gcc parsers.
-#genericWarningNoLine.test( "mingw32-make: *** No rule to make target `release'.  Stop.\n", 
-#                type = 'warning', 
-#                file = 'mingw32-make',
-#                text = "*** No rule to make target `release'.  Stop.",
-#                hint = "mingw32-make: *** No rule to make target `release'.  Stop." )
-
 # filename:line: message (maybe error aka undefined reference, multiple definition)
 genericMessage = parsing.Pattern( r"(?:^|\n)((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*([^\n$]+)",
                                 type = 'error',
@@ -236,12 +229,26 @@ no_lib.test( 'c:\usr\bin\ld.exe: cannot find -lqscintilla2d\n',
                 text = 'Cannot find library "qscintilla2d"',
                 hint = 'c:\usr\bin\ld.exe: cannot find -lqscintilla2d' )
 
+# linking command line
+linking = parsing.Pattern( r"(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+-o\s+([^\s\n$]+)\s+[^\n$]+",
+                                type = 'action',
+                                file = '%1',
+                                text = 'Linking %1...' )
+
+linking.setComment( "Linking command line" )
+
+linking.test( 'g++  -o /media/ramdisk/bodeasy/tst_bodeasyd /media/ramdisk/bodeasy/debug/obj/SqlHelper.o /media/ramdisk/bodeasy/debug/obj/sqlkeywords.o -L/usr/lib -lQtTest -L/usr/local/qwt-6.0.1/lib -lqwt -lQtSql -lQtGui -lQtCore -lpthread',
+                type = 'action',
+                file = '/media/ramdisk/bodeasy/tst_bodeasyd',
+                text = 'Linking /media/ramdisk/bodeasy/tst_bodeasyd...',
+                hint = 'g++  -o /media/ramdisk/bodeasy/tst_bodeasyd /media/ramdisk/bodeasy/debug/obj/SqlHelper.o /media/ramdisk/bodeasy/debug/obj/sqlkeywords.o -L/usr/lib -lQtTest -L/usr/local/qwt-6.0.1/lib -lqwt -lQtSql -lQtGui -lQtCore -lpthread' )
+
 # building command line
 # g++, gcc, mingw32-g++, mingw32-gcc, i386-mingw32-gcc, i386-mingw32-g++, gcc-4.0.0, c++-4.0.0
 # g++ .... -o *.o filename
 #compiling = parsing.Pattern( r"^(?:[\w\d]+-)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\s+([^\n]+)",
-compiling = parsing.Pattern( r"(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n$]+\s+-o\s+[^\n$]+\.o(?:[bjects]+)?\s+([^\n$]+)",
-                                type = 'compiling',
+compiling = parsing.Pattern( r"(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n$]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n$]+\s+-o\s+[^\n$]+\.o(?:[bjects]+)?\s+([^\n$]+)",
+                                type = 'action',
                                 text = 'Compiling %1...',
                                 file = '%1' )
 
@@ -263,7 +270,7 @@ text = \
 ' -I../../../monkey/src/projectsmanager/ui -I/usr/X11R6/include -I../../../build/debug/.moc -I../../../build/debug/.ui' + \
 ' -o ../../../build/debug/.obj/unix/MSVCMake.o src/MSVCMake.cpp\n'
 compiling.test(text,
-                    type = 'compiling',
+                    type = 'action',
                     text = 'Compiling src/MSVCMake.cpp...',
                     hint = text[:-1],
                     file = 'src/MSVCMake.cpp')
@@ -276,21 +283,21 @@ text = \
 '-I"/usr/local/i386-mingw32-3.4.5/i386-mingw32/include" -I"../../../intuisphere/trunk/mkspecs/4.6.x/win32-osx-g++" ' + \
 '-o ../build/release/obj/win32/tools.o tools.c\n'
 compiling.test(text,
-                    type = 'compiling',
+                    type = 'action',
                     text = 'Compiling tools.c...',
                     hint = text[:-1],
                     file = 'tools.c')
 #g++
 text = "g++ -c -pipe -Wall -g -Wall -W -D_REENTRANT -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtXml -I/usr/include/qt4 -Ieditor-src -Ieditor-src/branche1 -Ieditor-src -I/branche2 -Ibuild/debug/.moc -Ibuild/debug/.ui -o build/debug/.obj/unix/SourceFile.o editor-src/branche2/SourceFile.cpp"
 compiling.test(text,
-                    type = 'compiling',
+                    type = 'action',
                     text = 'Compiling editor-src/branche2/SourceFile.cpp...',
                     hint = text,
                     file = 'editor-src/branche2/SourceFile.cpp')
 #gcc
 text = "gcc -c -pipe -Wall -g -Wall -W -D_REENTRANT -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtXml -I/usr/include/qt4 -Ieditor-src -Ieditor-src/branche1 -Ieditor-src -I/branche2 -Ibuild/debug/.moc -Ibuild/debug/.ui -o build/debug/.obj/unix/SourceFile.o editor-src/branche2/SourceFile.cpp"
 compiling.test(text,
-                    type = 'compiling',
+                    type = 'action',
                     text = 'Compiling editor-src/branche2/SourceFile.cpp...',
                     hint = text,
                     file = 'editor-src/branche2/SourceFile.cpp')
@@ -298,21 +305,21 @@ compiling.test(text,
 # it is windows specific
 text = 'g++ -c -g -Wall -frtti -fexceptions -mthreads -DPACKAGE_NAME="\"Mirrorad\"" -DQT_DLL -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I"..\..\Qt\4.4.3\include\QtCore" -I"..\..\Qt\4.4.3\include\QtCore" -I"..\..\Qt\4.4.3\include" -I"src" -I"src\ie" -I"src\ff" -I"src\ui" -I"src\opera" -I"c:\Development\Qt\4.4.3\include\ActiveQt" -I"build\debug\.moc" -I"build\debug\.ui" -I"..\..\Qt\4.4.3\mkspecs\win32-g++" -o build\debug\.obj\win32\main.o src\main.cpp\n'
 compiling.test( text,
-                        type = 'compiling',
+                        type = 'action',
                         text = 'Compiling src\main.cpp...',
                         file = 'src\main.cpp',
                         hint = text[:-1])
 # it is windows specific
 text = 'mingw32-gcc -c -g -Wall -frtti -fexceptions -mthreads -DPACKAGE_NAME="\"Mirrorad\"" -DQT_DLL -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I"..\..\Qt\4.4.3\include\QtCore" -I"..\..\Qt\4.4.3\include\QtCore" -I"..\..\Qt\4.4.3\include" -I"src" -I"src\ie" -I"src\ff" -I"src\ui" -I"src\opera" -I"c:\Development\Qt\4.4.3\include\ActiveQt" -I"build\debug\.moc" -I"build\debug\.ui" -I"..\..\Qt\4.4.3\mkspecs\win32-g++" -o build\debug\.obj\win32\main.o src\main.cpp\n'
 compiling.test( text,
-                        type = 'compiling',
+                        type = 'action',
                         text = 'Compiling src\main.cpp...',
                         file = 'src\main.cpp',
                         hint = text[:-1])
 # Mac, compiling file
 text = 'g++-4.0 -c -pipe -g -gdwarf-2 -arch i386 -Wall -W -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/local/Trolltech/Qt-4.6.0-universal/mkspecs/macx-g++ -I. -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtCore.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtCore -I/usr/local/Trolltech/Qt-4.6.0-universal/lib/QtGui.framework/Versions/4/Headers -I/usr/local/Trolltech/Qt-4.6.0-universal/include/QtGui -I/usr/local/Trolltech/Qt-4.6.0-universal/include -Ibuild/debug/.moc -Ibuild/debug/.ui -F/usr/local/Trolltech/Qt-4.6.0-universal/lib -o build/debug/.obj/mac/UIMarketOptions.o src/UIMarketOptions.cpp'
 compiling.test( text,
-                        type = 'compiling',
+                        type = 'action',
                         text = 'Compiling src/UIMarketOptions.cpp...',
                         file = 'src/UIMarketOptions.cpp',
                         hint = text)
@@ -328,3 +335,4 @@ print genericMessage.generateMkSScript( 'GCC' )
 print link_failed.generateMkSScript( 'GCC' )
 print no_lib.generateMkSScript( 'GCC' )
 print compiling.generateMkSScript( 'GCC' )
+print linking.generateMkSScript( 'GCC' )
