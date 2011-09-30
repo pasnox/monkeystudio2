@@ -15,8 +15,9 @@ public:
     {
         Invalid = -1,
         Error,
+        Message,
         Warning,
-        Compiling,
+        Action,
         Finish,
         Unknown,
         Good,

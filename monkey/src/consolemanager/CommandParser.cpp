@@ -54,7 +54,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
     {
         if (9 != arguments.size())
         {
-            *status = MkSShellInterpreter::InvalidCommand;
+            if ( status ) {
+                *status = MkSShellInterpreter::InvalidCommand;
+            }
             
             return QString("Command '%1' has 9 arguments").arg(command);
         }
@@ -66,12 +68,16 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
         
         if (arguments[6] == "error")
             pattern.Type = pConsoleManagerStep::Error;
+        else if (arguments[6] == "message")
+            pattern.Type = pConsoleManagerStep::Message;
         else if (arguments[6] == "warning")
             pattern.Type = pConsoleManagerStep::Warning;
-        else if (arguments[6] == "compiling")
-            pattern.Type = pConsoleManagerStep::Compiling;
+        else if (arguments[6] == "action")
+            pattern.Type = pConsoleManagerStep::Action;
         else if (arguments[6] == "finish")
             pattern.Type = pConsoleManagerStep::Finish;
+        else if (arguments[6] == "unknown")
+            pattern.Type = pConsoleManagerStep::Unknown;
         else if (arguments[6] == "good")
             pattern.Type = pConsoleManagerStep::Good;
         else if (arguments[6] == "bad")
