@@ -7,6 +7,7 @@
 pConsoleManagerStepModel::pConsoleManagerStepModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
+    mMessages = 0;
     mWarnings = 0;
     mErrors = 0;
 }
@@ -133,6 +134,7 @@ void pConsoleManagerStepModel::clear()
     
     beginRemoveRows( QModelIndex(), 0, count -1 );
     mSteps.clear();
+    mMessages = 0;
     mWarnings = 0;
     mErrors = 0;
     endRemoveRows();
@@ -146,6 +148,9 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
     
     // update warnings/errors
     switch ( step.type() ) {
+        case pConsoleManagerStep::Message:
+            mMessages++;
+            break;
         case pConsoleManagerStep::Warning:
             mWarnings++;
             break;
@@ -158,19 +163,22 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
 
     // add step
     switch ( type ) {
-        case pConsoleManagerStep::Compiling: {
+        case pConsoleManagerStep::Action: {
             switch ( step.type() ) {
-                // add before last item (count -1 -1)
+                // insert before last item
+                case pConsoleManagerStep::Message:
                 case pConsoleManagerStep::Warning:
                 case pConsoleManagerStep::Error: {
-                    beginInsertRows( QModelIndex(), count -2, count -2 );
-                    mSteps.insert( count -2, step );
+                    const int row = count -1;
+                    beginInsertRows( QModelIndex(), row, row );
+                    mSteps.insert( row, step );
                     endInsertRows();
                     break;
                 }
-                // replace last (count -1)
+                // replace last item
                 default: {
-                    mSteps[ count -1 ] = step;
+                    const int row = count -1;
+                    mSteps[ row ] = step;
                     const QModelIndex index = this->index( step );
                     emit dataChanged( index, index );
                     break;
@@ -179,6 +187,7 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
             
             break;
         }
+        // append item
         default: {
             beginInsertRows( QModelIndex(), count, count );
             mSteps << step;
@@ -187,13 +196,13 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
         }
     }
     
-    // if step is finish, need set error, warning text if needed
+    // if step is finish, need set error, warning, message texts if needed
     if ( step.type() == pConsoleManagerStep::Finish ) {
         pConsoleManagerStep* _step = &mSteps.last();
         
         if ( step.roleValue( Qt::DisplayRole ).toString().isEmpty() ) {
             _step->setRoleValue( pConsoleManagerStep::TypeRole, mErrors ? pConsoleManagerStep::Bad : pConsoleManagerStep::Good );
-            _step->setRoleValue( Qt::DisplayRole, tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( mErrors ).arg( mWarnings ) );
+            _step->setRoleValue( Qt::DisplayRole, tr( "Command terminated, %1 error(s), %2 warning(s), %3 message(s)." ).arg( mErrors ).arg( mWarnings ).arg( mMessages ) );
         }
         else {
             _step->setRoleValue( pConsoleManagerStep::TypeRole, pConsoleManagerStep::Bad );

@@ -37,6 +37,7 @@ public slots:
 
 protected:
     mutable pConsoleManagerStepList mSteps;
+    uint mMessages;
     uint mWarnings;
     uint mErrors;
 };
