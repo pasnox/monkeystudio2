@@ -3,6 +3,46 @@ import sys
 import parsing
 from string import Template
 
+# message from filename:line,
+#      from filename:line,
+#      from filename:line:
+fromWarning = parsing.Pattern( r"(?:^|\n)\s*((?:[^\n$]+)?\s*from\s*((?:\w+:[\\/])?[^:]+):(\d+))[,:](?:\n|$)",
+                                    type = 'warning',
+                                    file = '%2',
+                                    line = '%3',
+                                    text = '%1',
+                                    hint = '%1' )
+
+fromWarning.setComment( 'Generic warning message' )
+
+fromWarning.test( "In file included from dependencies/lib/include/../src/encryption/CryptUtil.h:8,\n",
+                        type = 'warning',
+                        file = 'dependencies/lib/include/../src/encryption/CryptUtil.h',
+                        line = '8',
+                        text = 'In file included from dependencies/lib/include/../src/encryption/CryptUtil.h:8',
+                        hint = 'In file included from dependencies/lib/include/../src/encryption/CryptUtil.h:8' )
+
+fromWarning.test( "from dependencies/lib/include/intuisphere_encryption.h:9,\n",
+                        type = 'warning',
+                        file = 'dependencies/lib/include/intuisphere_encryption.h',
+                        line = '9',
+                        text = 'from dependencies/lib/include/intuisphere_encryption.h:9',
+                        hint = 'from dependencies/lib/include/intuisphere_encryption.h:9' )
+
+fromWarning.test( "                 from dependencies/lib/include/intuisphere_encryption.h:9,\n",
+                        type = 'warning',
+                        file = 'dependencies/lib/include/intuisphere_encryption.h',
+                        line = '9',
+                        text = 'from dependencies/lib/include/intuisphere_encryption.h:9',
+                        hint = 'from dependencies/lib/include/intuisphere_encryption.h:9' )
+
+fromWarning.test( "                 from dependencies/lib/include/intuisphere_encryption.h:9:\n",
+                        type = 'warning',
+                        file = 'dependencies/lib/include/intuisphere_encryption.h',
+                        line = '9',
+                        text = 'from dependencies/lib/include/intuisphere_encryption.h:9',
+                        hint = 'from dependencies/lib/include/intuisphere_encryption.h:9' )
+
 # filename:line: warning: message
 # filename:line:column: warning: message
 # filename:line: note: message
@@ -56,27 +96,6 @@ genericWarning.test( 'test.c:4:2: warning: #warning This is bad code!!!\n',
                         text = '#warning This is bad code!!!',
                         hint = 'test.c:4:2: warning: #warning This is bad code!!!' )
 
-# filename: message
-genericWarningNoLine = parsing.Pattern( r"(?:^|\n)(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*\n]+):\s*([^\n$]+)",
-                                    type = 'warning',
-                                    file = '%1',
-                                    text = '%2' )
-
-genericWarningNoLine.setComment( 'Generic warning message' )
-
-genericWarningNoLine.test( "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
-                        type = 'warning',
-                        file = 'SessionIconDelegate.cpp',
-                        text = "In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
-                        hint = "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':" )
-
-# this is a case that must not match to avoid conflict between gnumake and gcc parsers.
-#genericWarningNoLine.test( "mingw32-make: *** No rule to make target `release'.  Stop.\n", 
-#                type = 'warning', 
-#                file = 'mingw32-make',
-#                text = "*** No rule to make target `release'.  Stop.",
-#                hint = "mingw32-make: *** No rule to make target `release'.  Stop." )
-
 # filename:line: error: message
 # filename:line:column: error: message
 # filename:line: fatal error: message
@@ -129,6 +148,27 @@ genericError.test( "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemU
                     line = '2',
                     text = "core/FileSystemUtils.h: No such file or directory",
                     hint = "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory" )
+
+# filename: message
+genericWarningNoLine = parsing.Pattern( r"(?:^|\n)(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*\n]+):\s*([^\n$]+)",
+                                    type = 'warning',
+                                    file = '%1',
+                                    text = '%2' )
+
+genericWarningNoLine.setComment( 'Generic warning message' )
+
+genericWarningNoLine.test( "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
+                        type = 'warning',
+                        file = 'SessionIconDelegate.cpp',
+                        text = "In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':",
+                        hint = "SessionIconDelegate.cpp: In member function 'void SessionIconDelegate::drawExercise(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const':" )
+
+# this is a case that must not match to avoid conflict between gnumake and gcc parsers.
+#genericWarningNoLine.test( "mingw32-make: *** No rule to make target `release'.  Stop.\n", 
+#                type = 'warning', 
+#                file = 'mingw32-make',
+#                text = "*** No rule to make target `release'.  Stop.",
+#                hint = "mingw32-make: *** No rule to make target `release'.  Stop." )
 
 # filename:line: message (maybe error aka undefined reference, multiple definition)
 genericMessage = parsing.Pattern( r"(?:^|\n)((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*([^\n$]+)",
@@ -280,9 +320,10 @@ compiling.test( text,
 # Generation of script file
 print '# It is a machine generated file. Do not edit it manualy!'
 print ''
+print fromWarning.generateMkSScript( 'GCC' )
 print genericWarning.generateMkSScript( 'GCC' )
-print genericWarningNoLine.generateMkSScript( 'GCC' )
 print genericError.generateMkSScript( 'GCC' )
+print genericWarningNoLine.generateMkSScript( 'GCC' )
 print genericMessage.generateMkSScript( 'GCC' )
 print link_failed.generateMkSScript( 'GCC' )
 print no_lib.generateMkSScript( 'GCC' )
