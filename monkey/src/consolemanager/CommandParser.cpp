@@ -39,13 +39,6 @@
 #include "coremanager/MonkeyCore.h"
 #include "CommandParser.h"
 
-/*!
-    Change value of this macro, if you need to debug parsing or parsers, 
-    and also check, how much time parsing takes
-    A lot of debug info will be printed
-*/
-#define PARSERS_DEBUG 0
-
 #if PARSERS_DEBUG
     #include <QTime>
 #endif
@@ -181,12 +174,11 @@ void CommandParser::addPattern(const Pattern& pattern)
 
 void CommandParser::removePattern(const QString& regExp)
 {
-    for (int i = 0; i < mPatterns.size(); i++)
+    for (int i = mPatterns.size() -1; i >= 0; i--)
     {
         if (mPatterns[i].regExp.pattern() == regExp)
         {
             mPatterns.removeAt(i);
-            i--;
         }
     }
 }
@@ -194,7 +186,7 @@ void CommandParser::removePattern(const QString& regExp)
 /*!
     see \ref AbstractCommandParser::processParsing
 */
-int CommandParser::processParsing(QString* buf)
+void CommandParser::processParsing(QStringList& strings)
 {
 #if PARSERS_DEBUG
     static int allTime;
@@ -202,53 +194,54 @@ int CommandParser::processParsing(QString* buf)
     QTime time1;
     time1.start();
 #endif
-    foreach ( const Pattern& p, mPatterns)
-    {
-        int pos = p.regExp.indexIn(*buf);
+
+    const QStringList lines = strings;
+    int removed = 0;
+    
+    for ( int i = 0; i < lines.count(); i++ ) {
+        const QString& line = lines[ i ];
+        
+        foreach ( const Pattern& p, mPatterns ) {
+            const int pos = p.regExp.indexIn( line );
+        
 #if PARSERS_DEBUG
-        qDebug () << "parser " << name();
-        qDebug () << "parsing  " << *buf << "with" << p.regExp.pattern();
+            qDebug () << "parser " << name();
+            qDebug () << "parsing  " << line << "with" << p.regExp.pattern();
 #endif
-        if (pos != -1)
-        {
-            pConsoleManagerStep::Data data;
-            data[ pConsoleManagerStep::TypeRole ] = p.Type;
-            data[ pConsoleManagerStep::FileNameRole ] = replaceWithMatch(p.regExp,p.FileName);
-            data[ pConsoleManagerStep::PositionRole ] = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt()) -QPoint( 0, 1 );
-            data[ Qt::DisplayRole ] = replaceWithMatch(p.regExp,p.Text);
-            data[ Qt::ToolTipRole ] = replaceWithMatch(p.regExp,p.FullText);
-            
-            // emit signal
-            emit newStepAvailable( pConsoleManagerStep( data ) );
+            if ( pos != -1 ) {
+                strings.removeAt( i -removed );
+                removed++;
+                
+                pConsoleManagerStep::Data data;
+                data[ pConsoleManagerStep::TypeRole ] = p.Type;
+                data[ pConsoleManagerStep::FileNameRole ] = replaceWithMatch(p.regExp,p.FileName);
+                data[ pConsoleManagerStep::PositionRole ] = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt()) -QPoint( 0, 1 );
+                data[ Qt::DisplayRole ] = replaceWithMatch(p.regExp,p.Text);
+                data[ Qt::ToolTipRole ] = replaceWithMatch(p.regExp,p.FullText);
+                
+                // emit signal
+                emit newStepAvailable( pConsoleManagerStep( data ) );
             
 #if PARSERS_DEBUG
-            qDebug() << "Emited new step";
+                qDebug() << "Emited new step";
+                qDebug () << "Capture :" << p.regExp.cap();
+                qDebug () << "CaptureS :" << p.regExp.capturedTexts ();
 #endif
-            
-            int linesCount = p.regExp.cap().count ('\n');
-            
-            if (! p.regExp.cap().endsWith('\n'))
-                linesCount++;
-            
+                break; // foreach
+            }
+            else {
 #if PARSERS_DEBUG
-            qDebug () << "Capture :" << p.regExp.cap();
-            qDebug () << "CaptureS :" << p.regExp.capturedTexts ();
-            qDebug () << "Returning " << linesCount;
+                qDebug () << "Not matching";
 #endif
-            return linesCount;
+            }
         }
-#if PARSERS_DEBUG
-            qDebug () << "Not matching";
-#endif
     }
+    
 #if PARSERS_DEBUG
     allTime += time1.elapsed ();
     qDebug () << "All time" <<allTime;
     qDebug () << "Total count" <<total++;
-    
-    qDebug () << "Returning false";
 #endif
-    return 0;
 }
 
 /*!
@@ -263,8 +256,9 @@ int CommandParser::processParsing(QString* buf)
         Patterns will be replaced with according submatch of string
     \return Resulting string
 */
-QString CommandParser::replaceWithMatch(const QRegExp& rex, QString s)
+QString CommandParser::replaceWithMatch(const QRegExp& rex, const QString& _s) const
 {
+    QString s = _s;
     int pos = 0; 
     int i = 0;
     while ( (i = s.indexOf("%", pos)) != -1)

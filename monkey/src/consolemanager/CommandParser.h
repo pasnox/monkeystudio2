@@ -76,7 +76,7 @@ protected:
     QString mName;
     QList <Pattern> mPatterns;
     
-    QString replaceWithMatch(const QRegExp&, QString);
+    QString replaceWithMatch(const QRegExp&, const QString&) const;
     static QString parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter, void* data );
     
 public:
@@ -85,7 +85,7 @@ public:
         {   return mName;   };
     void addPattern(const Pattern& pattern);
     void removePattern(const QString& regExp);
-    int processParsing(QString* text);
+    void processParsing(QStringList& strings);
 };
 
 #endif // COMMANDPARSER_H

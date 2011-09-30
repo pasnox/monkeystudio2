@@ -40,6 +40,13 @@
 #include <QObject>
 
 /*!
+    Change value of this macro, if you need to debug parsing or parsers, 
+    and also check, how much time parsing takes
+    A lot of debug info will be printed
+*/
+#define PARSERS_DEBUG 0
+
+/*!
     Parent class for parsers of console output.
     
     Inherit this class for create own parser. There is some description of it 
@@ -58,12 +65,11 @@ public :
     
     
     /**
-     *\bfief Parse text
-     *\param text Text to parse
-     *\retval Count of lines, which was sucessfully parsed (text recognised). 
-     * This lines can be discarded, won't be parsed by other parsers
+     *\brief Parse strings
+     *\param strings Strings to parse
+     * Parsed lines are removed from the list
      */
-    virtual int processParsing(QString* text) = 0;
+    virtual void processParsing(QStringList& strings) = 0;
 
 signals:
     void newStepAvailable( const pConsoleManagerStep& );

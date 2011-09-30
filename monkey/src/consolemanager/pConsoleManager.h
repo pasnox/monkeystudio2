@@ -85,8 +85,6 @@ public:
 protected:
     int mTimerId;
     QBuffer mBuffer; //All output comming to this buffer
-    QString mStringBuffer; //... then by portions to this buffer
-    int mLinesInStringBuffer;
     pCommand::List mCommands;
     QStringList mCurrentParsers;
     QHash<QString, AbstractCommandParser*> mParsers;

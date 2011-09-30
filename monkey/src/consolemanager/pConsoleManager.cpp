@@ -59,7 +59,7 @@ static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Mon
     \param o Parent object
 */
 pConsoleManager::pConsoleManager( QObject* o )
-    : QProcess( o ), mLinesInStringBuffer (0)
+    : QProcess( o )
 {
     pActionsManager* am = MonkeyCore::actionsManager();
     am->setPathPartTranslation( "Console Manager", tr( "Console Manager" ) );
@@ -88,7 +88,6 @@ pConsoleManager::pConsoleManager( QObject* o )
     connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
     // start timerEvent
     mTimerId = startTimer( 100 );
-    mStringBuffer.reserve (MAX_LINES *200);
     mStopAttempt = 0;
     
     CommandParser::installParserCommand();
@@ -308,8 +307,6 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
     mStopAction->setEnabled( false );
     // clear buffer
     mBuffer.buffer().clear();
-    mStringBuffer.clear(); // For perfomance issues
-    mLinesInStringBuffer = 0;
 }
 
 /*!
@@ -579,59 +576,65 @@ void pConsoleManager::executeProcess()
 */
 void pConsoleManager::parseOutput( bool commandFinished )
 {
-    bool finished;
+    static QStringList strings;
     
-    do
-    {
-        // Fill string buffer
-        while ( mBuffer.canReadLine() && mLinesInStringBuffer < MAX_LINES )
-        {
-
-            mStringBuffer.append( QString::fromLocal8Bit( mBuffer.readLine() ) );
-            mLinesInStringBuffer ++;
+    forever {
+        // fill parsing buffer
+        while ( mBuffer.canReadLine() && strings.count() < MAX_LINES ) {
+            strings << QString::fromLocal8Bit( mBuffer.readLine() );
         }
-
-        if ( !mLinesInStringBuffer )
-            return;
-
-        finished = true;
-        int linesToRemove = 0;
         
-        //try all parsers
-        foreach ( const QString& parserName, mCurrentParsers )
-        {
+#if PARSERS_DEBUG
+        qWarning() << "CommandFinished/Strings" << commandFinished << strings;
+#endif
+
+        // read last line not ending by a \n on command finished
+        if ( commandFinished && strings.count() < MAX_LINES ) {
+            const QString line = QString::fromLocal8Bit( mBuffer.readAll() );
+            
+            if ( !line.isEmpty() ) {
+                strings << line;
+                
+#if PARSERS_DEBUG
+                qWarning() << "Add finished command last line" << line;
+#endif
+            }
+        }
+        
+        if ( strings.isEmpty() ) {
+#if PARSERS_DEBUG
+            qWarning() << "Empty strings, exiting / CommandFinished" << commandFinished;
+#endif
+            return;
+        }
+        
+        // try current command parsers
+        foreach ( const QString& parserName, mCurrentParsers ) {
             AbstractCommandParser* parser = mParsers.value( parserName );
             
-            if ( !parser )
-            {
+            if ( !parser ) {
+#if PARSERS_DEBUG
                 qWarning() << "Invalid parser" << parserName;
                 qWarning() << mParsers;
-                continue; //for
+#endif
+                continue; // foreach
             }
             
-            linesToRemove =  parser->processParsing( &mStringBuffer );
+            // parse content
+#if PARSERS_DEBUG
+            qWarning() << "Parsing..." << strings;
+#endif
+            parser->processParsing( strings );
+#if PARSERS_DEBUG
+            qWarning() << "Parsed fails..." << strings;
+#endif
             
-            if ( linesToRemove )
-                break; //for
+            if ( strings.isEmpty() ) {
+                break; // foreach
+            }
         }
         
-        if ( linesToRemove == 0 || commandFinished ) //need to remove one
-            linesToRemove = 1;
-
-        if ( !linesToRemove )
-            continue; // do-while
-
-        finished = false; //else one iteration of do-while after it
-
-        //removing of lines
-        mLinesInStringBuffer -= linesToRemove;
-        int posEnd = 0;
-        
-        while ( linesToRemove-- )
-            posEnd = mStringBuffer.indexOf( '\n', posEnd ) +1;
-            
-        mStringBuffer.remove( 0, posEnd );
+        // discarding unconsuming data
+        strings.clear();
     }
-    while ( !finished && mLinesInStringBuffer );
 }
-
