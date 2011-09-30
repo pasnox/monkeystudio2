@@ -6,7 +6,7 @@ from string import Template
 # filename:line: warning: message
 # filename:line:column: warning: message
 # filename:line: note: message
-genericWarning = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:warning|note):\s*([^\n]+)",
+genericWarning = parsing.Pattern( r"(?:^|\n)((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:warning|note):\s*([^\n$]+)",
                                     type = 'warning',
                                     file = '%1',
                                     line = '%2',
@@ -57,7 +57,7 @@ genericWarning.test( 'test.c:4:2: warning: #warning This is bad code!!!\n',
                         hint = 'test.c:4:2: warning: #warning This is bad code!!!' )
 
 # filename: message
-genericWarningNoLine = parsing.Pattern( r"^(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*\n]+):\s*([^\n]+)",
+genericWarningNoLine = parsing.Pattern( r"(?:^|\n)(?!(?:mingw32-)?make)((?:\w+:[\\/])?[^:\*\n]+):\s*([^\n$]+)",
                                     type = 'warning',
                                     file = '%1',
                                     text = '%2' )
@@ -80,7 +80,7 @@ genericWarningNoLine.test( "SessionIconDelegate.cpp: In member function 'void Se
 # filename:line: error: message
 # filename:line:column: error: message
 # filename:line: fatal error: message
-genericError = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:fatal)?\s*(?:error):\s*([^\n]+)",
+genericError = parsing.Pattern( r"(?:^|\n)((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*(?:fatal)?\s*(?:error):\s*([^\n$]+)",
                                 type = 'error',
                                 file = '%1',
                                 line = '%2',
@@ -131,7 +131,7 @@ genericError.test( "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemU
                     hint = "z:\src\gui\pIconManager.cpp:2: fatal error: core/FileSystemUtils.h: No such file or directory" )
 
 # filename:line: message (maybe error aka undefined reference, multiple definition)
-genericMessage = parsing.Pattern( r"^((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*([^\n]+)",
+genericMessage = parsing.Pattern( r"(?:^|\n)((?:\w+:[\\/])?[^:]+):(\d+)(?::\d+)?:\s*([^\n$]+)",
                                 type = 'error',
                                 file = '%1',
                                 line = '%2',
@@ -168,7 +168,7 @@ genericMessage.test( "/src/exercisesdialog.h:9: multiple definition of `toto(int
                         hint = "/src/exercisesdialog.h:9: multiple definition of `toto(int, int)'" )
 
 # Linking failed, probably undefined reference
-link_failed = parsing.Pattern( r"^collect\d+:\s*ld returned \d+ exit[^\n]+",
+link_failed = parsing.Pattern( r"(?:^|\n)collect\d+:\s*ld returned \d+ exit[^\n$]+",
                                 type = 'error',
                                 text = 'Linking failed. Check Output dock for more info' )
 
@@ -180,7 +180,7 @@ link_failed.test( 'collect2: ld returned 1 exit status\n',
                     hint = 'collect2: ld returned 1 exit status' )
 
 # Cannot find library
-no_lib = parsing.Pattern( r"^(?:\w+:[\\/])?[^:]+:\s*cannot find -l([^\n]+)",
+no_lib = parsing.Pattern( r"(?:^|\n)(?:\w+:[\\/])?[^:]+:\s*cannot find -l([^\n$]+)",
                             type = 'error',
                             text = 'Cannot find library "%1"' )
 
@@ -200,7 +200,7 @@ no_lib.test( 'c:\usr\bin\ld.exe: cannot find -lqscintilla2d\n',
 # g++, gcc, mingw32-g++, mingw32-gcc, i386-mingw32-gcc, i386-mingw32-g++, gcc-4.0.0, c++-4.0.0
 # g++ .... -o *.o filename
 #compiling = parsing.Pattern( r"^(?:[\w\d]+-)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\s+([^\n]+)",
-compiling = parsing.Pattern( r"^(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n]+\s+-o\s+[^\n]+\.o(?:[bjects]+)?\s+([^\n]+)",
+compiling = parsing.Pattern( r"(?:^|\n)(?:(?:\w+:[\\/])?[^\s\n]+)?(?:[gc]\+\+|gcc)(?:-[\d\.]+)?\s+[^\n$]+\s+-o\s+[^\n$]+\.o(?:[bjects]+)?\s+([^\n$]+)",
                                 type = 'compiling',
                                 text = 'Compiling %1...',
                                 file = '%1' )

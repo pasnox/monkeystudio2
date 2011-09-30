@@ -1,7 +1,7 @@
 import parsing
 
 # generic error rule for make + message
-genericErrorMake = parsing.Pattern( r"^(?:mingw32-)?make(?:\[\d+\])?\s*:(?:\s*\*+)\s*([^\n]+)",
+genericErrorMake = parsing.Pattern( r"(?:^|\n)(?:mingw32-)?make(?:\[\d+\])?\s*:(?:\s*\*+)\s*([^\n$]+)",
                                     type = 'error',
                                     text = '%1' )
 genericErrorMake.setComment( 'Generic error make message' )
@@ -12,7 +12,7 @@ genericErrorMake.test( "mingw32-make: *** No rule to make target `release'.  Sto
                 hint = "mingw32-make: *** No rule to make target `release'.  Stop." )
 
 # generic warning rule for make + message
-genericWarningMake = parsing.Pattern( r"^(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n]+)",
+genericWarningMake = parsing.Pattern( r"(?:^|\n)(?:mingw32-)?make(?:\[\d+\])?\s*:\s*([^\n$]+)",
                                     type = 'warning',
                                     text = '%1' )
 genericWarningMake.setComment( 'Generic warning make message' )
