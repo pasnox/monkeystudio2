@@ -41,4 +41,4 @@ CONFIG(debug, debug|release) {
     RCC_DIR = $${BUILD_PATH}/release/.rcc
 }
 
-SOURCES = $Main File Name$
+SOURCES *= $Main File Name$
