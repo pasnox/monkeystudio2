@@ -13,7 +13,7 @@ fromWarning = parsing.Pattern( r"(?:^|\n)\s*((?:[^\n$]+)?\s*from\s*((?:\w+:[\\/]
                                     text = '%1',
                                     hint = '%1' )
 
-fromWarning.setComment( 'Generic warning message' )
+fromWarning.setComment( 'Generic from warning message' )
 
 fromWarning.test( "In file included from dependencies/lib/include/../src/encryption/CryptUtil.h:8,\n",
                         type = 'warning',
@@ -179,6 +179,13 @@ genericMessage.test( "/monkey/src/main.cpp:30: undefined reference to `fake()'\n
                         text = "undefined reference to `fake()'",
                         hint = "/monkey/src/main.cpp:30: undefined reference to `fake()'" )
 
+genericMessage.test( "/src/main.cpp:57: undefined reference to `MainWindow::test()'\n",
+                        type = 'error',
+                        file = '/src/main.cpp',
+                        line = '57',
+                        text = "undefined reference to `MainWindow::test()'",
+                        hint = "/src/main.cpp:57: undefined reference to `MainWindow::test()'" )
+
 genericMessage.test( "z:\monkey\src\main.cpp:30: undefined reference to `fake()'\n",
                         type = 'error',
                         file = 'z:\monkey\src\main.cpp',
@@ -327,12 +334,12 @@ compiling.test( text,
 # Generation of script file
 print '# It is a machine generated file. Do not edit it manualy!'
 print ''
+print link_failed.generateMkSScript( 'GCC' )
 print fromWarning.generateMkSScript( 'GCC' )
 print genericWarning.generateMkSScript( 'GCC' )
 print genericError.generateMkSScript( 'GCC' )
-print genericWarningNoLine.generateMkSScript( 'GCC' )
 print genericMessage.generateMkSScript( 'GCC' )
-print link_failed.generateMkSScript( 'GCC' )
+print genericWarningNoLine.generateMkSScript( 'GCC' )
 print no_lib.generateMkSScript( 'GCC' )
 print compiling.generateMkSScript( 'GCC' )
 print linking.generateMkSScript( 'GCC' )
