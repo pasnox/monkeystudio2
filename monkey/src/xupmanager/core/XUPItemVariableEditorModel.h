@@ -13,9 +13,9 @@ class DocumentFilterMap;
 struct Q_MONKEY_EXPORT XUPItemVariableEditorModelItem {
     typedef QList<XUPItemVariableEditorModelItem> List;
     
-    XUPItemVariableEditorModelItem( const QString& string = QString::null, bool enabled = false, XUPItem* item = 0 ) {
+    XUPItemVariableEditorModelItem( const QString& string = QString::null, bool toBeDeleted = false, XUPItem* item = 0 ) {
         this->string = string;
-        this->enabled = enabled;
+        this->toBeDeleted = toBeDeleted;
         this->item = item;
     }
     
@@ -25,14 +25,14 @@ struct Q_MONKEY_EXPORT XUPItemVariableEditorModelItem {
     
     bool operator==( const XUPItemVariableEditorModelItem& other ) const {
         return string == other.string
-            && enabled == other.enabled
+            && toBeDeleted == other.toBeDeleted
             && item == other.item
             && children == other.children
             ;
     }
     
     QString string;
-    bool enabled;
+    bool toBeDeleted;
     XUPItem* item;
     XUPItemVariableEditorModelItem::List children;
 };

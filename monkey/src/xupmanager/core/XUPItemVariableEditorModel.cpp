@@ -35,10 +35,10 @@ QVariant XUPItemVariableEditorModel::data( const QModelIndex& index, int role ) 
     if ( item && item != &mRoot ) {
         const XUPItemVariableEditorModelItem* parent = mParentMapping.value( item );
         const bool isVariable = index.isValid() && !index.parent().isValid();
-        bool enabled = parent && parent != &mRoot ? parent->enabled : item->enabled;
+        bool toBeDeleted = parent && parent != &mRoot ? parent->toBeDeleted : item->toBeDeleted;
         
-        if ( enabled ) {
-            enabled = item->enabled;
+        if ( !toBeDeleted ) {
+            toBeDeleted = item->toBeDeleted;
         }
         
         switch ( role ) {
@@ -61,12 +61,12 @@ QVariant XUPItemVariableEditorModel::data( const QModelIndex& index, int role ) 
                 return item->string;
             }
             case Qt::CheckStateRole:
-                return enabled ? Qt::Checked : Qt::Unchecked;
+                return toBeDeleted ? Qt::Checked : Qt::Unchecked;
             case Qt::ForegroundRole:
-                return enabled ? QVariant() : QApplication::palette().brush( QPalette::Disabled, QPalette::WindowText );
+                return toBeDeleted ? QApplication::palette().brush( QPalette::Disabled, QPalette::WindowText ) : QVariant();
             case Qt::FontRole: {
                 QFont font;
-                font.setStrikeOut( !enabled );
+                font.setStrikeOut( toBeDeleted );
                 return font;
             }
         }
@@ -147,7 +147,7 @@ bool XUPItemVariableEditorModel::setData( const QModelIndex& index, const QVaria
             break;
         }
         case Qt::CheckStateRole:
-            item->enabled = value.toInt() == Qt::Checked;
+            item->toBeDeleted = value.toInt() == Qt::Checked;
             
             if ( hasChildren( index ) ) {
                 emit dataChanged( index.child( 0, 0 ), index.child( rowCount( index ) -1, columnCount( index ) -1 ) );
@@ -245,7 +245,7 @@ QModelIndex XUPItemVariableEditorModel::addValue( const QModelIndex& variable, c
     if ( item ) {
         const int count = item->children.count();
         beginInsertRows( variable, count, count );
-        item->children << XUPItemVariableEditorModelItem( value, true, 0 );
+        item->children << XUPItemVariableEditorModelItem( value, false, 0 );
         mParentMapping[ &( item->children.last() ) ] = item;
         endInsertRows();
         return createIndex( item->children.count() -1, 0, item );
@@ -336,7 +336,7 @@ void XUPItemVariableEditorModel::revert( XUPItem* item )
     // only retreives values of variables that are direct children of item
     foreach ( XUPItem* variable, mRootItem->childrenList() ) {
         if ( variable->type() == XUPItem::Variable ) {
-            XUPItemVariableEditorModelItem si( variable->attribute( "name" ), true, variable );
+            XUPItemVariableEditorModelItem si( variable->attribute( "name" ), false, variable );
             
             switch ( mMode ) {
                 case XUPItemVariableEditorModel::Out: {
@@ -358,7 +358,7 @@ void XUPItemVariableEditorModel::revert( XUPItem* item )
                     case XUPItem::Value:
                     case XUPItem::File:
                     case XUPItem::Path:
-                        si.children << XUPItemVariableEditorModelItem( value->content(), true, value );
+                        si.children << XUPItemVariableEditorModelItem( value->content(), false, value );
                         break;
                     default:
                         continue;
@@ -403,7 +403,7 @@ bool XUPItemVariableEditorModel::submit()
         XUPItem* variableItem = variable.item;
         QStringList files;
         
-        if ( !variable.enabled ) {
+        if ( variable.toBeDeleted ) {
             if ( variableItem ) {
                 project->removeValue( variableItem, deleteFiles );
             }
@@ -425,7 +425,7 @@ bool XUPItemVariableEditorModel::submit()
         foreach ( const XUPItemVariableEditorModelItem& value, variable.children ) {
             XUPItem* valueItem = value.item;
             
-            if ( value.enabled ) {
+            if ( !value.toBeDeleted ) {
                 if ( !isFileVariable ) {
                     if ( !valueItem ) {
                         const XUPItem::Type type = isPathVariable ? XUPItem::Path : XUPItem::Value;
@@ -491,7 +491,7 @@ void XUPItemVariableEditorModel::setRootItemInternal( const XUPItemVariableEdito
     
     beginInsertRows( QModelIndex(), 0, count -1 );
     mRoot = item;
-    mRoot.enabled = true;
+    mRoot.toBeDeleted = false;
     buildParentMapping( mRoot );
     endInsertRows();
 }
