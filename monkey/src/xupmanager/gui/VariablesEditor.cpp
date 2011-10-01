@@ -279,6 +279,6 @@ void VariablesEditor::on_tbValuesClear_clicked()
     
     for ( int i = 0; i < mModel->rowCount( variableIndex ); i++ ) {
         const QModelIndex index = variableIndex.child( i, 0 );
-        mModel->setData( index, Qt::Unchecked, Qt::CheckStateRole );
+        mModel->setData( index, Qt::Checked, Qt::CheckStateRole );
     }
 }
