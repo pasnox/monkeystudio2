@@ -434,7 +434,7 @@ bool XUPItemVariableEditorModel::submit()
                     
                     valueItem->setContent( value.string );
                 }
-                else {
+                else if ( !value.item ) {
                     files << value.string;
                 }
             }
