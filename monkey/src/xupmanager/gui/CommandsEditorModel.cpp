@@ -30,7 +30,7 @@ QVariant CommandsEditorModel::data( const QModelIndex& index, int role ) const
     const bool isMenu = index.parent() == QModelIndex();
     const QString menu = this->menu( index );
     const pCommand command = this->command( index );
-    const bool enabled = command.userData() == Qt::Checked;
+    const bool toBeDeleted = command.userData() == Qt::Checked;
     
     switch ( role ) {
         case Qt::CheckStateRole:
@@ -43,11 +43,11 @@ QVariant CommandsEditorModel::data( const QModelIndex& index, int role ) const
         case Qt::ToolTipRole:
             return isMenu ? ( mMenuBar && !menu.isEmpty() ? mMenuBar->menu( menu )->title() : QVariant() ) : command.text();
         case Qt::ForegroundRole:
-            return !isMenu && !enabled ? QApplication::palette().brush( QPalette::Disabled, QPalette::WindowText ) : QVariant();
+            return !isMenu && toBeDeleted ? QApplication::palette().brush( QPalette::Disabled, QPalette::WindowText ) : QVariant();
         case Qt::FontRole: {
             QFont font;
             font.setBold( isMenu );
-            font.setStrikeOut( !isMenu && !enabled );
+            font.setStrikeOut( !isMenu && toBeDeleted );
             return font;
         }
         case Qt::EditRole:
@@ -240,7 +240,7 @@ QModelIndex CommandsEditorModel::addCommand( const QModelIndex& menuIndex, const
     
     beginInsertRows( menuIndex, count, count );
     mCommands[ menu( menuIndex ) ] << command;
-    mCommands[ menu( menuIndex ) ].last().setUserData( Qt::Checked );
+    mCommands[ menu( menuIndex ) ].last().setUserData( Qt::Unchecked );
     endInsertRows();
     
     return index( count, 0, menuIndex );
@@ -306,7 +306,7 @@ bool CommandsEditorModel::submit()
         for ( int i = commands.count() -1; i >= 0; i-- ) {
             pCommand& command = commands[ i ];
             
-            if ( command.userData().toInt() != Qt::Checked ) {
+            if ( command.userData().toInt() == Qt::Checked ) {
                 commands.removeAt( i );
             }
         }

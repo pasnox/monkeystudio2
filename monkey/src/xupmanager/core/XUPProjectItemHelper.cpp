@@ -164,7 +164,7 @@ MenuCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
             command.setParsers( values.at( 5 ).toString().split( ";", QString::SkipEmptyParts ) );
             command.setSkipOnError( values.at( 6 ).toBool() );
             command.setTryAllParsers( values.at( 7 ).toBool() );
-            command.setUserData( Qt::Checked );
+            command.setUserData( Qt::Unchecked );
             
             commands[ values.at( 0 ).toString() ] << command;
         }
