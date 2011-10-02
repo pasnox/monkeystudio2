@@ -3,6 +3,7 @@
 #include "QMakeConfigurationEditor.h"
 #include "QMakeFilesEditor.h"
 #include "QMakeVariablesEditor.h"
+#include "QMakeTranslationsEditor.h"
 
 #include <xupmanager/gui/CommandsEditor.h>
 #include <xupmanager/core/XUPProjectItem.h>
@@ -27,6 +28,7 @@ void UIQMakeEditor::setupProject( XUPProjectItem* project )
         << new QMakeMainEditor( mPositiveValues, mNegativeValues )
         << new QMakeConfigurationEditor( mPositiveValues, mNegativeValues )
         << new QMakeFilesEditor
+        << new QMakeTranslationsEditor
         << new QMakeVariablesEditor
         << new CommandsEditor
         ;
