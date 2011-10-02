@@ -10,6 +10,8 @@ class QMakeFilesEditor : public FilesEditor
 public:
     QMakeFilesEditor( QWidget* parent = 0 );
     virtual ~QMakeFilesEditor();
+    
+    virtual QStringList filteredFileVariables() const;
 };
 
 #endif // QMAKEFILESEDITOR_H
