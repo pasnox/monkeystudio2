@@ -69,7 +69,8 @@ HEADERS	*= objects/GetOpt.h \
 	objects/TranslationManager.h \
 	widgets/TranslationDialog.h \
 	objects/pGenericTableModel.h \
-	widgets/pCheckComboBox.h
+	widgets/pCheckComboBox.h \
+	widgets/pLocaleModel.h
 
 SOURCES	*= objects/GetOpt.cpp \
 	objects/pIconManager.cpp \
@@ -115,4 +116,5 @@ SOURCES	*= objects/GetOpt.cpp \
 	objects/TranslationManager.cpp \
 	widgets/TranslationDialog.cpp \
 	objects/pGenericTableModel.cpp \
-	widgets/pCheckComboBox.cpp
+	widgets/pCheckComboBox.cpp \
+	widgets/pLocaleModel.cpp
