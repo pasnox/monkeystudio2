@@ -25,6 +25,8 @@ public:
     bool isDeleteRemovedFilesVisible() const;
     bool isDeleteRemovedFilesChecked() const;
     
+    virtual QStringList filteredFileVariables() const;
+    
     virtual void setup( XUPProjectItem* project );
     virtual void finalize();
 

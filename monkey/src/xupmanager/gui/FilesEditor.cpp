@@ -68,12 +68,17 @@ bool FilesEditor::isDeleteRemovedFilesChecked() const
     return ui->cbDeleteEnabled->isChecked();
 }
 
+QStringList FilesEditor::filteredFileVariables() const
+{
+    return mProject->documentFilters().fileVariables();
+}
+
 void FilesEditor::setup( XUPProjectItem* project )
 {
     mProject = project;
     mModel->setFilterMode( XUPItemVariableEditorModel::In );
     mModel->setFriendlyDisplayText( true );
-    mModel->setFilteredVariables( project->documentFilters().fileVariables() );
+    mModel->setFilteredVariables( filteredFileVariables() );
     mModel->setRootItem( project );
     ui->tvVariables->expandAll();
     tvVariables_selectionModel_selectionChanged();
