@@ -69,6 +69,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QLocale>
+#include <QDebug>
 
 QHash<QString,QsciLexer*> mGlobalsLexers;
 QHash<QString,QsciAPIs*> mGlobalsAPIs;
@@ -136,21 +137,37 @@ QString pMonkeyStudio::buildFileDialogFilter( const DocumentFilterMap& filters, 
 bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 {
     // get file info
-    QFileInfo fif( left );
-    QFileInfo fio( right );
+    QFileInfo fil( left );
+    QFileInfo fir( right );
 
     // check files exists
-    if ( fif.exists() != fio.exists() )
+    if ( fil.exists() != fir.exists() ) {
         return false;
+    }
 
     // check simlink
-    if ( fif.isSymLink() )
-        fif.setFile( fif.symLinkTarget() );
-    if ( fio.isSymLink() )
-        fio.setFile( fio.symLinkTarget() );
-
+    if ( fil.isSymLink() ) {
+        fil.setFile( fil.symLinkTarget() );
+    }
+    
+    if ( fir.isSymLink() ) {
+        fir.setFile( fir.symLinkTarget() );
+    }
+    
     // check canonical file path
-    return fif.canonicalFilePath() == fio.canonicalFilePath();
+    QString lstring = fil.canonicalFilePath();
+    QString rstring = fir.canonicalFilePath();
+    
+    // else given file path
+    if ( lstring.isEmpty() ) {
+        lstring = fil.absoluteFilePath();
+    }
+    
+    if ( rstring.isEmpty() ) {
+        rstring = fir.absoluteFilePath();
+    }
+    
+    return lstring == rstring;
 }
 
 /*!
