@@ -78,17 +78,17 @@ void QMakeTranslationsEditor::finalize()
         translations << QString( "%1/%2_%3.ts" ).arg( ui->leDirectory->text() ).arg( ui->leBaseName->text() ).arg( locale );
     }
     
-    foreach ( const QString& filePath, translations ) {
-        mCurrentTranslations.remove( filePath );
+    foreach ( const QString& translation, translations ) {
+        mCurrentTranslations.remove( mProject->filePath( translation ) );
     }
     
     mProject->addFiles( translations );
     
-    qWarning() << "Adding" << translations;
-    
-    /*foreach ( XUPItem* item, mCurrentTranslations.values() ) {
+    foreach ( XUPItem* item, mCurrentTranslations.values() ) {
         mProject->removeValue( item, false );
-    }*/
+    }
+    
+    QDir( mProject->path() ).mkpath( mProject->relativeFilePath( ui->leDirectory->text() ) );
 }
 
 void QMakeTranslationsEditor::on_tbDirectory_clicked()
