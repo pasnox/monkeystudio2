@@ -56,14 +56,19 @@ warning.test( "lrelease warning: Met no 'TRANSLATIONS' entry in project file '/h
                 text = "Met no 'TRANSLATIONS' entry in project file '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro'",
                 hint = "lrelease warning: Met no 'TRANSLATIONS' entry in project file '/home/pasnox/Temporaire/cppqtgui/cppqtgui.pro'" )
 
-# cannot open
-cannotOpen = parsing.Pattern( r"(?:^|\n)Cannot open [^:]+:\s*([^\n$]+)", type = 'warning', text = '%1' )
-cannotOpen.setComment( 'cannot open' )
+# cannot open/create
+cannot = parsing.Pattern( r"(?:^|\n)Cannot (?:open|create) [^:]+:\s*([^\n$]+)", type = 'error', text = '%1' )
+cannot.setComment( 'cannot open' )
 
-cannotOpen.test( 'Cannot open dependencies/intuisphere/core: file to open is a directory',
-                type = 'warning',
+cannot.test( 'Cannot open dependencies/intuisphere/core: file to open is a directory',
+                type = 'error',
                 text = 'file to open is a directory',
                 hint = 'Cannot open dependencies/intuisphere/core: file to open is a directory' )
+
+cannot.test( 'Cannot create /home/pasnox/Temporaire/cppqtgui/translations/cppqtgui: No such file or directory',
+                type = 'error',
+                text = 'No such file or directory',
+                hint = 'Cannot create /home/pasnox/Temporaire/cppqtgui/translations/cppqtgui: No such file or directory' )
 
 # Updating TS/QM file
 tsUpdate = parsing.Pattern( r"(?:^|\n)Updating\s*'([^']+)'[^\n$]+", file = '%1', type = 'message' )
@@ -198,7 +203,7 @@ print message.generateMkSScript( 'QMake' )
 print reading.generateMkSScript( 'QMake' )
 print duplicateAlias.generateMkSScript( 'QMake' )
 print warning.generateMkSScript( 'QMake' )
-print cannotOpen.generateMkSScript( 'QMake' )
+print cannot.generateMkSScript( 'QMake' )
 print tsUpdate.generateMkSScript( 'QMake' )
 print tsUpdateInfo.generateMkSScript( 'QMake' )
 print fileNameLine.generateMkSScript( 'QMake' )

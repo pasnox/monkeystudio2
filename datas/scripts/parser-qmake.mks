@@ -16,7 +16,7 @@ parser add "QMake" "(?:^|\n)([^:]+):\s*Warning:\s*(potential duplicate alias det
 parser add "QMake" "(?:^|\n)(?:lupdate|lrelease) warning:\s*((?:[^'\n$]+'[^'\n$]+')?[^'\n$]+'([^'\n$]+)'\.?)" "%2" "-1" "-1" "warning" "%1" "%0"
         
 # cannot open
-parser add "QMake" "(?:^|\n)Cannot open [^:]+:\s*([^\n$]+)" "" "-1" "-1" "warning" "%1" "%0"
+parser add "QMake" "(?:^|\n)Cannot (?:open|create) [^:]+:\s*([^\n$]+)" "" "-1" "-1" "error" "%1" "%0"
         
 # Updating TS/QM file
 parser add "QMake" "(?:^|\n)Updating\s*'([^']+)'[^\n$]+" "%1" "-1" "-1" "message" "%0" "%0"
