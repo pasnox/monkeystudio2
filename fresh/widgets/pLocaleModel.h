@@ -1,10 +1,12 @@
 #ifndef PLOCALEMODEL_H
 #define PLOCALEMODEL_H
 
+#include "MonkeyExport.h"
+
 #include <QAbstractItemModel>
 #include <QStringList>
 
-class pLocaleModel : public QAbstractItemModel
+class Q_MONKEY_EXPORT pLocaleModel : public QAbstractItemModel
 {
     Q_OBJECT
     
