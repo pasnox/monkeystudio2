@@ -8,7 +8,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
-#define QMakeTranslationsEditorDefaultName "$${TARGET}"
+#define QMakeTranslationsEditorDefaultName "app"
 #define QMakeTranslationsEditorDefaultDirectory "translations"
 
 QMakeTranslationsEditor::QMakeTranslationsEditor( QWidget* parent )
