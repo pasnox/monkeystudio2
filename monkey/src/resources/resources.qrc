@@ -98,6 +98,8 @@
     <file alias="play.png">icons/editor/play.png</file>
   </qresource>
   <qresource prefix="/file">
+    <file>icons/file/open-text.png</file>
+    <file>icons/file/new-template.png</file>
     <file>icons/file/backup.png</file>
     <file>icons/file/clear.png</file>
     <file>icons/file/close.png</file>
