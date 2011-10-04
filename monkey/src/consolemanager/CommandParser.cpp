@@ -50,7 +50,7 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
     Q_UNUSED( data );
     CommandParser::Pattern pattern;
         
-    if (arguments[0] == "add")
+    if (arguments.value( 0 ) == "add")
     {
         if (9 != arguments.size())
         {
@@ -86,7 +86,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
             pattern.Type = pConsoleManagerStep::Invalid;
         else
         {
-            *status = MkSShellInterpreter::InvalidCommand;
+			if ( status ) {
+            	*status = MkSShellInterpreter::InvalidCommand;
+			}
             
             return QString("Invalid type '%1'").arg(arguments[6]);
         }
@@ -95,6 +97,7 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
         pattern.FullText = arguments[8];
         
         AbstractCommandParser* parser = MonkeyCore::consoleManager()->getParser(arguments[1]);
+
         if (parser) // Already exists, add pattern
         {
             if (static_cast<CommandParser*>(parser))
@@ -103,7 +106,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
             }
             else
             {
-                *status = MkSShellInterpreter::InvalidCommand;
+				if ( status ) {
+                	*status = MkSShellInterpreter::InvalidCommand;
+				}
                 return QString("Parser '%1' has invalid type").arg(arguments[1]);
             }
         }
@@ -118,7 +123,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
     {
         if (1 != arguments.size())
         {
-            *status = MkSShellInterpreter::InvalidCommand;
+			if ( status ) {
+            	*status = MkSShellInterpreter::InvalidCommand;
+			}
             return QString("Command '%1 %2' has no arguments").arg(command).arg(arguments[0]);
         }
         
@@ -126,16 +133,14 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
     }
     else // Command is not "add"
     {
-        if ( status )
-        {
+        if ( status ) {
             *status = MkSShellInterpreter::InvalidCommand;
         }
         
         return QString("Invalid command %1").arg(arguments[0]);
     }
     
-    if ( status )
-    {
+    if ( status ) {
         *status = MkSShellInterpreter::NoError;
     }
     
