@@ -102,8 +102,8 @@ namespace pMonkeyStudio
     Q_MONKEY_EXPORT QColor tabsTextColor();
     Q_MONKEY_EXPORT void setCurrentTabTextColor( const QColor& color );
     Q_MONKEY_EXPORT QColor currentTabTextColor();
-    Q_MONKEY_EXPORT void setDocumentMode( pWorkspace::ViewMode mode );
-    Q_MONKEY_EXPORT pWorkspace::ViewMode documentMode();
+    Q_MONKEY_EXPORT void setDocumentMode( ExMdiArea::DocumentViewMode mode );
+    Q_MONKEY_EXPORT ExMdiArea::DocumentViewMode documentMode();
     Q_MONKEY_EXPORT void setSaveSessionOnClose( bool save );
     Q_MONKEY_EXPORT bool saveSessionOnClose();
     Q_MONKEY_EXPORT void setRestoreSessionOnStartup( bool restore );

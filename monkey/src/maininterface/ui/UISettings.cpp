@@ -88,11 +88,12 @@ UISettings::UISettings( QWidget* p )
     cbSortingMode->addItem( tr( "Custom" ), pOpenedFileModel::Custom );
 
     // tab mode
-    cbTabModes->addItem( tr( "No Tabs" ), pWorkspace::NoTabs );
-    cbTabModes->addItem( tr( "Tabs at Top" ), pWorkspace::TopTabs );
-    cbTabModes->addItem( tr( "Tabs at Bottom" ), pWorkspace::BottomTabs );
-    cbTabModes->addItem( tr( "Tabs at Left" ), pWorkspace::LeftTabs );
-    cbTabModes->addItem( tr( "Tabs at Right" ), pWorkspace::RightTabs );
+    cbTabModes->addItem( tr( "MDI" ), ExMdiArea::MDI );
+    cbTabModes->addItem( tr( "No Tabs" ), ExMdiArea::NoTabs );
+    cbTabModes->addItem( tr( "Tabs at Top" ), ExMdiArea::TopTabs );
+    cbTabModes->addItem( tr( "Tabs at Bottom" ), ExMdiArea::BottomTabs );
+    cbTabModes->addItem( tr( "Tabs at Left" ), ExMdiArea::LeftTabs );
+    cbTabModes->addItem( tr( "Tabs at Right" ), ExMdiArea::RightTabs );
 
     // loads text codecs
     cbDefaultCodec->addItems( availableTextCodecs() );
@@ -353,7 +354,7 @@ void UISettings::saveSettings()
     // General
     setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
     setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
-    setDocumentMode( (pWorkspace::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
+    setDocumentMode( (ExMdiArea::DocumentViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
     setSaveSessionOnClose( cbSaveSession->isChecked() );
     setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
     setShowQuickFileAccess( cbQuickFileAccess->isChecked() );

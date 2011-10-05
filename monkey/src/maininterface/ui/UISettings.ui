@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
-    <height>761</height>
+    <width>665</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2866,5 +2866,38 @@ You can quickly change it using the dock context menu.</string>
  <resources>
   <include location="../../resources/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>accepted()</signal>
+   <receiver>UISettings</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>597</x>
+     <y>734</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>728</x>
+     <y>716</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>rejected()</signal>
+   <receiver>UISettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>736</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>739</x>
+     <y>735</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -31,10 +31,10 @@
 
 #include <MonkeyExport.h>
 
+#include "ExMdiArea.h"
 #include "consolemanager/pConsoleManager.h"
 
 #include <QFrame>
-#include <QMdiArea>
 
 class pAbstractChild;
 class pChild;
@@ -52,15 +52,6 @@ class Q_MONKEY_EXPORT pWorkspace : public QFrame
     Q_OBJECT
 
 public:
-    enum ViewMode
-    {
-        NoTabs,
-        TopTabs,
-        BottomTabs,
-        LeftTabs,
-        RightTabs
-    };
-    
     pWorkspace( QMainWindow* parent = 0 );
     
     static QString defaultContext();
@@ -79,7 +70,7 @@ public:
     
     void goToLine( const QString& fileName, const QPoint& pos, const QString& codec, int selectionLength = -1 );
     void closeDocument( pAbstractChild* document, bool showDialog = true );
-    pWorkspace::ViewMode documentMode() const;
+    ExMdiArea::DocumentViewMode documentMode() const;
     void handleDocument( pAbstractChild* document );
     void unhandleDocument( pAbstractChild* document );
 
@@ -98,14 +89,13 @@ public slots:
     void minimize();
     void restore();
     
-    void setDocumentMode( pWorkspace::ViewMode mode );
+    void setDocumentMode( ExMdiArea::DocumentViewMode mode );
     pAbstractChild* createNewTextEditor();
     
 protected:
     QVBoxLayout* mLayout;
-    QMdiArea* mMdiArea;
+    ExMdiArea* mMdiArea;
     QActionGroup* mViewModesGroup;
-    pWorkspace::ViewMode mViewMode;
     pOpenedFileExplorer* mOpenedFileExplorer;
     QFileSystemWatcher* mFileWatcher;
     QTimer* mContentChangedTimer;

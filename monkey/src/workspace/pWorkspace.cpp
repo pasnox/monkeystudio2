@@ -73,12 +73,12 @@ pWorkspace::pWorkspace( QMainWindow* parent )
     : QFrame( parent )
 {
     Q_ASSERT( parent );
-    mViewMode = pWorkspace::NoTabs;
     
     pMenuBar* mb = MonkeyCore::menuBar();
     
     // action group for view modes
     mViewModesGroup = new QActionGroup( this );
+    mViewModesGroup->addAction( mb->action( "mWindow/aMDI" ) );
     mViewModesGroup->addAction( mb->action( "mWindow/aNoTabs" ) );
     mViewModesGroup->addAction( mb->action( "mWindow/aTopTabs" ) );
     mViewModesGroup->addAction( mb->action( "mWindow/aBottomTabs" ) );
@@ -88,44 +88,6 @@ pWorkspace::pWorkspace( QMainWindow* parent )
     
     mb->menu( "mWindow" )->insertActions( mb->action( "mWindow/aCascase" ), mViewModesGroup->actions() );
     mb->menu( "mWindow" )->insertAction( mb->action( "mWindow/aCascase" ), mb->action( "mWindow/aSeparator1" ) );
-    
-    QList<QAction*> actions = mViewModesGroup->actions();
-    
-    for ( int i = pWorkspace::NoTabs; i < pWorkspace::RightTabs +1; i++ )
-    {
-        QAction* action = actions.at( i );
-        action->setCheckable( true );
-        action->setData( i );
-        
-        if ( mViewMode == i )
-        {
-            action->setChecked( true );
-        }
-        
-        switch ( (pWorkspace::ViewMode)i )
-        {
-            case pWorkspace::NoTabs:
-                action->setText( tr( "No Tabs" ) );
-                action->setToolTip( tr( "No tabs, use 'Oopened Files List' to have a list of opened documents" ) );
-                break;
-            case pWorkspace::TopTabs:
-                action->setText( tr( "Tabs at &Top" ) );
-                action->setToolTip( action->text() );
-                break;
-            case pWorkspace::BottomTabs:
-                action->setText( tr( "Tabs at &Bottom" ) );
-                action->setToolTip( action->text() );
-                break;
-            case pWorkspace::LeftTabs:
-                action->setText( tr( "Tabs at &Left" ) );
-                action->setToolTip( action->text() );
-                break;
-            case pWorkspace::RightTabs:
-                action->setText( tr( "Tabs at &Right" ) );
-                action->setToolTip( action->text() );
-                break;
-        }
-    }
     
     mOpenedFileExplorer = new pOpenedFileExplorer( this );
     
@@ -139,9 +101,7 @@ pWorkspace::pWorkspace( QMainWindow* parent )
     hline->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     
     // document area
-    mMdiArea = new QMdiArea( this );
-    mMdiArea->setActivationOrder( QMdiArea::CreationOrder );
-    mMdiArea->setDocumentMode( true );
+    mMdiArea = new ExMdiArea( this );
     
     // add widgets to layout
     mLayout->addWidget( MonkeyCore::multiToolBar() );
@@ -151,6 +111,51 @@ pWorkspace::pWorkspace( QMainWindow* parent )
     // creaet file watcher
     mFileWatcher = new QFileSystemWatcher( this );
     mContentChangedTimer = new QTimer( this );
+    
+    // init view mode actions
+    QList<QAction*> actions = mViewModesGroup->actions();
+    
+    for ( int i = ExMdiArea::MDI; i < ExMdiArea::RightTabs +1; i++ )
+    {
+        QAction* action = actions.at( i );
+        action->setCheckable( true );
+        action->setData( i );
+        
+        if ( mMdiArea->documentViewMode() == i ) {
+            action->setChecked( true );
+        }
+        
+        switch ( (ExMdiArea::DocumentViewMode)i )
+        {
+            case ExMdiArea::Undefined:
+                Q_ASSERT( 0 );
+                break;
+            case ExMdiArea::MDI:
+                action->setText( tr( "&MDI" ) );
+                action->setToolTip( tr( "No tabs but mdi window available, use 'Oopened Files List' to have a list of opened documents" ) );
+                break;
+            case ExMdiArea::NoTabs:
+                action->setText( tr( "&No Tabs" ) );
+                action->setToolTip( tr( "No tabs, use 'Oopened Files List' to have a list of opened documents" ) );
+                break;
+            case ExMdiArea::TopTabs:
+                action->setText( tr( "Tabs at &Top" ) );
+                action->setToolTip( action->text() );
+                break;
+            case ExMdiArea::BottomTabs:
+                action->setText( tr( "Tabs at &Bottom" ) );
+                action->setToolTip( action->text() );
+                break;
+            case ExMdiArea::LeftTabs:
+                action->setText( tr( "Tabs at &Left" ) );
+                action->setToolTip( action->text() );
+                break;
+            case ExMdiArea::RightTabs:
+                action->setText( tr( "Tabs at &Right" ) );
+                action->setToolTip( action->text() );
+                break;
+        }
+    }
     
     // load settings
     loadSettings();
@@ -411,9 +416,9 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
     }
 }
 
-pWorkspace::ViewMode pWorkspace::documentMode() const
+ExMdiArea::DocumentViewMode pWorkspace::documentMode() const
 {
-    return mViewMode;
+    return mMdiArea->documentViewMode();
 }
 
 void pWorkspace::handleDocument( pAbstractChild* document )
@@ -531,7 +536,7 @@ bool pWorkspace::closeAllDocuments()
 
 void pWorkspace::activateNextDocument()
 {
-    if ( mViewMode == pWorkspace::NoTabs )
+    if ( documentMode() == ExMdiArea::MDI || documentMode() == ExMdiArea::NoTabs )
     {
         pAbstractChild* document = currentDocument();
         const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
@@ -556,7 +561,7 @@ void pWorkspace::activateNextDocument()
 
 void pWorkspace::activatePreviousDocument()
 {
-    if ( mViewMode == pWorkspace::NoTabs )
+    if ( documentMode() == ExMdiArea::MDI || documentMode() == ExMdiArea::NoTabs )
     {
         pAbstractChild* document = currentDocument();
         const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
@@ -591,80 +596,51 @@ void pWorkspace::focusEditor()
 
 void pWorkspace::tile()
 {
+    setDocumentMode( ExMdiArea::MDI );
     mMdiArea->tileSubWindows();
 }
 
 void pWorkspace::cascade()
 {
+    setDocumentMode( ExMdiArea::MDI );
     mMdiArea->cascadeSubWindows();
 }
 
 void pWorkspace::minimize()
 {
-    setDocumentMode( pWorkspace::NoTabs );
+    setDocumentMode( ExMdiArea::MDI );
     
-    foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
-    {
+    foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() ) {
         window->showMinimized();
     }
 }
 
 void pWorkspace::restore()
 {
-    setDocumentMode( pWorkspace::NoTabs );
+    setDocumentMode( ExMdiArea::MDI );
     
-    foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
-    {
+    foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )  {
         window->showNormal();
     }
 }
 
-void pWorkspace::setDocumentMode( pWorkspace::ViewMode mode )
+void pWorkspace::setDocumentMode( ExMdiArea::DocumentViewMode mode )
 {
-    if ( mViewMode == mode )
-    {
+    if ( documentMode() == mode ) {
         return;
     }
     
     QMdiSubWindow* document = mMdiArea->currentSubWindow();
-    mViewMode = mode;
+    mMdiArea->setDocumentViewMode( mode );
+    mOpenedFileExplorer->setVisible( mode == ExMdiArea::MDI || mode == ExMdiArea::NoTabs );
     
-    switch ( mViewMode )
-    {
-        case pWorkspace::NoTabs:
-            mMdiArea->setViewMode( QMdiArea::SubWindowView );
-            break;
-        case pWorkspace::TopTabs:
-            mMdiArea->setTabPosition( QTabWidget::North );
-            mMdiArea->setViewMode( QMdiArea::TabbedView );
-            break;
-        case pWorkspace::BottomTabs:
-            mMdiArea->setTabPosition( QTabWidget::South );
-            mMdiArea->setViewMode( QMdiArea::TabbedView );
-            break;
-        case pWorkspace::LeftTabs:
-            mMdiArea->setTabPosition( QTabWidget::West );
-            mMdiArea->setViewMode( QMdiArea::TabbedView );
-            break;
-        case pWorkspace::RightTabs:
-            mMdiArea->setTabPosition( QTabWidget::East );
-            mMdiArea->setViewMode( QMdiArea::TabbedView );
-            break;
-    }
-    
-    mOpenedFileExplorer->setVisible( mViewMode == pWorkspace::NoTabs );
-    
-    if ( document && !document->isMaximized() )
-    {
+    if ( document && !document->isMaximized() ) {
         document->showMaximized();
     }
     
-    foreach ( QAction* action, mViewModesGroup->actions() )
-    {
-        if ( action->data().toInt() == mViewMode )
-        {
-            if ( !action->isChecked() )
-            {
+    foreach ( QAction* action, mViewModesGroup->actions() ) {
+        if ( action->data().toInt() == mode ) {
+            if ( !action->isChecked() ) {
                 action->setChecked( true );
             }
             
@@ -770,7 +746,7 @@ void pWorkspace::multitoolbar_notifyChanges()
 
 void pWorkspace::viewModes_triggered( QAction* action )
 {
-    setDocumentMode( (pWorkspace::ViewMode)action->data().toInt() );
+    setDocumentMode( (ExMdiArea::DocumentViewMode)action->data().toInt() );
 }
 
 void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* _document )

@@ -1016,14 +1016,14 @@ QColor pMonkeyStudio::currentTabTextColor()
     \details Set the workspace doc mode
     \param mode The mode to apply
 */
-void pMonkeyStudio::setDocumentMode( pWorkspace::ViewMode mode )
+void pMonkeyStudio::setDocumentMode( ExMdiArea::DocumentViewMode mode )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", mode ); }
 
 /*!
     \details Return the mod used by the workspace
 */
-pWorkspace::ViewMode pMonkeyStudio::documentMode()
-{ return (pWorkspace::ViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pWorkspace::NoTabs ).toInt(); }
+ExMdiArea::DocumentViewMode pMonkeyStudio::documentMode()
+{ return (ExMdiArea::DocumentViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", ExMdiArea::MDI ).toInt(); }
 
 /*!
     \details Set if session must be save on close
