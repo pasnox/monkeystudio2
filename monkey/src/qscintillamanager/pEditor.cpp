@@ -210,10 +210,21 @@ void pEditor::replace( const QString& replaceStr )
 
 void pEditor::keyPressEvent( QKeyEvent* e )
 {
-    if ( !e->isAutoRepeat() && e->modifiers() & Qt::ControlModifier && e->key() == Qt::Key_Space )
-    {
-        switch ( autoCompletionSource() )
-        {
+    const bool ctrl = e->modifiers() & Qt::ControlModifier;
+    const bool shift = e->modifiers() & Qt::ShiftModifier;
+    const bool alt = e->modifiers() & Qt::AltModifier;
+    const bool meta = e->modifiers() & Qt::MetaModifier;
+    
+    /*qWarning()
+        << "ctrl" << ctrl
+        << "shift" << shift
+        << "alt" << alt
+        << "meta" << meta
+        << "text" << e->text()
+        ;*/
+    
+    if ( !e->isAutoRepeat() && ( shift || ctrl || alt || meta ) && e->key() == Qt::Key_Space ) {
+        switch ( autoCompletionSource() ) {
             case QsciScintilla::AcsAll:
                 autoCompleteFromAll();
                 break;
@@ -226,8 +237,11 @@ void pEditor::keyPressEvent( QKeyEvent* e )
             default:
                 break;
         }
+        
+        e->accept();
         return;
     }
+    
     QsciScintilla::keyPressEvent( e );
 }
 
