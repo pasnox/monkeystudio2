@@ -132,7 +132,10 @@ SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
 #endif
     setAttribute(Qt::WA_StaticContents);
 
+// workaround a bug that auto close the popups on mac os x
+#ifndef Q_WS_MAC
     setFocusProxy(parent);
+#endif
 
     setFrameShape(StyledPanel);
     setFrameShadow(Plain);
