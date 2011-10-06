@@ -18,13 +18,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -1625,7 +1620,7 @@ void QsciScintilla::zoomTo(int size)
 
 // Find the first occurrence of a string.
 bool QsciScintilla::findFirst(const QString &expr, bool re, bool cs, bool wo,
-        bool wrap, bool forward, int line, int index, bool show)
+        bool wrap, bool forward, int line, int index, bool show, bool posix)
 {
     findState.inProgress = false;
 
@@ -1639,7 +1634,8 @@ bool QsciScintilla::findFirst(const QString &expr, bool re, bool cs, bool wo,
     findState.flags =
         (cs ? SCFIND_MATCHCASE : 0) |
         (wo ? SCFIND_WHOLEWORD : 0) |
-        (re ? SCFIND_REGEXP : 0);
+        (re ? SCFIND_REGEXP : 0) |
+        (posix ? SCFIND_POSIX : 0);
 
     if (line < 0 || index < 0)
         findState.startpos = SendScintilla(SCI_GETCURRENTPOS);
@@ -2438,6 +2434,8 @@ void QsciScintilla::setMarginText(int line, const QString &text, int style)
 // Annotate a line.
 void QsciScintilla::setMarginText(int line, const QString &text, const QsciStyle &style)
 {
+    style.apply(this);
+
     setMarginText(line, text, style.style());
 }
 
@@ -2445,6 +2443,8 @@ void QsciScintilla::setMarginText(int line, const QString &text, const QsciStyle
 // Annotate a line.
 void QsciScintilla::setMarginText(int line, const QsciStyledText &text)
 {
+    text.apply(this);
+
     setMarginText(line, text.text(), text.style());
 }
 
@@ -3831,6 +3831,8 @@ void QsciScintilla::annotate(int line, const QString &text, int style)
 // Annotate a line.
 void QsciScintilla::annotate(int line, const QString &text, const QsciStyle &style)
 {
+    style.apply(this);
+
     annotate(line, text, style.style());
 }
 
@@ -3838,6 +3840,8 @@ void QsciScintilla::annotate(int line, const QString &text, const QsciStyle &sty
 // Annotate a line.
 void QsciScintilla::annotate(int line, const QsciStyledText &text)
 {
+    text.apply(this);
+
     annotate(line, text.text(), text.style());
 }
 
@@ -3881,6 +3885,8 @@ QsciScintilla::ScintillaString QsciScintilla::styleText(const QList<QsciStyledTe
     for (i = 0; i < styled_text.count(); ++i)
     {
         const QsciStyledText &st = styled_text[i];
+
+        st.apply(this);
 
         text.append(st.text());
     }

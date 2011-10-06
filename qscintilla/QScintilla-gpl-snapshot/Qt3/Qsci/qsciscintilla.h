@@ -17,13 +17,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -671,10 +666,14 @@ public:
     //! If \a show is true (the default) then any text found is made visible
     //! (ie. it is unfolded).
     //!
+    //! If \a posix is true then a regular expression is treated in a more
+    //! POSIX compatible manner by interpreting bare ( and ) as tagged sections
+    //! rather than \( and \).
+    //!
     //! \sa findNext(), replace()
     virtual bool findFirst(const QString &expr, bool re, bool cs, bool wo,
             bool wrap, bool forward = true, int line = -1, int index = -1,
-            bool show = true);
+            bool show = true, bool posix = false);
 
     //! Find the next occurence of the string found using findFirst().
     //!
