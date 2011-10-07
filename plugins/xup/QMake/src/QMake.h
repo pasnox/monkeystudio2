@@ -38,7 +38,7 @@ public:
     // CLIToolPlugin
     virtual QStringList availableParsers() const;
     virtual pCommand defaultCommand() const;
-
+    
     static QtVersionManager* versionManager();
 
 protected:

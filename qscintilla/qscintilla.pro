@@ -27,12 +27,12 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
     INCLUDEPATH *= $${QSCINTILLAVERSION}/include $${QSCINTILLAVERSION}/src $${QSCINTILLAVERSION}/lexers $${QSCINTILLAVERSION}/lexlib $${QSCINTILLAVERSION}/Qt4 $${QSCINTILLAVERSION}/Qt4/Qsci
     #INCLUDEPATH    *= $${QSCINTILLA_SOURCES_PATHS}
     DEPENDPATH  *= $${QSCINTILLA_SOURCES_PATHS}
-	
+
     # overwrite some values to made no lib
     CONFIG  -= dll
     CONFIG  -= release
     CONFIG  *= staticlib
-	
+
     # remove install script of qscintilla
     INSTALLS    -= header trans qsci target
 }
