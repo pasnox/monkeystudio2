@@ -695,7 +695,7 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
             }
         }
         else if ( isVariable( node ) ) {
-            const QString variable = QString( "%1\t%2 " )
+            const QString variable = QString( "%1 %2 " )
                 .arg( nodeAttribute( node, "name" ) )
                 .arg( nodeAttribute( node, "operator", "=" ) )
                 ;
@@ -808,7 +808,7 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
 
 QString QMake2XUP::tabbedString( int weight, const QString& string, const QString& eol )
 {
-    return QString( weight, '\t' ).append( string ).append( eol );
+    return QString( weight *4, ' ' ).append( string ).append( eol );
 }
 
 QString QMake2XUP::nodeAttribute( const QDomNode& node, const QString& attribute, const QString& defaultValue )

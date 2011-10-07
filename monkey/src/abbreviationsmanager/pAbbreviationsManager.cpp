@@ -430,7 +430,7 @@ void pAbbreviationsManager::generateScript()
     buffer << "# reset abbreviations";
     buffer << "abbreviation clear";
     buffer << "# introduce new ones per language";
-    buffer << "# abbreviation\tadd\tMacro\tDescription\tLanguage\tSnippet";
+    buffer << "# abbreviation add Macro Description Language Snippet";
     
     foreach ( const QString& language, abbreviations.keys() )
     {

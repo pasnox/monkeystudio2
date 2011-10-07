@@ -49,10 +49,10 @@ bool EnvironmentVariablesManager::writeVariables( const pEnvironmentVariablesMod
     buffer << "# reset variables";
     buffer << "environment clear";
     buffer << "# Available commands:";
-    buffer << "# environment set\tname\tvalue";
-    buffer << "# environment unset\tname";
+    buffer << "# environment set name value";
+    buffer << "# environment unset name";
     buffer << "# environment clear";
-    buffer << "# environment enable\tname\ttrue/false";
+    buffer << "# environment enable name true/false";
     buffer << "# introduce new ones per name/state";
     
     foreach ( const QString& name, variables.keys() ) {

@@ -250,8 +250,8 @@ bool ToolsManager::writeTools( const ToolsManager::Tools& tools ) const
     buffer << "# reset tools";
     buffer << "tools clear";
     buffer << "# Available commands:";
-    buffer << "# tools set\tcaption\tfileIcon\tfilePath\tworkingPath\tdesktopEntry\tuseConsoleManager";
-    buffer << "# tools unset\tcaption";
+    buffer << "# tools set caption fileIcon filePath workingPath desktopEntry useConsoleManager";
+    buffer << "# tools unset caption";
     buffer << "# tools clear";
     buffer << "# tools update-menu";
     buffer << "# tools list";

@@ -316,8 +316,8 @@ void pFileManager::generateScript()
     buffer << "# reset associations";
     buffer << "association clear";
     buffer << "# introduce new ones per language";
-    buffer << "# association add\tlanguage/type\tSuffixes";
-    buffer << "# association set\tlanguage/type\tSuffixes";
+    buffer << "# association add language/type Suffixes";
+    buffer << "# association set language/type Suffixes";
     
     foreach ( const QString& type, mAssociations.keys() )
     {
