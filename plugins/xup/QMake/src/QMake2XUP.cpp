@@ -100,7 +100,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                 }
                 if(liste[0].trimmed()[0] == '}')
                     liste[0] = liste[0].trimmed().right(liste[0].trimmed().length()-2);
-                liste[0] = liste[0].left(liste[0].indexOf(QChar('{'))+1);
+                liste[0] = liste[0].left(liste[0].lastIndexOf(QChar('{'))+1);
                 QStringList liste2 = liste[0].split(QChar(':'),QString::SkipEmptyParts);
                 
                 foreach(QString s,liste2)
