@@ -2,11 +2,11 @@
 
 [CustomMessages]
 MKS_NAME=Monkey Studio IDE
-MKS_COPYRIGHTS=2005 - 2009 Azevedo Filipe & The Monkey Studio Team
+MKS_COPYRIGHTS=2005 - 2011 Azevedo Filipe & The Monkey Studio Team
 MKS_URL=http://monkeystudio.org
 MKS_FORUMS_URL=http://monkeystudio.org/forum
 
-#define MKS_VERSION "1.8.4.0b2"
+#define MKS_VERSION "1.9.0.0"
 #define MKS_REVISION "3482"
 #define MKS_SETUP_NAME "setup_mks_" +MKS_VERSION +"-svn" +MKS_REVISION +"-win32"
 #define QT_PATH "C:\Development\Qt\4.5.1"
