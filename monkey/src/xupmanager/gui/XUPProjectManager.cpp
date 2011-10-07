@@ -11,6 +11,7 @@
 #include "pluginsmanager/XUPPlugin.h"
 #include "templatesmanager/ui/UITemplatesWizard.h"
 #include "recentsmanager/pRecentsManager.h"
+#include "workspace/pFileManager.h"
 
 #include <pDockWidgetTitleBar.h>
 #include <pQueuedMessageToolBar.h>
@@ -37,7 +38,8 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
     titleBar()->addAction( action( atEdit ), 3 );
     titleBar()->addAction( action( atAddFiles ), 4 );
     titleBar()->addAction( action( atRemoveFiles ), 5 );
-    titleBar()->addSeparator( 6 );
+    titleBar()->addAction( action( atOpen ), 6 );
+    titleBar()->addSeparator( 7 );
     
     mFilteredModel = new XUPFilteredProjectModel( tvFiltered );
     tvFiltered->setModel( mFilteredModel );
@@ -190,6 +192,10 @@ QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
             action = new QAction( pIconManager::icon( "remove.png", ":/project" ), tr( "Remove files from current project..." ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT( removeFiles() ) );
             break;
+        case XUPProjectManager::atOpen:
+            action = new QAction( pIconManager::icon( "open.png", ":/project" ), tr( "Open the project file" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT( openProjectFile() ) );
+            break;
     }
     
     if ( action )
@@ -338,6 +344,17 @@ void XUPProjectManager::removeFiles()
     addFiles();
 }
 
+void XUPProjectManager::openProjectFile()
+{
+    XUPProjectItem* project = currentProject();
+    
+    if ( !project ) {
+        return;
+    }
+    
+    MonkeyCore::fileManager()->openFile( project->fileName(), project->codec(), true );
+}
+
 void XUPProjectManager::addFiles( const QStringList& files, XUPItem* scope )
 {
     XUPProjectItem* project = scope->project();
@@ -399,6 +416,7 @@ void XUPProjectManager::setCurrentProject( XUPProjectItem* curProject, XUPProjec
     action( atEdit )->setEnabled( curProject );
     action( atAddFiles )->setEnabled( curProject );
     action( atRemoveFiles )->setEnabled( curProject );
+    action( atOpen )->setEnabled( curProject );
     
     if ( !curProject )
     {

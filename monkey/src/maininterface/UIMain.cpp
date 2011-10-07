@@ -237,6 +237,8 @@ void UIMain::initMenuBar()
         mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atAddFiles ) );
         mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atRemoveFiles ) );
         mb->action( "aSeparator4" );
+        mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atOpen ) );
+        mb->action( "aSeparator5" );
         mb->menu( "mRecents", tr( "Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
         mb->action( "mRecents/aClear", tr( "Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
         mb->action( "mRecents/aSeparator1" );

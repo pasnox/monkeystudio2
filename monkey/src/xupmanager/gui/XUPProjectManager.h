@@ -18,7 +18,7 @@ class Q_MONKEY_EXPORT XUPProjectManager : public pDockWidget, public Ui::XUPProj
     friend class DebugDockWidget;
 
 public:
-    enum ActionType { atNew = 0, atClose, atCloseAll, atEdit, atAddFiles, atRemoveFiles };
+    enum ActionType { atNew = 0, atClose, atCloseAll, atEdit, atAddFiles, atRemoveFiles, atOpen };
     
     XUPProjectManager( QWidget* parent = 0 );
     virtual ~XUPProjectManager();
@@ -47,6 +47,7 @@ public slots:
     void editProject();
     void addFiles();
     void removeFiles();
+    void openProjectFile();
     void setCurrentProject( XUPProjectItem* curProject, XUPProjectItem* preProject );
 
 protected slots:
