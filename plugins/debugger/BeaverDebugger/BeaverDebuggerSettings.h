@@ -1,15 +1,6 @@
 /****************************************************************************
-**
-**      Created using Monkey Studio
-** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>
-** Project   : Monkey Studio Beaver integration
-** FileName  : BeaverDebuggerSettings.cpp
-** Date      : 2009-09-23T19:02:00
-** License   : GPL
-** Comment   : Settings widget of BeaverDebugger plugin
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Andrei KOPATS & The Monkey Studio Team
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 /*!
     \file BeaverDebuggerSettings.cpp

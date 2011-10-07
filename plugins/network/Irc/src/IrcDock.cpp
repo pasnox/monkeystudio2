@@ -1,5 +1,6 @@
 /****************************************************************************
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -282,4 +283,3 @@ IrcDock::~IrcDock()
 
     // Qt delete for me
 }
-

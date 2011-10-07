@@ -10,4 +10,3 @@ HEADERS = MakefileProject.h \
 
 SOURCES = MakefileProject.cpp \
     MakefileProjectItem.cpp
-

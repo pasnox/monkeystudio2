@@ -1,14 +1,6 @@
 /****************************************************************************
-**
-** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>
-** Project   : Beaver Debugger plugin
-** FileName  : BeaverDebugger.h
-** Date      : 
-** License   : GPL
-** Comment   : 
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Andrei KOPATS & The Monkey Studio Team
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 /*!
     \file BeaverDebugger.h
