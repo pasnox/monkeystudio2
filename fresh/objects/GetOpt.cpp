@@ -1,19 +1,20 @@
 /****************************************************************************
-        Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
 
-        This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "GetOpt.h"
 
@@ -167,12 +168,12 @@ void GetOpt::init( int argc, char *argv[], int offset )
 {
     numReqArgs = numOptArgs = 0;
     currArg = 1; // appname is not part of the arguments
-    
+
     if ( argc )
     {
         // application name
         aname = QFileInfo( QString::fromLocal8Bit( argv[0] ) ).fileName();
-        
+
         // arguments
         for ( int i = offset; i < argc; ++i )
         {
@@ -206,11 +207,11 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
     QStack<QString> stack;
     {
         QStringList::const_iterator it = args.isEmpty() ? args.end() : --args.end();
-        
+
         while ( it != args.constEnd() )
         {
             stack.push( *it );
-            
+
             if ( it == args.begin() )
             {
                 it = args.constEnd();
@@ -221,45 +222,45 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
             }
         }
     }
-    
+
     //qWarning() << stack;
 
     enum { StartState, ExpectingState, OptionalState } state = StartState;
     enum TokenType { LongOpt, ShortOpt, Arg, End } t, currType = End;
-    
+
     const OptionConstIterator obegin = options.begin();
     const OptionConstIterator oend = options.end();
     Option currOpt;
     bool extraLoop = true; // we'll do an extra round. fake an End argument
-    
+
     while ( !stack.isEmpty() || extraLoop )
     {
         QString a;
         QString origA;
-        
+
         // identify argument type
         if ( !stack.isEmpty() )
         {
             a = stack.pop();
             currArg++;
             origA = a;
-            
+
             // qDebug( "popped %s", a.toLocal8Bit().constData() );
             if ( a.startsWith( QLatin1String( "--" ) ) )
             {
                 // recognized long option
                 a = a.mid( 2 );
-                
+
                 if ( a.isEmpty() )
                 {
                     qWarning( "'--' feature not supported, yet" );
                     //exit( 2 );
                     return false;
                 }
-                
+
                 t = LongOpt;
                 int equal = a.indexOf( '=' ); // split key=value style arguments
-                
+
                 if ( equal >= 0 )
                 {
                     stack.push( a.mid( equal +1 ) );
@@ -284,7 +285,7 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
                     a = a.mid( 1 );
                     t = LongOpt;
                     int equal = a.find( '=' ); // split key=value style arguments
-                    
+
                     if ( equal >= 0 )
                     {
                         stack.push( a.mid( equal +1 ) );
@@ -295,14 +296,14 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
 #else
                 // short option
                 t = ShortOpt;
-                
+
                 // followed by an argument ? push it for later processing.
                 if ( a.length() > 2 )
                 {
                     stack.push( a.mid( 2 ) );
                     currArg--;
                 }
-                
+
                 a = a[ 1 ];
 #endif
             }
@@ -316,26 +317,26 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
             // faked closing argument
             t = End;
         }
-        
+
         // look up among known list of options
         Option opt;
         if ( t != End )
         {
             OptionConstIterator oit = obegin;
-            
+
             while ( oit != oend )
             {
                 const Option &o = *oit;
-                
+
                 if ( ( t == LongOpt && a == o.lname ) || ( t == ShortOpt && a[ 0 ].unicode() == o.sname ) )
                 {
                     opt = o;
                     break;
                 }
-                
+
                 ++oit;
             }
-            
+
             if ( t == LongOpt && opt.type == OUnknown )
             {
                 if ( currOpt.type != OVarLen )
@@ -481,14 +482,14 @@ bool GetOpt::parse( bool untilFirstSwitchOnly )
                 {
                     *currOpt.stringValue = currOpt.def;
                 }
-                
+
                 if ( t != End )
                 {
                     // re-evaluate current argument
                     stack.push( origA );
                     currArg--;
                 }
-                
+
                 state = StartState;
             }
             break;
