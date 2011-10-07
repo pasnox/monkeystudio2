@@ -29,18 +29,18 @@ class pLocaleModel;
 
 class QMakeTranslationsEditor : public XUPPageEditor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	QMakeTranslationsEditor( QWidget* parent = 0 );
-	virtual ~QMakeTranslationsEditor();
+    QMakeTranslationsEditor( QWidget* parent = 0 );
+    virtual ~QMakeTranslationsEditor();
 
-	virtual void setup( XUPProjectItem* project );
-	virtual void finalize();
+    virtual void setup( XUPProjectItem* project );
+    virtual void finalize();
 
 protected:
-	Ui_QMakeTranslationsEditor* ui;
-	XUPProjectItem* mProject;
+    Ui_QMakeTranslationsEditor* ui;
+    XUPProjectItem* mProject;
     pLocaleModel* mModel;
     QHash<QString, XUPItem*> mCurrentTranslations;
 

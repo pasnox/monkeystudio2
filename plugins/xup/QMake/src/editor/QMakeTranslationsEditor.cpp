@@ -30,20 +30,20 @@
 #define QMakeTranslationsEditorDefaultDirectory "translations"
 
 QMakeTranslationsEditor::QMakeTranslationsEditor( QWidget* parent )
-	: XUPPageEditor( parent )
+    : XUPPageEditor( parent )
 {
     mProject = 0;
     mModel = new pLocaleModel( this );
     mModel->setCheckable( true );
     
-	ui = new Ui_QMakeTranslationsEditor;
-	ui->setupUi( this );
+    ui = new Ui_QMakeTranslationsEditor;
+    ui->setupUi( this );
     ui->tvLocales->setModel( mModel );
 }
 
 QMakeTranslationsEditor::~QMakeTranslationsEditor()
 {
-	delete ui;
+    delete ui;
 }
 
 void QMakeTranslationsEditor::setup( XUPProjectItem* project )

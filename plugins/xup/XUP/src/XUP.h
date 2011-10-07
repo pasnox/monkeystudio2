@@ -25,26 +25,26 @@
 
 class GenericXUPProjectItem : public XUPProjectItem
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	Q_INVOKABLE GenericXUPProjectItem();
-	
-	virtual QString projectType() const;
-	virtual void installCommands();
+    Q_INVOKABLE GenericXUPProjectItem();
+    
+    virtual QString projectType() const;
+    virtual void installCommands();
 };
 
 class XUP : public XUPPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin XUPPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin XUPPlugin )
 
 protected:
-	DocumentFilterMap mFilters;
-	
-	virtual void fillPluginInfos();
-	virtual bool install();
-	virtual bool uninstall();
+    DocumentFilterMap mFilters;
+    
+    virtual void fillPluginInfos();
+    virtual bool install();
+    virtual bool uninstall();
 };
 
 #endif // XUP_H

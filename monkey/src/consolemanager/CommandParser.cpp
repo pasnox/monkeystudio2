@@ -76,9 +76,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
             pattern.Type = pConsoleManagerStep::Invalid;
         else
         {
-			if ( status ) {
-            	*status = MkSShellInterpreter::InvalidCommand;
-			}
+            if ( status ) {
+                *status = MkSShellInterpreter::InvalidCommand;
+            }
             
             return QString("Invalid type '%1'").arg(arguments[6]);
         }
@@ -96,9 +96,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
             }
             else
             {
-				if ( status ) {
-                	*status = MkSShellInterpreter::InvalidCommand;
-				}
+                if ( status ) {
+                    *status = MkSShellInterpreter::InvalidCommand;
+                }
                 return QString("Parser '%1' has invalid type").arg(arguments[1]);
             }
         }
@@ -113,9 +113,9 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
     {
         if (1 != arguments.size())
         {
-			if ( status ) {
-            	*status = MkSShellInterpreter::InvalidCommand;
-			}
+            if ( status ) {
+                *status = MkSShellInterpreter::InvalidCommand;
+            }
             return QString("Command '%1 %2' has no arguments").arg(command).arg(arguments[0]);
         }
         
