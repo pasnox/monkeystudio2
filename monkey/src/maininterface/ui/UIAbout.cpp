@@ -82,7 +82,8 @@ UIAbout::UIAbout( QWidget* parent )
         << pData( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
         << pData( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French Translator" ) )
         << pData( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) )
-        << pData( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) );
+        << pData( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) )
+    ;
     
     const QList<pData> links = QList<pData>()
         << pData( QString::null, QString::null, QString::null, QString( "http://%1" ).arg( PACKAGE_DOMAIN ), QObject::tr( "%1 homepage" ).arg( PACKAGE_NAME ) )
@@ -92,10 +93,13 @@ UIAbout::UIAbout( QWidget* parent )
         << pData( QString::null, QString::null, QString::null, "http://monkeystudio.org/team", QObject::tr( "MkS Team" ) )
         << pData( QString::null, QString::null, QString::null, "http://qt.nokia.com", QObject::tr( "Nokia's Qt homepage" ) )
         << pData( QString::null, QString::null, QString::null, "http://webissues.mimec.org", QObject::tr( "WebIssues" ) )
-        << pData( QString::null, QString::null, QString::null, "http://webissues.monkeystudio.org", QObject::tr( "Our WebIssues Server (login/password: anonymous)" ) );
+        << pData( QString::null, QString::null, QString::null, "http://webissues.monkeystudio.org", QObject::tr( "Our WebIssues Server (login/password: anonymous)" ) )
+    ;
     
     const QList<pData> donations = QList<pData>()
-        << pData( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"%1\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the project." ).arg( PACKAGE_DONATION_LINK ) );
+        << pData( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "You can use this <a href=\"%1\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the project." ).arg( PACKAGE_DONATION_LINK ) )
+        << pData( "Viosoft Corporation", "Viosoft Corporation", QObject::tr( "U.S.A." ), "sales@viosoft.com", QObject::tr( "<a href=\"http://www.viosoft.com\">Homepage</a>" ) )
+    ;
     
     setAttribute( Qt::WA_DeleteOnClose );
     setWindowTitle( tr( "About : %1" ).arg( PACKAGE_NAME ) );
