@@ -23,6 +23,6 @@
 #define AUTHOR_NAME       "Darren Hiebert"
 #define AUTHOR_EMAIL      "dhiebert@users.sourceforge.net"
 
-#endif	/* _CTAGS_H */
+#endif  /* _CTAGS_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

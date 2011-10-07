@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerCustom class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -82,13 +77,13 @@ public:
     void setStyling(int length, const QsciStyle &style);
 
     //! The styling position is set to \a start and the mask of style bits that
-    //! can be set is set to \a style_bits.  \a style_bits allows the styling
-    //! of text to be done over several passes by setting different style bits
-    //! on each pass.  If \a style_bits is 0 then all style bits (as returned
-    //! by styleBitsNeeded()) are set.
+    //! can be set is set to \a styleBits.  \a styleBits allows the styling of
+    //! text to be done over several passes by setting different style bits on
+    //! each pass.  If \a styleBits is 0 then all style bits (as returned by
+    //! styleBitsNeeded()) are set.
     //!
     //! \sa setStyling(), styleBitsNeeded(), styleText()
-    void startStyling(int pos, int style_bits = 0);
+    void startStyling(int pos, int styleBits = 0);
 
     //! This is called when the section of text beginning at position \a start
     //! and up to position \a end needs to be styled.  \a start will always be

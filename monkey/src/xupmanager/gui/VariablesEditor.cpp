@@ -1,543 +1,302 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #include "VariablesEditor.h"
+#include "ui_VariablesEditor.h"
 #include "xupmanager/core/XUPProjectItem.h"
-#include "xupmanager/core/XUPProjectItemHelper.h"
-#include "pMonkeyStudio.h"
 
 #include <QMenu>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDebug>
 
 VariablesEditor::VariablesEditor( QWidget* parent )
-	: QFrame( parent )
+    : XUPPageEditor( parent )
 {
-	mProject = 0;
-	
-	setupUi( this );
-	
-	// tbOthersValuesAdd actions
-	QMenu* addMenu = new QMenu( tbOthersValuesAdd );
-	aOthersValuesAddValue = addMenu->addAction( tr( "As Value..." ) );
-	aOthersValuesAddFile = addMenu->addAction( tr( "As File..." ) );
-	aOthersValuesAddPath = addMenu->addAction( tr( "As Path..." ) );
-	tbOthersValuesAdd->setMenu( addMenu );
-	
-	// tbOthersValuesEdit actions
-	QMenu* editMenu = new QMenu( tbOthersValuesEdit );
-	aOthersValuesEditValue = editMenu->addAction( tr( "As Value..." ) );
-	aOthersValuesEditFile = editMenu->addAction( tr( "As File..." ) );
-	aOthersValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
-	tbOthersValuesEdit->setMenu( editMenu );
+    ui = new Ui_VariablesEditor;
+    mProject = 0;
+    mModel = new XUPItemVariableEditorModel( this );
+    
+    ui->setupUi( this );
+    ui->lvVariables->setModel( mModel );
+    ui->lvValues->setModel( mModel );
+    
+    // tbValuesAdd actions
+    QMenu* addMenu = new QMenu( ui->tbValuesAdd );
+    aValuesAddValue = addMenu->addAction( tr( "As Value..." ) );
+    aValuesAddFile = addMenu->addAction( tr( "As File..." ) );
+    aValuesAddPath = addMenu->addAction( tr( "As Path..." ) );
+    ui->tbValuesAdd->setMenu( addMenu );
+    
+    // tbValuesEdit actions
+    QMenu* editMenu = new QMenu( ui->tbValuesEdit );
+    aValuesEditValue = editMenu->addAction( tr( "As Value..." ) );
+    aValuesEditFile = editMenu->addAction( tr( "As File..." ) );
+    aValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
+    ui->tbValuesEdit->setMenu( editMenu );
+    
+    connect( ui->lvVariables->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( lvVariables_selectionModel_selectionChanged() ) );
+    connect( ui->lvValues->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( lvValues_selectionModel_selectionChanged() ) );
+    connect( ui->cbQuoteEnabled, SIGNAL( toggled( bool ) ), mModel, SLOT( setQuoteValues( bool ) ) );
+    
+    mModel->setQuoteValues( ui->cbQuoteEnabled->isChecked() );
+    
+    lvVariables_selectionModel_selectionChanged();
 }
 
 VariablesEditor::~VariablesEditor()
 {
+    delete ui;
 }
 
-void VariablesEditor::init( XUPProjectItem* project )
+void VariablesEditor::setQuoteSpacedValuesVisible( bool visible )
 {
-	mProject = project;
-	
-	int pType = mProject->projectType();
-	mFileVariables = mProject->projectInfos()->fileVariables( pType );
-	mPathVariables = mProject->projectInfos()->pathVariables( pType );
-	mManagedVariables << mFileVariables << XUPProjectItemHelper::DynamicFolderName << XUPProjectItemHelper::DynamicFolderSettingsName;
-	
-	// loading datas from variable of root scope having operator =, += or *= only
-	foreach ( XUPItem* child, mProject->childrenList() )
-	{
-		if ( child->type() == XUPItem::Variable )
-		{
-			QString variableName = child->attribute( "name" );
-			QString op = child->attribute( "operator", "=" );
-			
-			if ( op != "=" && op != "+=" && op != "*=" )
-			{
-				continue;
-			}
-			
-			if ( variableName == XUPProjectItemHelper::DynamicFolderSettingsName ||
-				variableName == XUPProjectItemHelper::DynamicFolderName )
-			{
-				continue;
-			}
-			
-			foreach ( XUPItem* value, child->childrenList() )
-			{
-				XUPItem::Type type = value->type();
-				QString val;
-				
-				if ( type != XUPItem::Value && type != XUPItem::File && type != XUPItem::Path )
-				{
-					continue;
-				}
-				
-				val += mValues[ variableName ].trimmed();
-				val += " " +value->attribute( "content" );
-				mValues[ variableName ] = val.trimmed();
-			}
-		}
-	}
-	
-	updateValuesEditorVariables();
+    ui->cbQuoteEnabled->setVisible( visible );
+}
+
+bool VariablesEditor::isQuoteSpacedValuesVisible() const
+{
+    return ui->cbQuoteEnabled->isVisible();
+}
+
+void VariablesEditor::setQuoteSpacedValuesChecked( bool checked )
+{
+    ui->cbQuoteEnabled->setChecked( checked );
+}
+
+bool VariablesEditor::isQuoteSpacedValuesChecked() const
+{
+    return ui->cbQuoteEnabled->isChecked();
+}
+
+XUPItemVariableEditorModel::FilterMode VariablesEditor::filterMode() const
+{
+    return XUPItemVariableEditorModel::Out;
+}
+
+bool VariablesEditor::isFriendlyDisplayText() const
+{
+    return false;
+}
+
+QStringList VariablesEditor::filteredVariables() const
+{
+    return mProject ? mProject->documentFilters().fileVariables() : QStringList();
+}
+
+void VariablesEditor::setup( XUPProjectItem* project )
+{
+    mProject = project;
+    mModel->setFilterMode( filterMode() );
+    mModel->setFriendlyDisplayText( isFriendlyDisplayText() );
+    mModel->setFilteredVariables( filteredVariables() );
+    mModel->setRootItem( project );
+    const QModelIndex index = mModel->index( 0, 0 );
+    ui->lvVariables->setCurrentIndex( index );
+    ui->lvVariables->scrollTo( index );
 }
 
 void VariablesEditor::finalize()
 {
-	QListWidgetItem* curItem = lwOthersVariables->currentItem();
-	on_lwOthersVariables_currentItemChanged( curItem, curItem );
-	
-	// tell about variables to remove
-	foreach ( const QString& variable, mVariablesToRemove )
-	{
-		mValues[ variable ] = QString::null;
-	}
-	
-	// update project
-	foreach ( const QString& variable, mValues.keys() )
-	{
-		bool isEmpty = mValues[ variable ].trimmed().isEmpty();
-		XUPItem* variableItem = getUniqueVariableItem( variable, !isEmpty );
-		if ( !variableItem )
-		{
-			continue;
-		}
-		
-		if ( !isEmpty )
-		{
-			if ( mFileVariables.contains( variable ) || mPathVariables.contains( variable ) )
-			{
-				// get child type
-				XUPItem::Type type = mFileVariables.contains( variable ) ? XUPItem::File : XUPItem::Path;
-				// get values
-				QStringList values = mProject->splitMultiLineValue( mValues[ variable ] );
-				
-				// update variable
-				variableItem->setAttribute( "operator", "=" );
-				variableItem->setAttribute( "multiline", "true" );
-				
-				// remove all child
-				foreach ( XUPItem* child, variableItem->childrenList() )
-				{
-					if ( child->type() == type )
-					{
-						QString value = child->attribute( "content" );
-						if ( values.contains( value ) )
-						{
-							values.removeAll( value );
-						}
-						else if ( !values.contains( value ) )
-						{
-							variableItem->removeChild( child );
-						}
-					}
-				}
-				
-				// add new ones
-				foreach ( const QString& v, values )
-				{
-					XUPItem* value = variableItem->addChild( type );
-					value->setAttribute( "content", v );
-				}
-			}
-			else if ( variable == "CONFIG" )
-			{
-				// update variable
-				variableItem->setAttribute( "operator", "+=" );
-				variableItem->setAttribute( "multiline", "false" );
-				
-				// remove all child values
-				foreach ( XUPItem* child, variableItem->childrenList() )
-				{
-					if ( child->type() == XUPItem::Value )
-					{
-						variableItem->removeChild( child );
-					}
-				}
-				
-				// add new one
-				XUPItem* value = variableItem->addChild( XUPItem::Value );
-				value->setAttribute( "content", mValues[ variable ] );
-			}
-			else
-			{
-				// update variable
-				variableItem->setAttribute( "operator", "=" );
-				variableItem->setAttribute( "multiline", "false" );
-				
-				// remove all child values
-				foreach ( XUPItem* child, variableItem->childrenList() )
-				{
-					if ( child->type() == XUPItem::Value )
-					{
-						variableItem->removeChild( child );
-					}
-				}
-				
-				// add new one
-				XUPItem* value = variableItem->addChild( XUPItem::Value );
-				value->setAttribute( "content", mValues[ variable ] );
-			}
-		}
-		else if ( isEmpty && variableItem && variableItem->childCount() > 0 )
-		{
-			// remove all child values
-			foreach ( XUPItem* child, variableItem->childrenList() )
-			{
-				if ( child->type() == XUPItem::Value || child->type() == XUPItem::File || child->type() == XUPItem::Path )
-				{
-					variableItem->removeChild( child );
-				}
-			}
-		}
-		
-		// remove empty variable
-		if ( variableItem->childCount() == 0 )
-		{
-			variableItem->parent()->removeChild( variableItem );
-		}
-	}
+    mModel->submit();
 }
 
-XUPItem* VariablesEditor::getUniqueVariableItem( const QString& variableName, bool create )
+QModelIndex VariablesEditor::currentVariable() const
 {
-	const QStringList mOperators = QStringList() << "=" << "+=" << "*=";
-	XUPItemList variables = mProject->getVariables( mProject, variableName, 0, false );
-	XUPItem* variableItem = 0;
-	
-	// remove duplicate variables
-	foreach ( XUPItem* variable, variables )
-	{
-		QString op = variable->attribute( "operator", "=" );
-		
-		if ( !variableItem && mOperators.contains( op ) )
-		{
-			variableItem = variable;
-		}
-		else if ( mOperators.contains( op ) )
-		{
-			variable->parent()->removeChild( variable );
-		}
-	}
-	
-	// create it if needed
-	if ( !variableItem && create )
-	{
-		variableItem = mProject->addChild( XUPItem::Variable );
-		variableItem->setAttribute( "name", variableName );
-	}
-	
-	// return item
-	return variableItem;
+    const QModelIndex index = ui->lvVariables->selectionModel()->selectedIndexes().value( 0 );
+    return ui->lvVariables->rootIndex() == index.parent() ? index : QModelIndex();
 }
 
-void VariablesEditor::updateValuesEditorVariables()
+QModelIndex VariablesEditor::currentValue() const
 {
-	QListWidgetItem* curItem = lwOthersVariables->selectedItems().value( 0 );
-	const QString curVariable = curItem ? curItem->text() : QString::null;
-	curItem = 0;
-	
-	lwOthersVariables->clear();
-	lwOthersValues->clear();
-	
-	foreach ( const QString& variable, mValues.keys() )
-	{
-		if ( !mManagedVariables.contains( variable ) )
-		{
-			lwOthersVariables->addItem( variable );
-			
-			if ( variable == curVariable )
-			{
-				curItem = lwOthersVariables->item( lwOthersVariables->count() -1 );
-				curItem->setSelected( true );
-			}
-		}
-	}
+    const QModelIndex index = ui->lvValues->selectionModel()->selectedIndexes().value( 0 );
+    return ui->lvValues->rootIndex() == index.parent() ? index : QModelIndex();
 }
 
-void VariablesEditor::updateValuesEditorValues( const QString& variable )
+void VariablesEditor::lvVariables_selectionModel_selectionChanged()
 {
-	const QStringList values = XUPProjectItem::splitMultiLineValue( mValues[ variable ] );
-	
-	lwOthersValues->clear();
-	lwOthersValues->addItems( values );
+    const QModelIndex index = currentVariable();
+    ui->tbVariablesEdit->setEnabled( index.isValid() );
+    ui->gbValues->setEnabled( index.isValid() );
+    ui->lvValues->setRootIndex( index );
+    lvValues_selectionModel_selectionChanged();
 }
 
-void VariablesEditor::on_lwOthersVariables_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous )
+void VariablesEditor::on_tbVariablesAdd_clicked()
 {
-	// enable/disable actions
-	gbOthersValues->setEnabled( current );
-	tbOthersVariablesEdit->setEnabled( current );
-	tbOthersVariablesRemove->setEnabled( current );
-	
-	// save previous variable datas
-	if ( previous )
-	{
-		const QString variable = previous->text();
-		QStringList values;
-		
-		for ( int i = 0; i < lwOthersValues->count(); i++ )
-		{
-			values << lwOthersValues->item( i )->text();
-		}
-		
-		mValues[ variable ] = values.join( " " );;
-	}
-	
-	// update values view
-	const QString variable = current ? current->text() : QString::null;
-	updateValuesEditorValues( variable );
+    const QStringList variables = mModel->knownVariables();
+    bool ok;
+    
+    const QString variable = QInputDialog::getItem( QApplication::activeWindow(), tr( "Add variable..." ), tr( "Select a variable name or enter a new one" ), variables, 0, true, &ok );
+    
+    if ( !variable.isEmpty() && ok ) {
+        const QModelIndex index = mModel->addVariable( variable );
+        
+        if ( index.isValid() ) {
+            ui->lvVariables->setCurrentIndex( index );
+            ui->lvVariables->scrollTo( index );
+        }
+        else {
+            QMessageBox::information( QApplication::activeWindow(), tr( "Information..." ), tr( "This variable is filtered." ) );
+        }
+    }
 }
 
-void VariablesEditor::on_tbOthersVariablesAdd_clicked()
+void VariablesEditor::on_tbVariablesEdit_clicked()
 {
-	bool ok;
-	const QStringList variables = mProject->projectInfos()->knowVariables( mProject->projectType() );
-	const QString variable = QInputDialog::getItem( window(), tr( "Add variable..." ), tr( "Select a variable name or enter a new one" ), variables, 0, true, &ok );
-	
-	if ( !variable.isEmpty() && ok )
-	{
-		if ( !mValues.keys().contains( variable ) && !mManagedVariables.contains( variable ) )
-		{
-			QListWidgetItem* item = new QListWidgetItem( variable, lwOthersVariables );
-			lwOthersVariables->setCurrentItem( item );
-			
-			mValues[ variable ] = QString::null;
-			mVariablesToRemove.removeAll( variable );
-		}
-		else
-		{
-			QMessageBox::information( window(), tr( "Information..." ), tr( "This variable already exists or is filtered out." ) );
-		}
-	}
+    const QModelIndex index = currentVariable();
+    
+    if ( !index.isValid() ) {
+        return;
+    }
+    
+    bool ok;
+    QString variable = index.data( Qt::DisplayRole ).toString();
+    variable = QInputDialog::getText( QApplication::activeWindow(), tr( "Edit variable..." ), tr( "Enter a new name for this variable" ), QLineEdit::Normal, variable, &ok );
+    
+    if ( !variable.isEmpty() && ok ) {
+        if ( !mModel->setData( index, variable, Qt::DisplayRole ) ) {
+            QMessageBox::information( QApplication::activeWindow(), tr( "Information..." ), tr( "This variable exists or is filtered." ) );
+        }
+    }
 }
 
-void VariablesEditor::on_tbOthersVariablesEdit_clicked()
+void VariablesEditor::lvValues_selectionModel_selectionChanged()
 {
-	QListWidgetItem* item = lwOthersVariables->currentItem();
-	
-	if ( !item )
-	{
-		return;
-	}
-	
-	bool ok;
-	QString oldVariable = item->text();
-	QString variable = QInputDialog::getText( window(), tr( "Edit variable..." ), tr( "Enter a new name for this variable" ), QLineEdit::Normal, oldVariable, &ok );
-	
-	if ( !variable.isEmpty() && ok )
-	{
-		if ( !mValues.keys().contains( variable ) && !mManagedVariables.contains( variable ) )
-		{
-			item->setText( variable );
-			
-			mValues.remove( oldVariable );
-			if ( !mVariablesToRemove.contains( oldVariable ) )
-			{
-				mVariablesToRemove << oldVariable;
-			}
-		}
-		else
-		{
-			QMessageBox::information( QApplication::activeWindow(), tr( "Information..." ), tr( "This variable already exists or is filtered out." ) );
-		}
-	}
+    const QModelIndex variableIndex = currentVariable();
+    const QModelIndex valueIndex = currentValue();
+    const int count = mModel->rowCount( variableIndex );
+    ui->tbValuesEdit->setEnabled( valueIndex.isValid() );
+    ui->tbValuesClear->setEnabled( variableIndex.isValid() && count > 0 );
 }
 
-void VariablesEditor::on_tbOthersVariablesRemove_clicked()
+void VariablesEditor::on_tbValuesAdd_clicked()
 {
-	QListWidgetItem* item = lwOthersVariables->currentItem();
-	
-	if ( !item )
-	{
-		return;
-	}
-	
-	// confirm user request
-	if ( QMessageBox::question( QApplication::activeWindow(), tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
-	{
-		QString variable = item->text();
-		
-		lwOthersValues->clear();
-		delete item;
-		
-		mValues.remove( variable );
-		if ( !mVariablesToRemove.contains( variable ) )
-		{
-			mVariablesToRemove << variable;
-		}
-	}
+    on_tbValuesAdd_triggered( aValuesAddValue );
 }
 
-void VariablesEditor::on_lwOthersValues_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous )
+void VariablesEditor::on_tbValuesAdd_triggered( QAction* action )
 {
-	// enable button according to item validity
-	tbOthersValuesEdit->setEnabled( current );
-	tbOthersValuesRemove->setEnabled( current );
-	Q_UNUSED( previous );
+    const QModelIndex variableIndex = currentVariable();
+    
+    if ( !variableIndex.isValid() ) {
+        return;
+    }
+    
+    const QString title = tr( "Add a value..." );
+    bool ok = true;
+    QString value;
+    
+    if ( action == aValuesAddValue ) {
+        value = QInputDialog::getText( QApplication::activeWindow(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+        
+        if ( !ok ) {
+            value.clear();
+        }
+    }
+    else if ( action == aValuesAddFile ) {
+        value = QFileDialog::getOpenFileName( QApplication::activeWindow(), tr( "Choose a file" ), mProject->path() );
+        
+        if ( !value.isEmpty() ) {
+            value = mProject->relativeFilePath( value );
+        }
+    }
+    else if ( action == aValuesAddPath ) {
+        value = QFileDialog::getExistingDirectory( QApplication::activeWindow(), tr( "Choose a path" ), mProject->path() );
+        
+        if ( !value.isEmpty() ) {
+            value = mProject->relativeFilePath( value );
+        }
+    }
+    
+    if ( value.isEmpty() || !ok ) {
+        return;
+    }
+    
+    const QModelIndex index = mModel->addValue( variableIndex, value );
+    ui->lvValues->setCurrentIndex( index );
+    ui->lvValues->scrollTo( index );
 }
 
-void VariablesEditor::on_tbOthersValuesAdd_clicked()
+void VariablesEditor::on_tbValuesEdit_clicked()
 {
-	on_tbOthersValuesAdd_triggered( aOthersValuesAddValue );
+    on_tbValuesEdit_triggered( aValuesEditValue );
 }
 
-void VariablesEditor::on_tbOthersValuesAdd_triggered( QAction* action )
+void VariablesEditor::on_tbValuesEdit_triggered( QAction* action )
 {
-	QListWidgetItem* variableItem = lwOthersVariables->currentItem();
-	
-	if ( variableItem )
-	{
-		const QString title = tr( "Add a value..." );
-		bool ok = true;
-		QString val;
-		
-		if ( action == aOthersValuesAddValue )
-		{
-			val	= QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
-			if ( !ok )
-			{
-				val.clear();
-			}
-		}
-		else if ( action == aOthersValuesAddFile )
-		{
-			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), mProject->path() );
-			if ( !val.isEmpty() )
-			{
-				val = mProject->relativeFilePath( val );
-			}
-		}
-		else if ( action == aOthersValuesAddPath )
-		{
-			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), mProject->path() );
-			if ( !val.isEmpty() )
-			{
-				val = mProject->relativeFilePath( val );
-			}
-		}
-		
-		if ( !val.isEmpty() )
-		{
-			// quote value if needed
-			if ( val.contains( " " ) && !val.startsWith( '"' ) && !val.endsWith( '"' ) )
-			{
-				val.prepend( '"' ).append( '"' );
-			}
-			
-			// check if value exists
-			for ( int i = 0; i < lwOthersValues->count(); i++ )
-			{
-				QListWidgetItem* valueItem = lwOthersValues->item( i );
-				
-				if ( valueItem->text() == val )
-				{
-					lwOthersValues->setCurrentItem( valueItem );
-					return;
-				}
-			}
-			
-			// create value item
-			QListWidgetItem* valueItem = new QListWidgetItem( val, lwOthersValues );
-			lwOthersValues->setCurrentItem( valueItem );
-		}
-	}
+    const QModelIndex variableIndex = currentVariable();
+    const QModelIndex valueIndex = currentValue();
+    
+    if ( !variableIndex.isValid() || !valueIndex.isValid() ) {
+        return;
+    }
+    
+    const QString title = tr( "Edit a value..." );
+    bool ok = true;
+    QString value = valueIndex.data( Qt::DisplayRole ).toString();
+    
+    if ( action == aValuesEditValue ) {
+        value = QInputDialog::getText( QApplication::activeWindow(), title, tr( "Edit the value :" ), QLineEdit::Normal, value, &ok );
+        
+        if ( !ok ) {
+            value.clear();
+        }
+    }
+    else {
+        value = mProject->filePath( value );
+        
+        if ( action == aValuesEditFile ) {
+            value = QFileDialog::getOpenFileName( QApplication::activeWindow(), tr( "Choose a file" ), value );
+        }
+        else if ( action == aValuesEditPath ) {
+            value = QFileDialog::getExistingDirectory( QApplication::activeWindow(), tr( "Choose a path" ), value );
+        }
+        
+        if ( !value.isEmpty() ) {
+            value = mProject->relativeFilePath( value );
+        }
+    }
+    
+    if ( value.isEmpty() || !ok ) {
+        return;
+    }
+    
+    if ( !mModel->setData( valueIndex, value, Qt::DisplayRole ) ) {
+        QMessageBox::information( QApplication::activeWindow(), tr( "Information..." ), tr( "This value already exists." ) );
+    }
 }
 
-void VariablesEditor::on_tbOthersValuesEdit_clicked()
+void VariablesEditor::on_tbValuesClear_clicked()
 {
-	on_tbOthersValuesEdit_triggered( aOthersValuesEditValue );
-}
-
-void VariablesEditor::on_tbOthersValuesEdit_triggered( QAction* action )
-{
-	QListWidgetItem* valueItem = lwOthersValues->currentItem();
-	
-	if ( valueItem )
-	{
-		const QString title = tr( "Edit a value..." );
-		bool ok = true;
-		QString oldValue = valueItem->text();
-		QString val;
-		
-		if ( action == aOthersValuesEditValue )
-		{
-			val	= QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, oldValue, &ok );
-			if ( !ok )
-			{
-				val.clear();
-			}
-		}
-		else if ( action == aOthersValuesEditFile )
-		{
-			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), oldValue );
-			if ( !val.isEmpty() )
-			{
-				val = mProject->relativeFilePath( val );
-			}
-		}
-		else if ( action == aOthersValuesEditPath )
-		{
-			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), oldValue );
-			if ( !val.isEmpty() )
-			{
-				val = mProject->relativeFilePath( val );
-			}
-		}
-		
-		if ( !val.isEmpty() )
-		{
-			// quote value if needed
-			if ( val.contains( " " ) && !val.startsWith( '"' ) && !val.endsWith( '"' ) )
-			{
-				val.prepend( '"' ).append( '"' );
-			}
-			
-			// check if value exists
-			for ( int i = 0; i < lwOthersValues->count(); i++ )
-			{
-				QListWidgetItem* item = lwOthersValues->item( i );
-				
-				if ( item->text() == val )
-				{
-					lwOthersValues->setCurrentItem( item );
-					return;
-				}
-			}
-			
-			// update item
-			valueItem->setText( val );
-		}
-	}
-}
-
-void VariablesEditor::on_tbOthersValuesRemove_clicked()
-{
-	QListWidgetItem* valueItem = lwOthersValues->currentItem();
-	
-	if ( valueItem )
-	{
-		// confirm user request
-		if ( QMessageBox::question( QApplication::activeWindow(), tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
-		{
-			return;
-		}
-		
-		// remove value
-		delete valueItem;
-	}
-}
-
-void VariablesEditor::on_tbOthersValuesClear_clicked()
-{
-	QListWidgetItem* variableItem = lwOthersVariables->currentItem();
-	
-	if ( variableItem )
-	{
-		// request user confirm
-		if ( QMessageBox::question( QApplication::activeWindow(), tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
-		{
-			lwOthersValues->clear();
-		}
-	}
+    const QModelIndex variableIndex = currentVariable();
+    
+    if ( !variableIndex.isValid() ) {
+        return;
+    }
+    
+    if ( QMessageBox::question( QApplication::activeWindow(), tr( "Clear values..." ), tr( "Are you sure you want to clear these values ?" ), QMessageBox::Yes, QMessageBox::No ) == QMessageBox::No ) {
+        return;
+    }
+    
+    for ( int i = 0; i < mModel->rowCount( variableIndex ); i++ ) {
+        const QModelIndex index = variableIndex.child( i, 0 );
+        mModel->setData( index, Qt::Checked, Qt::CheckStateRole );
+    }
 }

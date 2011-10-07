@@ -1,15 +1,6 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : qSciShortcutsManager.h
-** Date      : 2008-01-14T00:37:07
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #ifndef QSCISHORTCUTSMANAGER
 #define QSCISHORTCUTSMANAGER
 
-#include <objects/MonkeyExport.h>
-#include <objects/QSingleton.h>
+#include <MonkeyExport.h>
+#include <QSingleton.h>
 
 #include <QApplication>
 #include <QIcon>
@@ -46,8 +36,8 @@ class pEditor;
 
 struct SciAction
 {
-	SciAction (QString _name, QString _text, QIcon _icon, QString _defaultShortcut, QString _toolTip, int _messageCode):
-		name (_name), text (_text), icon (_icon), defaultShortcut (_defaultShortcut), toolTip (_toolTip), messageCode (_messageCode){};
+    SciAction (QString _name, QString _text, QIcon _icon, QString _defaultShortcut, QString _toolTip, int _messageCode):
+        name (_name), text (_text), icon (_icon), defaultShortcut (_defaultShortcut), toolTip (_toolTip), messageCode (_messageCode){};
     QString name;
     QString text;
     QIcon icon;
@@ -62,7 +52,7 @@ class Q_MONKEY_EXPORT qSciShortcutsManager: public QObject, public QSingleton<qS
     Q_OBJECT
     friend class QSingleton<qSciShortcutsManager>;
 protected:
-	qSciShortcutsManager (QObject* parent = QApplication::instance());
+    qSciShortcutsManager (QObject* parent = QApplication::instance());
 
 protected:
     QList<SciAction> sactions;

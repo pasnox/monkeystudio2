@@ -1,3 +1,2 @@
-TEMPLATE	= subdirs
-
-SUBDIRS	= XUP QMake PHP-Qt PyQt
+TEMPLATE    = subdirs
+SUBDIRS = QMake PHP-Qt PyQt MakefileProject XUP

@@ -1,6 +1,6 @@
 // This module implements the QsciLexerSQL class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -38,7 +33,10 @@
 // The ctor.
 QsciLexerSQL::QsciLexerSQL(QObject *parent)
     : QsciLexer(parent),
-      fold_comments(false), fold_compact(true), backslash_escapes(false)
+      at_else(false), fold_comments(false), fold_compact(true),
+      only_begin(false), backticks_identifier(false),
+      numbersign_comment(false), backslash_escapes(false),
+      allow_dotted_word(false)
 {
 }
 
@@ -153,6 +151,8 @@ QFont QsciLexerSQL::defaultFont(int style) const
     case CommentDocKeywordError:
 #if defined(Q_OS_WIN)
         f = QFont("Comic Sans MS",9);
+#elif defined(Q_OS_MAC)
+        f = QFont("Comic Sans MS", 12);
 #else
         f = QFont("Bitstream Vera Serif",9);
 #endif
@@ -169,6 +169,8 @@ QFont QsciLexerSQL::defaultFont(int style) const
     case PlusPrompt:
 #if defined(Q_OS_WIN)
         f = QFont("Courier New",10);
+#elif defined(Q_OS_MAC)
+        f = QFont("Courier", 12);
 #else
         f = QFont("Bitstream Vera Sans Mono",9);
 #endif
@@ -234,6 +236,10 @@ const char *QsciLexerSQL::keywords(int set) const
             "view when whenever where with without work write "
             "year zone";
 
+    if (set == 3)
+        return
+            "param author since return see deprecated todo";
+
     if (set == 4)
         return
             "acc~ept a~ppend archive log attribute bre~ak "
@@ -245,6 +251,12 @@ const char *QsciLexerSQL::keywords(int set) const
             "spo~ol sta~rt startup store timi~ng tti~tle "
             "undef~ine var~iable whenever oserror whenever "
             "sqlerror";
+
+    if (set == 5)
+        return
+            "dbms_output.disable dbms_output.enable dbms_output.get_line "
+            "dbms_output.get_lines dbms_output.new_line dbms_output.put "
+            "dbms_output.put_line";
 
     return 0;
 }
@@ -314,6 +326,9 @@ QString QsciLexerSQL::description(int style) const
 
     case KeywordSet8:
         return tr("User defined 4");
+
+    case QuotedIdentifier:
+        return tr("Quoted identifier");
     }
 
     return QString();
@@ -333,42 +348,66 @@ QColor QsciLexerSQL::defaultPaper(int style) const
 // Refresh all properties.
 void QsciLexerSQL::refreshProperties()
 {
+    setAtElseProp();
     setCommentProp();
     setCompactProp();
+    setOnlyBeginProp();
+    setBackticksIdentifierProp();
+    setNumbersignCommentProp();
     setBackslashEscapesProp();
+    setAllowDottedWordProp();
 }
 
 
 // Read properties from the settings.
-bool QsciLexerSQL::readProperties(QSettings &qs,const QString &prefix)
+bool QsciLexerSQL::readProperties(QSettings &qs, const QString &prefix)
 {
     int rc = true;
 
+    at_else = qs.value(prefix + "atelse", false).toBool();
     fold_comments = qs.value(prefix + "foldcomments", false).toBool();
     fold_compact = qs.value(prefix + "foldcompact", true).toBool();
+    only_begin = qs.value(prefix + "onlybegin", false).toBool();
+    backticks_identifier = qs.value(prefix + "backticksidentifier", false).toBool();
+    numbersign_comment = qs.value(prefix + "numbersigncomment", false).toBool();
     backslash_escapes = qs.value(prefix + "backslashescapes", false).toBool();
+    allow_dotted_word = qs.value(prefix + "allowdottedword", false).toBool();
 
     return rc;
 }
 
 
 // Write properties to the settings.
-bool QsciLexerSQL::writeProperties(QSettings &qs,const QString &prefix) const
+bool QsciLexerSQL::writeProperties(QSettings &qs, const QString &prefix) const
 {
     int rc = true;
 
+    qs.value(prefix + "atelse", at_else);
     qs.value(prefix + "foldcomments", fold_comments);
     qs.value(prefix + "foldcompact", fold_compact);
+    qs.value(prefix + "onlybegin", only_begin);
+    qs.value(prefix + "backticksidentifier", backticks_identifier);
+    qs.value(prefix + "numbersigncomment", numbersign_comment);
     qs.value(prefix + "backslashescapes", backslash_escapes);
+    qs.value(prefix + "allowdottedword", allow_dotted_word);
 
     return rc;
 }
 
 
-// Return true if comments can be folded.
-bool QsciLexerSQL::foldComments() const
+// Set if ELSE blocks can be folded.
+void QsciLexerSQL::setFoldAtElse(bool fold)
 {
-    return fold_comments;
+    at_else = fold;
+
+    setAtElseProp();
+}
+
+
+// Set the "lexer.sql.fold.at.else" property.
+void QsciLexerSQL::setAtElseProp()
+{
+    emit propertyChanged("lexer.sql.fold.at.else", (at_else ? "1" : "0"));
 }
 
 
@@ -384,14 +423,7 @@ void QsciLexerSQL::setFoldComments(bool fold)
 // Set the "fold.comment" property.
 void QsciLexerSQL::setCommentProp()
 {
-    emit propertyChanged("fold.comment",(fold_comments ? "1" : "0"));
-}
-
-
-// Return true if folds are compact.
-bool QsciLexerSQL::foldCompact() const
-{
-    return fold_compact;
+    emit propertyChanged("fold.comment", (fold_comments ? "1" : "0"));
 }
 
 
@@ -407,14 +439,55 @@ void QsciLexerSQL::setFoldCompact(bool fold)
 // Set the "fold.compact" property.
 void QsciLexerSQL::setCompactProp()
 {
-    emit propertyChanged("fold.compact",(fold_compact ? "1" : "0"));
+    emit propertyChanged("fold.compact", (fold_compact ? "1" : "0"));
 }
 
 
-// Return true if backslash escapes are enabled.
-bool QsciLexerSQL::backslashEscapes() const
+// Set if BEGIN blocks only can be folded.
+void QsciLexerSQL::setFoldOnlyBegin(bool fold)
 {
-    return backslash_escapes;
+    only_begin = fold;
+
+    setOnlyBeginProp();
+}
+
+
+// Set the "fold.sql.only.begin" property.
+void QsciLexerSQL::setOnlyBeginProp()
+{
+    emit propertyChanged("fold.sql.only.begin", (only_begin ? "1" : "0"));
+}
+
+
+// Enable quoted identifiers.
+void QsciLexerSQL::setQuotedIdentifiers(bool enable)
+{
+    backticks_identifier = enable;
+
+    setBackticksIdentifierProp();
+}
+
+
+// Set the "lexer.sql.backticks.identifier" property.
+void QsciLexerSQL::setBackticksIdentifierProp()
+{
+    emit propertyChanged("lexer.sql.backticks.identifier", (backticks_identifier ? "1" : "0"));
+}
+
+
+// Enable '#' as a comment character.
+void QsciLexerSQL::setHashComments(bool enable)
+{
+    numbersign_comment = enable;
+
+    setNumbersignCommentProp();
+}
+
+
+// Set the "lexer.sql.numbersign.comment" property.
+void QsciLexerSQL::setNumbersignCommentProp()
+{
+    emit propertyChanged("lexer.sql.numbersign.comment", (numbersign_comment ? "1" : "0"));
 }
 
 
@@ -430,5 +503,21 @@ void QsciLexerSQL::setBackslashEscapes(bool enable)
 // Set the "sql.backslash.escapes" property.
 void QsciLexerSQL::setBackslashEscapesProp()
 {
-    emit propertyChanged("sql.backslash.escapes",(backslash_escapes ? "1" : "0"));
+    emit propertyChanged("sql.backslash.escapes", (backslash_escapes ? "1" : "0"));
+}
+
+
+// Enable dotted words.
+void QsciLexerSQL::setDottedWords(bool enable)
+{
+    allow_dotted_word = enable;
+
+    setAllowDottedWordProp();
+}
+
+
+// Set the "lexer.sql.allow.dotted.word" property.
+void QsciLexerSQL::setAllowDottedWordProp()
+{
+    emit propertyChanged("lexer.sql.allow.dotted.word", (allow_dotted_word ? "1" : "0"));
 }

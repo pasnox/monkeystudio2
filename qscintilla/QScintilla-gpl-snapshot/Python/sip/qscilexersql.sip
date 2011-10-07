@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciLexerSQL.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -56,6 +51,7 @@ public:
         KeywordSet6,
         KeywordSet7,
         KeywordSet8,
+        QuotedIdentifier,
     };
 
 %If (Qsci_Qt4)
@@ -77,14 +73,24 @@ public:
     QString description(int style) const;
 
     void refreshProperties();
+    bool backslashEscapes() const;
+    void setDottedWords(bool enable);
+    bool dottedWords() const;
+    void setFoldAtElse(bool fold);
+    bool foldAtElse() const;
     bool foldComments() const;
     bool foldCompact() const;
-    bool backslashEscapes() const;
+    void setFoldOnlyBegin(bool fold);
+    bool foldOnlyBegin() const;
+    void setHashComments(bool enable);
+    bool hashComments() const;
+    void setQuotedIdentifiers(bool enable);
+    bool quotedIdentifiers() const;
 
 public slots:
+    virtual void setBackslashEscapes(bool enable);
     virtual void setFoldComments(bool fold);
     virtual void setFoldCompact(bool fold);
-    virtual void setBackslashEscapes(bool enable);
 
 protected:
     bool readProperties(QSettings &qs, const QString &prefix);

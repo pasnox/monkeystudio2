@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciAPIs.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -51,9 +46,9 @@ public:
     void prepare();
     void cancelPreparation();
     QString defaultPreparedName() const;
-    bool isPrepared(const QString &fname = QString()) const;
-    bool loadPrepared(const QString &fname = QString());
-    bool savePrepared(const QString &fname = QString()) const;
+    bool isPrepared(const QString &filename = QString()) const;
+    bool loadPrepared(const QString &filename = QString());
+    bool savePrepared(const QString &filename = QString()) const;
     virtual bool event(QEvent *e);
     QStringList installedAPIFiles() const;
 

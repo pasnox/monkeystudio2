@@ -1,184 +1,188 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef XUPPROJECTITEM_H
 #define XUPPROJECTITEM_H
 
 #include <QObject>
 #include <QFileInfo>
 
-#include <objects/MonkeyExport.h>
+#include "MonkeyExport.h"
 
 #include "XUPItem.h"
-#include "XUPProjectItemInfos.h"
-#include "consolemanager/pCommand.h"
+#include "xupmanager/core/ProjectTypesIndex.h"
 
-class BuilderPlugin;
-class DebuggerPlugin;
-class InterpreterPlugin;
+class QAction;
+
+class XUPPlugin;
+class XUPProjectItemCacheBackend;
+class XUPProjectItemCache;
+class UIXUPEditor;
+class pCommand;
 
 typedef QList<class XUPProjectItem*> XUPProjectItemList;
 
+#define XUP_VERSION "1.1.0"
+
 class Q_MONKEY_EXPORT XUPProjectItem : public QObject, public XUPItem
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    friend class XUPProjectItemCache;
+    friend class DebugDockWidget;
+    
 public:
-	// project type id
-	enum ProjectType { InvalidProject = -1, XUPProject = 0 };
-	// target type
-	enum TargetType { DefaultTarget = 0, DebugTarget, ReleaseTarget };
-	// platform type
-	enum PlatformType
-	{
-		AnyPlatform = 0,
-		WindowsPlatform,
-		MacPlatform,
-		OthersPlatform,
-#if defined( Q_OS_WIN )
-		CurrentPlatform = WindowsPlatform
-#elif defined( Q_OS_MAC )
-		CurrentPlatform = MacPlatform
-#else
-		CurrentPlatform = OthersPlatform
-#endif
-	};
-	
-	// ctor
-	XUPProjectItem();
-	// dtor
-	virtual ~XUPProjectItem();
-	
-	// return the global static proejcts types informations
-	static XUPProjectItemInfos* projectInfos();
-	
-	// the variable cache
-	QMap<QString, QString>& variableCache();
-	
-	// set last encounter error
-	void setLastError( const QString& error );
-	// return the last encounter error
-	QString lastError() const;
-	
-	// return the project absolute filename
-	QString fileName() const;
-	// return the project absolute path
-	QString path() const;
-	// return an absolute file name according to project path
-	QString filePath( const QString& fileName ) const;
-	// return a filepath relative to project path
-	QString relativeFilePath( const QString& fileName ) const;
-	// return the list of all source files for this project
-	QStringList sourceFiles() const;
-	// return the list of all source files for all projects from the root project
-	QStringList topLevelProjectSourceFiles() const;
-	
-	// return the direct parent proejct if one, else return itself
-	XUPProjectItem* parentProject() const;
-	// return the most toplevel project ( ie: the model root project )
-	XUPProjectItem* topLevelProject() const;
-	// return the parent project for include project ( recursive parent project for include project, else return project itself )
-	XUPProjectItem* rootIncludeProject() const;
-	// return children project recursively according to bool
-	XUPProjectItemList childrenProjects( bool recursive ) const;
-	
-	// return icon filename for item
-	QString iconFileName( XUPItem* item ) const;
-	// return the project icons path
-	QString iconsPath() const;
-	
-	// return the display text of a project variable name
-	QString variableDisplayText( const QString& variableName ) const;
-	
-	// return the display text for the project item
-	QString itemDisplayText( XUPItem* item );
-	// return the display icon for the project item
-	QIcon itemDisplayIcon( XUPItem* item );
-	
-	// rebuild the project cache by clearing values and analyzing again the project
-	void rebuildCache();
-	
-	// split a multi line value into QStringList
-	static QStringList splitMultiLineValue( const QString& value );
-	// return the matching path ( from start ) between left and right string or null string if result isa drive on windows, or / on unix like
-	QString matchingPath( const QString& left, const QString& right ) const;
-	// return the compressed result list of paths list given in parameter
-	QStringList compressedPaths( const QStringList& paths ) const;
-	// return a list of QFileInfo having corresponding partial file path
-	virtual QFileInfoList findFile( const QString& partialFilePath ) const;
-	// return all variable items named variableName until caller is found ( if define ) or until the the complete tree is scanned
-	// if recursive is true, then the scan recurse in each item, else not
-	virtual XUPItemList getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem = 0, bool recursive = true ) const;
-	// return the project datas as qstring
-	virtual QString toString() const;
-	
-	// return the project settings scope, creating it if needed
-	XUPItem* projectSettingsScope( bool create ) const;
-	// return a project settings value as stringlist or string.
-	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;
-	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const;
-	// set a project setting value
-	virtual void setProjectSettingsValues( const QString& variable, const QStringList& values );
-	virtual void setProjectSettingsValue( const QString& variable, const QString& value );
-	// add project setting value
-	virtual void addProjectSettingsValues( const QString& variable, const QStringList& values );
-	virtual void addProjectSettingsValue( const QString& variable, const QString& value );
-	
-	// return the project type id
-	virtual int projectType() const;
-	// return the textual representation key for target type
-	virtual QString targetTypeString( XUPProjectItem::TargetType type ) const;
-	// return the current project target type
-	virtual XUPProjectItem::TargetType projectTargetType() const;
-	// return the textual representation key for platform type
-	virtual QString platformTypeString( XUPProjectItem::PlatformType type ) const;
-	// register the project type
-	virtual void registerProjectType() const;
-	// unregister the project type
-	virtual void unRegisterProjectType() const;
-	// return a new instance of this kind of projecttype
-	// FIXME AK in future I think XUPProject will be abstract class
-	inline virtual XUPProjectItem* newProject() const { return new XUPProjectItem(); }
-	// get a variable content in the project at the call instant
-	virtual QString getVariableContent( const QString& variableName );
-	// interpret the content, ie, replace variables by their content
-	virtual QString interpretContent( const QString& content );
-	// handle the inclusion of include files
-	virtual bool handleIncludeFile( XUPItem* function );
-	// analyze a project for caching the variables keys
-	virtual bool analyze( XUPItem* item );
-	// open a project with codec
-	virtual bool open( const QString& fileName, const QString& codec );
-	// save the project
-	virtual bool save();
-	// return the project target file, ie the binary / library file path, if allowToAskUser is set to true - user might be asked for it via doalog
-	virtual QString targetFilePath( bool allowToAskUser = false, XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget, XUPProjectItem::PlatformType = XUPProjectItem::CurrentPlatform );
-	QString targetFilePath( const pCommandTargetExecution& execution );
-	
-	// return plugin associated with the project
-	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;
-	virtual DebuggerPlugin* debugger( const QString& plugin = QString() ) const;
-	virtual InterpreterPlugin* interpreter( const QString& plugin = QString() ) const;
-
-	// add a pCommand in menu
-	virtual void addCommand( pCommand& cmd, const QString& mnu );
-	// install custom project actions in menus
-	virtual void installCommands();
-	// uninstall custom project actions in menus
-	virtual void uninstallCommands();
-
-public slots:
-	// called when a watched path of a DynamicFolder have changed
-	void directoryChanged( const QString& path );
-
+    // target type
+    enum TargetType {
+        NoTarget = 0,
+        ServicesTarget, // use QDesktopServices::openUrl()
+        DesktopTarget, // use open or similar thing (open on mac, xdg-open on unix...)
+        DefaultTarget,
+        DebugTarget,
+        ReleaseTarget
+    };
+    
+    // ctor
+    XUPProjectItem();
+    // dtor
+    virtual ~XUPProjectItem();
+    
+    // set last encounter error
+    void showError( const QString& error );
+    
+    // return the project absolute filename
+    QString fileName() const;
+    // return the project absolute path
+    QString path() const;
+    // return an absolute file name according to project path
+    QString filePath( const QString& filePath ) const;
+    // return a filepath relative to project path
+    QString relativeFilePath( const QString& filePath ) const;
+    
+    /* return the list of all source files for this project
+     * Defautl implementation returns empty list
+     */
+    QStringList sourceFiles() const;
+    // return the list of all source files for all projects from the root project
+    QStringList topLevelProjectSourceFiles() const;
+    
+    // return the xup plugin associated with this project
+    XUPPlugin* driver() const;
+    
+    /* When project is activated (selected as current), some plugins can be also enabled.
+     * for example - PHP-Qt project will activate PHP interpreter plugin.
+     * When project deselected - plugin will be disabled
+     */
+    QStringList autoActivatePlugins() const;
+    
+    /* Add files to the project. 
+     * Optional argument 'scope' allows to add files to the particular part of the project, 
+     * not to the project root.
+     * It allows, for example, to add files to the particular scope in the QMake projects (win32, !unix ...)
+     */
+    virtual void addFiles( const QStringList& files, XUPItem* scope = 0 );
+    // Remove file, subproject, or other item
+    virtual void removeValue( XUPItem* item, bool deleteFiles );
+    
+    virtual QString quoteString() const;
+    virtual QString defaultOperator() const;
+    
+    // return the direct parent proejct if one, else return itself
+    XUPProjectItem* parentProject() const;
+    // return the most toplevel project ( ie: the model root project )
+    XUPProjectItem* topLevelProject() const;
+    // return the parent project for include project ( recursive parent project for include project, else return project itself )
+    XUPProjectItem* rootIncludeProject() const;
+    // return children project recursively according to bool
+    XUPProjectItemList childrenProjects( bool recursive ) const;
+    
+    // return a list of QFileInfo having corresponding partial file path
+    virtual QFileInfoList findFile( const QString& partialFilePath ) const;
+    // return all variable items named variableName until caller is found ( if define ) or until the complete tree is scanned
+    // if recursive is true, then the scan recurse in each item, else not
+    virtual XUPItemList getVariables( const XUPItem* root, const QString& variableName, bool recursive = true, const XUPItem* caller = 0 ) const;
+    // return first found variable with name. 0 returned, if not found
+    virtual XUPItem* getVariable( const XUPItem* root, const QString& variableName ) const;
+    // return the project datas as qstring
+    virtual QString toXml() const;
+    virtual QString toNativeString() const;
+    
+    // return the project type id
+    virtual QString projectType() const = 0;
+    // open a project with codec
+    virtual bool open( const QString& fileName, const QString& codec );
+    // save the project
+    virtual bool save();
+    // return the project target file, ie the binary / library / file path, user might be asked for it via dialog
+    virtual QString targetFilePath( XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget );
+    
+    // install custom project actions in menus
+    virtual void installCommands();
+    // uninstall custom project actions in menus
+    virtual void uninstallCommands();
+    // return the text codec used by this project
+    QString codec() const;
+    
+    // show project settings dialog
+    bool edit();
+    
+    // show project settings files editor dialog
+    bool editProjectFiles();
+    
+    // return project document filters
+    const DocumentFilterMap& documentFilters() const;
+    
+    /** Add pCommand console commands to the main menu. When menu item triggered - console command executed.
+     * If more than one command set for the menu - commands will be executed one by one
+     * XUPProjectItem remembers create QAction's and deletes it by uninstallCommands()
+     */
+    QAction* addSeparator( const QString& mnu );
+    void addCommands( const QString& mnu, const QList<pCommand>& cmds );
+    pCommand command( const QString& name ) const;
+    pCommand command( QAction* action ) const;
+    void executeCommand( const QString& name );
+    virtual void addCommand( const QString& mnu, const pCommand& cmd );
+    
+    // return the cache backend used by  cache()
+    virtual XUPProjectItemCacheBackend* cacheBackend() const;
+    // return the variable value
+    QStringList cachedVariableValues( const QString& variableName ) const;
+    QString cachedVariableValue( const QString& variableName ) const;
+    static XUPProjectItemCache* cache();
+    
+    QString quotedValue( const QString& value ) const;
+    QString unquotedValue( const QString& value ) const;
+    
 protected:
-	QDomDocument mDocument;
-	pCommandMap mCommands;
-	static XUPProjectItemInfos* mXUPProjectInfos;
-	static bool mFoundCallerItem;
-	
-	QMap<QString, QString> mVariableCache;
-
-signals:
-	void installCommandRequested( const pCommand& cmd, const QString& mnu );
-	void uninstallCommandRequested( const pCommand& cmd, const QString& mnu );
+    QDomDocument mDocument;
+    QString mCodec;
+    QString mFileName;
+    // Action pointers stored here for delete it, when current project changed
+    QHash<QString, QAction*> mInstalledActions;
+    QHash<QString, pCommand> mCommands; // project installed commands by name pCommand::name()
+    static XUPProjectItemCache mProjectsCache;
+    static XUPProjectItemCacheBackend mProjectsCacheBackend;
+    
+    virtual UIXUPEditor* newEditDialog() const;
+    
+protected slots:
+    // Common handler for actions, which execute pCommand. Does few checks, then executes pCommand
+    // Can be overrided if needed.
+    virtual void projectCustomActionTriggered();
 };
 
 #endif // XUPPROJECTITEM_H

@@ -47,14 +47,14 @@
 virtual <a class="el" href="classQsciAPIs.html#a07bc73b7a67f8f405578992bae29528c">~QsciAPIs</a> ()
 <li>void <a class="el" href="classQsciAPIs.html#af46ca05571eb676d3aa65b080fb406c5">add</a> (const QString &amp;entry)
 <li>void <a class="el" href="classQsciAPIs.html#a6b29d84b0b5d63f2b590988195c7557c">clear</a> ()
-<li>bool <a class="el" href="classQsciAPIs.html#ae8441f9ef6c8e4aa4a4147e029c51cc3">load</a> (const QString &amp;fname)
+<li>bool <a class="el" href="classQsciAPIs.html#a3084b749e4eb1c741fc1004e8a84a631">load</a> (const QString &amp;filename)
 <li>void <a class="el" href="classQsciAPIs.html#acb1aa10ea05a7ee72a0d77376153b4d2">remove</a> (const QString &amp;entry)
 <li>void <a class="el" href="classQsciAPIs.html#a5c26b8395c49cf61243e5f73c0ce577f">prepare</a> ()
 <li>void <a class="el" href="classQsciAPIs.html#aa5c7c8855162eeb1be74c226ebf1b1b6">cancelPreparation</a> ()
 <li>QString <a class="el" href="classQsciAPIs.html#a1768bc2153e4d522dd8031543b033985">defaultPreparedName</a> () const 
-<li>bool <a class="el" href="classQsciAPIs.html#ac7ac08654f4cea03cb15a951a310d606">isPrepared</a> (const QString &amp;fname=QString()) const 
-<li>bool <a class="el" href="classQsciAPIs.html#a68767739f2a23715f243e5b4b70f81e3">loadPrepared</a> (const QString &amp;fname=QString())
-<li>bool <a class="el" href="classQsciAPIs.html#a341c212308f1a79de81819bd32c2d077">savePrepared</a> (const QString &amp;fname=QString()) const 
+<li>bool <a class="el" href="classQsciAPIs.html#a093f3d79ccba93b9de573a3281aa1763">isPrepared</a> (const QString &amp;filename=QString()) const 
+<li>bool <a class="el" href="classQsciAPIs.html#af42a26a050bfeb4249d35ab61567ea9e">loadPrepared</a> (const QString &amp;filename=QString())
+<li>bool <a class="el" href="classQsciAPIs.html#ab35a2804e9e8e1509ff5e8896daa1d82">savePrepared</a> (const QString &amp;filename=QString()) const 
 <li><a class="anchor" id="ab0f824492bb0f3ca54edb4d46945a3de"></a><!-- doxytag: member="QsciAPIs::updateAutoCompletionList" ref="ab0f824492bb0f3ca54edb4d46945a3de" args="(const QStringList &amp;context, QStringList &amp;list)" -->
 virtual void <a class="el" href="classQsciAPIs.html#ab0f824492bb0f3ca54edb4d46945a3de">updateAutoCompletionList</a> (const QStringList &amp;context, QStringList &amp;list)
 <li><a class="anchor" id="adff0073d1f4ee2e0ea8b3bf234ff2dd3"></a><!-- doxytag: member="QsciAPIs::autoCompletionSelected" ref="adff0073d1f4ee2e0ea8b3bf234ff2dd3" args="(const QString &amp;sel)" -->
@@ -109,7 +109,7 @@ virtual bool <b>event</b> (QEvent *e)
 </div>
 <div class="memdoc">
 <p>Add the single raw API entry <em>entry</em> to the current set.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#a6b29d84b0b5d63f2b590988195c7557c">clear()</a>, <a class="el" href="classQsciAPIs.html#ae8441f9ef6c8e4aa4a4147e029c51cc3">load()</a>, <a class="el" href="classQsciAPIs.html#acb1aa10ea05a7ee72a0d77376153b4d2">remove()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#a6b29d84b0b5d63f2b590988195c7557c">clear()</a>, <a class="el" href="classQsciAPIs.html#a3084b749e4eb1c741fc1004e8a84a631">load()</a>, <a class="el" href="classQsciAPIs.html#acb1aa10ea05a7ee72a0d77376153b4d2">remove()</a> </dd></dl>
 
 </div>
 </div>
@@ -128,11 +128,11 @@ virtual bool <b>event</b> (QEvent *e)
 </div>
 <div class="memdoc">
 <p>Deletes all raw API information.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#af46ca05571eb676d3aa65b080fb406c5">add()</a>, <a class="el" href="classQsciAPIs.html#ae8441f9ef6c8e4aa4a4147e029c51cc3">load()</a>, <a class="el" href="classQsciAPIs.html#acb1aa10ea05a7ee72a0d77376153b4d2">remove()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#af46ca05571eb676d3aa65b080fb406c5">add()</a>, <a class="el" href="classQsciAPIs.html#a3084b749e4eb1c741fc1004e8a84a631">load()</a>, <a class="el" href="classQsciAPIs.html#acb1aa10ea05a7ee72a0d77376153b4d2">remove()</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ae8441f9ef6c8e4aa4a4147e029c51cc3"></a><!-- doxytag: member="QsciAPIs::load" ref="ae8441f9ef6c8e4aa4a4147e029c51cc3" args="(const QString &amp;fname)" -->
+<a class="anchor" id="a3084b749e4eb1c741fc1004e8a84a631"></a><!-- doxytag: member="QsciAPIs::load" ref="a3084b749e4eb1c741fc1004e8a84a631" args="(const QString &amp;filename)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -140,14 +140,14 @@ virtual bool <b>event</b> (QEvent *e)
           <td class="memname">bool QsciAPIs::load </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&nbsp;</td>
-          <td class="paramname"> <em>fname</em></td>
+          <td class="paramname"> <em>filename</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Load the API information from the file named <em>fname</em>, adding it to the current set. Returns true if successful, otherwise false. </p>
+<p>Load the API information from the file named <em>filename</em>, adding it to the current set. Returns true if successful, otherwise false. </p>
 
 </div>
 </div>
@@ -167,7 +167,7 @@ virtual bool <b>event</b> (QEvent *e)
 </div>
 <div class="memdoc">
 <p>Remove the single raw API entry <em>entry</em> from the current set.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#af46ca05571eb676d3aa65b080fb406c5">add()</a>, <a class="el" href="classQsciAPIs.html#a6b29d84b0b5d63f2b590988195c7557c">clear()</a>, <a class="el" href="classQsciAPIs.html#ae8441f9ef6c8e4aa4a4147e029c51cc3">load()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#af46ca05571eb676d3aa65b080fb406c5">add()</a>, <a class="el" href="classQsciAPIs.html#a6b29d84b0b5d63f2b590988195c7557c">clear()</a>, <a class="el" href="classQsciAPIs.html#a3084b749e4eb1c741fc1004e8a84a631">load()</a> </dd></dl>
 
 </div>
 </div>
@@ -227,7 +227,7 @@ virtual bool <b>event</b> (QEvent *e)
 
 </div>
 </div>
-<a class="anchor" id="ac7ac08654f4cea03cb15a951a310d606"></a><!-- doxytag: member="QsciAPIs::isPrepared" ref="ac7ac08654f4cea03cb15a951a310d606" args="(const QString &amp;fname=QString()) const " -->
+<a class="anchor" id="a093f3d79ccba93b9de573a3281aa1763"></a><!-- doxytag: member="QsciAPIs::isPrepared" ref="a093f3d79ccba93b9de573a3281aa1763" args="(const QString &amp;filename=QString()) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -235,19 +235,19 @@ virtual bool <b>event</b> (QEvent *e)
           <td class="memname">bool QsciAPIs::isPrepared </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&nbsp;</td>
-          <td class="paramname"> <em>fname</em> = <code>QString()</code></td>
+          <td class="paramname"> <em>filename</em> = <code>QString()</code></td>
           <td>&nbsp;)&nbsp;</td>
           <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Check to see is a prepared API information file named <em>fname</em> exists. If <em>fname</em> is empty then the value returned by <a class="el" href="classQsciAPIs.html#a1768bc2153e4d522dd8031543b033985">defaultPreparedName()</a> is used. Returns true if successful, otherwise false.</p>
+<p>Check to see is a prepared API information file named <em>filename</em> exists. If <em>filename</em> is empty then the value returned by <a class="el" href="classQsciAPIs.html#a1768bc2153e4d522dd8031543b033985">defaultPreparedName()</a> is used. Returns true if successful, otherwise false.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciAPIs.html#a1768bc2153e4d522dd8031543b033985">defaultPreparedName()</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a68767739f2a23715f243e5b4b70f81e3"></a><!-- doxytag: member="QsciAPIs::loadPrepared" ref="a68767739f2a23715f243e5b4b70f81e3" args="(const QString &amp;fname=QString())" -->
+<a class="anchor" id="af42a26a050bfeb4249d35ab61567ea9e"></a><!-- doxytag: member="QsciAPIs::loadPrepared" ref="af42a26a050bfeb4249d35ab61567ea9e" args="(const QString &amp;filename=QString())" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -255,18 +255,18 @@ virtual bool <b>event</b> (QEvent *e)
           <td class="memname">bool QsciAPIs::loadPrepared </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&nbsp;</td>
-          <td class="paramname"> <em>fname</em> = <code>QString()</code></td>
+          <td class="paramname"> <em>filename</em> = <code>QString()</code></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Load the prepared API information from the file named <em>fname</em>. If <em>fname</em> is empty then a name is constructed based on the name of the associated lexer and saved in the directory defined by the QSCIDIR environment variable. If the environment variable isn't set then $HOME/.qsci is used. Returns true if successful, otherwise false. </p>
+<p>Load the prepared API information from the file named <em>filename</em>. If <em>filename</em> is empty then a name is constructed based on the name of the associated lexer and saved in the directory defined by the QSCIDIR environment variable. If the environment variable isn't set then $HOME/.qsci is used. Returns true if successful, otherwise false. </p>
 
 </div>
 </div>
-<a class="anchor" id="a341c212308f1a79de81819bd32c2d077"></a><!-- doxytag: member="QsciAPIs::savePrepared" ref="a341c212308f1a79de81819bd32c2d077" args="(const QString &amp;fname=QString()) const " -->
+<a class="anchor" id="ab35a2804e9e8e1509ff5e8896daa1d82"></a><!-- doxytag: member="QsciAPIs::savePrepared" ref="ab35a2804e9e8e1509ff5e8896daa1d82" args="(const QString &amp;filename=QString()) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -274,14 +274,14 @@ virtual bool <b>event</b> (QEvent *e)
           <td class="memname">bool QsciAPIs::savePrepared </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&nbsp;</td>
-          <td class="paramname"> <em>fname</em> = <code>QString()</code></td>
+          <td class="paramname"> <em>filename</em> = <code>QString()</code></td>
           <td>&nbsp;)&nbsp;</td>
           <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Save the prepared API information to the file named <em>fname</em>. If <em>fname</em> is empty then a name is constructed based on the name of the associated lexer and saved in the directory defined by the QSCIDIR environment variable. If the environment variable isn't set then $HOME/.qsci is used. Returns true if successful, otherwise false. </p>
+<p>Save the prepared API information to the file named <em>filename</em>. If <em>filename</em> is empty then a name is constructed based on the name of the associated lexer and saved in the directory defined by the QSCIDIR environment variable. If the environment variable isn't set then $HOME/.qsci is used. Returns true if successful, otherwise false. </p>
 
 </div>
 </div>
@@ -361,7 +361,7 @@ virtual bool <b>event</b> (QEvent *e)
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Aug 31 08:49:37 2010 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:08 2011 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

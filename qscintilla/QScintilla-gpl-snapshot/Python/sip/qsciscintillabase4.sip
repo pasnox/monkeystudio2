@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciScintillaBase.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -96,6 +91,8 @@ public:
         SCI_GETMARGINMASKN,
         SCI_SETMARGINSENSITIVEN,
         SCI_GETMARGINSENSITIVEN,
+        SCI_SETMARGINCURSORN,
+        SCI_GETMARGINCURSORN,
         SCI_STYLECLEARALL,
         SCI_STYLESETFORE,
         SCI_STYLESETBACK,
@@ -127,6 +124,8 @@ public:
         SCI_INDICGETFORE,
         SCI_SETWHITESPACEFORE,
         SCI_SETWHITESPACEBACK,
+        SCI_SETWHITESPACESIZE,
+        SCI_GETWHITESPACESIZE,
         SCI_SETSTYLEBITS,
         SCI_GETSTYLEBITS,
         SCI_SETLINESTATE,
@@ -454,11 +453,13 @@ public:
         SCI_SETWRAPSTARTINDENT,
         SCI_GETWRAPSTARTINDENT,
         SCI_MARKERADDSET,
-        SCI_SETPASTECONVERTENDINGS
-        SCI_GETPASTECONVERTENDINGS
-        SCI_SELECTIONDUPLICATE
-        SCI_SETCARETLINEBACKALPHA
-        SCI_GETCARETLINEBACKALPHA
+        SCI_SETPASTECONVERTENDINGS,
+        SCI_GETPASTECONVERTENDINGS,
+        SCI_SELECTIONDUPLICATE,
+        SCI_SETCARETLINEBACKALPHA,
+        SCI_GETCARETLINEBACKALPHA,
+        SCI_SETWRAPINDENTMODE,
+        SCI_GETWRAPINDENTMODE,
         SCI_MARKERSETALPHA,
         SCI_GETSELALPHA,
         SCI_SETSELALPHA,
@@ -533,6 +534,64 @@ public:
         SCI_ANNOTATIONSETSTYLEOFFSET,
         SCI_ANNOTATIONGETSTYLEOFFSET,
         SCI_ADDUNDOACTION,
+        SCI_CHARPOSITIONFROMPOINT,
+        SCI_CHARPOSITIONFROMPOINTCLOSE,
+        SCI_SETMULTIPLESELECTION,
+        SCI_GETMULTIPLESELECTION,
+        SCI_SETADDITIONALSELECTIONTYPING,
+        SCI_GETADDITIONALSELECTIONTYPING,
+        SCI_SETADDITIONALCARETSBLINK,
+        SCI_GETADDITIONALCARETSBLINK,
+        SCI_SETADDITIONALCARETSVISIBLE,
+        SCI_GETADDITIONALCARETSVISIBLE,
+        SCI_AUTOCGETCURRENTTEXT,
+        SCI_GETSELECTIONS,
+        SCI_CLEARSELECTIONS,
+        SCI_SETSELECTION,
+        SCI_ADDSELECTION,
+        SCI_SETMAINSELECTION,
+        SCI_GETMAINSELECTION,
+        SCI_SETSELECTIONNCARET,
+        SCI_GETSELECTIONNCARET,
+        SCI_SETSELECTIONNANCHOR,
+        SCI_GETSELECTIONNANCHOR,
+        SCI_SETSELECTIONNCARETVIRTUALSPACE,
+        SCI_GETSELECTIONNCARETVIRTUALSPACE,
+        SCI_SETSELECTIONNANCHORVIRTUALSPACE,
+        SCI_GETSELECTIONNANCHORVIRTUALSPACE,
+        SCI_SETSELECTIONNSTART,
+        SCI_GETSELECTIONNSTART,
+        SCI_SETSELECTIONNEND,
+        SCI_GETSELECTIONNEND,
+        SCI_SETRECTANGULARSELECTIONCARET,
+        SCI_GETRECTANGULARSELECTIONCARET,
+        SCI_SETRECTANGULARSELECTIONANCHOR,
+        SCI_GETRECTANGULARSELECTIONANCHOR,
+        SCI_SETRECTANGULARSELECTIONCARETVIRTUALSPACE,
+        SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE,
+        SCI_SETRECTANGULARSELECTIONANCHORVIRTUALSPACE,
+        SCI_GETRECTANGULARSELECTIONANCHORVIRTUALSPACE,
+        SCI_SETVIRTUALSPACEOPTIONS,
+        SCI_GETVIRTUALSPACEOPTIONS,
+        SCI_SETRECTANGULARSELECTIONMODIFIER,
+        SCI_GETRECTANGULARSELECTIONMODIFIER,
+        SCI_SETADDITIONALSELFORE,
+        SCI_SETADDITIONALSELBACK,
+        SCI_SETADDITIONALSELALPHA,
+        SCI_GETADDITIONALSELALPHA,
+        SCI_SETADDITIONALCARETFORE,
+        SCI_GETADDITIONALCARETFORE,
+        SCI_ROTATESELECTION,
+        SCI_SWAPMAINANCHORCARET,
+        SCI_SETFONTQUALITY,
+        SCI_GETFONTQUALITY,
+        SCI_SETFIRSTVISIBLELINE,
+        SCI_SETMULTIPASTE,
+        SCI_GETMULTIPASTE,
+        SCI_GETTAG,
+        SCI_CHANGELEXERSTATE,
+        SCI_CONTRACTEDFOLDNEXT,
+        SCI_VERTICALCENTRECARET,
         SCI_STARTRECORD,
         SCI_STOPRECORD,
         SCI_SETLEXER,
@@ -546,24 +605,59 @@ public:
         SCI_GETPROPERTYEXPANDED,
         SCI_GETPROPERTYINT,
         SCI_GETSTYLEBITSNEEDED,
+        SCI_GETLEXERLANGUAGE,
+        SCI_PRIVATELEXERCALL,
+        SCI_PROPERTYNAMES,
+        SCI_PROPERTYTYPE,
+        SCI_DESCRIBEPROPERTY,
+        SCI_DESCRIBEKEYWORDSETS,
     };
 
-    enum
-    {
+    enum {
         SC_ALPHA_TRANSPARENT,
         SC_ALPHA_OPAQUE,
         SC_ALPHA_NOALPHA,
     };
 
-    enum
-    {
+    enum {
+        SC_CARETSTICKY_OFF,
+        SC_CARETSTICKY_ON,
+        SC_CARETSTICKY_WHITESPACE,
+    };
+
+    enum {
+        SC_EFF_QUALITY_MASK,
+        SC_EFF_QUALITY_DEFAULT,
+        SC_EFF_QUALITY_NON_ANTIALIASED,
+        SC_EFF_QUALITY_ANTIALIASED,
+        SC_EFF_QUALITY_LCD_OPTIMIZED,
+    };
+
+    enum {
+        SC_MULTIPASTE_ONCE,
+        SC_MULTIPASTE_EACH,
+    };
+
+    enum {
+        SC_TYPE_BOOLEAN,
+        SC_TYPE_INTEGER,
+        SC_TYPE_STRING,
+    };
+
+    enum {
+        SC_UPDATE_CONTENT,
+        SC_UPDATE_SELECTION,
+        SC_UPDATE_V_SCROLL,
+        SC_UPDATE_H_SCROLL,
+    };
+
+    enum {
         SC_WRAPVISUALFLAG_NONE,
         SC_WRAPVISUALFLAG_END,
         SC_WRAPVISUALFLAG_START
     };
 
-    enum
-    {
+    enum {
         SC_WRAPVISUALFLAGLOC_DEFAULT,
         SC_WRAPVISUALFLAGLOC_END_BY_TEXT,
         SC_WRAPVISUALFLAGLOC_START_BY_TEXT
@@ -572,7 +666,14 @@ public:
     enum {
         SC_SEL_STREAM,
         SC_SEL_RECTANGLE,
-        SC_SEL_LINES
+        SC_SEL_LINES,
+        SC_SEL_THIN,
+    };
+
+    enum {
+        SCVS_NONE,
+        SCVS_RECTANGULARSELECTION,
+        SCVS_USERACCESSIBLE,
     };
 
     enum {
@@ -622,6 +723,7 @@ public:
         SC_MARK_FULLRECT,
         SC_MARK_LEFTRECT,
         SC_MARK_AVAILABLE,
+        SC_MARK_UNDERLINE,
         SC_MARK_CHARACTER
     };
 
@@ -754,6 +856,12 @@ public:
     };
 
     enum {
+        SC_WRAPINDENT_FIXED,
+        SC_WRAPINDENT_SAME,
+        SC_WRAPINDENT_INDENT,
+    };
+
+    enum {
         SC_CACHE_NONE,
         SC_CACHE_CARET,
         SC_CACHE_PAGE,
@@ -774,7 +882,9 @@ public:
 
     enum {
         SC_CURSORNORMAL,
-        SC_CURSORWAIT
+        SC_CURSORARROW,
+        SC_CURSORWAIT,
+        SC_CURSORREVERSEARROW
     };
 
     enum {
@@ -820,6 +930,7 @@ public:
         SC_MOD_CHANGEMARGIN,
         SC_MOD_CHANGEANNOTATION,
         SC_MOD_CONTAINER,
+        SC_MOD_LEXERSTATE,
         SC_MODEVENTMASKALL
     };
 
@@ -850,7 +961,8 @@ public:
         SCMOD_NORM,
         SCMOD_SHIFT,
         SCMOD_CTRL,
-        SCMOD_ALT
+        SCMOD_ALT,
+        SCMOD_SUPER,
     };
 
     enum {
@@ -951,6 +1063,10 @@ public:
         SCLEX_POWERPRO,
         SCLEX_NIMROD,
         SCLEX_SML,
+        SCLEX_MARKDOWN,
+        SCLEX_TXT2TAGS,
+        SCLEX_A68K,
+        SCLEX_MODULA,
     };
 
     explicit QsciScintillaBase(QWidget *parent /TransferThis/ = 0);
@@ -1061,6 +1177,7 @@ signals:
     void SCN_DWELLSTART(int, int, int);
     void SCN_HOTSPOTCLICK(int position, int modifiers);
     void SCN_HOTSPOTDOUBLECLICK(int position, int modifiers);
+    void SCN_HOTSPOTRELEASECLICK(int position, int modifiers);
     void SCN_INDICATORCLICK(int position, int modifiers);
     void SCN_INDICATORRELEASE(int position, int modifiers);
     void SCN_MACRORECORD(unsigned int, unsigned long, void *);
@@ -1072,14 +1189,14 @@ signals:
     void SCN_SAVEPOINTLEFT();
     void SCN_SAVEPOINTREACHED();
     void SCN_STYLENEEDED(int position);
-    void SCN_UPDATEUI();
+    void SCN_UPDATEUI(int updated);
     void SCN_USERLISTSELECTION(const char *, int);
     void SCN_ZOOM();
 
 protected:
     virtual bool canInsertFromMimeData(const QMimeData *source) const;
-    virtual QString fromMimeData(const QMimeData *source) const;
-    virtual QMimeData *toMimeData(const QString &text) const;
+    virtual QByteArray fromMimeData(const QMimeData *source, bool &rectangular) const;
+    virtual QMimeData *toMimeData(const QByteArray &text, bool rectangular) const;
 
     virtual void contextMenuEvent(QContextMenuEvent *e);
     virtual void dragEnterEvent(QDragEnterEvent *e);

@@ -1,16 +1,13 @@
-TARGET	= ProjectHeaders
-
+TARGET  = ProjectHeaders
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
+DESTDIR = $$MONKEY_PLUGINS_DIR/base
+INCLUDEPATH *= src/ui
+RESOURCES   = src/resources/ProjectHeaders.qrc
 
-INCLUDEPATH	*= src/ui
+FORMS   = src/ui/UIProjectHeaders.ui
 
-RESOURCES	*= src/resources/ProjectHeaders.qrc
+HEADERS = src/ProjectHeaders.h \
+    src/ui/UIProjectHeaders.h
 
-FORMS	*= src/ui/UIProjectHeaders.ui
-
-HEADERS	*= src/ProjectHeaders.h \
-	src/ui/UIProjectHeaders.h
-
-SOURCES	*= src/ProjectHeaders.cpp \
-	src/ui/UIProjectHeaders.cpp
+SOURCES = src/ProjectHeaders.cpp \
+    src/ui/UIProjectHeaders.cpp

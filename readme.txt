@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
+**      Created using Monkey Studio v1.8.0.0
 ** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
 ** Project   : Monkey Studio 2
 ** FileName  : readme.txt
@@ -21,10 +21,10 @@ Before building, you should know about some rules if you are unix/linux users.
 By default monkey studio will install itself in /usr/local.
 If you want to change this you should do these build step ( assuming you want to install in /usr ) :
 
-	* cd to root sources of monkey studio
-	* qmake prefix=/usr
-	* make
-	* sudo make install
+    * cd to root sources of monkey studio
+    * qmake prefix=/usr
+    * make
+    * sudo make install
 
 You now have a full working copy of monkey for your unix/linux box.
 If you have trouble when monkey starting ( because you already use old version of monkey studio ), you should rename the file ~/.Monkey Studio/Monkey Studio.ini and restart monkey studio.
@@ -36,22 +36,22 @@ How to build Monkey Studio:
 With MinGW/Windows:
 
 * Open a console, and go to the sources directory.
-	* qmake && mingw32-make
+    * qmake && mingw32-make
 
 With MSVC/Windows:
 
 * Open a console, and go to the sources directory.
-	* qmake && nmake // possible you will need to set, for wich compiler to generate makefile like : qmake -spec win32-msvc2005
+    * qmake && nmake // possible you will need to set, for wich compiler to generate makefile like : qmake -spec win32-msvc2005
 
 With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
-	* qmake && make // some distros use qmake-qt4 for qmake of Qt 4
+    * qmake && make // some distros use qmake-qt4 for qmake of Qt 4
 
 With Mac OS X:
 
 * Open a terminal, and go to the sources directory.
-	* qmake -spec macx-g++ && make
+    * qmake -spec macx-g++ && make
 
 How to execute Monkey Studio:
 =============================
@@ -75,6 +75,6 @@ from root dirrectory of source archive
 (dirrectory, where config storing)
 Directory 'doc/html' with documentation will appear.
 
-	Azevedo Filipe & The Monkey Studio Team,
+    Azevedo Filipe & The Monkey Studio Team,
 
 --EOF

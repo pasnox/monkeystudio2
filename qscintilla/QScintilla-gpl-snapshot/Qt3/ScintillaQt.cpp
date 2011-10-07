@@ -1,6 +1,6 @@
 // The implementation of the Qt specific subclass of ScintillaBase.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -56,6 +51,7 @@
 #undef  SCN_DWELLSTART
 #undef  SCN_HOTSPOTCLICK
 #undef  SCN_HOTSPOTDOUBLECLICK
+#undef  SCN_HOTSPOTRELEASECLICK
 #undef  SCN_INDICATORCLICK
 #undef  SCN_INDICATORRELEASE
 #undef  SCN_MACRORECORD
@@ -84,6 +80,7 @@ enum
     SCN_DWELLSTART = 2016,
     SCN_HOTSPOTCLICK = 2019,
     SCN_HOTSPOTDOUBLECLICK = 2020,
+    SCN_HOTSPOTRELEASECLICK = 2027,
     SCN_INDICATORCLICK = 2023,
     SCN_INDICATORRELEASE = 2024,
     SCN_MACRORECORD = 2009,
@@ -149,7 +146,7 @@ void ScintillaQt::StartDrag()
     if (dobj->drag() && dobj->target() != qsb->viewport())
         ClearSelection();
 
-    SetDragPosition(-1);
+    SetDragPosition(SelectionPosition());
     inDragDrop = ddNone;
 }
 
@@ -319,6 +316,10 @@ void ScintillaQt::NotifyParent(SCNotification scn)
         emit qsb->SCN_HOTSPOTDOUBLECLICK(scn.position, scn.modifiers);
         break;
 
+    case SCN_HOTSPOTRELEASECLICK:
+        emit qsb->SCN_HOTSPOTRELEASECLICK(scn.position, scn.modifiers);
+        break;
+
     case SCN_INDICATORCLICK:
         emit qsb->SCN_INDICATORCLICK(scn.position, scn.modifiers);
         break;
@@ -387,7 +388,7 @@ void ScintillaQt::NotifyParent(SCNotification scn)
         break;
 
     case SCN_UPDATEUI:
-        emit qsb->SCN_UPDATEUI();
+        emit qsb->SCN_UPDATEUI(scn.updated);
         break;
 
     case SCN_USERLISTSELECTION:
@@ -404,8 +405,9 @@ void ScintillaQt::NotifyParent(SCNotification scn)
 }
 
 
+
 // Convert a text range to a QString.
-QString ScintillaQt::textRange(const SelectionText *text)
+QString ScintillaQt::textRange(const SelectionText *text) const
 {
     if (!text->s)
         return QString();
@@ -415,6 +417,7 @@ QString ScintillaQt::textRange(const SelectionText *text)
 
     return QString::fromLatin1(text->s);
 }
+
 
 
 // Copy the selected text to the clipboard.
@@ -427,7 +430,7 @@ void ScintillaQt::CopyToClipboard(const SelectionText &selectedText)
 // Implement copy.
 void ScintillaQt::Copy()
 {
-    if (currentPos != anchor)
+    if (!sel.Empty())
     {
         SelectionText text;
 
@@ -447,17 +450,17 @@ void ScintillaQt::Paste()
 // Paste text from either the clipboard or selection.
 void ScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
 {
+    int len;
+    const char *s;
+    bool rectangular;
+
+    // This code is historical.  We could support rectangular selections and
+    // not do the unnecessary UTF-8 conversions but we no longer actively
+    // support Qt v3.
     QString str = QApplication::clipboard()->text(mode);
 
     if (str.isEmpty())
         return;
-
-    pdoc->BeginUndoAction();
-
-    ClearSelection();
-
-    int len;
-    const char *s;
 
     QCString bytes;
 
@@ -474,12 +477,23 @@ void ScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
         len = (s ? qstrlen(s) : 0);
     }
 
-    if (len)
-        pdoc->InsertString(currentPos, s, len);
+    rectangular = false;
 
-    SetEmptySelection(currentPos + len);
+    s = Document::TransformLineEnds(&len, s, len, pdoc->eolMode);
 
-    pdoc->EndUndoAction();
+    UndoGroup ug(pdoc);
+
+    ClearSelection();
+
+    SelectionPosition start = sel.IsRectangular() ? sel.Rectangular().Start()
+            : sel.Range(sel.Main()).Start();
+
+    if (rectangular)
+        PasteRectangular(start, s, len);
+    else
+        InsertPaste(start, s, len);
+
+    delete[] s;
 
     NotifyChange();
     Redraw();
@@ -514,7 +528,7 @@ void ScintillaQt::AddToPopUp(const char *label, int cmd, bool enabled)
 // Claim the selection.
 void ScintillaQt::ClaimSelection()
 {
-    bool isSel = (currentPos != anchor);
+    bool isSel = !sel.Empty();
 
     if (isSel)
     {

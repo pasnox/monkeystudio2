@@ -1,6 +1,6 @@
 # The project file for the QScintilla library.
 #
-# Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
 # This file is part of QScintilla.
 # 
@@ -16,25 +16,20 @@
 # GPL Exception version 1.1, which can be found in the file
 # GPL_EXCEPTION.txt in this package.
 # 
-# Please review the following information to ensure GNU General
-# Public Licensing requirements will be met:
-# http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-# you are unsure which license is appropriate for your use, please
-# review the following information:
-# http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-# or contact the sales department at sales@riverbankcomputing.com.
+# If you are unsure which license is appropriate for your use, please
+# contact the sales department at sales@riverbankcomputing.com.
 # 
 # This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
 # This must be kept in sync with configure.py.
-!win32:VERSION = 5.4.1
+!win32:VERSION = 7.0.0
 
 TEMPLATE = lib
 TARGET = qscintilla2
 CONFIG += qt warn_off release dll thread
-INCLUDEPATH = . ../include ../src
+INCLUDEPATH = . ../include ../lexlib ../src
 DEFINES = QSCINTILLA_MAKE_DLL QT SCI_LEXER
 
 # Handle both Qt v4 and v3.
@@ -91,6 +86,8 @@ HEADERS = \
 	./Qsci/qscilexerjavascript.h \
 	./Qsci/qscilexerlua.h \
 	./Qsci/qscilexermakefile.h \
+	./Qsci/qscilexermatlab.h \
+	./Qsci/qscilexeroctave.h \
 	./Qsci/qscilexerpascal.h \
 	./Qsci/qscilexerperl.h \
 	./Qsci/qscilexerpostscript.h \
@@ -113,24 +110,33 @@ HEADERS = \
 	ListBoxQt.h \
 	SciClasses.h \
 	ScintillaQt.h \
-	../include/Accessor.h \
-	../include/KeyWords.h \
+	../include/ILexer.h \
 	../include/Platform.h \
-	../include/PropSet.h \
-	../include/SString.h \
 	../include/SciLexer.h \
 	../include/Scintilla.h \
 	../include/ScintillaWidget.h \
+	../lexlib/Accessor.h \
+	../lexlib/CharacterSet.h \
+	../lexlib/LexAccessor.h \
+	../lexlib/LexerBase.h \
+	../lexlib/LexerModule.h \
+	../lexlib/LexerNoExceptions.h \
+	../lexlib/LexerSimple.h \
+	../lexlib/OptionSet.h \
+	../lexlib/PropSetSimple.h \
+	../lexlib/StyleContext.h \
+	../lexlib/WordList.h \
 	../src/AutoComplete.h \
 	../src/CallTip.h \
+	../src/Catalogue.h \
 	../src/CellBuffer.h \
 	../src/CharClassify.h \
 	../src/ContractionState.h \
 	../src/Decoration.h \
 	../src/Document.h \
-	../src/DocumentAccessor.h \
 	../src/Editor.h \
 	../src/ExternalLexer.h \
+	../src/FontQuality.h \
 	../src/Indicator.h \
 	../src/KeyMap.h \
 	../src/LineMarker.h \
@@ -139,11 +145,12 @@ HEADERS = \
 	../src/PositionCache.h \
 	../src/RESearch.h \
 	../src/RunStyles.h \
-	../src/SVector.h \
 	../src/ScintillaBase.h \
+	../src/Selection.h \
 	../src/SplitVector.h \
 	../src/Style.h \
-	../src/StyleContext.h \
+	../src/SVector.h \
+	../src/UniConversion.h \
 	../src/ViewStyle.h \
 	../src/XPM.h
 
@@ -173,6 +180,8 @@ SOURCES = \
 	qscilexerjavascript.cpp \
 	qscilexerlua.cpp \
 	qscilexermakefile.cpp \
+	qscilexermatlab.cpp \
+	qscilexeroctave.cpp \
 	qscilexerpascal.cpp \
 	qscilexerperl.cpp \
 	qscilexerpostscript.cpp \
@@ -196,105 +205,117 @@ SOURCES = \
 	ListBoxQt.cpp \
 	PlatQt.cpp \
 	ScintillaQt.cpp \
+	../lexers/LexA68k.cpp \
+	../lexers/LexAbaqus.cpp \
+	../lexers/LexAda.cpp \
+	../lexers/LexAPDL.cpp \
+	../lexers/LexAsm.cpp \
+	../lexers/LexAsn1.cpp \
+	../lexers/LexASY.cpp \
+	../lexers/LexAU3.cpp \
+	../lexers/LexAVE.cpp \
+	../lexers/LexBaan.cpp \
+	../lexers/LexBash.cpp \
+	../lexers/LexBasic.cpp \
+	../lexers/LexBullant.cpp \
+	../lexers/LexCaml.cpp \
+	../lexers/LexCLW.cpp \
+	../lexers/LexCmake.cpp \
+	../lexers/LexCOBOL.cpp \
+	../lexers/LexConf.cpp \
+	../lexers/LexCPP.cpp \
+	../lexers/LexCrontab.cpp \
+	../lexers/LexCsound.cpp \
+	../lexers/LexCSS.cpp \
+	../lexers/LexD.cpp \
+	../lexers/LexEiffel.cpp \
+	../lexers/LexErlang.cpp \
+	../lexers/LexEScript.cpp \
+	../lexers/LexFlagship.cpp \
+	../lexers/LexForth.cpp \
+	../lexers/LexFortran.cpp \
+	../lexers/LexGAP.cpp \
+	../lexers/LexGui4Cli.cpp \
+	../lexers/LexHaskell.cpp \
+	../lexers/LexHTML.cpp \
+	../lexers/LexInno.cpp \
+	../lexers/LexKix.cpp \
+	../lexers/LexLisp.cpp \
+	../lexers/LexLout.cpp \
+	../lexers/LexLua.cpp \
+	../lexers/LexMagik.cpp \
+	../lexers/LexMarkdown.cpp \
+	../lexers/LexMatlab.cpp \
+	../lexers/LexMetapost.cpp \
+	../lexers/LexMMIXAL.cpp \
+	../lexers/LexModula.cpp \
+	../lexers/LexMPT.cpp \
+	../lexers/LexMSSQL.cpp \
+	../lexers/LexMySQL.cpp \
+	../lexers/LexNimrod.cpp \
+	../lexers/LexNsis.cpp \
+	../lexers/LexOpal.cpp \
+	../lexers/LexOthers.cpp \
+	../lexers/LexPascal.cpp \
+	../lexers/LexPB.cpp \
+	../lexers/LexPerl.cpp \
+	../lexers/LexPLM.cpp \
+	../lexers/LexPOV.cpp \
+	../lexers/LexPowerPro.cpp \
+	../lexers/LexPowerShell.cpp \
+	../lexers/LexProgress.cpp \
+	../lexers/LexPS.cpp \
+	../lexers/LexPython.cpp \
+	../lexers/LexR.cpp \
+	../lexers/LexRebol.cpp \
+	../lexers/LexRuby.cpp \
+	../lexers/LexScriptol.cpp \
+	../lexers/LexSmalltalk.cpp \
+	../lexers/LexSML.cpp \
+	../lexers/LexSorcus.cpp \
+	../lexers/LexSpecman.cpp \
+	../lexers/LexSpice.cpp \
+	../lexers/LexSQL.cpp \
+	../lexers/LexTACL.cpp \
+	../lexers/LexTADS3.cpp \
+	../lexers/LexTAL.cpp \
+	../lexers/LexTCL.cpp \
+	../lexers/LexTeX.cpp \
+	../lexers/LexTxt2tags.cpp \
+	../lexers/LexVB.cpp \
+	../lexers/LexVerilog.cpp \
+	../lexers/LexVHDL.cpp \
+	../lexers/LexYAML.cpp \
+	../lexlib/Accessor.cpp \
+	../lexlib/CharacterSet.cpp \
+	../lexlib/LexerBase.cpp \
+	../lexlib/LexerModule.cpp \
+	../lexlib/LexerNoExceptions.cpp \
+	../lexlib/LexerSimple.cpp \
+	../lexlib/PropSetSimple.cpp \
+	../lexlib/StyleContext.cpp \
+	../lexlib/WordList.cpp \
 	../src/AutoComplete.cpp \
 	../src/CallTip.cpp \
+	../src/Catalogue.cpp \
 	../src/CellBuffer.cpp \
 	../src/CharClassify.cpp \
 	../src/ContractionState.cpp \
 	../src/Decoration.cpp \
 	../src/Document.cpp \
-	../src/DocumentAccessor.cpp \
 	../src/Editor.cpp \
 	../src/ExternalLexer.cpp \
 	../src/Indicator.cpp \
     ../src/KeyMap.cpp \
-	../src/KeyWords.cpp \
-	../src/LexAbaqus.cpp \
-	../src/LexAPDL.cpp \
-	../src/LexAU3.cpp \
-	../src/LexAVE.cpp \
-	../src/LexAda.cpp \
-	../src/LexAsm.cpp \
-	../src/LexAsn1.cpp \
-	../src/LexASY.cpp \
-	../src/LexBaan.cpp \
-	../src/LexBash.cpp \
-	../src/LexBasic.cpp \
-	../src/LexBullant.cpp \
-	../src/LexCLW.cpp \
-	../src/LexCPP.cpp \
-	../src/LexCSS.cpp \
-	../src/LexCaml.cpp \
-	../src/LexCmake.cpp \
-	../src/LexCOBOL.cpp \
-	../src/LexConf.cpp \
-	../src/LexCrontab.cpp \
-	../src/LexCsound.cpp \
-	../src/LexD.cpp \
-	../src/LexEScript.cpp \
-	../src/LexEiffel.cpp \
-	../src/LexErlang.cpp \
-	../src/LexFlagship.cpp \
-	../src/LexForth.cpp \
-	../src/LexFortran.cpp \
-	../src/LexGAP.cpp \
-	../src/LexGui4Cli.cpp \
-	../src/LexHTML.cpp \
-	../src/LexHaskell.cpp \
-	../src/LexInno.cpp \
-	../src/LexKix.cpp \
-	../src/LexLisp.cpp \
-	../src/LexLout.cpp \
-	../src/LexLua.cpp \
-	../src/LexMagik.cpp \
-	../src/LexMMIXAL.cpp \
-	../src/LexMPT.cpp \
-	../src/LexMSSQL.cpp \
-	../src/LexMatlab.cpp \
-	../src/LexMetapost.cpp \
-	../src/LexMySQL.cpp \
-	../src/LexNimrod.cpp \
-	../src/LexNsis.cpp \
-	../src/LexOpal.cpp \
-	../src/LexOthers.cpp \
-	../src/LexPB.cpp \
-	../src/LexPLM.cpp \
-	../src/LexPOV.cpp \
-	../src/LexPowerPro.cpp \
-	../src/LexPowerShell.cpp \
-	../src/LexProgress.cpp \
-	../src/LexPS.cpp \
-	../src/LexPascal.cpp \
-	../src/LexPerl.cpp \
-	../src/LexPython.cpp \
-	../src/LexR.cpp \
-	../src/LexRebol.cpp \
-	../src/LexRuby.cpp \
-	../src/LexSQL.cpp \
-	../src/LexScriptol.cpp \
-	../src/LexSmalltalk.cpp \
-	../src/LexSML.cpp \
-	../src/LexSorcus.cpp \
-	../src/LexSpecman.cpp \
-	../src/LexSpice.cpp \
-	../src/LexTACL.cpp \
-	../src/LexTADS3.cpp \
-	../src/LexTAL.cpp \
-	../src/LexTCL.cpp \
-	../src/LexTeX.cpp \
-	../src/LexVB.cpp \
-	../src/LexVHDL.cpp \
-	../src/LexVerilog.cpp \
-	../src/LexYAML.cpp \
 	../src/LineMarker.cpp \
 	../src/PerLine.cpp \
 	../src/PositionCache.cpp \
-	../src/PropSet.cpp \
     ../src/RESearch.cpp \
 	../src/RunStyles.cpp \
     ../src/ScintillaBase.cpp \
+    ../src/Selection.cpp \
 	../src/Style.cpp \
-	../src/StyleContext.cpp \
+	../src/UniConversion.cpp \
 	../src/ViewStyle.cpp \
 	../src/XPM.cpp
 

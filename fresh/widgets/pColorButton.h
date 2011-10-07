@@ -1,37 +1,55 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef PCOLORBUTTON_H
 #define PCOLORBUTTON_H
 
-#include "objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QPushButton>
 
 class Q_MONKEY_EXPORT pColorButton : public QPushButton
 {
-	Q_OBJECT
-	Q_PROPERTY( bool colorNameHidden READ isColorNameHidden WRITE setColorNameHidden )
-	Q_PROPERTY( QColor color READ color WRITE setColor )
-	
+    Q_OBJECT
+    Q_PROPERTY( bool colorNameHidden READ isColorNameHidden WRITE setColorNameHidden )
+    Q_PROPERTY( QColor color READ color WRITE setColor )
+    
 public:
-	pColorButton( QWidget* parent = 0 );
-	pColorButton( const QColor& color, QWidget* parent = 0 );
-	virtual ~pColorButton();
-	
-	bool isColorNameHidden() const;
-	const QColor& color() const;
+    pColorButton( QWidget* parent = 0 );
+    pColorButton( const QColor& color, QWidget* parent = 0 );
+    virtual ~pColorButton();
+    
+    bool isColorNameHidden() const;
+    const QColor& color() const;
 
 protected:
-	bool mColorNameHidden;
-	QColor mColor;
-	
-	void init( const QColor& color );
-	void updateColorName();
+    bool mColorNameHidden;
+    QColor mColor;
+    
+    void init( const QColor& color );
+    void updateColorName();
 
 public slots:
-	void setColorNameHidden( bool hidden );
-	void setColor( const QColor& color );
+    void setColorNameHidden( bool hidden );
+    void setColor( const QColor& color );
 
 protected slots:
-	void onClicked();
+    void onClicked();
 };
 
 #endif // PCOLORBUTTON_H

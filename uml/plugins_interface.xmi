@@ -61,9 +61,9 @@
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="1eGeOH7NX2JB" isRoot="false" isAbstract="false" name="QWidget" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="vZ7R0DlBX9nJ" isRoot="false" isAbstract="false" name="QSettings" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="4QoVLCxaDo85" isRoot="false" isAbstract="false" name="QVariant" />
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="jsq53XLZqUnV" isRoot="false" isAbstract="false" name="CLIToolPlugin" >
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="jsq53XLZqUnV" isRoot="false" isAbstract="false" name="CLIToolInterface" >
        <UML:Classifier.feature>
-        <UML:Operation comment="Default dtor" isSpecification="false" isLeaf="false" visibility="public" xmi.id="56i40e9eO4gk" isRoot="false" isAbstract="false" isQuery="false" name="~ CLIToolPlugin" />
+        <UML:Operation comment="Default dtor" isSpecification="false" isLeaf="false" visibility="public" xmi.id="56i40e9eO4gk" isRoot="false" isAbstract="false" isQuery="false" name="~ CLIToolInterface" />
         <UML:Operation comment="Return all default available commands for this tool" isSpecification="false" isLeaf="false" visibility="public" xmi.id="sMr9qjxZcnfd" isRoot="false" isAbstract="false" isQuery="false" name="defaultCommands" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="9XczwaOgJs5P" type="KyAASwdX0LZ0" />

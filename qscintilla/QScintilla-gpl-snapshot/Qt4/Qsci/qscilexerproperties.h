@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerProperties class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -64,7 +59,10 @@ public:
         Assignment = 3,
 
         //! A default value.
-        DefaultValue = 4
+        DefaultValue = 4,
+
+        //! A key.
+        Key = 5
     };
 
     //! Construct a QsciLexerProperties with parent \a parent.  \a parent is
@@ -100,9 +98,9 @@ public:
     //! \sa defaultColor()
     QColor defaultPaper(int style) const;
 
-    //! Returns the descriptive name for style number \a style.  If the
-    //! style is invalid for this language then an empty QString is returned.
-    //! This is intended to be used in user preference dialogs.
+    //! Returns the descriptive name for style number \a style.  If the style
+    //! is invalid for this language then an empty QString is returned.  This
+    //! is intended to be used in user preference dialogs.
     QString description(int style) const;
 
     //! Causes all properties to be refreshed by emitting the
@@ -112,7 +110,18 @@ public:
     //! Returns true if trailing blank lines are included in a fold block.
     //!
     //! \sa setFoldCompact()
-    bool foldCompact() const;
+    bool foldCompact() const {return fold_compact;}
+
+    //! If \a enable is true then initial spaces in a line are allowed.  The
+    //! default is true.
+    //!
+    //! \sa initialSpaces()
+    void setInitialSpaces(bool enable);
+
+    //! Returns true if initial spaces in a line are allowed.
+    //!
+    //! \sa setInitialSpaces()
+    bool initialSpaces() const {return initial_spaces;}
 
 public slots:
     //! If \a fold is true then trailing blank lines are included in a fold
@@ -138,8 +147,10 @@ protected:
 
 private:
     void setCompactProp();
+    void setInitialSpacesProp();
 
     bool fold_compact;
+    bool initial_spaces;
 
     QsciLexerProperties(const QsciLexerProperties &);
     QsciLexerProperties &operator=(const QsciLexerProperties &);

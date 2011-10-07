@@ -1,48 +1,60 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef COMMANDSEDITOR_H
 #define COMMANDSEDITOR_H
 
-#include <objects/MonkeyExport.h>
+#include "MonkeyExport.h"
+#include "XUPPageEditor.h"
 
-#include "ui_CommandsEditor.h"
 #include "xupmanager/core/XUPProjectItemHelper.h"
 
-class Q_MONKEY_EXPORT CommandsEditor : public QFrame, public Ui::CommandsEditor
+#include <QModelIndex>
+#include <QItemSelection>
+
+class Ui_CommandsEditor;
+class CommandsEditorModel;
+
+class Q_MONKEY_EXPORT CommandsEditor : public XUPPageEditor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CommandsEditor( QWidget* parent = 0 );
-	virtual ~CommandsEditor();
-	
-	void finalize();
-	
-	void setCommandTypes( const BasePluginTypeList& types );
-	BasePluginTypeList commandTypes() const;
-	
-	void setCommands( const TypeCommandListMap& commands );
-	TypeCommandListMap commands() const;
-	
-	void setCurrentType( BasePlugin::Type type );
-	BasePlugin::Type currentType() const;
-	
-	void setParsers( const QStringList& parsers );
-	QStringList parsers() const;
+    CommandsEditor( QWidget* parent = 0 );
+    virtual ~CommandsEditor();
+    
+    virtual void setup( XUPProjectItem* project );
+    virtual void finalize();
 
 protected:
-	BasePluginTypeList mCommandTypes;
-	QStringList mParsers;
-	TypeCommandListMap mCommands;
-	BasePlugin::Type mLastCommandType;
+    Ui_CommandsEditor* ui;
+    CommandsEditorModel* mModel;
+    XUPProjectItem* mProject;
+    
+    void setCommand( const QModelIndex& commandIndex );
+    void getCommand( const QModelIndex& commandIndex );
+    void updateState();
 
 protected slots:
-	void updateGui();
-	void on_cbCommandTypes_currentIndexChanged( int index );
-	void on_tbCommandAdd_clicked();
-	void on_tbCommandRemove_clicked();
-	void on_tbCommandUp_clicked();
-	void on_tbCommandDown_clicked();
-	void on_lwCommands_itemSelectionChanged();
-	void on_lwCommands_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
+    void tvCommands_selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected );
+    void on_tbCommandAdd_clicked();
+    void on_tbCommandUp_clicked();
+    void on_tbCommandDown_clicked();
 };
 
 #endif // COMMANDSEDITOR_H

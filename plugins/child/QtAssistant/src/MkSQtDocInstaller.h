@@ -1,3 +1,21 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef MKSQTDOCINSTALLER_H
 #define MKSQTDOCINSTALLER_H
 
@@ -8,26 +26,26 @@ class QtDocInstaller;
 
 class MkSQtDocInstaller : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MkSQtDocInstaller( QHelpEngine* engine = 0 );
-	
-	static QString collectionFileDirectory( bool createDir = false, const QString& cacheDir = QString() );
-	static QString defaultHelpCollectionFileName();
+    MkSQtDocInstaller( QHelpEngine* engine = 0 );
+    
+    static QString collectionFileDirectory( bool createDir = false, const QString& cacheDir = QString() );
+    static QString defaultHelpCollectionFileName();
 
 protected:
-	QHelpEngine* mHelpEngine;
-	QtDocInstaller* mQtDocInstaller;
+    QHelpEngine* mHelpEngine;
+    QtDocInstaller* mQtDocInstaller;
 
 public slots:
-	bool checkDocumentation();
+    bool checkDocumentation();
 
 protected slots:
-	bool initHelpDB();
-	void lookForNewQtDocumentation();
-	void displayInstallationError( const QString& errorMessage );
-	void qtDocumentationInstalled( bool newDocsInstalled );
+    bool initHelpDB();
+    void lookForNewQtDocumentation();
+    void displayInstallationError( const QString& errorMessage );
+    void qtDocumentationInstalled( bool newDocsInstalled );
 };
 
 #endif // MKSQTDOCINSTALLER_H

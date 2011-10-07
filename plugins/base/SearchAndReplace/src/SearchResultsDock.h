@@ -1,7 +1,25 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef SEARCHRESULTSDOCK_H
 #define SEARCHRESULTSDOCK_H
 
-#include <widgets/pDockWidget.h>
+#include <pDockWidget.h>
 
 #include <QModelIndex>
 
@@ -12,21 +30,21 @@ class QTreeView;
 
 class SearchResultsDock : public pDockWidget
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	SearchResultsDock( SearchThread* searchThread, QWidget* parent = 0 );
-	
-	SearchResultsModel* model() const;
+    SearchResultsDock( SearchThread* searchThread, QWidget* parent = 0 );
+    
+    SearchResultsModel* model() const;
 
 protected:
-	SearchThread* mSearchThread;
-	QHBoxLayout* mLayout;
-	SearchResultsModel* mModel;
-	QTreeView* mView;
+    SearchThread* mSearchThread;
+    QHBoxLayout* mLayout;
+    SearchResultsModel* mModel;
+    QTreeView* mView;
 
 protected slots:
-	void view_activated( const QModelIndex& index );
+    void view_activated( const QModelIndex& index );
 };
 
 #endif // SEARCHRESULTSDOCK_H

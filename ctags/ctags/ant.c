@@ -23,20 +23,20 @@
 
 static void installAntRegex (const langType language)
 {
-	addTagRegex (language,
-		"^[ \t]*<[ \t]*project.*name=\"([^\"]+)\".*", "\\1", "p,project,projects", NULL);
-	addTagRegex (language,
-		"^[ \t]*<[ \t]*target.*name=\"([^\"]+)\".*", "\\1", "t,target,targets", NULL);
+    addTagRegex (language,
+        "^[ \t]*<[ \t]*project.*name=\"([^\"]+)\".*", "\\1", "p,project,projects", NULL);
+    addTagRegex (language,
+        "^[ \t]*<[ \t]*target.*name=\"([^\"]+)\".*", "\\1", "t,target,targets", NULL);
 }
 
 extern parserDefinition* AntParser ()
 {
-	static const char *const extensions [] = { "build.xml", NULL };
-	parserDefinition* const def = parserNew ("Ant");
-	def->extensions = extensions;
-	def->initialize = installAntRegex;
-	def->regex      = TRUE;
-	return def;
+    static const char *const extensions [] = { "build.xml", NULL };
+    parserDefinition* const def = parserNew ("Ant");
+    def->extensions = extensions;
+    def->initialize = installAntRegex;
+    def->regex      = TRUE;
+    return def;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

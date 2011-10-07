@@ -1,6 +1,6 @@
 // This module implements the QsciLexerProperties class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -38,7 +33,7 @@
 // The ctor.
 QsciLexerProperties::QsciLexerProperties(QObject *parent, const char *name)
     : QsciLexer(parent, name),
-      fold_compact(true)
+      fold_compact(true), initial_spaces(true)
 {
 }
 
@@ -110,6 +105,8 @@ QFont QsciLexerProperties::defaultFont(int style) const
     if (style == Comment)
 #if defined(Q_OS_WIN)
         f = QFont("Comic Sans MS",9);
+#elif defined(Q_OS_MAC)
+        f = QFont("Comic Sans MS", 12);
 #else
         f = QFont("Bitstream Vera Serif",9);
 #endif
@@ -139,6 +136,9 @@ QString QsciLexerProperties::description(int style) const
 
     case DefaultValue:
         return tr("Default value");
+
+    case Key:
+        return tr("Key");
     }
 
     return QString();
@@ -159,6 +159,7 @@ QColor QsciLexerProperties::defaultPaper(int style) const
 void QsciLexerProperties::refreshProperties()
 {
     setCompactProp();
+    setInitialSpacesProp();
 }
 
 
@@ -176,6 +177,13 @@ bool QsciLexerProperties::readProperties(QSettings &qs,const QString &prefix)
     else
         rc = false;
 
+    flag = qs.readBoolEntry(prefix + "initialspaces", true, &ok);
+
+    if (ok)
+        initial_spaces = flag;
+    else
+        rc = false;
+
     return rc;
 }
 
@@ -188,14 +196,10 @@ bool QsciLexerProperties::writeProperties(QSettings &qs,const QString &prefix) c
     if (!qs.writeEntry(prefix + "foldcompact", fold_compact))
         rc = false;
 
+    if (!qs.writeEntry(prefix + "initialspaces", initial_spaces))
+        rc = false;
+
     return rc;
-}
-
-
-// Return true if folds are compact.
-bool QsciLexerProperties::foldCompact() const
-{
-    return fold_compact;
 }
 
 
@@ -211,5 +215,21 @@ void QsciLexerProperties::setFoldCompact(bool fold)
 // Set the "fold.compact" property.
 void QsciLexerProperties::setCompactProp()
 {
-    emit propertyChanged("fold.compact",(fold_compact ? "1" : "0"));
+    emit propertyChanged("fold.compact", (fold_compact ? "1" : "0"));
+}
+
+
+// Set if initial spaces are allowed.
+void QsciLexerProperties::setInitialSpaces(bool enable)
+{
+    initial_spaces = enable;
+
+    setInitialSpacesProp();
+}
+
+
+// Set the "lexer.props.allow.initial.spaces" property.
+void QsciLexerProperties::setInitialSpacesProp()
+{
+    emit propertyChanged("lexer.props.allow.initial.spaces", (fold_compact ? "1" : "0"));
 }

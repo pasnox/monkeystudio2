@@ -1,18 +1,13 @@
-TARGET	= PHP-Qt
-
+TARGET  = PHP-Qt
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
+DESTDIR = $$MONKEY_PLUGINS_DIR/xup
 
-INCLUDEPATH	*= src/gui .
+INCLUDEPATH *= src .
 
-RESOURCES	*= src/resources/PHP-Qt.qrc
+RESOURCES   *= src/resources/PHP-Qt.qrc
 
-FORMS	*= ../XUP/src/gui/UIXUPEditor.ui
+HEADERS *= src/PHPQt.h \
+    src/PHPQtProjectItem.h
 
-HEADERS	*= src/PHPQt.h \
-	src/PHPQtProjectItem.h \
-	../XUP/src/gui/UIXUPEditor.h
-
-SOURCES	*= src/PHPQt.cpp \
-	src/PHPQtProjectItem.cpp \
-	../XUP/src/gui/UIXUPEditor.cpp
+SOURCES *= src/PHPQt.cpp \
+    src/PHPQtProjectItem.cpp

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QMakeTranslationsEditor</class>
+ <widget class="XUPPageEditor" name="QMakeTranslationsEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Translations</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/QMake.qrc">
+    <normaloff>:/qmakeitems/translations.png</normaloff>:/qmakeitems/translations.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="gbTranslations">
+     <property name="title">
+      <string>Translations</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="0">
+       <widget class="QLabel" name="lDirectory">
+        <property name="text">
+         <string>Directory</string>
+        </property>
+        <property name="buddy">
+         <cstring>leDirectory</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="leDirectory"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QToolButton" name="tbDirectory">
+        <property name="icon">
+         <iconset resource="../../../../../monkey/src/resources/resources.qrc">
+          <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="Line" name="lTop">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <widget class="QTreeView" name="tvLocales">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="verticalScrollMode">
+         <enum>QAbstractItemView::ScrollPerPixel</enum>
+        </property>
+        <property name="uniformRowHeights">
+         <bool>true</bool>
+        </property>
+        <property name="headerHidden">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="leBaseName"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lName">
+        <property name="text">
+         <string>Base name</string>
+        </property>
+        <property name="buddy">
+         <cstring>leDirectory</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>XUPPageEditor</class>
+   <extends>QFrame</extends>
+   <header>xupmanager/gui/XUPPageEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../../../monkey/src/resources/resources.qrc"/>
+  <include location="../resources/QMake.qrc"/>
+ </resources>
+ <connections/>
+</ui>

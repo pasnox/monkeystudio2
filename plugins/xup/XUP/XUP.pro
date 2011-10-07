@@ -1,14 +1,24 @@
-TARGET	= XUP
+###########################################################################################
+##      Created using Monkey Studio IDE v1.8.4.0 (1.8.4.0)
+##
+##  Author      : You Name <your@email.org>
+##  Project     : XUP
+##  FileName    : XUP.pro
+##  Date        : 2011-09-14T23:35:58
+##  Description : Generic XUP Plugin
+##
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+###########################################################################################
+
+TARGET  = XUP
 
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
+DESTDIR = $$MONKEY_PLUGINS_DIR/xup
+INCLUDEPATH *= src
+RESOURCES   = src/resources/XUP.qrc
 
-INCLUDEPATH	*= src
+HEADERS = src/XUP.h
 
-FORMS	*=  src/gui/UIXUPEditor.ui
-
-HEADERS	*=  src/XUP.h \
-	src/gui/UIXUPEditor.h
-
-SOURCES	*=  src/XUP.cpp \
-	src/gui/UIXUPEditor.cpp
+SOURCES = src/XUP.cpp

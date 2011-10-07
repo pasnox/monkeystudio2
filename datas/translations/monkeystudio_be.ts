@@ -3702,153 +3702,153 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>UICLIToolSettings</name>
+    <name>UIAdditionalCommandsSettings</name>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="135"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.cpp" line="135"/>
         <source>New Command</source>
         <translation type="unfinished">Новая каманда</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="183"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.cpp" line="183"/>
         <source>Select an executable</source>
         <translation type="unfinished">Абярыце выканальны файл</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="190"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.cpp" line="190"/>
         <source>Select a folder</source>
         <translation type="unfinished">Абарысе папку</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="13"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="13"/>
         <source>Commands Editor</source>
         <translation>Рэдактар каманд</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="48"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="48"/>
         <source>Commands :</source>
         <translation>Каманды:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="58"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="58"/>
         <source>Add</source>
         <translation>Дадаць</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="71"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="71"/>
         <source>Remove</source>
         <translation>Выдаліць</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="97"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="97"/>
         <source>Down</source>
         <translation>Уніз</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="107"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="107"/>
         <source>Up</source>
         <translation>Уверх</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="119"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="119"/>
         <source>Command</source>
         <translation>Каманда</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="154"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="154"/>
         <source>Text :</source>
         <translation>Тэкст:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="164"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="164"/>
         <source>Command :</source>
         <translation>Каманда:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="174"/>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="204"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="174"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="204"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="184"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="184"/>
         <source>Arguments :</source>
         <translation>Аргументы:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="194"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="194"/>
         <source>Working Directory :</source>
         <translation>Працоўная дырэкторыя:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="214"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="214"/>
         <source>Skip On Error</source>
         <translation>Прапусціць пры памылцы</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="235"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="235"/>
         <source>Parsers :</source>
         <translation>Парсеры:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="252"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIAdditionalCommandsSettings.ui" line="252"/>
         <source>Try All</source>
         <translation>Спрабаваць усе</translation>
     </message>
 </context>
 <context>
-    <name>UIInterpreterSettings</name>
+    <name>UICLIToolSettings</name>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.cpp" line="102"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="102"/>
         <source>Select an executable</source>
         <translation type="unfinished">Абярыце выканальны файл</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.cpp" line="109"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="109"/>
         <source>Select a folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="13"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="13"/>
         <source>Interpreter Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="31"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="31"/>
         <source>Build Command</source>
         <translation type="unfinished">Каманда на пабудовы</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="63"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="63"/>
         <source>Text :</source>
         <translation type="unfinished">Тэкст:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="73"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="73"/>
         <source>Command :</source>
         <translation type="unfinished">Каманда:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="91"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="91"/>
         <source>Arguments :</source>
         <translation type="unfinished">Аргументы:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="101"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="101"/>
         <source>Working Directory :</source>
         <translation type="unfinished">Працоўная дырэкторыя:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="119"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="119"/>
         <source>Skip On Error</source>
         <translation type="unfinished">Прапусціць пры памылцы</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="140"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="140"/>
         <source>Parsers :</source>
         <translation type="unfinished">Парсеры:</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="157"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="157"/>
         <source>Try All</source>
         <translation type="unfinished">Спрабаваць усе</translation>
     </message>
@@ -4665,6 +4665,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="234"/>
         <source>&amp;Project Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="246"/>
+        <source>Default projects directory :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5529,6 +5534,11 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="543"/>
+        <source>Select default projects directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="553"/>
         <source>Choose the default document font</source>
         <translation type="unfinished"></translation>
@@ -5986,19 +5996,19 @@ In non expert mode, only projects and scopes will be shown.</source>
     </message>
 </context>
 <context>
-    <name>XUPProjectItemInfos</name>
+    <name>ProjectTypesIndex</name>
     <message>
-        <location filename="../../monkey/src/xupmanager/core/XUPProjectItemInfos.cpp" line="147"/>
+        <location filename="../../monkey/src/xupmanager/core/ProjectTypesIndex.cpp" line="147"/>
         <source>All Projects (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/xupmanager/core/XUPProjectItemInfos.cpp" line="242"/>
+        <location filename="../../monkey/src/xupmanager/core/ProjectTypesIndex.cpp" line="242"/>
         <source>All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/xupmanager/core/XUPProjectItemInfos.cpp" line="246"/>
+        <location filename="../../monkey/src/xupmanager/core/ProjectTypesIndex.cpp" line="246"/>
         <source>All Supported Files (%2)</source>
         <translation type="unfinished"></translation>
     </message>

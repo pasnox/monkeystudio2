@@ -23,20 +23,20 @@
 
 static void installDosBatchRegex (const langType language)
 {
-	addTagRegex (language,
-		"^:([A-Za-z_0-9]+)", "\\1", "l,label,labels", NULL);
-	addTagRegex (language,
-		"set[ \t]+([A-Za-z_0-9]+)[ \t]*=", "\\1", "v,variable,variables", NULL);
+    addTagRegex (language,
+        "^:([A-Za-z_0-9]+)", "\\1", "l,label,labels", NULL);
+    addTagRegex (language,
+        "set[ \t]+([A-Za-z_0-9]+)[ \t]*=", "\\1", "v,variable,variables", NULL);
 }
 
 extern parserDefinition* DosBatchParser ()
 {
-	static const char *const extensions [] = { "bat", "cmd", NULL };
-	parserDefinition* const def = parserNew ("DosBatch");
-	def->extensions = extensions;
-	def->initialize = installDosBatchRegex;
-	def->regex      = TRUE;
-	return def;
+    static const char *const extensions [] = { "bat", "cmd", NULL };
+    parserDefinition* const def = parserNew ("DosBatch");
+    def->extensions = extensions;
+    def->initialize = installDosBatchRegex;
+    def->regex      = TRUE;
+    return def;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

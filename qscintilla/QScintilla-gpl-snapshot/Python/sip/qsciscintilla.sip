@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciScintilla.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -52,6 +47,12 @@ public:
         AcsAll,
         AcsDocument,
         AcsAPIs
+    };
+
+    enum AutoCompletionUseSingle {
+        AcusNever,
+        AcusExplicit,
+        AcusAlways
     };
 
     enum BraceMatch {
@@ -88,6 +89,17 @@ public:
         BoxedTreeFoldStyle
     };
 
+    enum IndicatorStyle {
+        PlainIndicator,
+        SquiggleIndicator,
+        TTIndicator,
+        DiagonalIndicator,
+        StrikeIndicator,
+        HiddenIndicator,
+        BoxIndicator,
+        RoundBoxIndicator
+    };
+
     enum MarginType {
         SymbolMargin,
         SymbolMarginDefaultForegroundColor,
@@ -122,7 +134,10 @@ public:
         CircledMinusConnected,
         Background,
         ThreeDots,
-        ThreeRightArrows
+        ThreeRightArrows,
+        FullRectangle,
+        LeftRectangle,
+        Underline
     };
 
     enum WhitespaceVisibility {
@@ -141,6 +156,12 @@ public:
         WrapFlagNone,
         WrapFlagByText,
         WrapFlagByBorder,
+    };
+
+    enum WrapIndentMode {
+        WrapIndentFixed,
+        WrapIndentSame,
+        WrapIndentIndented,
     };
 
 %If (Qsci_Qt4)
@@ -175,6 +196,7 @@ public:
     bool autoCompletionShowSingle() const;
     AutoCompletionSource autoCompletionSource() const;
     int autoCompletionThreshold() const;
+    AutoCompletionUseSingle autoCompletionUseSingle() const;
     bool autoIndent() const;
 
     bool backspaceUnindents() const;
@@ -187,6 +209,12 @@ public:
     bool caseSensitive() const;
     void clearRegisteredImages();
     QColor color() const;
+%If (Qsci_Qt4)
+    QList<int> contractedFolds() const;
+%End
+%If (!Qsci_Qt4)
+    QValueList<int> contractedFolds() const;
+%End
     void convertEols(EolMode mode);
 
     QsciDocument document() const;
@@ -198,9 +226,12 @@ public:
     EolMode eolMode() const;
     bool eolVisibility() const;
 
+    int extraAscent() const;
+    int extraDescent() const;
+
     virtual bool findFirst(const QString &expr, bool re, bool cs, bool wo,
             bool wrap, bool forward = true, int line = -1, int index = -1,
-            bool show = true);
+            bool show = true, bool posix = false);
     virtual bool findNext();
     int firstVisibleLine() const;
     FoldStyle folding() const;
@@ -215,6 +246,14 @@ public:
     bool indentationGuides() const;
     bool indentationsUseTabs() const;
     int indentationWidth() const;
+
+    void clearIndicatorRange(int lineFrom, int indexFrom, int lineTo,
+            int indexTo, int indicatorNumber);
+    void fillIndicatorRange(int lineFrom, int indexFrom, int lineTo,
+            int indexTo, int indicatorNumber);
+    int indicatorDefine(IndicatorStyle style, int indicatorNumber = -1);
+    bool indicatorDrawUnder(int indicatorNumber) const;
+
     bool isCallTipActive() const;
     bool isListActive() const;
     bool isModified() const;
@@ -237,13 +276,13 @@ public:
     MarginType marginType(int margin) const;
     int marginWidth(int margin) const;
 
-    int markerDefine(MarkerSymbol sym, int mnr = -1);
-    int markerDefine(char ch, int mnr = -1);
-    int markerDefine(const QPixmap &pm, int mnr = -1);
-    int markerAdd(int linenr, int mnr);
+    int markerDefine(MarkerSymbol sym, int markerNumber = -1);
+    int markerDefine(char ch, int markerNumber = -1);
+    int markerDefine(const QPixmap &pm, int markerNumber = -1);
+    int markerAdd(int linenr, int markerNumber);
     unsigned markersAtLine(int linenr) const;
-    void markerDelete(int linenr, int mnr = -1);
-    void markerDeleteAll(int mnr = -1);
+    void markerDelete(int linenr, int markerNumber = -1);
+    void markerDeleteAll(int markerNumber = -1);
     void markerDeleteHandle(int mhandle);
     int markerLine(int mhandle) const;
     int markerFindNext(int linenr, unsigned mask) const;
@@ -270,6 +309,12 @@ public:
     void setCallTipsHighlightColor(const QColor &col);
     void setCallTipsStyle(CallTipsStyle style);
     void setCallTipsVisible(int nr);
+%If (Qsci_Qt4)
+    void setContractedFolds(const QList<int> &folds);
+%End
+%If (!Qsci_Qt4)
+    void setContractedFolds(const QValueList<int> &folds);
+%End
 
     void setDocument(const QsciDocument &document);
 
@@ -277,7 +322,12 @@ public:
     void setEdgeColumn(int colnr);
     void setEdgeMode(EdgeMode mode);
 
+    void setFirstVisibleLine(int linenr);
     void setFont(const QFont &f);
+
+    void setIndicatorDrawUnder(bool under, int indicatorNumber = -1);
+    void setIndicatorForegroundColor(const QColor &col,
+            int indicatorNumber = -1);
 
     void setMarginText(int line, const QString &text, int style);
     void setMarginText(int line, const QString &text, const QsciStyle &style);
@@ -291,21 +341,30 @@ public:
     void setMarginType(int margin, MarginType type);
     void clearMarginText(int line = -1);
 
-    void setMarkerBackgroundColor(const QColor &col, int mnr = -1);
-    void setMarkerForegroundColor(const QColor &col, int mnr = -1);
+    void setMarkerBackgroundColor(const QColor &col, int markerNumber = -1);
+    void setMarkerForegroundColor(const QColor &col, int markerNumber = -1);
 
     void setMatchedBraceBackgroundColor(const QColor &col);
     void setMatchedBraceForegroundColor(const QColor &col);
     void setUnmatchedBraceBackgroundColor(const QColor &col);
     void setUnmatchedBraceForegroundColor(const QColor &col);
 
-    void setWrapVisualFlags(WrapVisualFlag eflag,
-            WrapVisualFlag sflag = QsciScintilla::WrapFlagNone,
-            int sindent = 0);
+    void setWrapVisualFlags(WrapVisualFlag endFlag,
+            WrapVisualFlag startFlag = QsciScintilla::WrapFlagNone,
+            int indent = 0);
 
     QString selectedText() const;
     bool selectionToEol() const;
     void setSelectionToEol(bool filled);
+
+    void setExtraAscent(int extra);
+    void setExtraDescent(int extra);
+
+    void setWhitespaceBackgroundColor(const QColor &col);
+    void setWhitespaceForegroundColor(const QColor &col);
+    void setWhitespaceSize(int size);
+
+    void setWrapIndentMode(WrapIndentMode mode);
     void showUserList(int id, const QStringList &list);
     QsciCommandSet *standardCommands() const;
 
@@ -315,10 +374,13 @@ public:
     QString text(int line) const;
     int textHeight(int linenr) const;
 
+    int whitespaceSize() const;
     WhitespaceVisibility whitespaceVisibility() const;
+
     QString wordAtPoint(const QPoint &point) const;
     const char *wordCharacters() const;
     WrapMode wrapMode() const;
+    WrapIndentMode wrapIndentMode() const;
     bool write(QIODevice *io) const /ReleaseGIL/;
 
 public slots:
@@ -342,6 +404,7 @@ public slots:
     virtual void paste();
     virtual void redo();
     virtual void removeSelectedText();
+    virtual void replaceSelectedText(const QString &text);
     virtual void resetSelectionBackgroundColor();
     virtual void resetSelectionForegroundColor();
     virtual void selectAll(bool select = true);
@@ -352,6 +415,7 @@ public slots:
     virtual void setAutoCompletionShowSingle(bool single);
     virtual void setAutoCompletionSource(AutoCompletionSource source);
     virtual void setAutoCompletionThreshold(int thresh);
+    virtual void setAutoCompletionUseSingle(AutoCompletionUseSingle single);
     virtual void setAutoIndent(bool autoindent);
     virtual void setBraceMatching(BraceMatch bm);
     virtual void setBackspaceUnindents(bool unindent);
@@ -409,8 +473,22 @@ public slots:
     virtual void zoomTo(int size);
 
 signals:
-    void cursorPositionChanged(int line, int pos);
+    void cursorPositionChanged(int line, int index);
     void copyAvailable(bool yes);
+
+%If (Qsci_Qt4)
+    void indicatorClicked(int line, int index, Qt::KeyboardModifiers state);
+%End
+%If (!Qsci_Qt4)
+    void indicatorClicked(int line, int index, Qt::ButtonState state);
+%End
+
+%If (Qsci_Qt4)
+    void indicatorReleased(int line, int index, Qt::KeyboardModifiers state);
+%End
+%If (!Qsci_Qt4)
+    void indicatorReleased(int line, int index, Qt::ButtonState state);
+%End
 
     void linesChanged();
 

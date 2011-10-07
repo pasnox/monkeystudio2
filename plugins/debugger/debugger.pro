@@ -1,3 +1,2 @@
-TEMPLATE	= subdirs
-
-SUBDIRS	= BeaverDebugger
+TEMPLATE    = subdirs
+SUBDIRS = BeaverDebugger

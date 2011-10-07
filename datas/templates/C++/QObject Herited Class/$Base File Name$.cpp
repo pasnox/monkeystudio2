@@ -1,7 +1,7 @@
 #include "$Base File Name$.h"
 
 $Class Name$::$Class Name$( QObject* parent )
-	: $Parent Class$( parent )
+    : $Parent Class$( parent )
 {
 }
 

@@ -37,12 +37,13 @@
 <h2>Public Types</h2>
 <ul>
 <li>enum { <br/>
-&nbsp;&nbsp;<a class="el" href="classQsciLexerProperties.html#a3139758b88a5d629b2377677fc32488fa9e761a14600d042a269a5dac6a146e67">Default</a> =  0, 
-<a class="el" href="classQsciLexerProperties.html#a3139758b88a5d629b2377677fc32488faec8fd1ed5dfafb06753fcd402406e164">Comment</a> =  1, 
-<a class="el" href="classQsciLexerProperties.html#a3139758b88a5d629b2377677fc32488fa9b9be54dcfbb2e38f1243779c71c76f4">Section</a> =  2, 
+&nbsp;&nbsp;<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076a9e761a14600d042a269a5dac6a146e67">Default</a> =  0, 
+<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076aec8fd1ed5dfafb06753fcd402406e164">Comment</a> =  1, 
+<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076a9b9be54dcfbb2e38f1243779c71c76f4">Section</a> =  2, 
 <br/>
-&nbsp;&nbsp;<a class="el" href="classQsciLexerProperties.html#a3139758b88a5d629b2377677fc32488fa2dce9dbe1d758936b321ee9d77343be6">Assignment</a> =  3, 
-<a class="el" href="classQsciLexerProperties.html#a3139758b88a5d629b2377677fc32488fa3ad64721ceda301cf547533fd6736fe7">DefaultValue</a> =  4
+&nbsp;&nbsp;<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076a2dce9dbe1d758936b321ee9d77343be6">Assignment</a> =  3, 
+<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076a3ad64721ceda301cf547533fd6736fe7">DefaultValue</a> =  4, 
+<a class="el" href="classQsciLexerProperties.html#a486e03ea54af8cb6b87d95c7705e5076af20795f392c5dc1ab5639c7de93181e6">Key</a> =  5
 <br/>
  }
 </ul>
@@ -69,6 +70,8 @@ QFont <a class="el" href="classQsciLexerProperties.html#a1072a9cca2ec577c3953643
 <li>QString <a class="el" href="classQsciLexerProperties.html#a7f77f8e2dfe2bccdcfdbcb9086446f4a">description</a> (int style) const 
 <li>void <a class="el" href="classQsciLexerProperties.html#a638b892c566301f0efe779c58516cbc0">refreshProperties</a> ()
 <li>bool <a class="el" href="classQsciLexerProperties.html#abbe81eb353d24480865e02fb8ebbef99">foldCompact</a> () const 
+<li>void <a class="el" href="classQsciLexerProperties.html#a2243845007f5165eb5718a131be3ada3">setInitialSpaces</a> (bool enable)
+<li>bool <a class="el" href="classQsciLexerProperties.html#a5c77bc878cd265794762420999e98060">initialSpaces</a> () const 
 </ul>
 <h2>Protected Member Functions</h2>
 <ul>
@@ -78,7 +81,7 @@ QFont <a class="el" href="classQsciLexerProperties.html#a1072a9cca2ec577c3953643
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>The <a class="el" href="classQsciLexerProperties.html" title="The QsciLexerProperties class encapsulates the Scintilla Properties lexer.">QsciLexerProperties</a> class encapsulates the Scintilla Properties lexer. </p>
 <hr/><h2>Member Enumeration Documentation</h2>
-<a class="anchor" id="a3139758b88a5d629b2377677fc32488f"></a><!-- doxytag: member="QsciLexerProperties::@15" ref="a3139758b88a5d629b2377677fc32488f" args="" -->
+<a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076"></a><!-- doxytag: member="QsciLexerProperties::@16" ref="a486e03ea54af8cb6b87d95c7705e5076" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -90,20 +93,23 @@ QFont <a class="el" href="classQsciLexerProperties.html#a1072a9cca2ec577c3953643
 <div class="memdoc">
 <p>This enum defines the meanings of the different styles used by the Properties lexer. </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" id="a3139758b88a5d629b2377677fc32488fa9e761a14600d042a269a5dac6a146e67"></a><!-- doxytag: member="Default" ref="a3139758b88a5d629b2377677fc32488fa9e761a14600d042a269a5dac6a146e67" args="" -->Default</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076a9e761a14600d042a269a5dac6a146e67"></a><!-- doxytag: member="Default" ref="a486e03ea54af8cb6b87d95c7705e5076a9e761a14600d042a269a5dac6a146e67" args="" -->Default</em>&nbsp;</td><td>
 <p>The default. </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a3139758b88a5d629b2377677fc32488faec8fd1ed5dfafb06753fcd402406e164"></a><!-- doxytag: member="Comment" ref="a3139758b88a5d629b2377677fc32488faec8fd1ed5dfafb06753fcd402406e164" args="" -->Comment</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076aec8fd1ed5dfafb06753fcd402406e164"></a><!-- doxytag: member="Comment" ref="a486e03ea54af8cb6b87d95c7705e5076aec8fd1ed5dfafb06753fcd402406e164" args="" -->Comment</em>&nbsp;</td><td>
 <p>A comment. </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a3139758b88a5d629b2377677fc32488fa9b9be54dcfbb2e38f1243779c71c76f4"></a><!-- doxytag: member="Section" ref="a3139758b88a5d629b2377677fc32488fa9b9be54dcfbb2e38f1243779c71c76f4" args="" -->Section</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076a9b9be54dcfbb2e38f1243779c71c76f4"></a><!-- doxytag: member="Section" ref="a486e03ea54af8cb6b87d95c7705e5076a9b9be54dcfbb2e38f1243779c71c76f4" args="" -->Section</em>&nbsp;</td><td>
 <p>A section. </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a3139758b88a5d629b2377677fc32488fa2dce9dbe1d758936b321ee9d77343be6"></a><!-- doxytag: member="Assignment" ref="a3139758b88a5d629b2377677fc32488fa2dce9dbe1d758936b321ee9d77343be6" args="" -->Assignment</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076a2dce9dbe1d758936b321ee9d77343be6"></a><!-- doxytag: member="Assignment" ref="a486e03ea54af8cb6b87d95c7705e5076a2dce9dbe1d758936b321ee9d77343be6" args="" -->Assignment</em>&nbsp;</td><td>
 <p>An assignment operator. </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a3139758b88a5d629b2377677fc32488fa3ad64721ceda301cf547533fd6736fe7"></a><!-- doxytag: member="DefaultValue" ref="a3139758b88a5d629b2377677fc32488fa3ad64721ceda301cf547533fd6736fe7" args="" -->DefaultValue</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076a3ad64721ceda301cf547533fd6736fe7"></a><!-- doxytag: member="DefaultValue" ref="a486e03ea54af8cb6b87d95c7705e5076a3ad64721ceda301cf547533fd6736fe7" args="" -->DefaultValue</em>&nbsp;</td><td>
 <p>A default value. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a486e03ea54af8cb6b87d95c7705e5076af20795f392c5dc1ab5639c7de93181e6"></a><!-- doxytag: member="Key" ref="a486e03ea54af8cb6b87d95c7705e5076af20795f392c5dc1ab5639c7de93181e6" args="" -->Key</em>&nbsp;</td><td>
+<p>A key. </p>
 </td></tr>
 </table>
 </dd>
@@ -255,13 +261,52 @@ QFont <a class="el" href="classQsciLexerProperties.html#a1072a9cca2ec577c3953643
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Returns true if trailing blank lines are included in a fold block.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerProperties.html#a4caa0f46faeb171710ec2657cd23436e">setFoldCompact()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2243845007f5165eb5718a131be3ada3"></a><!-- doxytag: member="QsciLexerProperties::setInitialSpaces" ref="a2243845007f5165eb5718a131be3ada3" args="(bool enable)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciLexerProperties::setInitialSpaces </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>enable</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>If <em>enable</em> is true then initial spaces in a line are allowed. The default is true.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerProperties.html#a5c77bc878cd265794762420999e98060">initialSpaces()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5c77bc878cd265794762420999e98060"></a><!-- doxytag: member="QsciLexerProperties::initialSpaces" ref="a5c77bc878cd265794762420999e98060" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerProperties::initialSpaces </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if initial spaces in a line are allowed.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerProperties.html#a2243845007f5165eb5718a131be3ada3">setInitialSpaces()</a> </dd></dl>
 
 </div>
 </div>
@@ -348,7 +393,7 @@ QFont <a class="el" href="classQsciLexerProperties.html#a1072a9cca2ec577c3953643
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Aug 31 08:49:38 2010 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:10 2011 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

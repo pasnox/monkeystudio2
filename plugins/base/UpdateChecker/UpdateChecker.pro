@@ -1,17 +1,14 @@
-TARGET	= UpdateChecker
-
+TARGET  = UpdateChecker
 include( ../../plugins.pri )
-QT	*= network
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
+DESTDIR = $$MONKEY_PLUGINS_DIR/base
+QT  *= network
+INCLUDEPATH *= src/ui
+RESOURCES   = src/resources/UpdateChecker.qrc
 
-INCLUDEPATH	*= src/ui
+FORMS   = src/ui/UIUpdateChecker.ui
 
-RESOURCES	*= src/resources/UpdateChecker.qrc
+HEADERS = src/UpdateChecker.h \
+    src/ui/UIUpdateChecker.h
 
-FORMS	*= src/ui/UIUpdateChecker.ui
-
-HEADERS	*= src/UpdateChecker.h \
-	src/ui/UIUpdateChecker.h
-
-SOURCES	*= src/UpdateChecker.cpp \
-	src/ui/UIUpdateChecker.cpp
+SOURCES = src/UpdateChecker.cpp \
+    src/ui/UIUpdateChecker.cpp

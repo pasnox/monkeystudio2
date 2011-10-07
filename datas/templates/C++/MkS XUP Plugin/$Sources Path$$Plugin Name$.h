@@ -1,21 +1,18 @@
 #ifndef $Plugin Name.upper$_H
 #define $Plugin Name.upper$_H
 
-#include <XUPPlugin.h>
+#include <pluginsmanager/XUPPlugin.h>
 
 class $Plugin Name$ : public XUPPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin XUPPlugin )
-
-public:
-	virtual bool editProject( XUPProjectItem* project );
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin XUPPlugin )
 
 protected:
-	virtual void fillPluginInfos();
+    virtual void fillPluginInfos();
 
-	virtual bool install();
-	virtual bool uninstall();
+    virtual bool install();
+    virtual bool uninstall();
 };
 
 #endif // $Plugin Name.upper$_H

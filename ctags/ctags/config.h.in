@@ -18,7 +18,7 @@
  * 1:  Original ctags format
  * 2:  Extended ctags format with extension flags in EX-style comment.
  */
-#define DEFAULT_FILE_FORMAT	2
+#define DEFAULT_FILE_FORMAT 2
 
 
 

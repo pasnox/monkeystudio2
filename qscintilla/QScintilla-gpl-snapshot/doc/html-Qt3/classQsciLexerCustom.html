@@ -41,7 +41,7 @@
 virtual <a class="el" href="classQsciLexerCustom.html#a3a6b7f17d604db4e06e0d469b55b7602">~QsciLexerCustom</a> ()
 <li>void <a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling</a> (int length, int style)
 <li>void <a class="el" href="classQsciLexerCustom.html#a5ba7f97b19cfa7bd0b846fc56d94fa3c">setStyling</a> (int length, const <a class="el" href="classQsciStyle.html">QsciStyle</a> &amp;style)
-<li>void <a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling</a> (int pos, int style_bits=0)
+<li>void <a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling</a> (int pos, int styleBits=0)
 <li>virtual void <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText</a> (int start, int end)=0
 <li><a class="anchor" id="a224fe82235b9a1c7b9c8bec9dd441178"></a><!-- doxytag: member="QsciLexerCustom::setEditor" ref="a224fe82235b9a1c7b9c8bec9dd441178" args="(QsciScintilla *editor)" -->
 virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8bec9dd441178">setEditor</a> (<a class="el" href="classQsciScintilla.html">QsciScintilla</a> *editor)
@@ -105,8 +105,8 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
       </table>
 </div>
 <div class="memdoc">
-<p>The next <em>length</em> characters starting from the current styling position have their style set to style number <em>style</em>. The current styling position is moved. The styling position is initially set by calling <a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a>.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText()</a> </dd></dl>
+<p>The next <em>length</em> characters starting from the current styling position have their style set to style number <em>style</em>. The current styling position is moved. The styling position is initially set by calling <a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a>.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText()</a> </dd></dl>
 
 </div>
 </div>
@@ -134,12 +134,12 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
       </table>
 </div>
 <div class="memdoc">
-<p>The next <em>length</em> characters starting from the current styling position have their style set to style <em>style</em>. The current styling position is moved. The styling position is initially set by calling <a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a>.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText()</a> </dd></dl>
+<p>The next <em>length</em> characters starting from the current styling position have their style set to style <em>style</em>. The current styling position is moved. The styling position is initially set by calling <a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a>.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText()</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab187b687c1fa141c6efab92cff9d0f15"></a><!-- doxytag: member="QsciLexerCustom::startStyling" ref="ab187b687c1fa141c6efab92cff9d0f15" args="(int pos, int style_bits=0)" -->
+<a class="anchor" id="a19d92643c31c4ec10eab14da7c931b55"></a><!-- doxytag: member="QsciLexerCustom::startStyling" ref="a19d92643c31c4ec10eab14da7c931b55" args="(int pos, int styleBits=0)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -153,7 +153,7 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>style_bits</em> = <code>0</code></td><td>&nbsp;</td>
+          <td class="paramname"> <em>styleBits</em> = <code>0</code></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -163,7 +163,7 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
       </table>
 </div>
 <div class="memdoc">
-<p>The styling position is set to <em>start</em> and the mask of style bits that can be set is set to <em>style_bits</em>. <em>style_bits</em> allows the styling of text to be done over several passes by setting different style bits on each pass. If <em>style_bits</em> is 0 then all style bits (as returned by <a class="el" href="classQsciLexerCustom.html#a472781cc12e12d742f77f53776cc938e">styleBitsNeeded()</a>) are set.</p>
+<p>The styling position is set to <em>start</em> and the mask of style bits that can be set is set to <em>styleBits</em>. <em>styleBits</em> allows the styling of text to be done over several passes by setting different style bits on each pass. If <em>styleBits</em> is 0 then all style bits (as returned by <a class="el" href="classQsciLexerCustom.html#a472781cc12e12d742f77f53776cc938e">styleBitsNeeded()</a>) are set.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a472781cc12e12d742f77f53776cc938e">styleBitsNeeded()</a>, <a class="el" href="classQsciLexerCustom.html#a91d71c4bdff5140ae0b0cb34b4511f79">styleText()</a> </dd></dl>
 
 </div>
@@ -192,8 +192,8 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
       </table>
 </div>
 <div class="memdoc">
-<p>This is called when the section of text beginning at position <em>start</em> and up to position <em>end</em> needs to be styled. <em>start</em> will always be at the start of a line. The text is styled by calling <a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a> followed by one or more calls to <a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling()</a>. It must be re-implemented by a sub-class.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling()</a>, <a class="el" href="classQsciLexerCustom.html#ab187b687c1fa141c6efab92cff9d0f15">startStyling()</a> </dd></dl>
+<p>This is called when the section of text beginning at position <em>start</em> and up to position <em>end</em> needs to be styled. <em>start</em> will always be at the start of a line. The text is styled by calling <a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a> followed by one or more calls to <a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling()</a>. It must be re-implemented by a sub-class.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCustom.html#aae1debbb0a7be0266725c0ca327b0834">setStyling()</a>, <a class="el" href="classQsciLexerCustom.html#a19d92643c31c4ec10eab14da7c931b55">startStyling()</a> </dd></dl>
 
 </div>
 </div>
@@ -218,7 +218,7 @@ virtual void <a class="el" href="classQsciLexerCustom.html#a224fe82235b9a1c7b9c8
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Aug 31 08:49:38 2010 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:09 2011 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

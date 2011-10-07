@@ -215,13 +215,17 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
 <li>const char * <a class="el" href="classQsciLexerHTML.html#a8b0b6ba87a84ed15a7ca76589f165146">keywords</a> (int set) const 
 <li>QString <a class="el" href="classQsciLexerHTML.html#a8c31928bef0cc43f0caf10b78db632a0">description</a> (int style) const 
 <li>void <a class="el" href="classQsciLexerHTML.html#a7c73d608fd96b019e70ebf448de23357">refreshProperties</a> ()
+<li>bool <a class="el" href="classQsciLexerHTML.html#a88d5cc8d35f575042f99c0fe3dff5f9a">caseSensitiveTags</a> () const 
+<li>void <a class="el" href="classQsciLexerHTML.html#a59c9b8ff5d698d7e7e03ec2655a24764">setDjangoTemplates</a> (bool enabled)
+<li>bool <a class="el" href="classQsciLexerHTML.html#a6f5338360db38c522079ae0a6b0975a9">djangoTemplates</a> () const 
 <li>bool <a class="el" href="classQsciLexerHTML.html#ad372b36c39361c4f16d4a44757e354f1">foldCompact</a> () const 
 <li>bool <a class="el" href="classQsciLexerHTML.html#a87fe46735e60f956bae48538c81395bc">foldPreprocessor</a> () const 
-<li>bool <a class="el" href="classQsciLexerHTML.html#a88d5cc8d35f575042f99c0fe3dff5f9a">caseSensitiveTags</a> () const 
 <li>void <a class="el" href="classQsciLexerHTML.html#a51401044d3ad272ede84e1f2a128cce6">setFoldScriptComments</a> (bool fold)
 <li>bool <a class="el" href="classQsciLexerHTML.html#a411a322794fbd5d1afebf4e5f5d20bea">foldScriptComments</a> () const 
 <li>void <a class="el" href="classQsciLexerHTML.html#a122450b5227d23ee119b2653b9e9be2f">setFoldScriptHeredocs</a> (bool fold)
 <li>bool <a class="el" href="classQsciLexerHTML.html#a7523e7872a5c52d3f4c185c3c4c3cb95">foldScriptHeredocs</a> () const 
+<li>void <a class="el" href="classQsciLexerHTML.html#a8553315e763e1e53f56dd4dbe6b3c3d7">setMakoTemplates</a> (bool enabled)
+<li>bool <a class="el" href="classQsciLexerHTML.html#a6662e50a08685b6cae50be19834ab617">makoTemplates</a> () const 
 </ul>
 <h2>Protected Member Functions</h2>
 <ul>
@@ -736,6 +740,64 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
 
 </div>
 </div>
+<a class="anchor" id="a88d5cc8d35f575042f99c0fe3dff5f9a"></a><!-- doxytag: member="QsciLexerHTML::caseSensitiveTags" ref="a88d5cc8d35f575042f99c0fe3dff5f9a" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerHTML::caseSensitiveTags </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if tags are case sensitive.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a2fda8ad57009d4e2f1ac388cad2cfc92">setCaseSensitiveTags()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a59c9b8ff5d698d7e7e03ec2655a24764"></a><!-- doxytag: member="QsciLexerHTML::setDjangoTemplates" ref="a59c9b8ff5d698d7e7e03ec2655a24764" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciLexerHTML::setDjangoTemplates </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>enabled</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>If <em>enabled</em> is true then Django templates are enabled. The default is false.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a6f5338360db38c522079ae0a6b0975a9">djangoTemplates()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6f5338360db38c522079ae0a6b0975a9"></a><!-- doxytag: member="QsciLexerHTML::djangoTemplates" ref="a6f5338360db38c522079ae0a6b0975a9" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerHTML::djangoTemplates </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if support for Django templates is enabled.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a59c9b8ff5d698d7e7e03ec2655a24764">setDjangoTemplates()</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ad372b36c39361c4f16d4a44757e354f1"></a><!-- doxytag: member="QsciLexerHTML::foldCompact" ref="ad372b36c39361c4f16d4a44757e354f1" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -745,7 +807,7 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -764,32 +826,13 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Returns true if preprocessor blocks can be folded.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#aeba753c0e1fca8bf66834667e301458e">setFoldPreprocessor()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a88d5cc8d35f575042f99c0fe3dff5f9a"></a><!-- doxytag: member="QsciLexerHTML::caseSensitiveTags" ref="a88d5cc8d35f575042f99c0fe3dff5f9a" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool QsciLexerHTML::caseSensitiveTags </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns true if tags are case sensitive.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a2fda8ad57009d4e2f1ac388cad2cfc92">setCaseSensitiveTags()</a> </dd></dl>
 
 </div>
 </div>
@@ -822,7 +865,7 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -861,13 +904,52 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Returns true if script heredocs can be folded.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a122450b5227d23ee119b2653b9e9be2f">setFoldScriptHeredocs()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8553315e763e1e53f56dd4dbe6b3c3d7"></a><!-- doxytag: member="QsciLexerHTML::setMakoTemplates" ref="a8553315e763e1e53f56dd4dbe6b3c3d7" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciLexerHTML::setMakoTemplates </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>enabled</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>If <em>enabled</em> is true then Mako templates are enabled. The default is false.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a6662e50a08685b6cae50be19834ab617">makoTemplates()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6662e50a08685b6cae50be19834ab617"></a><!-- doxytag: member="QsciLexerHTML::makoTemplates" ref="a6662e50a08685b6cae50be19834ab617" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerHTML::makoTemplates </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if support for Mako templates is enabled.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerHTML.html#a8553315e763e1e53f56dd4dbe6b3c3d7">setMakoTemplates()</a> </dd></dl>
 
 </div>
 </div>
@@ -996,7 +1078,7 @@ QFont <a class="el" href="classQsciLexerHTML.html#a59b6a02379f19276b9a53c967a513
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Aug 31 08:49:37 2010 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:09 2011 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

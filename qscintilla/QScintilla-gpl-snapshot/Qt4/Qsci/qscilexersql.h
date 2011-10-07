@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerSQL class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -112,7 +107,10 @@ public:
 
         //! A keyword defined in keyword set number 8.  The class must be
         //! sub-classed and re-implement keywords() to make use of this style.
-        KeywordSet8 = 22
+        KeywordSet8 = 22,
+
+        //! A quoted identifier.
+        QuotedIdentifier = 23
     };
 
     //! Construct a QsciLexerSQL with parent \a parent.  \a parent is typically
@@ -148,37 +146,99 @@ public:
     //! \sa defaultColor()
     QColor defaultPaper(int style) const;
 
-    //! Returns the set of keywords for the keyword set \a set recognised
-    //! by the lexer as a space separated string.
+    //! Returns the set of keywords for the keyword set \a set recognised by
+    //! the lexer as a space separated string.
     const char *keywords(int set) const;
 
-    //! Returns the descriptive name for style number \a style.  If the
-    //! style is invalid for this language then an empty QString is returned.
-    //! This is intended to be used in user preference dialogs.
+    //! Returns the descriptive name for style number \a style.  If the style
+    //! is invalid for this language then an empty QString is returned.  This
+    //! is intended to be used in user preference dialogs.
     QString description(int style) const;
 
     //! Causes all properties to be refreshed by emitting the
     //! propertyChanged() signal as required.
     void refreshProperties();
 
+    //! Returns true if backslash escapes are enabled.
+    //!
+    //! \sa setBackslashEscapes()
+    bool backslashEscapes() const {return backslash_escapes;}
+
+    //! If \a enable is true then words may contain dots (i.e. periods or full
+    //! stops).  The default is false.
+    //!
+    //! \sa dottedWords()
+    void setDottedWords(bool enable);
+
+    //! Returns true if words may contain dots (i.e. periods or full stops).
+    //!
+    //! \sa setDottedWords()
+    bool dottedWords() const {return allow_dotted_word;}
+
+    //! If \a fold is true then ELSE blocks can be folded.  The default is
+    //! false.
+    //!
+    //! \sa foldAtElse()
+    void setFoldAtElse(bool fold);
+
+    //! Returns true if ELSE blocks can be folded.
+    //!
+    //! \sa setFoldAtElse()
+    bool foldAtElse() const {return at_else;}
+
     //! Returns true if multi-line comment blocks can be folded.
     //!
     //! \sa setFoldComments()
-    bool foldComments() const;
+    bool foldComments() const {return fold_comments;}
 
     //! Returns true if trailing blank lines are included in a fold block.
     //!
     //! \sa setFoldCompact()
-    bool foldCompact() const;
+    bool foldCompact() const {return fold_compact;}
 
-    //! Returns true if backslash escapes are enabled.
+    //! If \a fold is true then only BEGIN blocks can be folded.  The default
+    //! is false.
     //!
-    //! \sa setBackslashEscapes()
-    bool backslashEscapes() const;
+    //! \sa foldOnlyBegin()
+    void setFoldOnlyBegin(bool fold);
+
+    //! Returns true if BEGIN blocks only can be folded.
+    //!
+    //! \sa setFoldOnlyBegin()
+    bool foldOnlyBegin() const {return only_begin;}
+
+    //! If \a enable is true then '#' is used as a comment character.  It is
+    //! typically enabled for MySQL and disabled for Oracle.  The default is
+    //! false.
+    //!
+    //! \sa hashComments()
+    void setHashComments(bool enable);
+
+    //! Returns true if '#' is used as a comment character.
+    //!
+    //! \sa setHashComments()
+    bool hashComments() const {return numbersign_comment;}
+
+    //! If \a enable is true then quoted identifiers are enabled.  The default
+    //! is false.
+    //!
+    //! \sa quotedIdentifiers()
+    void setQuotedIdentifiers(bool enable);
+
+    //! Returns true if quoted identifiers are enabled.
+    //!
+    //! \sa setQuotedIdentifiers()
+    bool quotedIdentifiers() const {return backticks_identifier;}
 
 public slots:
-    //! If \a fold is true then multi-line comment blocks can be folded.
-    //! The default is false.
+    //! If \a enable is true then backslash escapes are enabled.  The
+    //! default is false.
+    //!
+    //! \sa backslashEscapes()
+    virtual void setBackslashEscapes(bool enable);
+
+    //! If \a fold is true then multi-line comment blocks can be folded.  The
+    //! default is false.
     //!
     //! \sa foldComments()
     virtual void setFoldComments(bool fold);
@@ -189,33 +249,37 @@ public slots:
     //! \sa foldCompact()
     virtual void setFoldCompact(bool fold);
 
-    //! If \a enable is true then backslash escapes are enabled.  The
-    //! default is false.
-    //!
-    //! \sa backslashEscapes()
-    virtual void setBackslashEscapes(bool enable);
-
 protected:
     //! The lexer's properties are read from the settings \a qs.  \a prefix
     //! (which has a trailing '/') should be used as a prefix to the key of
     //! each setting.  true is returned if there is no error.
     //!
-    bool readProperties(QSettings &qs,const QString &prefix);
+    bool readProperties(QSettings &qs, const QString &prefix);
 
     //! The lexer's properties are written to the settings \a qs.
     //! \a prefix (which has a trailing '/') should be used as a prefix to
     //! the key of each setting.  true is returned if there is no error.
     //!
-    bool writeProperties(QSettings &qs,const QString &prefix) const;
+    bool writeProperties(QSettings &qs, const QString &prefix) const;
 
 private:
+    void setAtElseProp();
     void setCommentProp();
     void setCompactProp();
+    void setOnlyBeginProp();
+    void setBackticksIdentifierProp();
+    void setNumbersignCommentProp();
     void setBackslashEscapesProp();
+    void setAllowDottedWordProp();
 
+    bool at_else;
     bool fold_comments;
     bool fold_compact;
+    bool only_begin;
+    bool backticks_identifier;
+    bool numbersign_comment;
     bool backslash_escapes;
+    bool allow_dotted_word;
 
     QsciLexerSQL(const QsciLexerSQL &);
     QsciLexerSQL &operator=(const QsciLexerSQL &);

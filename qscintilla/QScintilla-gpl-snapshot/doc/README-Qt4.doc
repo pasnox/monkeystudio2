@@ -38,22 +38,20 @@ QScintilla also includes language bindings for
 <a href="http://www.riverbankcomputing.com/software/pyqt/">PyQt</a> v3 or v4
 is also installed.
 
-This version of QScintilla is based on Scintilla v1.78.
+This version of QScintilla is based on Scintilla v2.25.
 
 
 <h2>Licensing</h2>
 
-QScintilla uses a similar license model as Qt and is available under the
-<a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License v2</a>
+QScintilla is available under the
+<a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License v2</a>,
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License v3</a>
 and a commercial license.
 
 The commercial license allows closed source applications using QScintilla to be
 developed and distributed.  At the moment the commercial version of QScintilla
 is bundled with the commercial version of
-<a href="http://www.riverbankcomputing.co.uk/pyqt/">PyQt</a>.
-
-See the file "LICENSE" to see what license this copy of QScintilla is released
-under.
+<a href="http://www.riverbankcomputing.com/software/pyqt/">PyQt</a>.
 
 The Scintilla code within QScintilla is released under the following license:
 

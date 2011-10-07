@@ -1,6 +1,6 @@
 // This module implements the QsciLexerD class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -199,6 +194,8 @@ QFont QsciLexerD::defaultFont(int style) const
     case CommentDocKeywordError:
 #if defined(Q_OS_WIN)
         f = QFont("Comic Sans MS",9);
+#elif defined(Q_OS_MAC)
+        f = QFont("Comic Sans MS", 12);
 #else
         f = QFont("Bitstream Vera Serif",9);
 #endif
@@ -217,6 +214,8 @@ QFont QsciLexerD::defaultFont(int style) const
     case UnclosedString:
 #if defined(Q_OS_WIN)
         f = QFont("Courier New",10);
+#elif defined(Q_OS_MAC)
+        f = QFont("Courier", 12);
 #else
         f = QFont("Bitstream Vera Sans Mono",9);
 #endif
@@ -321,6 +320,21 @@ QString QsciLexerD::description(int style) const
 
     case CommentDocKeywordError:
         return tr("DDoc keyword error");
+
+    case BackquoteString:
+        return tr("Backquoted string");
+
+    case RawString:
+        return tr("Raw string");
+
+    case KeywordSet5:
+        return tr("User defined 1");
+
+    case KeywordSet6:
+        return tr("User defined 2");
+
+    case KeywordSet7:
+        return tr("User defined 3");
     }
 
     return QString();

@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>VariablesEditor</class>
- <widget class="QFrame" name="VariablesEditor">
+ <widget class="XUPPageEditor" name="VariablesEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>399</width>
     <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>My Form Class</string>
+   <string>Variables</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resources.qrc">
+    <normaloff>:/xupeditor/icons/xupeditor/values.png</normaloff>:/xupeditor/icons/xupeditor/values.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QGroupBox" name="gbOthersVariables">
+    <widget class="QGroupBox" name="gbVariables">
      <property name="maximumSize">
       <size>
        <width>200</width>
@@ -25,7 +32,7 @@
      <property name="title">
       <string>Variables</string>
      </property>
-     <layout class="QGridLayout" name="_2">
+     <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <spacer>
         <property name="orientation">
@@ -40,45 +47,34 @@
        </spacer>
       </item>
       <item row="0" column="1">
-       <widget class="QToolButton" name="tbOthersVariablesAdd">
+       <widget class="QToolButton" name="tbVariablesAdd">
         <property name="toolTip">
          <string>Add...</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QToolButton" name="tbOthersVariablesEdit">
+       <widget class="QToolButton" name="tbVariablesEdit">
         <property name="toolTip">
          <string>Edit...</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="tbOthersVariablesRemove">
-        <property name="toolTip">
-         <string>Remove...</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="4">
-       <widget class="QListWidget" name="lwOthersVariables">
+      <item row="1" column="0" colspan="3">
+       <widget class="QListView" name="lvVariables">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
+        <property name="uniformItemSizes">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -86,11 +82,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="gbOthersValues">
+    <widget class="QGroupBox" name="gbValues">
      <property name="title">
       <string>Values</string>
      </property>
-     <layout class="QGridLayout" name="_3">
+     <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <spacer>
         <property name="orientation">
@@ -105,12 +101,12 @@
        </spacer>
       </item>
       <item row="0" column="1">
-       <widget class="QToolButton" name="tbOthersValuesAdd">
+       <widget class="QToolButton" name="tbValuesAdd">
         <property name="toolTip">
          <string>Add...</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
         </property>
         <property name="popupMode">
@@ -119,12 +115,12 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QToolButton" name="tbOthersValuesEdit">
+       <widget class="QToolButton" name="tbValuesEdit">
         <property name="toolTip">
          <string>Edit...</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
         </property>
         <property name="popupMode">
@@ -133,34 +129,36 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QToolButton" name="tbOthersValuesRemove">
-        <property name="toolTip">
-         <string>Remove...</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QToolButton" name="tbOthersValuesClear">
+       <widget class="QToolButton" name="tbValuesClear">
         <property name="toolTip">
          <string>Clear...</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/listeditor/icons/listeditor/clear.png</normaloff>:/listeditor/icons/listeditor/clear.png</iconset>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="5">
-       <widget class="QListWidget" name="lwOthersValues">
+      <item row="1" column="0" colspan="4">
+       <widget class="QListView" name="lvValues">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
+        <property name="uniformItemSizes">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="4">
+       <widget class="QCheckBox" name="cbQuoteEnabled">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Quote spaced values.</string>
         </property>
        </widget>
       </item>
@@ -169,6 +167,16 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>XUPPageEditor</class>
+   <extends>QFrame</extends>
+   <header>xupmanager/gui/XUPPageEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

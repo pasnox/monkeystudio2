@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerHTML class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -432,20 +427,31 @@ public:
     //! propertyChanged() signal as required.
     void refreshProperties();
 
+    //! Returns true if tags are case sensitive.
+    //!
+    //! \sa setCaseSensitiveTags()
+    bool caseSensitiveTags() const {return case_sens_tags;}
+
+    //! If \a enabled is true then Django templates are enabled.  The default
+    //! is false.
+    //!
+    //! \sa djangoTemplates()
+    void setDjangoTemplates(bool enabled);
+
+    //! Returns true if support for Django templates is enabled.
+    //!
+    //! \sa setDjangoTemplates()
+    bool djangoTemplates() const {return django_templates;}
+
     //! Returns true if trailing blank lines are included in a fold block.
     //!
     //! \sa setFoldCompact()
-    bool foldCompact() const;
+    bool foldCompact() const {return fold_compact;}
 
     //! Returns true if preprocessor blocks can be folded.
     //!
     //! \sa setFoldPreprocessor()
-    bool foldPreprocessor() const;
-
-    //! Returns true if tags are case sensitive.
-    //!
-    //! \sa setCaseSensitiveTags()
-    bool caseSensitiveTags() const;
+    bool foldPreprocessor() const {return fold_preproc;}
 
     //! If \a fold is true then script comments can be folded.  The default is
     //! false.
@@ -456,7 +462,7 @@ public:
     //! Returns true if script comments can be folded.
     //!
     //! \sa setFoldScriptComments()
-    bool foldScriptComments() const;
+    bool foldScriptComments() const {return fold_script_comments;}
 
     //! If \a fold is true then script heredocs can be folded.  The default is
     //! false.
@@ -467,7 +473,18 @@ public:
     //! Returns true if script heredocs can be folded.
     //!
     //! \sa setFoldScriptHeredocs()
-    bool foldScriptHeredocs() const;
+    bool foldScriptHeredocs() const {return fold_script_heredocs;}
+
+    //! If \a enabled is true then Mako templates are enabled.  The default is
+    //! false.
+    //!
+    //! \sa makoTemplates()
+    void setMakoTemplates(bool enabled);
+
+    //! Returns true if support for Mako templates is enabled.
+    //!
+    //! \sa setMakoTemplates()
+    bool makoTemplates() const {return mako_templates;}
 
 public slots:
     //! If \a fold is true then trailing blank lines are included in a fold
@@ -506,12 +523,16 @@ private:
     void setCaseSensTagsProp();
     void setScriptCommentsProp();
     void setScriptHeredocsProp();
+    void setDjangoProp();
+    void setMakoProp();
 
     bool fold_compact;
     bool fold_preproc;
     bool case_sens_tags;
     bool fold_script_comments;
     bool fold_script_heredocs;
+    bool django_templates;
+    bool mako_templates;
 
     QsciLexerHTML(const QsciLexerHTML &);
     QsciLexerHTML &operator=(const QsciLexerHTML &);

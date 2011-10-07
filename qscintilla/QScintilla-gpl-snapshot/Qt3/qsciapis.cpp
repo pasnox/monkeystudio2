@@ -1,6 +1,6 @@
 // This module implements the QsciAPIs class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -308,9 +303,9 @@ void QsciAPIs::clear()
 
 
 // Clear out all API information.
-bool QsciAPIs::load(const QString &fname)
+bool QsciAPIs::load(const QString &filename)
 {
-    QFile f(fname);
+    QFile f(filename);
 
     if (!f.open(IO_ReadOnly))
         return false;
@@ -826,9 +821,9 @@ void QsciAPIs::cancelPreparation()
 
 
 // Check that a prepared API file exists.
-bool QsciAPIs::isPrepared(const QString &fname) const
+bool QsciAPIs::isPrepared(const QString &filename) const
 {
-    QString pname = prepName(fname);
+    QString pname = prepName(filename);
 
     if (pname.isEmpty())
         return false;
@@ -840,9 +835,9 @@ bool QsciAPIs::isPrepared(const QString &fname) const
 
 
 // Load the prepared API information.
-bool QsciAPIs::loadPrepared(const QString &fname)
+bool QsciAPIs::loadPrepared(const QString &filename)
 {
-    QString pname = prepName(fname);
+    QString pname = prepName(filename);
 
     if (pname.isEmpty())
         return false;
@@ -915,9 +910,9 @@ bool QsciAPIs::loadPrepared(const QString &fname)
 
 
 // Save the prepared API information.
-bool QsciAPIs::savePrepared(const QString &fname) const
+bool QsciAPIs::savePrepared(const QString &filename) const
 {
-    QString pname = prepName(fname, true);
+    QString pname = prepName(filename, true);
 
     if (pname.isEmpty())
         return false;
@@ -958,11 +953,11 @@ QString QsciAPIs::defaultPreparedName() const
 
 
 // Return the name of a prepared API file.
-QString QsciAPIs::prepName(const QString &fname, bool mkpath) const
+QString QsciAPIs::prepName(const QString &filename, bool mkpath) const
 {
     // Handle the tivial case.
-    if (!fname.isEmpty())
-        return fname;
+    if (!filename.isEmpty())
+        return filename;
 
     QString pdname;
     char *qsci = getenv("QSCIDIR");
@@ -994,7 +989,7 @@ QStringList QsciAPIs::installedAPIFiles() const
         return QStringList();
 
     QDir apidir = QDir(QString("%1/qsci/api/%2").arg(qtdir).arg(lexer()->lexer()));
-    QStringList fnames;
+    QStringList filenames;
 
     const QFileInfoList *flist = apidir.entryInfoList("*.api", QDir::Files, QDir::IgnoreCase);
 
@@ -1005,10 +1000,10 @@ QStringList QsciAPIs::installedAPIFiles() const
 
         while ((fi = it.current()) != 0)
         {
-            fnames << fi->absFilePath();
+            filenames << fi->absFilePath();
             ++it;
         }
     }
 
-    return fnames;
+    return filenames;
 }

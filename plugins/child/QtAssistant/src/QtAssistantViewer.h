@@ -1,3 +1,21 @@
+/****************************************************************************
+    Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team
+    http://monkeystudio.org licensing under the GNU GPL.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #ifndef QTASSISTANTVIEWER_H
 #define QTASSISTANTVIEWER_H
 
@@ -9,64 +27,64 @@ class QtAssistantChild;
 
 class QtAssistantViewer : public QWebView
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	QtAssistantViewer( QHelpEngine* engine, QtAssistantChild* child, const QUrl& homeUrl = QUrl() );
-	
-	void setSource( const QUrl& url );
+    QtAssistantViewer( QHelpEngine* engine, QtAssistantChild* child, const QUrl& homeUrl = QUrl() );
+    
+    void setSource( const QUrl& url );
 
-	inline QUrl source() const
-	{ return url(); }
+    inline QUrl source() const
+    { return url(); }
 
-	inline QString documentTitle() const
-	{ return title(); }
+    inline QString documentTitle() const
+    { return title(); }
 
-	inline bool hasSelection() const
-	{ return !selectedText().isEmpty(); }
+    inline bool hasSelection() const
+    { return !selectedText().isEmpty(); }
 
-	void resetZoom();
-	void zoomIn( int range = 1 );
-	void zoomOut( int range = 1 );
+    void resetZoom();
+    void zoomIn( int range = 1 );
+    void zoomOut( int range = 1 );
 
-	inline void copy()
-	{ triggerPageAction( QWebPage::Copy ); }
+    inline void copy()
+    { triggerPageAction( QWebPage::Copy ); }
 
-	inline bool isForwardAvailable() const
-	{ return pageAction( QWebPage::Forward )->isEnabled(); }
+    inline bool isForwardAvailable() const
+    { return pageAction( QWebPage::Forward )->isEnabled(); }
 
-	inline bool isBackwardAvailable() const
-	{ return pageAction( QWebPage::Back )->isEnabled(); }
+    inline bool isBackwardAvailable() const
+    { return pageAction( QWebPage::Back )->isEnabled(); }
 
 public slots:
-	void home();
-	void backward()
-	{ back(); }
+    void home();
+    void backward()
+    { back(); }
 
 protected:
-	virtual void wheelEvent( QWheelEvent* event );
-	virtual void mouseReleaseEvent( QMouseEvent* event );
+    virtual void wheelEvent( QWheelEvent* event );
+    virtual void mouseReleaseEvent( QMouseEvent* event );
 
 private slots:
-	void actionChanged();
-	void loadFinished( bool ok );
+    void actionChanged();
+    void loadFinished( bool ok );
 
 private:
-	QHelpEngine* mEngine;
-	QtAssistantChild* mChild;
-	QUrl mHomeUrl;
+    QHelpEngine* mEngine;
+    QtAssistantChild* mChild;
+    QUrl mHomeUrl;
 
 signals:
-	void copyAvailable( bool enabled );
-	void cutAvailable( bool enabled );
-	void pasteAvailable( bool enabled );
-	void undoAvailable( bool enabled );
-	void redoAvailable( bool enabled );
-	void forwardAvailable( bool enabled );
-	void backwardAvailable( bool enabled );
-	void actionsChanged();
-	void highlighted( const QString& );
-	void sourceChanged( const QUrl& );
+    void copyAvailable( bool enabled );
+    void cutAvailable( bool enabled );
+    void pasteAvailable( bool enabled );
+    void undoAvailable( bool enabled );
+    void redoAvailable( bool enabled );
+    void forwardAvailable( bool enabled );
+    void backwardAvailable( bool enabled );
+    void actionsChanged();
+    void highlighted( const QString& );
+    void sourceChanged( const QUrl& );
 };
 
 #endif // QTASSISTANTVIEWER_H

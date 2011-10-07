@@ -1,7 +1,7 @@
 // The implementation of various Qt version independent classes used by the
 // rest of the port.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -17,13 +17,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -86,6 +81,8 @@ void SciCallTip::mousePressEvent(QMouseEvent *e)
 
     sci->ct.MouseClick(pt);
     sci->CallTipClick();
+
+    update();
 }
 
 
@@ -135,7 +132,10 @@ SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
 #endif
     setAttribute(Qt::WA_StaticContents);
 
+// workaround a bug that auto close the popups on mac os x
+#ifndef Q_WS_MAC
     setFocusProxy(parent);
+#endif
 
     setFrameShape(StyledPanel);
     setFrameShadow(Plain);

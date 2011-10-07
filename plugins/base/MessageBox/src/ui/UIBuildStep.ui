@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>138</height>
+    <width>400</width>
+    <height>140</height>
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/MessageBox.qrc">
+   <iconset>
     <normaloff>:/icons/tabbuild.png</normaloff>:/icons/tabbuild.png</iconset>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header location="global">widgets/pDockWidget.h</header>
+   <header location="global">pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

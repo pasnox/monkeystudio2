@@ -1,6 +1,6 @@
 // This module implements the QsciLexerTeX class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -32,11 +27,14 @@
 
 #include <qcolor.h>
 #include <qfont.h>
+#include <qsettings.h>
 
 
 // The ctor.
 QsciLexerTeX::QsciLexerTeX(QObject *parent, const char *name)
-    : QsciLexer(parent, name)
+    : QsciLexer(parent, name),
+      fold_comments(false), fold_compact(true), process_comments(false),
+      process_if(true)
 {
 }
 
@@ -210,4 +208,138 @@ QString QsciLexerTeX::description(int style) const
     }
 
     return QString();
+}
+
+
+// Refresh all properties.
+void QsciLexerTeX::refreshProperties()
+{
+    setCommentProp();
+    setCompactProp();
+    setProcessCommentsProp();
+    setAutoIfProp();
+}
+
+
+// Read properties from the settings.
+bool QsciLexerTeX::readProperties(QSettings &qs, const QString &prefix)
+{
+    int rc = true;
+
+    bool ok, flag;
+
+    flag = qs.readBoolEntry(prefix + "foldcomments", false, &ok);
+
+    if (ok)
+        fold_comments = flag;
+    else
+        rc = false;
+
+    flag = qs.readBoolEntry(prefix + "foldcompact", true, &ok);
+
+    if (ok)
+        fold_compact = flag;
+    else
+        rc = true;
+
+    flag = qs.readBoolEntry(prefix + "processcomments", false, &ok);
+
+    if (ok)
+        process_comments = flag;
+    else
+        rc = true;
+
+    flag = qs.readBoolEntry(prefix + "processif", true, &ok);
+
+    if (ok)
+        process_if = flag;
+    else
+        rc = true;
+
+    return rc;
+}
+
+
+// Write properties to the settings.
+bool QsciLexerTeX::writeProperties(QSettings &qs, const QString &prefix) const
+{
+    int rc = true;
+
+    if (!qs.writeEntry(prefix + "foldcomments", fold_comments))
+        rc = false;
+
+    if (!qs.writeEntry(prefix + "foldcompact", fold_compact))
+        rc = false;
+
+    if (!qs.writeEntry(prefix + "processcomments", process_comments))
+        rc = false;
+
+    if (!qs.writeEntry(prefix + "processif", process_if))
+        rc = false;
+
+    return rc;
+}
+
+
+// Set if comments can be folded.
+void QsciLexerTeX::setFoldComments(bool fold)
+{
+    fold_comments = fold;
+
+    setCommentProp();
+}
+
+
+// Set the "fold.comment" property.
+void QsciLexerTeX::setCommentProp()
+{
+    emit propertyChanged("fold.comment", (fold_comments ? "1" : "0"));
+}
+
+
+// Set if folds are compact.
+void QsciLexerTeX::setFoldCompact(bool fold)
+{
+    fold_compact = fold;
+
+    setCompactProp();
+}
+
+
+// Set the "fold.compact" property.
+void QsciLexerTeX::setCompactProp()
+{
+    emit propertyChanged("fold.compact", (fold_compact ? "1" : "0"));
+}
+
+
+// Set if comments are processed
+void QsciLexerTeX::setProcessComments(bool enable)
+{
+    process_comments = enable;
+
+    setProcessCommentsProp();
+}
+
+
+// Set the "lexer.tex.comment.process" property.
+void QsciLexerTeX::setProcessCommentsProp()
+{
+    emit propertyChanged("lexer.tex.comment.process", (process_comments ? "1" : "0"));
+}
+
+
+// Set if \if<unknown> is processed
+void QsciLexerTeX::setProcessIf(bool enable)
+{
+    process_if = enable;
+
+    setAutoIfProp();
+}
+
+
+// Set the "lexer.tex.auto.if" property.
+void QsciLexerTeX::setAutoIfProp()
+{
+    emit propertyChanged("lexer.tex.auto.if", (process_if ? "1" : "0"));
 }

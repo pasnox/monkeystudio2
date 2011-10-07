@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UISettingsClassBrowser</class>
+ <widget class="QWidget" name="UISettingsClassBrowser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="twPages">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wGeneral">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lIntegrationMode">
+         <property name="text">
+          <string>Integration Mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="cbIntegrationMode"/>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="gbUseDBFileName">
+         <property name="title">
+          <string>Use physical database</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="lDBFileName">
+            <property name="text">
+             <string>Database file name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="leDBFileName"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QToolButton" name="tbDBFileName">
+            <property name="icon">
+             <iconset resource="../../../../monkey/src/resources/resources.qrc">
+              <normaloff>:/listeditor/icons/listeditor/file.png</normaloff>:/listeditor/icons/listeditor/file.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>369</width>
+           <height>108</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wIncludes">
+      <attribute name="title">
+       <string>System include paths</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="pPathListEditor" name="pePaths">
+         <property name="title">
+          <string>System include paths</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wSuffixes">
+      <attribute name="title">
+       <string>Filtered file suffixes</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="pStringListEditor" name="sleSuffixes">
+         <property name="title">
+          <string>Filtered file suffixes</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="dbbButtons">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pPathListEditor</class>
+   <extends>QGroupBox</extends>
+   <header location="global">pPathListEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>pStringListEditor</class>
+   <extends>QGroupBox</extends>
+   <header location="global">pStringListEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../../fresh/resources/fresh.qrc"/>
+  <include location="../../../../monkey/src/resources/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

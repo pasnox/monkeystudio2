@@ -59,7 +59,14 @@
 <br/>
 &nbsp;&nbsp;<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5adf5911a2c4224ab8d38ea4ebe7747cb4">CommentLineDoc</a> =  15, 
 <a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5af5c6b133d2a0391d65dd11ca8cd0dc46">CommentDocKeyword</a> =  16, 
-<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a8416e006ed8c6157e87fddc9497b56ab">CommentDocKeywordError</a> =  17
+<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a8416e006ed8c6157e87fddc9497b56ab">CommentDocKeywordError</a> =  17, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a682cc956cd52ccfff101565bd51327e1">BackquoteString</a> =  18, 
+<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a8f0a37846a48085a681eb744375efbc9">RawString</a> =  19, 
+<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a41699ff5135f73d77045b68748e881b0">KeywordSet5</a> =  20, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a8bbc63e31f19f9b6d7b50c1e1c2667b0">KeywordSet6</a> =  21, 
+<a class="el" href="classQsciLexerD.html#ab312600549d8e63da461d4a322bec7b5a9f6ffdc183c1d99ce9fb0edce756410e">KeywordSet7</a> =  22
 <br/>
  }
 </ul>
@@ -175,6 +182,21 @@ QFont <a class="el" href="classQsciLexerD.html#acf2fa7c413a30adb58d2409ff1ee80e8
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a8416e006ed8c6157e87fddc9497b56ab"></a><!-- doxytag: member="CommentDocKeywordError" ref="ab312600549d8e63da461d4a322bec7b5a8416e006ed8c6157e87fddc9497b56ab" args="" -->CommentDocKeywordError</em>&nbsp;</td><td>
 <p>A JavaDoc and Doxygen keyword error. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a682cc956cd52ccfff101565bd51327e1"></a><!-- doxytag: member="BackquoteString" ref="ab312600549d8e63da461d4a322bec7b5a682cc956cd52ccfff101565bd51327e1" args="" -->BackquoteString</em>&nbsp;</td><td>
+<p>A backquoted string. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a8f0a37846a48085a681eb744375efbc9"></a><!-- doxytag: member="RawString" ref="ab312600549d8e63da461d4a322bec7b5a8f0a37846a48085a681eb744375efbc9" args="" -->RawString</em>&nbsp;</td><td>
+<p>A raw, hexadecimal or delimited string. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a41699ff5135f73d77045b68748e881b0"></a><!-- doxytag: member="KeywordSet5" ref="ab312600549d8e63da461d4a322bec7b5a41699ff5135f73d77045b68748e881b0" args="" -->KeywordSet5</em>&nbsp;</td><td>
+<p>A keyword defined in keyword set number 5. The class must be sub-classed and re-implement <a class="el" href="classQsciLexerD.html#ace171ed1e05a7c7b14423d51469fa9b9">keywords()</a> to make use of this style. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a8bbc63e31f19f9b6d7b50c1e1c2667b0"></a><!-- doxytag: member="KeywordSet6" ref="ab312600549d8e63da461d4a322bec7b5a8bbc63e31f19f9b6d7b50c1e1c2667b0" args="" -->KeywordSet6</em>&nbsp;</td><td>
+<p>A keyword defined in keyword set number 6. The class must be sub-classed and re-implement <a class="el" href="classQsciLexerD.html#ace171ed1e05a7c7b14423d51469fa9b9">keywords()</a> to make use of this style. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ab312600549d8e63da461d4a322bec7b5a9f6ffdc183c1d99ce9fb0edce756410e"></a><!-- doxytag: member="KeywordSet7" ref="ab312600549d8e63da461d4a322bec7b5a9f6ffdc183c1d99ce9fb0edce756410e" args="" -->KeywordSet7</em>&nbsp;</td><td>
+<p>A keyword defined in keyword set number 7. The class must be sub-classed and re-implement <a class="el" href="classQsciLexerD.html#ace171ed1e05a7c7b14423d51469fa9b9">keywords()</a> to make use of this style. </p>
 </td></tr>
 </table>
 </dd>
@@ -518,7 +540,7 @@ QFont <a class="el" href="classQsciLexerD.html#acf2fa7c413a30adb58d2409ff1ee80e8
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Aug 31 08:49:38 2010 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:09 2011 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

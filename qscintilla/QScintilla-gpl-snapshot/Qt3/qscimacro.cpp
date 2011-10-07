@@ -1,6 +1,6 @@
 // This module implements the QsciMacro class.
 //
-// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -16,13 +16,8 @@
 // GPL Exception version 1.1, which can be found in the file
 // GPL_EXCEPTION.txt in this package.
 // 
-// Please review the following information to ensure GNU General
-// Public Licensing requirements will be met:
-// http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-// you are unsure which license is appropriate for your use, please
-// review the following information:
-// http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-// or contact the sales department at sales@riverbankcomputing.com.
+// If you are unsure which license is appropriate for your use, please
+// contact the sales department at sales@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -115,11 +110,7 @@ bool QsciMacro::load(const QString &asc)
                 break;
             }
 
-            cmd.text.resize(len);
-
             const char *sp = fields[f++].ascii();
-
-            char *dp = cmd.text.data();
 
             if (!sp)
             {
@@ -127,12 +118,12 @@ bool QsciMacro::load(const QString &asc)
                 break;
             }
 
-            while (len--)
+            // Because of historical bugs the length field is unreliable.
+            bool embedded_null = false;
+            unsigned char ch;
+
+            while ((ch = *sp++) != '\0')
             {
-                unsigned char ch;
-
-                ch = *sp++;
-
                 if (ch == '"' || ch <= ' ' || ch >= 0x7f)
                 {
                     ok = false;
@@ -153,11 +144,28 @@ bool QsciMacro::load(const QString &asc)
                     ch = (b1 << 4) + b2;
                 }
 
-                *dp++ = ch;
+                if (ch == '\0')
+                {
+                    // Don't add it now as it may be the terminating '\0'.
+                    embedded_null = true;
+                }
+                else
+                {
+                    if (embedded_null)
+                    {
+                        // Add the pending embedded '\0'.
+                        cmd.text += '\0';
+                        embedded_null = false;
+                    }
+
+                    cmd.text += ch;
+                }
             }
 
             if (!ok)
                 break;
+
+            cmd.text += '\0';
         }
 
         macro.append(cmd);
