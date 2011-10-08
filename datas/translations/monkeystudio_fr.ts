@@ -720,7 +720,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="100"/>
         <source>You can use this &lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the project.</source>
-        <translation>Vous pouvez utiliser &lt;a href=&quot;%1&quot;&gt;lien&lt;a&gt; pour faire une donation. Les dons aiderons à payer l&apos;hebergement/nom de domaines, ainsi que divers choses en rapport avec le projet.</translation>
+        <translation>Vous pouvez utiliser ce &lt;a href=&quot;%1&quot;&gt;lien&lt;/a&gt; pour faire un don. Les dons aideront à payer l&apos;hebergement/nom de domaines, ainsi que divers choses en rapport avec le projet.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="101"/>
