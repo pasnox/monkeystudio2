@@ -150,8 +150,8 @@
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/FilesEditor.ui" line="84"/>
-        <source>Delete removed files</source>
-        <translation>Effacer les fichiers modifiés.</translation>
+        <source>Delete removed files.</source>
+        <translation>Effacer les fichiers enlevés.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/FilesEditor.ui" line="97"/>
@@ -2391,12 +2391,12 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="74"/>
         <source>Opening order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ouverture</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="75"/>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom de fichier</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="76"/>
@@ -2406,12 +2406,12 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="77"/>
         <source>Suffixes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Extension</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="78"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Personnel</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.cpp" line="81"/>

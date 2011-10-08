@@ -147,7 +147,7 @@
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/FilesEditor.ui" line="84"/>
-        <source>Delete removed files</source>
+        <source>Delete removed files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
