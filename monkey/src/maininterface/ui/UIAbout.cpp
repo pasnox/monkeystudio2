@@ -106,6 +106,11 @@ UIAbout::UIAbout( QWidget* parent )
     
     ui = new Ui::UIAbout;
     ui->setupUi( this );
+    
+    foreach ( QWidget* widget, findChildren<QWidget*>() ) {
+        widget->setAttribute( Qt::WA_MacSmallSize );
+    }
+    
     ui->lTitle->setText( PACKAGE_NAME );
     ui->lVersion->setText( tr( "Version %1 (%2)" ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ) );
     ui->tbTeamates->setHtml( generateTeamatesTable( teamates, teamatesMask ) );
