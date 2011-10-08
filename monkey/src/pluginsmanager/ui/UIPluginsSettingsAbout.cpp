@@ -33,6 +33,7 @@ UIPluginsSettingsAbout::UIPluginsSettingsAbout( BasePlugin* plugin, QWidget* p )
     
     if ( !infos.Pixmap.isNull() ) {
         lIcon->setPixmap( infos.Pixmap );
+        setWindowIcon( infos.Pixmap );
     }
     
     lIcon->setPixmap( lIcon->pixmap()->scaled( QSize( 48, 48 ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
