@@ -137,7 +137,7 @@ void UIXUPEditor::setup( XUPProjectItem* project )
     mProject = project;
     
     setWindowIcon( project->displayIcon() );
-    setWindowTitle( tr( "Project Editor - %2" ).arg( project->displayText() ) );
+    setWindowTitle( tr( "Project Editor - %1" ).arg( project->displayText() ) );
     
     foreach ( XUPPageEditor* editor, mPages ) {
         editor->setup( project );

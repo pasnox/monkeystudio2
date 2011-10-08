@@ -93,7 +93,7 @@ QString pMonkeyStudio::buildFileDialogFilter( const QMap<QString, QStringList>& 
         const QStringList& suffixes = map[ name ];
         
         if ( !suffixes.isEmpty() ) {
-            filters << QObject::tr( "%1 (%2)" ).arg( name ).arg( suffixes.join( " " ) );
+            filters << QString( "%1 (%2)" ).arg( name ).arg( suffixes.join( " " ) );
             
             if ( addSupported ) {
                 allSuffixes << suffixes;
