@@ -1696,12 +1696,6 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
         <translation>Carpeta de proyectos por defecto :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="253"/>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2284"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="260"/>
         <source>%HOME%/.Monkey Studio/Projects</source>
         <translation>%HOME%/.Monkey Studio/Projects</translation>
@@ -2282,19 +2276,9 @@ You can quickly change it using the dock context menu.</source>
         <translation>Llenar hasta fin de linea</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2463"/>
-        <source>setFoldComments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2466"/>
         <source>Fold comments</source>
         <translation>Comentarios de pliegue</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2473"/>
-        <source>setFoldCompact</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2476"/>
@@ -2302,18 +2286,8 @@ You can quickly change it using the dock context menu.</source>
         <translation>Compactar pliegue</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2483"/>
-        <source>setFoldQuotes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2486"/>
         <source>Fold quotes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2493"/>
-        <source>setFoldDirectives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2322,18 +2296,8 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2503"/>
-        <source>setFoldAtBegin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2506"/>
         <source>Fold at begin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2513"/>
-        <source>setFoldAtParenthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2342,18 +2306,8 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2523"/>
-        <source>setFoldAtElse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2526"/>
         <source>Fold at else</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2533"/>
-        <source>setFoldAtModule</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2362,18 +2316,8 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2543"/>
-        <source>setFoldPreprocessor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2546"/>
         <source>Fold preprocessor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2553"/>
-        <source>setStylePreprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2382,117 +2326,102 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2563"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2566"/>
         <source>Indent opening brace</source>
         <translation>Delimitador de apertura de identación</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2570"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2576"/>
         <source>Indent closing brace</source>
         <translation>Delimitador de cierre de identación</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2577"/>
-        <source>setCaseSensitiveTags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2580"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2586"/>
         <source>Case sensitive tags</source>
         <translation>Tags sensible a mayúsculas</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2587"/>
-        <source>setBackslashEscapes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2590"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2596"/>
         <source>Backslash escapes</source>
         <translation>Bara invertida hace de escape</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2597"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2603"/>
         <source>Indentation warning :</source>
         <translation>Aviso de identación :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2604"/>
-        <source>setIndentationWarning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2629"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2635"/>
         <source>All Foreground Colours</source>
         <translation>Todos los colores de primer plano</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2636"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2642"/>
         <source>All Background Colours</source>
         <translation>Todos los colores de fondo</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2643"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2649"/>
         <source>All Fonts</source>
         <translation>Todas las fuentes</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2668"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2674"/>
         <source>Restore all default properties for all lexers&apos; styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2671"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2677"/>
         <source>Reset Current Lexer</source>
         <translation>Resetear léxico actual</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2678"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2684"/>
         <source>Apply default font family and pixel size to all lexers&apos; styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2681"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2687"/>
         <source>Apply default font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2703"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2709"/>
         <source>Lexer Language :</source>
         <translation>Lenguaje de léxico :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2720"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2726"/>
         <source>Templates :</source>
         <translation>Plantillas :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2732"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2738"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2758"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2764"/>
         <source>Template</source>
         <translation>Plantilla</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2763"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2769"/>
         <source>Description</source>
         <translation>Descripción</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2768"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2774"/>
         <source>Language</source>
         <translation>Lenguaje</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2776"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2782"/>
         <source>Add...</source>
         <translation>Añadir...</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2798"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2804"/>
         <source>Code :</source>
         <translation>Código :</translation>
     </message>

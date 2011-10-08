@@ -1696,12 +1696,6 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
         <translation>Каталог для проектов по умолчанию :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="253"/>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2284"/>
-        <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="260"/>
         <source>%HOME%/.Monkey Studio/Projects</source>
         <translation></translation>
@@ -2282,19 +2276,9 @@ You can quickly change it using the dock context menu.</source>
         <translation>Заполнить до конца строки</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2463"/>
-        <source>setFoldComments</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2466"/>
         <source>Fold comments</source>
         <translation>Сворачивать комментарии</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2473"/>
-        <source>setFoldCompact</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2476"/>
@@ -2302,19 +2286,9 @@ You can quickly change it using the dock context menu.</source>
         <translation>Сворачивать компактно</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2483"/>
-        <source>setFoldQuotes</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2486"/>
         <source>Fold quotes</source>
         <translation>Сворачивать кавычки</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2493"/>
-        <source>setFoldDirectives</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2496"/>
@@ -2322,19 +2296,9 @@ You can quickly change it using the dock context menu.</source>
         <translation>Сворачивать директивы</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2503"/>
-        <source>setFoldAtBegin</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2506"/>
         <source>Fold at begin</source>
         <translation>Сворачивать вначале</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2513"/>
-        <source>setFoldAtParenthesis</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2516"/>
@@ -2342,19 +2306,9 @@ You can quickly change it using the dock context menu.</source>
         <translation>Сворачивать скобки</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2523"/>
-        <source>setFoldAtElse</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2526"/>
         <source>Fold at else</source>
         <translation>Сворачивать else</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2533"/>
-        <source>setFoldAtModule</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2536"/>
@@ -2362,19 +2316,9 @@ You can quickly change it using the dock context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2543"/>
-        <source>setFoldPreprocessor</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2546"/>
         <source>Fold preprocessor</source>
         <translation>Сворачивать preprocessor</translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2553"/>
-        <source>setStylePreprocessor</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2556"/>
@@ -2382,117 +2326,102 @@ You can quickly change it using the dock context menu.</source>
         <translation>Стиль preprocessor</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2563"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2566"/>
         <source>Indent opening brace</source>
         <translation>Отступ пир открытии скобки</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2570"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2576"/>
         <source>Indent closing brace</source>
         <translation>Отступ при закрытии скобки</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2577"/>
-        <source>setCaseSensitiveTags</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2580"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2586"/>
         <source>Case sensitive tags</source>
         <translation>Регистро чувствительные теги</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2587"/>
-        <source>setBackslashEscapes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2590"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2596"/>
         <source>Backslash escapes</source>
         <translation>Backslash символ</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2597"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2603"/>
         <source>Indentation warning :</source>
         <translation>Предупреждение отступа :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2604"/>
-        <source>setIndentationWarning</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2629"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2635"/>
         <source>All Foreground Colours</source>
         <translation>Все цвета</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2636"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2642"/>
         <source>All Background Colours</source>
         <translation>Все фоновые цвета</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2643"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2649"/>
         <source>All Fonts</source>
         <translation>Все шрифты</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2668"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2674"/>
         <source>Restore all default properties for all lexers&apos; styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2671"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2677"/>
         <source>Reset Current Lexer</source>
         <translation>Сбросить текущий Lexer</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2678"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2684"/>
         <source>Apply default font family and pixel size to all lexers&apos; styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2681"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2687"/>
         <source>Apply default font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2703"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2709"/>
         <source>Lexer Language :</source>
         <translation>Язык Lexer :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2720"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2726"/>
         <source>Templates :</source>
         <translation>Шаблоны :</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2732"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2738"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2758"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2764"/>
         <source>Template</source>
         <translation>Шаблон</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2763"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2769"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2768"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2774"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2776"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2782"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2798"/>
+        <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="2804"/>
         <source>Code :</source>
         <translation>Код :</translation>
     </message>

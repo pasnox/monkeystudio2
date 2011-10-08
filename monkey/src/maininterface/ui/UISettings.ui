@@ -250,7 +250,7 @@
           <item row="2" column="1">
            <widget class="QToolButton" name="tbDefaultProjectsDirectory">
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -2281,7 +2281,7 @@ You can quickly change it using the dock context menu.</string>
           <item row="2" column="3">
            <widget class="QPushButton" name="pbSourceAPIsBrowse">
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -2460,7 +2460,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldComments">
               <property name="statusTip">
-               <string>setFoldComments</string>
+               <string notr="true">setFoldComments</string>
               </property>
               <property name="text">
                <string>Fold comments</string>
@@ -2470,7 +2470,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldCompact">
               <property name="statusTip">
-               <string>setFoldCompact</string>
+               <string notr="true">setFoldCompact</string>
               </property>
               <property name="text">
                <string>Fold compact</string>
@@ -2480,7 +2480,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldQuotes">
               <property name="statusTip">
-               <string>setFoldQuotes</string>
+               <string notr="true">setFoldQuotes</string>
               </property>
               <property name="text">
                <string>Fold quotes</string>
@@ -2490,7 +2490,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldDirectives">
               <property name="statusTip">
-               <string>setFoldDirectives</string>
+               <string notr="true">setFoldDirectives</string>
               </property>
               <property name="text">
                <string>Fold directives</string>
@@ -2500,7 +2500,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldAtBegin">
               <property name="statusTip">
-               <string>setFoldAtBegin</string>
+               <string notr="true">setFoldAtBegin</string>
               </property>
               <property name="text">
                <string>Fold at begin</string>
@@ -2510,7 +2510,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldAtParenthesis">
               <property name="statusTip">
-               <string>setFoldAtParenthesis</string>
+               <string notr="true">setFoldAtParenthesis</string>
               </property>
               <property name="text">
                <string>Fold at parenthesis</string>
@@ -2520,7 +2520,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldAtElse">
               <property name="statusTip">
-               <string>setFoldAtElse</string>
+               <string notr="true">setFoldAtElse</string>
               </property>
               <property name="text">
                <string>Fold at else</string>
@@ -2530,7 +2530,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldAtModule">
               <property name="statusTip">
-               <string>setFoldAtModule</string>
+               <string notr="true">setFoldAtModule</string>
               </property>
               <property name="text">
                <string>Fold at module</string>
@@ -2540,7 +2540,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldPreprocessor">
               <property name="statusTip">
-               <string>setFoldPreprocessor</string>
+               <string notr="true">setFoldPreprocessor</string>
               </property>
               <property name="text">
                <string>Fold preprocessor</string>
@@ -2550,7 +2550,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingStylePreprocessor">
               <property name="statusTip">
-               <string>setStylePreprocessor</string>
+               <string notr="true">setStylePreprocessor</string>
               </property>
               <property name="text">
                <string>Style preprocessor</string>
@@ -2559,6 +2559,9 @@ You can quickly change it using the dock context menu.</string>
             </item>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingIndentOpeningBrace">
+              <property name="statusTip">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>Indent opening brace</string>
               </property>
@@ -2566,6 +2569,9 @@ You can quickly change it using the dock context menu.</string>
             </item>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingIndentClosingBrace">
+              <property name="statusTip">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>Indent closing brace</string>
               </property>
@@ -2574,7 +2580,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingCaseSensitiveTags">
               <property name="statusTip">
-               <string>setCaseSensitiveTags</string>
+               <string notr="true">setCaseSensitiveTags</string>
               </property>
               <property name="text">
                <string>Case sensitive tags</string>
@@ -2584,7 +2590,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QCheckBox" name="cbLexersHighlightingBackslashEscapes">
               <property name="statusTip">
-               <string>setBackslashEscapes</string>
+               <string notr="true">setBackslashEscapes</string>
               </property>
               <property name="text">
                <string>Backslash escapes</string>
@@ -2601,7 +2607,7 @@ You can quickly change it using the dock context menu.</string>
             <item>
              <widget class="QComboBox" name="cbLexersHighlightingIndentationWarning">
               <property name="statusTip">
-               <string>setIndentationWarning</string>
+               <string notr="true">setIndentationWarning</string>
               </property>
              </widget>
             </item>
