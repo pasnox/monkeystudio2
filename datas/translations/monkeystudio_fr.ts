@@ -787,37 +787,37 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
         <translation>A Propos : %1</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="110"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="115"/>
         <source>Version %1 (%2)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="79"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="87"/>
         <source>The Free, Fast and Powerfull cross-platform Open Source IDE</source>
         <translation>L&apos;EDI multi plateformes Open Source Libre, Rapide et Puissant</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="130"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="187"/>
         <source>About</source>
         <translation>A Propos</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="190"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="292"/>
         <source>Teamates</source>
         <translation>Membres</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="310"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="466"/>
         <source>Donations</source>
         <translation>Dons</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="361"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="544"/>
         <source>Licensed under the GNU GPL2 &amp; up.</source>
-        <translation>Licencé sous la GNU GPL2 &amp; supérieure.</translation>
+        <translation>Licencié sous la GNU GPL2 &amp; supérieure.</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="250"/>
+        <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="379"/>
         <source>Links</source>
         <translation>Liens</translation>
     </message>
@@ -1411,32 +1411,32 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
 <context>
     <name>UIPluginsSettingsAbout</name>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp" line="41"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp" line="46"/>
         <source>GNU General Public License</source>
         <translation>License publique générale GNU</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="20"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="14"/>
         <source>About Plugin: %1</source>
         <translation>A propos du plugin: %1</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="132"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="142"/>
         <source>Authors</source>
         <translation>Auteurs</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="149"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="165"/>
         <source>Types</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="166"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="188"/>
         <source>Languages</source>
         <translation>Langages</translation>
     </message>
     <message>
-        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="183"/>
+        <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsAbout.ui" line="211"/>
         <source>Dependencies</source>
         <translation>Dépendances</translation>
     </message>
