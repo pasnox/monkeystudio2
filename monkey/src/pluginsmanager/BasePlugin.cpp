@@ -48,7 +48,7 @@ QString BasePlugin::typeToString( BasePlugin::Type type )
         case BasePlugin::iXUP:
             return tr( "XUP Project" );
         case BasePlugin::iLast:
-            return tr( "NaN" );
+            return QString( "NaN" );
         default:
             //Q_ASSERT( 0 ); // comment assert as in debug it will always assert as i do a loop that contains bad type in the compelteTypeToString() member.
             return QString::null;

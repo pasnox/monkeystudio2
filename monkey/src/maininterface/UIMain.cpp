@@ -374,7 +374,7 @@ void UIMain::initConnections()
 
 void UIMain::finalyzeGuiInit()
 {
-    setWindowTitle( QObject::tr( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
+    setWindowTitle( QString( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
     setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
 }
 
