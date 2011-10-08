@@ -31,6 +31,10 @@ UIPluginsSettingsAbout::UIPluginsSettingsAbout( BasePlugin* plugin, QWidget* p )
     setupUi( this );
     setWindowTitle( windowTitle().arg( infos.Caption ) );
     
+    foreach ( QWidget* widget, findChildren<QWidget*>() ) {
+        widget->setAttribute( Qt::WA_MacSmallSize );
+    }
+    
     if ( !infos.Pixmap.isNull() ) {
         lIcon->setPixmap( infos.Pixmap );
         setWindowIcon( infos.Pixmap );
