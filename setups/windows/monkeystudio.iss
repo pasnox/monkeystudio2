@@ -1,10 +1,10 @@
 ; This script need to use a special Inno Setup version located here : http://jrsoftware.org/isdl.php#qsp
 
-[_ISTool]
-UseAbsolutePaths=false
-
 [InnoIDE_Settings]
 LogFileOverwrite=false
+
+[_ISTool]
+UseAbsolutePaths=false
 
 [CustomMessages]
 APP_NAME=Monkey Studio IDE
@@ -30,6 +30,7 @@ VersionInfoCompany=Monkey Studio Team
 VersionInfoDescription=Free, Fast and Flexible cross-platform IDE
 VersionInfoTextVersion={#APP_VERSION}
 VersionInfoCopyright={cm:APP_COPYRIGHTS}
+VersionInfoProductVersion={#APP_VERSION}
 AppCopyright={cm:APP_COPYRIGHTS}
 AppName={cm:APP_NAME}
 AppVerName={cm:APP_NAME} {#APP_VERSION}
@@ -88,11 +89,17 @@ Name: {group}\Home Page; Filename: {app}\Home page.url; WorkingDir: {app}
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}
 Name: {group}\Issues Tracker; Filename: {app}\Issues tracker.url; WorkingDir: {app}
 Name: {group}\{cm:UninstallProgram, {cm:APP_NAME}}; Filename: {uninstallexe}; WorkingDir: {app}
+Name: {group}\Downloads Qt Libraries; Filename: {app}\Downloads Qt Libraries.url; WorkingDir: {app}
+Name: {group}\Downloads MinGW; Filename: {app}\Downloads MinGW.url; WorkingDir: {app}
+Name: {group}\Qt downloads page; Filename: {app}\Qt downloads page.url; WorkingDir: {app}
 
 [INI]
 Filename: {app}\Home page.url; Section: InternetShortcut; Key: URL; String: {cm:APP_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: {cm:APP_FORUMS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 Filename: {app}\Issues tracker.url; Section: InternetShortcut; Key: URL; String: {cm:APP_ISSUES_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
+Filename: {app}\Downloads Qt Libraries.url; Section: InternetShortcut; Key: URL; String: http://get.qt.nokia.com/qt/source/qt-win-opensource-4.7.4-mingw.exe; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Languages: 
+Filename: {app}\Downloads MinGW.url; Section: InternetShortcut; Key: URL; String: http://get.qt.nokia.com/misc/MinGW-gcc440_1.zip; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
+Filename: {app}\Qt downloads page.url; Section: InternetShortcut; Key: URL; String: http://qt.nokia.com/downloads; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 
 [UninstallDelete]
 Name: {app}\Home page.url; Type: files
