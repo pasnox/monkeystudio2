@@ -42,6 +42,7 @@ class BeaverDebugger : public DebuggerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin DebuggerPlugin )
+    
     enum TryFindResult
     {
         OK,
@@ -52,8 +53,6 @@ class BeaverDebugger : public DebuggerPlugin
         NOT_BEAVER,
     };
     
-public:
-    BeaverDebugger();
 protected:  
     void fillPluginInfos();
     virtual bool install(); // FIXME make protected for all plugins
