@@ -807,6 +807,15 @@ QString QMakeProjectItem::defaultActionTypeToText( QMakeProjectItem::DefaultActi
 
 void QMakeProjectItem::installCommandsV2()
 {
+    const QString suffix = QFileInfo( fileName() ).suffix().toLower();
+    
+    // Only call qmake and generate commands for true projects, and not include project files
+    if ( suffix != "pro" ) {
+        // install defaults commands
+        XUPProjectItem::installCommands();
+        return;
+    }
+    
     XUPProjectItem* tlProject = topLevelProject();
     const CLIToolPlugin* bp = builder();
     const QtVersionManager* manager = QMake::versionManager();
@@ -994,8 +1003,7 @@ void QMakeProjectItem::installCommands()
     installCommandsV2();
     return;
     
-//read makefile commands directly to avoid creation of bad commands.
-    // get plugins
+    /*// get plugins
     CLIToolPlugin* bp = builder();
     
     // config variable
@@ -1084,7 +1092,7 @@ void QMakeProjectItem::installCommands()
         }
         
         // default build
-        if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
+        if ( /!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Build" ) );
             cmds[ QMakeProjectItem::Build ] = cmd;
@@ -1125,7 +1133,7 @@ void QMakeProjectItem::installCommands()
         }
         
         // default clean
-        if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
+        if ( /!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Clean" ) );
             cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
@@ -1167,7 +1175,7 @@ void QMakeProjectItem::installCommands()
         }
         
         // default distclean
-        if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
+        if ( /!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Distclean" ) );
             cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
@@ -1213,7 +1221,7 @@ void QMakeProjectItem::installCommands()
             }
             
             // default rebuild
-            if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
+            if ( /!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )/ 0 == 0 ) {
                 cmd = pCommand( tr( "Rebuild" ) );
                 cmd.addChildCommand( cmds[ QMakeProjectItem::Distclean ] );
                 cmd.addChildCommand( cmds[ QMakeProjectItem::QMake ] );
@@ -1247,7 +1255,7 @@ void QMakeProjectItem::installCommands()
         }
         
         // execute
-        if ( /*!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )*/ 0 == 0 ) {
+        if ( /!( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease )/ 0 == 0 ) {
             cmd = cmdBuild;
             cmd.setText( tr( "Execute" ) );
             cmd.setCommand( "$target$" );
@@ -1333,7 +1341,7 @@ void QMakeProjectItem::installCommands()
     }
     
     // install defaults commands
-    XUPProjectItem::installCommands();
+    XUPProjectItem::installCommands();*/
 }
 
 XUPProjectItemCacheBackend* QMakeProjectItem::cacheBackend() const
