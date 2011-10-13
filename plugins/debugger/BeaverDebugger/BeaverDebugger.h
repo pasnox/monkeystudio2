@@ -54,7 +54,7 @@ class BeaverDebugger : public DebuggerPlugin
     };
     
 protected:  
-    void fillPluginInfos();
+    virtual void fillPluginInfos();
     virtual bool install(); // FIXME make protected for all plugins
     virtual bool uninstall();
 public:
