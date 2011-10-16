@@ -23,7 +23,7 @@
 
 #include <QPointer>
 
-class QtAssistant : public ChildPlugin
+class QtAssistant : public QObject, public ChildPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin ChildPlugin )

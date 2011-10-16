@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/BasePlugin.h>
 
-class ProjectHeaders : public BasePlugin
+class ProjectHeaders : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

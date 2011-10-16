@@ -25,7 +25,7 @@
 
 class ToolsManager;
 
-class Tools : public BasePlugin
+class Tools : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

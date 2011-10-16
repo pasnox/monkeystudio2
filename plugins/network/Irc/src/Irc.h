@@ -24,7 +24,7 @@
 
 
 
-class Irc : public BasePlugin
+class Irc : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

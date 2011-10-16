@@ -23,7 +23,7 @@
 
 class MkSShellDock;
 
-class MkSShell : public BasePlugin
+class MkSShell : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/BasePlugin.h>
 
-class UpdateChecker : public BasePlugin
+class UpdateChecker : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

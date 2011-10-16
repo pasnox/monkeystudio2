@@ -33,6 +33,8 @@ class PluginsMenu;
 class Q_MONKEY_EXPORT PluginsManager : public QObject
 {
     Q_OBJECT
+    Q_ENUMS( BasePlugin::Type )
+    
     friend class MonkeyCore;
     
 public:
@@ -54,7 +56,7 @@ public:
                     // no version or good version
                     if ( version.isEmpty() || bp->infos().Version == version ) {
                         // good cast
-                        if ( T plugin = qobject_cast<T>( bp ) ) {
+                        if ( T plugin = dynamic_cast<T>( bp ) ) {
                             plugins << plugin;
                         }
                     }

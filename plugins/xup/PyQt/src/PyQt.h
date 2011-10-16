@@ -22,7 +22,7 @@
 #include <pluginsmanager/XUPPlugin.h>
 #include <xupmanager/core/ProjectTypesIndex.h>
 
-class PyQt : public XUPPlugin
+class PyQt : public QObject, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin XUPPlugin )

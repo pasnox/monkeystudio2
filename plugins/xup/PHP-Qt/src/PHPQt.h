@@ -22,7 +22,7 @@
 #include <pluginsmanager/XUPPlugin.h>
 #include <xupmanager/core/ProjectTypesIndex.h>
 
-class PHPQt : public XUPPlugin
+class PHPQt : public QObject, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin XUPPlugin )

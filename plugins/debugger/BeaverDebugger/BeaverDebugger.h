@@ -38,7 +38,7 @@ class XUPProjectItem;
     
     Plugin allows to use Beaver Debugger with MkS
 */
-class BeaverDebugger : public DebuggerPlugin
+class BeaverDebugger : public QObject, public DebuggerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin DebuggerPlugin )

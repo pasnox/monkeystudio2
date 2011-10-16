@@ -27,7 +27,7 @@
 
 class QtVersionManager;
 
-class QMake : virtual public BasePlugin, public CLIToolPlugin, public XUPPlugin
+class QMake : public QObject, virtual public BasePlugin, public CLIToolPlugin, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CLIToolPlugin XUPPlugin )

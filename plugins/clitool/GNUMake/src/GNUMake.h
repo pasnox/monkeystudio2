@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/CLIToolPlugin.h>
 
-class GNUMake : public CLIToolPlugin
+class GNUMake : public QObject, public CLIToolPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CLIToolPlugin )

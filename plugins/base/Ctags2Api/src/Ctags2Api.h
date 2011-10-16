@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/BasePlugin.h>
 
-class Ctags2Api : public BasePlugin
+class Ctags2Api : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

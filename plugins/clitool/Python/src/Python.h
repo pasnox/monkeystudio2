@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/CLIToolPlugin.h>
 
-class Python : public CLIToolPlugin
+class Python : public QObject, public CLIToolPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CLIToolPlugin )
