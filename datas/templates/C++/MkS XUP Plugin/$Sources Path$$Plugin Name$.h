@@ -3,7 +3,7 @@
 
 #include <pluginsmanager/XUPPlugin.h>
 
-class $Plugin Name$ : public XUPPlugin
+class $Plugin Name$ : public QObject, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin XUPPlugin )

@@ -3,7 +3,7 @@
 
 #include <pluginsmanager/CLIToolPlugin.h>
 
-class $Plugin Name$ : public CLIToolPlugin
+class $Plugin Name$ : public QObject, public CLIToolPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CLIToolPlugin )
