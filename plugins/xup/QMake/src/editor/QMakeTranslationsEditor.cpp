@@ -57,6 +57,11 @@ void QMakeTranslationsEditor::setup( XUPProjectItem* project )
     ui->leDirectory->setText( mProject->relativeFilePath( directory ) );
     
     foreach ( const XUPItem* translation, translations ) {
+        // keep only mProject translations, and not it's included files
+        if ( translation->project() != mProject ) {
+            continue;
+        }
+        
         foreach( XUPItem* item, translation->childrenList() ) {
             if ( item->type() == XUPItem::File ) {
                 mCurrentTranslations[ mProject->filePath( item->content() ) ] = item;
