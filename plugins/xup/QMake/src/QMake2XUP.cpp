@@ -88,7 +88,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
     QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
     QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
     QRegExp comments("^\\s*#(.*)");
-    QRegExp varLine("^\\s*[^}]?(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
+    QRegExp varLine("^\\s*[^}]?(?![\\w\\d_-\\.]+\\s+(?:[*+-~]?=)\\s+)(.+)[ \\t]*\\\\[ \\t]*(#.*)?");
     
     file.append( QString( "<!DOCTYPE XUPProject>\n<project name=\"%1\" version=\"%2\" expanded=\"false\">\n" ).arg( QFileInfo( s ).fileName() ).arg( GENERATED_XUP_VERSION ) );
     try
@@ -205,7 +205,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                         && !end_bloc_continuing.exactMatch( v[i +1] )
                         && !comments.exactMatch( v[i +1] )
                     ) {
-                        isMulti = true;
+                        isMulti = !v[i +1].trimmed().isEmpty();
                     }
                     
                     if ( isMulti ) {
@@ -469,7 +469,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                     && !end_bloc_continuing.exactMatch( v[i +1] )
                     && !comments.exactMatch( v[i +1] )
                 ) {
-                    isMulti = true;
+                    isMulti = !v[i +1].trimmed().isEmpty();
                 }
                 
                 QString theOp = (liste[4].trimmed() == "=" ? "" : " operator=\""+liste[4].trimmed()+"\"");
@@ -805,10 +805,10 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
                 data.append( ':' );
             }
             else {
-                //if ( node.hasChildNodes() ) {
+                if ( node.hasChildNodes() || ( isBlock( node.nextSibling() ) && nodeAttribute( node.nextSibling(), "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) {
                     data.append( " {" );
                     weight++;
-                //}
+                }
                 
                 if ( !comment.isEmpty() ) {
                     data.append( ' ' +comment );
@@ -831,10 +831,10 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
         const QString comment = nodeAttribute( node, "closing-comment" );
         const QDomNode sibling = node.nextSibling();
         
-        //if ( node.hasChildNodes() ) {
+        if ( node.hasChildNodes() || ( isBlock( node.nextSibling() ) && nodeAttribute( node.nextSibling(), "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) {
             weight--;
             data.append( tabbedString( weight, "}" ) );
-        //}
+        }
         
         if ( !( isBlock( sibling ) && ( nodeAttribute( sibling, "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) ) {
             if ( node.hasChildNodes() ) {
