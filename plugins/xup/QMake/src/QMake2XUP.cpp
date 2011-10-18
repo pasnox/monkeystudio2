@@ -88,7 +88,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
     QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
     QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
     QRegExp comments("^\\s*#(.*)");
-    QRegExp varLine("^([^}]*)[ \\t]*\\\\[ \\t]*(#.*)?");
+    QRegExp varLine("^\\s*[^}]?(?![\\w\\d_-\\.]+\\s+(?:[*+-~]?=)\\s+)(.+)[ \\t]*\\\\[ \\t]*(#.*)?");
     
     file.append( QString( "<!DOCTYPE XUPProject>\n<project name=\"%1\" version=\"%2\" expanded=\"false\">\n" ).arg( QFileInfo( s ).fileName() ).arg( GENERATED_XUP_VERSION ) );
     try
@@ -190,9 +190,23 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                 
                 bool isMulti = false;
                 
-                if (liste[4].trimmed() == "\\")
+                if ( liste[4].trimmed() == "\\" )
                 {
-                    isMulti = i +1 < v.size() ? varLine.exactMatch(v[i +1]) : true;
+                    const bool hasNextLine = i +1 < v.size();
+                    isMulti = hasNextLine ? varLine.exactMatch( v[i +1] ) : true;
+                    
+                    // a multine variable composed of 2 lines so the next is not a varLine
+                    if ( !isMulti && hasNextLine
+                        && !Variable.exactMatch( v[i +1] )
+                        && !RegexVar.exactMatch( v[i +1] )
+                        && !bloc.exactMatch( v[i +1] )
+                        && !function_call.exactMatch( v[i +1] )
+                        && !end_bloc.exactMatch( v[i +1] )
+                        && !end_bloc_continuing.exactMatch( v[i +1] )
+                        && !comments.exactMatch( v[i +1] )
+                    ) {
+                        isMulti = !v[i +1].trimmed().isEmpty();
+                    }
                     
                     if ( isMulti ) {
                         liste[4].clear();
@@ -442,7 +456,22 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                     isNested.push(true);
                 }
                 bool isMulti = (liste[6].trimmed() == "\\" ? true : false);
-                isMulti = isMulti && i +1 < v.size() ? varLine.exactMatch(v[i +1]) : isMulti;
+                const bool hasNextLine = i +1 < v.size();
+                isMulti = isMulti && hasNextLine ? varLine.exactMatch(v[i +1]) : isMulti;
+                
+                // a multine variable composed of 2 lines so the next is not a varLine
+                if ( !isMulti && hasNextLine
+                    && !Variable.exactMatch( v[i +1] )
+                    && !RegexVar.exactMatch( v[i +1] )
+                    && !bloc.exactMatch( v[i +1] )
+                    && !function_call.exactMatch( v[i +1] )
+                    && !end_bloc.exactMatch( v[i +1] )
+                    && !end_bloc_continuing.exactMatch( v[i +1] )
+                    && !comments.exactMatch( v[i +1] )
+                ) {
+                    isMulti = !v[i +1].trimmed().isEmpty();
+                }
+                
                 QString theOp = (liste[4].trimmed() == "=" ? "" : " operator=\""+liste[4].trimmed()+"\"");
                 file.append("<variable name=\""+escape(liste[3].trimmed())+"\""+theOp+">\n");
                 
@@ -776,10 +805,10 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
                 data.append( ':' );
             }
             else {
-                //if ( node.hasChildNodes() ) {
+                if ( node.hasChildNodes() || ( isBlock( node.nextSibling() ) && nodeAttribute( node.nextSibling(), "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) {
                     data.append( " {" );
                     weight++;
-                //}
+                }
                 
                 if ( !comment.isEmpty() ) {
                     data.append( ' ' +comment );
@@ -802,10 +831,10 @@ QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool mult
         const QString comment = nodeAttribute( node, "closing-comment" );
         const QDomNode sibling = node.nextSibling();
         
-        //if ( node.hasChildNodes() ) {
+        if ( node.hasChildNodes() || ( isBlock( node.nextSibling() ) && nodeAttribute( node.nextSibling(), "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) {
             weight--;
             data.append( tabbedString( weight, "}" ) );
-        //}
+        }
         
         if ( !( isBlock( sibling ) && ( nodeAttribute( sibling, "name" ).compare( "else", Qt::CaseInsensitive ) == 0 ) ) ) {
             if ( node.hasChildNodes() ) {

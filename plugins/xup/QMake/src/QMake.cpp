@@ -112,7 +112,7 @@ bool QMake::install()
     mFilters[ "INCLUDE_PROJECT" ].label = tr( "Qt Include Projects" );
     mFilters[ "INCLUDE_PROJECT" ].icon = "project.png";
     mFilters[ "INCLUDE_PROJECT" ].type = DocumentFilter::Project;
-    mFilters[ "INCLUDE_PROJECT" ].filters << "*.pri";
+    mFilters[ "INCLUDE_PROJECT" ].filters << "*.pri" << "*.prf";
     
     mFilters[ "FORMS3" ].weight = weight++;
     mFilters[ "FORMS3" ].label = QMakeProjectItem::tr( "Qt3 Forms" );
