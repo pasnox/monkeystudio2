@@ -88,7 +88,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
     QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
     QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
     QRegExp comments("^\\s*#(.*)");
-    QRegExp varLine("^([^}]*)[ \\t]*\\\\[ \\t]*(#.*)?");
+    QRegExp varLine("^\\s*[^}]?(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
     
     file.append( QString( "<!DOCTYPE XUPProject>\n<project name=\"%1\" version=\"%2\" expanded=\"false\">\n" ).arg( QFileInfo( s ).fileName() ).arg( GENERATED_XUP_VERSION ) );
     try
@@ -190,9 +190,23 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                 
                 bool isMulti = false;
                 
-                if (liste[4].trimmed() == "\\")
+                if ( liste[4].trimmed() == "\\" )
                 {
-                    isMulti = i +1 < v.size() ? varLine.exactMatch(v[i +1]) : true;
+                    const bool hasNextLine = i +1 < v.size();
+                    isMulti = hasNextLine ? varLine.exactMatch( v[i +1] ) : true;
+                    
+                    // a multine variable composed of 2 lines so the next is not a varLine
+                    if ( !isMulti && hasNextLine
+                        && !Variable.exactMatch( v[i +1] )
+                        && !RegexVar.exactMatch( v[i +1] )
+                        && !bloc.exactMatch( v[i +1] )
+                        && !function_call.exactMatch( v[i +1] )
+                        && !end_bloc.exactMatch( v[i +1] )
+                        && !end_bloc_continuing.exactMatch( v[i +1] )
+                        && !comments.exactMatch( v[i +1] )
+                    ) {
+                        isMulti = true;
+                    }
                     
                     if ( isMulti ) {
                         liste[4].clear();
@@ -442,7 +456,22 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                     isNested.push(true);
                 }
                 bool isMulti = (liste[6].trimmed() == "\\" ? true : false);
-                isMulti = isMulti && i +1 < v.size() ? varLine.exactMatch(v[i +1]) : isMulti;
+                const bool hasNextLine = i +1 < v.size();
+                isMulti = isMulti && hasNextLine ? varLine.exactMatch(v[i +1]) : isMulti;
+                
+                // a multine variable composed of 2 lines so the next is not a varLine
+                if ( !isMulti && hasNextLine
+                    && !Variable.exactMatch( v[i +1] )
+                    && !RegexVar.exactMatch( v[i +1] )
+                    && !bloc.exactMatch( v[i +1] )
+                    && !function_call.exactMatch( v[i +1] )
+                    && !end_bloc.exactMatch( v[i +1] )
+                    && !end_bloc_continuing.exactMatch( v[i +1] )
+                    && !comments.exactMatch( v[i +1] )
+                ) {
+                    isMulti = true;
+                }
+                
                 QString theOp = (liste[4].trimmed() == "=" ? "" : " operator=\""+liste[4].trimmed()+"\"");
                 file.append("<variable name=\""+escape(liste[3].trimmed())+"\""+theOp+">\n");
                 
