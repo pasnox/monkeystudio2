@@ -3,7 +3,7 @@
 
 #include <pluginsmanager/DebuggerPlugin.h>
 
-class $Plugin Name$ : public DebuggerPlugin
+class $Plugin Name$ : public QObject, public DebuggerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin DebuggerPlugin )

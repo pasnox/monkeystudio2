@@ -22,7 +22,7 @@
 #include <pluginsmanager/XUPPlugin.h>
 #include <xupmanager/core/ProjectTypesIndex.h>
 
-class MakefileProject : public XUPPlugin
+class MakefileProject : public QObject, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin XUPPlugin )

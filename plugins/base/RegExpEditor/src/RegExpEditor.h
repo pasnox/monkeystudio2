@@ -25,7 +25,7 @@
 
 class UIRegExpEditor;
 
-class RegExpEditor : public BasePlugin
+class RegExpEditor : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

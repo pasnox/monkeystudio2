@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/CLIToolPlugin.h>
 
-class PHP : public CLIToolPlugin
+class PHP : public QObject, public CLIToolPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CLIToolPlugin )

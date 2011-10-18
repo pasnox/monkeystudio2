@@ -1,6 +1,8 @@
 Q_OS    = $$lower( $$QMAKE_HOST.os )
 Q_OS_BUILD = $$Q_OS
 win32:Q_OS_BUILD = windows
+Q_BACK_SLASH = \
+Q_SLASH = /
 
 win32:!isEqual( Q_OS, "windows" ):CONFIG    *= win32_crossbuild
 
@@ -21,7 +23,7 @@ isEmpty( translations_pass ) {
             _q_folders  = $$system( $$command )
             _q_folders *= $$1
             
-            _q_folders = $$replace( _q_folders, "\\\\", "/" )
+            _q_folders = $$replace( _q_folders, $$Q_BACK_SLASH, $Q_SLASH )
 
             # loop paths
             for( q_folder, _q_folders ) {

@@ -38,10 +38,6 @@
 #include "BeaverDebugger.h"
 #include "BeaverDebuggerSettings.h"
 
-BeaverDebugger::BeaverDebugger()
-{
-}
-
 void BeaverDebugger::fillPluginInfos()
 {
     mPluginInfos.Caption = tr( "Beaver Debugger" );

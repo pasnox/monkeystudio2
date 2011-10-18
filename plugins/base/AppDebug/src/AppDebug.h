@@ -23,7 +23,7 @@
 
 class DebugDockWidget;
 
-class AppDebug : public BasePlugin
+class AppDebug : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

@@ -21,7 +21,7 @@
 
 #include <pluginsmanager/BasePlugin.h>
 
-class pAStyle : public BasePlugin
+class pAStyle : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

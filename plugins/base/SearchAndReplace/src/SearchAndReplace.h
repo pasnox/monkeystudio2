@@ -24,7 +24,7 @@
 class SearchWidget;
 class SearchResultsDock;
 
-class SearchAndReplace : public BasePlugin
+class SearchAndReplace : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

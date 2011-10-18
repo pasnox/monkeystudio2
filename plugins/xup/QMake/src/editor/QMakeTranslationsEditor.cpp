@@ -57,6 +57,11 @@ void QMakeTranslationsEditor::setup( XUPProjectItem* project )
     ui->leDirectory->setText( mProject->relativeFilePath( directory ) );
     
     foreach ( const XUPItem* translation, translations ) {
+        // keep only mProject translations, and not it's included files
+        if ( translation->project() != mProject ) {
+            continue;
+        }
+        
         foreach( XUPItem* item, translation->childrenList() ) {
             if ( item->type() == XUPItem::File ) {
                 mCurrentTranslations[ mProject->filePath( item->content() ) ] = item;
@@ -86,14 +91,21 @@ void QMakeTranslationsEditor::setup( XUPProjectItem* project )
 
 void QMakeTranslationsEditor::finalize()
 {
-    XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_BASENAME", ui->leBaseName->text() );
-    XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_DIRECTORY", mProject->relativeFilePath( ui->leDirectory->text() ) );
-    
     const QStringList locales = mModel->checkedLocales();
+    QString baseName = ui->leBaseName->text();
+    QString directory = mProject->relativeFilePath( ui->leDirectory->text() );
     QStringList translations;
     
+    if ( baseName.isEmpty() ) {
+        baseName = QMakeTranslationsEditorDefaultName;
+    }
+    
+    if ( directory.isEmpty() ) {
+        directory = QMakeTranslationsEditorDefaultDirectory;
+    }
+    
     foreach ( const QString& locale, locales ) {
-        translations << QString( "%1/%2_%3.ts" ).arg( ui->leDirectory->text() ).arg( ui->leBaseName->text() ).arg( locale );
+        translations << QString( "%1/%2_%3.ts" ).arg( directory ).arg( baseName ).arg( locale );
     }
     
     foreach ( const QString& translation, translations ) {
@@ -106,7 +118,20 @@ void QMakeTranslationsEditor::finalize()
         mProject->removeValue( item, false );
     }
     
-    QDir( mProject->path() ).mkpath( mProject->relativeFilePath( ui->leDirectory->text() ) );
+    if ( locales.isEmpty() ) {
+        if ( baseName != QMakeTranslationsEditorDefaultName ) {
+            XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_BASENAME", baseName );
+        }
+        
+        if ( directory != QMakeTranslationsEditorDefaultDirectory ) {
+            XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_DIRECTORY", directory );
+        }
+    }
+    else {
+        XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_BASENAME", baseName );
+        XUPProjectItemHelper::setProjectSettingsValue( mProject, "TRANSLATIONS_DIRECTORY", directory );
+        QDir( mProject->path() ).mkpath( directory );
+    }
 }
 
 void QMakeTranslationsEditor::on_tbDirectory_clicked()

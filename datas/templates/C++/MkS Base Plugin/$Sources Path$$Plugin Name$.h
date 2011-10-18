@@ -3,7 +3,7 @@
 
 #include <pluginsmanager/BasePlugin.h>
 
-class $Plugin Name$ : public BasePlugin
+class $Plugin Name$ : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

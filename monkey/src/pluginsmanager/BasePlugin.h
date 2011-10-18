@@ -35,11 +35,8 @@
 #include <QDir>
 #endif
 
-class Q_MONKEY_EXPORT BasePlugin : public QObject
+class Q_MONKEY_EXPORT BasePlugin
 {
-    Q_OBJECT
-    Q_ENUMS( Type )
-    
     friend class PluginsManager; // for call fillPluginInfo()
     
 public:

@@ -29,7 +29,7 @@ class pAbstractChild;
 class XUPProjectItem;
 struct qCtagsSenseEntry;
 
-class ClassBrowser : public BasePlugin
+class ClassBrowser : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

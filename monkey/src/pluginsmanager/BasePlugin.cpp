@@ -17,12 +17,12 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pluginsmanager/BasePlugin.h"
+#include "pluginsmanager/PluginsManager.h"
 #include "main.h"
 
 #include <QApplication>
 
 BasePlugin::BasePlugin()
-    : QObject()
 {
     // auto fill minimum version required using compil time version
     mPluginInfos.ApplicationVersionRequired = PACKAGE_VERSION;
@@ -30,23 +30,26 @@ BasePlugin::BasePlugin()
 
 BasePlugin::~BasePlugin()
 {
-    if ( isEnabled() ) 
+    if ( isEnabled() ) {
         setEnabled( false );
+    }
+    
+    delete mAction;
 }
 
 QString BasePlugin::typeToString( BasePlugin::Type type )
 {
     switch ( type ) {
         case BasePlugin::iBase:
-            return tr( "Basic" );
+            return PluginsManager::tr( "Basic" );
         case BasePlugin::iChild:
-            return tr( "Child" );
+            return PluginsManager::tr( "Child" );
         case BasePlugin::iCLITool:
-            return tr( "Command Line Tool" );
+            return PluginsManager::tr( "Command Line Tool" );
         case BasePlugin::iDebugger:
-            return tr( "Debugger" );
+            return PluginsManager::tr( "Debugger" );
         case BasePlugin::iXUP:
-            return tr( "XUP Project" );
+            return PluginsManager::tr( "XUP Project" );
         case BasePlugin::iLast:
             return QString( "NaN" );
         default:
@@ -82,9 +85,9 @@ QAction* BasePlugin::stateAction() const
 {
     if ( !mAction )
     {
-        mAction = new QAction( const_cast<BasePlugin*>( this ) );
+        mAction = new QAction( 0 );
         mAction->setCheckable( true );
-        mAction->setText( tr( "Enabled" ) );
+        mAction->setText( PluginsManager::tr( "Enabled" ) );
         mAction->setObjectName( captionVersionString().replace( " ", "_" ) );
         mAction->setData( QVariant::fromValue( const_cast<BasePlugin*>( this ) ) );
     }

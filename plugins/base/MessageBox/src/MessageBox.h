@@ -36,7 +36,7 @@ class MessageBoxDocks;
 
     Plugin displaying console output and build steps of current building project
 */
-class MessageBox : public BasePlugin
+class MessageBox : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

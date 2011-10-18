@@ -36,7 +36,7 @@ class pDockFileBrowser;
     
     Plugin allows to see file system contents and open files
 */
-class FileBrowser : public BasePlugin
+class FileBrowser : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )

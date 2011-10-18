@@ -34,7 +34,7 @@ public:
     virtual void installCommands();
 };
 
-class XUP : public XUPPlugin
+class XUP : public QObject, public XUPPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin XUPPlugin )

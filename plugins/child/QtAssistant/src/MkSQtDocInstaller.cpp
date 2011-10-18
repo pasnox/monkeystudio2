@@ -22,6 +22,7 @@
 
 #include <coremanager/MonkeyCore.h>
 #include <pQueuedMessageToolBar.h>
+#include <settingsmanager/Settings.h>
 
 #include <QDesktopServices>
 #include <QDir>
@@ -38,7 +39,7 @@ MkSQtDocInstaller::MkSQtDocInstaller( QHelpEngine* engine )
 
 QString MkSQtDocInstaller::collectionFileDirectory( bool createDir, const QString& cacheDir )
 {
-    QString collectionPath = QDesktopServices::storageLocation( QDesktopServices::DataLocation ).remove( PACKAGE_NAME );
+    /*QString collectionPath = QDesktopServices::storageLocation( QDesktopServices::DataLocation ).remove( PACKAGE_NAME );
     if ( collectionPath.isEmpty() )
     {
         if ( cacheDir.isEmpty() )
@@ -60,7 +61,14 @@ QString MkSQtDocInstaller::collectionFileDirectory( bool createDir, const QStrin
         if ( !dir.exists( collectionPath ) )
             dir.mkpath( collectionPath );
     }
-    return QDir::cleanPath( collectionPath );
+    return QDir::cleanPath( collectionPath );*/
+    const QString path = QDir::cleanPath( QString( "%1/doc/%2" )
+        .arg( QFileInfo( MonkeyCore::settings()->fileName() ).absolutePath() )
+        .arg( cacheDir )
+    );
+    
+    QDir().mkpath( path );
+    return path;
 }
 
 QString MkSQtDocInstaller::defaultHelpCollectionFileName()

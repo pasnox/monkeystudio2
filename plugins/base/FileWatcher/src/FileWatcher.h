@@ -37,7 +37,7 @@ class QFileSystemWatcher;
     
     Plugin track opened files for external modification, deletion and propose some actions.
 */
-class FileWatcher : public BasePlugin
+class FileWatcher : public QObject, public BasePlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin )
