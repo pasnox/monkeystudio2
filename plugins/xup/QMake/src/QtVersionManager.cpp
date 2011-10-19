@@ -138,18 +138,18 @@ QtItemList QtVersionManager::defaultModules() const
         << QtItem( "QtDeclarative", "declarative", "QT", "An engine for declaratively building fluid user interfaces" )
         << QtItem( "Phonon", "phonon", "QT", "Multimedia framework classes" )
         << QtItem( "Qt3Support", "qt3support", "QT", "Qt 3 compatibility classes" )
-        
+
         << QtItem( "Qt's Tools", QString::null, QString::null, "Modules for working with Qt's tools" )
         << QtItem( "QtDesigner", "designer", "CONFIG", "Classes for extending Qt Designer" )
         << QtItem( "QtUiTools", "uitools", "CONFIG", "Classes for handling Qt Designer forms in applications" )
         << QtItem( "QtHelp", "help", "CONFIG", "Classes for online help" )
         << QtItem( "QtAssistant", "assistant", "CONFIG", "Add support for Qt Assistant classes" )
         << QtItem( "QtTest", "qtestlib", "CONFIG", "Tool classes for unit testing" )
-        
+
         << QtItem( "Windows", QString::null, QString::null, "Modules for Windows developers" )
         << QtItem( "QAxContainer", "qaxcontainer", "CONFIG", "Extension for accessing ActiveX controls" )
         << QtItem( "QAxServer", "qaxserver", "CONFIG", "Extension for writing ActiveX servers" )
-        
+
         << QtItem( "Unix", QString::null, QString::null, "Modules for Unix developers" )
         << QtItem( "QtDBus", "dbus", "QT", "Classes for Inter-Process Communication using the D-Bus" )
         ;
@@ -177,24 +177,24 @@ QtItemList QtVersionManager::modules() const
     }
 
     _this->endArray();
-    
+
     if ( modules.isEmpty() ) {
         modules = defaultModules();
     }
-    
+
     return modules;
 }
 
 void QtVersionManager::setModules( const QtItemList& modules )
 {
     const bool isDefault = modules == defaultModules();
-    
+
     remove( mQtModuleKey );
-    
+
     if ( isDefault ) {
         return;
     }
-    
+
     beginWriteArray( mQtModuleKey );
 
     for ( int i = 0; i < modules.count(); i++ )
@@ -221,7 +221,7 @@ QtItemList QtVersionManager::defaultConfigurations() const
         << QtItem( "debug_and_release_target",  "debug_and_release_target", "CONFIG", "The project is built in both debug and release modes. TARGET is built into both the debug and release directories" )
         << QtItem( "build_all", "build_all", "CONFIG", "If debug_and_release is specified, the project is built in both debug and release modes by default" )
         << QtItem( "ordered", "ordered", "CONFIG", "When using the subdirs template, this option specifies that the directories listed should be processed in the order in which they are given" )
-        
+
         << QtItem( "Compiler/Linker", QString::null, QString::null, "Compiler/Linker configuration" )
         << QtItem( "warn_on", "warn_on", "CONFIG", "The compiler should output as many warnings as possible. This is ignored if warn_off is specified" )
         << QtItem( "warn_off", "warn_off", "CONFIG", "The compiler should output as few warnings as possible" )
@@ -238,27 +238,27 @@ QtItemList QtVersionManager::defaultConfigurations() const
         << QtItem( "3dnow", "3dnow", "CONFIG", "AMD 3DNow! instruction support is enabled" )
         << QtItem( "sse", "sse", "CONFIG", "SSE support is enabled" )
         << QtItem( "sse2", "sse2", "CONFIG", "SSE2 support is enabled" )
-        
+
         << QtItem( "Linker", QString::null, QString::null, "Linker configuration" )
         << QtItem( "no_lflags_merge", "no_lflags_merge", "CONFIG", "Ensures that the list of libraries stored in the LIBS variable is not reduced to a list of unique values before it is used" )
-        
+
         << QtItem( "Qt", QString::null, QString::null, "Qt configuration" )
         << QtItem( "qt", "qt", "CONFIG", "The target is a Qt application/library and requires the Qt library and header files. The proper include and library paths for the Qt library will automatically be added to the project. This is defined by default, and can be fine-tuned with the QT variable" )
         << QtItem( "uic3", "uic3", "CONFIG", "Configures qmake to run uic3 on the content of FORMS3 if defined; otherwise the contents of FORMS will be processed instead" )
         << QtItem( "resources", "resources", "CONFIG", "Configures qmake to run rcc on the content of RESOURCES if defined" )
-        
+
         << QtItem( "Others", QString::null, QString::null, "Others configuration" )
         << QtItem( "create_prl", "create_prl", "CONFIG", "This option enables qmake to track these dependencies. When this option is enabled, qmake will create a file ending in .prl which will save meta-information about the library (see Library Dependencies for more info)" )
         << QtItem( "link_prl", "", "CONFIG", "When this is enabled, qmake will process all libraries linked to by the application and find their meta-information (see Library Dependencies for more info)" )
         << QtItem( "copy_dir_files", "copy_dir_files", "CONFIG", "Enables the install rule to also copy directories, not just files" )
-        
+
         << QtItem( "Windows", QString::null, QString::null, "Windows specific configuration" )
         << QtItem( "flat", "flat", "CONFIG", "When using the vcapp template this will put all the source files into the source group and the header files into the header group regardless of what directory they reside in. Turning this option off will group the files within the source/header group depending on the directory they reside. This is turned on by default" )
         << QtItem( "embed_manifest_dll", "embed_manifest_dll", "CONFIG", "Embeds a manifest file in the DLL created as part of a library project" )
         << QtItem( "embed_manifest_exe", "embed_manifest_exe", "CONFIG", "Embeds a manifest file in the DLL created as part of an application project" )
         << QtItem( "incremental", "incremental", "CONFIG", "Used to enable or disable incremental linking in Visual C++, depending on whether this feature is enabled or disabled by default" )
         << QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", QString::null )
-        
+
         << QtItem( "Mac OS X", QString::null, QString::null, "Mac OS X specific configuration" )
         << QtItem( "ppc", "ppc", "CONFIG", "Builds a PowerPC binary" )
         << QtItem( "x86", "x86", "CONFIG", "Builds an i386 compatible binary" )
@@ -266,11 +266,11 @@ QtItemList QtVersionManager::defaultConfigurations() const
         << QtItem( "x86_64", "x86_64", "CONFIG", "Builds a x86 64 bits compatible binary." )
         << QtItem( "app_bundle", "app_bundle", "CONFIG", "Puts the executable into a bundle (this is the default)" )
         << QtItem( "lib_bundle", "lib_bundle", "CONFIG", "Puts the library into a library bundle" )
-        
+
         << QtItem( "Unix", QString::null, QString::null, "Unix specific configuration" )
         << QtItem( "largefile", "largefile", "CONFIG", "Includes support for large files" )
         << QtItem( "separate_debug_info", "separate_debug_info", "CONFIG", "Puts debugging information for libraries in separate files" )
-        
+
         << QtItem( "Symbian", QString::null, QString::null, "Symbian specific configuration" )
         << QtItem( "stdbinary", "stdbinary", "CONFIG", "Builds an Open C binary (i.e. STDDLL, STDEXE, or STDLIB, depending on the target binary type.)" )
         << QtItem( "no_icon", "no_icon", "CONFIG", "Doesn't generate resources needed for displaying an icon for executable in application menu (app only)" )
@@ -301,24 +301,24 @@ QtItemList QtVersionManager::configurations() const
     }
 
     _this->endArray();
-    
+
     if ( configurations.isEmpty() ) {
         configurations = defaultConfigurations();
     }
-    
+
     return configurations;
 }
 
 void QtVersionManager::setConfigurations( const QtItemList& configurations )
 {
     const bool isDefault = configurations == defaultConfigurations();
-    
+
     remove( mQtConfigurationKey );
-    
+
     if ( isDefault ) {
         return;
     }
-    
+
     beginWriteArray( mQtConfigurationKey );
 
     for ( int i = 0; i < configurations.count(); i++ )
@@ -402,13 +402,13 @@ QStringList QtVersionManager::possibleQtPaths() const
     QDir dir( "/usr/local/Trolltech" );
     const QFileInfoList files = pMonkeyStudio::getFolders( dir, QStringList( "Qt*" ), false );
     QStringList paths;
-    
+
     paths << QString::null; // for qmake available in PATH
-    
+
     foreach ( const QFileInfo& file, files ) {
         paths << file.absoluteFilePath();
     }
-    
+
     return paths;
 }
 #endif
@@ -447,7 +447,7 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
             const QString qpath = QDir::toNativeSeparators( mQtQMakeRegExp.cap( 2 ).replace( "\\", "/" ).section( '/', 0, -2 ) );
 
             sysQt.Version = QString( "Qt System (%1)" ).arg( path.isEmpty() ? qversion : QFileInfo( qpath ).fileName() );
-            sysQt.Path = qpath;
+            sysQt.Path = path.isEmpty() ? QString::null : qpath;
             sysQt.Default = hasDefaultVersion ? false : true;
             sysQt.QMakeSpec = QString::null;
             sysQt.QMakeParameters = QString::null;
@@ -495,12 +495,12 @@ void QtVersionManager::synchronizeVersions()
 
         items[ newVersion.hash() ] = newVersion;
     }
-    
+
     // remove dead ones
     foreach ( const quint32& key, items.keys() ) {
         const QtVersion& v = items[ key ];
-        
-        if ( !QFile::exists( v.Path ) ) {
+
+        if ( !v.Path.isEmpty() && !QFile::exists( v.Path ) ) {
             items.remove( key );
         }
     }

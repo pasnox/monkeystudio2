@@ -70,7 +70,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
     
     QVector<QString> temp_v = data.split( '\n' ).toVector();
     QVector<QString> v;
-    foreach(QString b,temp_v)
+    foreach(const QString& b,temp_v)
     {// used to trim the vector's data
         v.append(b.trimmed());
     }
@@ -88,7 +88,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
     QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
     QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
     QRegExp comments("^\\s*#(.*)");
-    QRegExp varLine("^\\s*[^}]?(?![\\w\\d_-\\.]+\\s+(?:[*+-~]?=)\\s+)(.+)[ \\t]*\\\\[ \\t]*(#.*)?");
+    QRegExp varLine("^\\s*[^}]?(?![\\w\\d_-\\.]+\\s*(?:[*+-~]?=)\\s*)(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
     
     file.append( QString( "<!DOCTYPE XUPProject>\n<project name=\"%1\" version=\"%2\" expanded=\"false\">\n" ).arg( QFileInfo( s ).fileName() ).arg( GENERATED_XUP_VERSION ) );
     try
@@ -222,6 +222,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
                     tmppp.chop(1);
                     liste[4] = tmppp;
                 }
+                
                 QString theOp = (liste[3].trimmed() == "=" ? "" : " operator=\""+liste[3].trimmed()+"\"");
                 file.append("<variable name=\""+escape(liste[2].trimmed())+"\""+theOp+">\n");
                 bool isFile = fileVariables.contains(liste[2].trimmed());

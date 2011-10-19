@@ -33,32 +33,43 @@ struct QtVersion
     { Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HasQt4Suffix = haveSuffixe; }
 
     quint32 hash() const
-    { return qHash( QString( "%1/%2" ).arg( Path ).arg( QMakeSpec )/*.arg( QMakeParameters ).arg( HasQt4Suffix )*/ ); }
+    {
+            return Path.isEmpty()
+                ? qHash( QString( "%1/%2" ).arg( Version ).arg( QMakeSpec ) )
+                : qHash( QString( "%1/%2" ).arg( Path ).arg( QMakeSpec )/*.arg( QMakeParameters ).arg( HasQt4Suffix )*/ )
+            ;
+    }
 
     bool isValid() const
-    { return !Version.isEmpty() && !Path.isEmpty() && QFile::exists( Path ); }
+    {
+        return !Version.isEmpty() &&
+            (
+                ( !Path.isEmpty() && QFile::exists( Path ) )
+                || Path.isEmpty()
+            )
+        ;
+    }
 
     bool isSystem() const
     { return Version.startsWith( "Qt System", Qt::CaseInsensitive ); }
 
     QString qmake() const
-    { return QString( "%1/bin/qmake%2" ).arg( Path ).arg( binarySuffixe() ); }
+    { return mkPath( "qmake" ); }
+    QString lupdate() const
+    { return mkPath( "lupdate" ); }
+    QString lrelease() const
+    { return mkPath( "lrelease" ); }
+    QString designer() const
+    { return mkPath( "designer" ); }
+    QString assistant() const
+    { return mkPath( "assistant" ); }
+    QString linguist() const
+    { return mkPath( "linguist" ); }
+
     QString qmakeSpec() const
     { return ( QMakeSpec != "default" && !QMakeSpec.isEmpty() ) ? QString( "-spec %1" ).arg( QMakeSpec ) : QString(); }
     QString qmakeParameters() const
     { return qmakeSpec().append( " " +QMakeParameters ); }
-    QString lupdate() const
-    { return QString( "%1/bin/lupdate%2" ).arg( Path ).arg( binarySuffixe() ); }
-    QString lrelease() const
-    { return QString( "%1/bin/lrelease%2" ).arg( Path ).arg( binarySuffixe() ); }
-    QString designer() const
-    { return QString( "%1/bin/designer%2" ).arg( Path ).arg( binarySuffixe() ); }
-    QString assistant() const
-    { return QString( "%1/bin/assistant%2" ).arg( Path ).arg( binarySuffixe() ); }
-    QString linguist() const
-    { return QString( "%1/bin/linguist%2" ).arg( Path ).arg( binarySuffixe() ); }
-    QString binarySuffixe() const
-    { return HasQt4Suffix ? QString( "-qt4" ) : QString::null; }
 
     QString toXml() const
     {
@@ -98,6 +109,14 @@ struct QtVersion
 
     bool operator!=( const QtVersion& other ) const
     { return !operator==( other ); }
+
+    QString mkPath( const QString& binary ) const
+    {
+        return Path.isEmpty()
+            ? QString( "%1%2" ).arg( binary ).arg( HasQt4Suffix ? QString( "-qt4" ) : QString::null )
+            : QString( "%1/bin/%2%3" ).arg( Path ).arg( binary ).arg( HasQt4Suffix ? QString( "-qt4" ) : QString::null )
+        ;
+    }
 
     QString Version;
     QString Path;
