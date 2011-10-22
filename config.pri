@@ -19,7 +19,7 @@ unix { # build on ramdisk instead of physical hard disk if possible
 }
 
 # build mode
-CONFIG  *= qt warn_on thread x11 windows release
+CONFIG  *= qt warn_on thread x11 windows rtti release
 CONFIG  -= warn_off debug debug_and_release
 QT  *= xml sql
 
