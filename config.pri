@@ -23,11 +23,11 @@ CONFIG  *= qt warn_on thread x11 windows rtti debug
 CONFIG  -= warn_off release debug_and_release
 QT  *= xml sql
 
-# Mac universal build from 10.3 to up to 10.5
+# Mac universal build from 10.4 to up to 10.5
 mac {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.3
-    QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
-    CONFIG  *= x86 ppc
+    QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
+    #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
+    CONFIG  *= x86 ppc x86_64
 }
 
 # define config mode paths
