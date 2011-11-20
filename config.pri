@@ -14,7 +14,7 @@ PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
 unix { # build on ramdisk instead of physical hard disk if possible
     UNIX_RAM_DISK   = /media/ramdisk
     exists( $${UNIX_RAM_DISK} ) {
-        PACKAGE_BUILD_PATH  = $${UNIX_RAM_DISK}/$${PACKAGE_TARGET}
+        PACKAGE_BUILD_PATH  = "$${UNIX_RAM_DISK}/$${PACKAGE_TARGET}"
     }
 }
 
