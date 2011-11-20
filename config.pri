@@ -1,3 +1,8 @@
+# helpers for crossbuilds
+Q_OS	= $$lower( $$QMAKE_HOST.os )
+win32:!isEqual( Q_OS, "windows" ):CONFIG *= cb_win32
+mac:!isEqual( Q_OS, "darwin" ):CONFIG *= cb_mac
+
 # get current path
 PACKAGE_PWD = $$PWD
 
@@ -11,7 +16,7 @@ PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
 # temporary path for building
 PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
 
-unix { # build on ramdisk instead of physical hard disk if possible
+unix|cb_win32|cb_mac { # build on ramdisk instead of physical hard disk if possible
     UNIX_RAM_DISK   = /media/ramdisk
     exists( $${UNIX_RAM_DISK} ) {
         PACKAGE_BUILD_PATH  = $${UNIX_RAM_DISK}/$$replace(PACKAGE_TARGET," ","")
