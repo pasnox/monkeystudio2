@@ -28,6 +28,8 @@ mac {
     QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
     #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
     CONFIG  *= x86 ppc x86_64
+    # this link is required for building the ppc port to avoid the undefined __Unwind_Resume symbol
+    CONFIG( ppc ):LIBS *= -lgcc_eh
 }
 
 # define config mode paths
