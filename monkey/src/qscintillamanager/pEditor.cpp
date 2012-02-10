@@ -23,6 +23,7 @@
 
 #include <pQueuedMessageToolBar.h>
 #include <qsciprinter.h>
+#include <qscicommandset.h>
 
 #include <QKeyEvent>
 #include <QApplication>
@@ -67,7 +68,9 @@ pEditor::pEditor( QWidget* p )
     }
     
     // init qscishortcutsmanager if needed
-    SendScintilla( QsciScintillaBase::SCI_CLEARALLCMDKEYS );
+    standardCommands()->clearKeys();
+    standardCommands()->clearAlternateKeys();
+
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_TAB, SCI_TAB);
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_ESCAPE, SCI_CANCEL);
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_RETURN, SCI_NEWLINE);
@@ -80,13 +83,6 @@ pEditor::pEditor( QWidget* p )
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_NEXT, SCI_PAGEDOWN);
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_HOME, SCI_VCHOME);
     SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_END, SCI_LINEEND);
-
-    // By default control characters don't do anything (rather than insert the
-    // control character into the text). (c) Phil
-    for (int k = 'A'; k <= 'Z'; ++k)
-    SendScintilla(QsciScintillaBase::SCI_ASSIGNCMDKEY,
-            k + (QsciScintillaBase::SCMOD_CTRL << 16),
-            QsciScintillaBase::SCI_NULL);
 
     // Create shortcuts manager, if not created
     qSciShortcutsManager::instance();
