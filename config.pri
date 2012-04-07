@@ -25,14 +25,17 @@ unix|cb_win32|cb_mac { # build on ramdisk instead of physical hard disk if possi
 
 # build mode
 CONFIG  *= qt warn_on thread x11 windows rtti debug
-CONFIG  -= warn_off release debug_and_release
+CONFIG  -= warn_off release debug_and_release x86 x86_64 ppc ppc64
 QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
 mac {
     QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
     #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
-    CONFIG  *= x86 ppc x86_64
+    CONFIG  *= x86
+    #CONFIG  *= x86_64
+    #CONFIG  *= ppc
+    #CONFIG  *= ppc64
     # this link is required for building the ppc port to avoid the undefined __Unwind_Resume symbol
     CONFIG( ppc ):LIBS *= -lgcc_eh
 }
@@ -98,45 +101,56 @@ unix:!mac {
         # plugins path
         isEmpty( plugins ) {
             isEqual( QT_ARCH, "i386" ) {
-                plugins = $$prefix/lib
+                plugins = $${prefix}/lib
             } else {
-                plugins = $$prefix/lib64
+                plugins = $${prefix}/lib64
             }
         }
 
         # datas path
         isEmpty( datas ) {
-            datas   = $$prefix/share
+            datas   = $${prefix}/share
+        }
+        
+        # docs path
+        isEmpty( docs ) {
+            docs = $${datas}/doc
         }
     }
 } else:mac {
     prefix  = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
     plugins = $${prefix}/plugins
     datas   = $${prefix}/Resources
+    docs    = $${datas}
 } else:win32 {
     prefix  = $${PACKAGE_DESTDIR}
     plugins = $${prefix}/plugins
     datas   = $${prefix}
+    docs   = $${datas}
 }
 
 unix:!mac {
-    PACKAGE_PREFIX  = $$quote($$prefix/bin)
-    PACKAGE_PLUGINS = $$quote($$plugins/$$PACKAGE_TARGET)
-    PACKAGE_DATAS   = $$quote($$datas/$$PACKAGE_TARGET)
+    PACKAGE_PREFIX  = $$quote($${prefix}/bin)
+    PACKAGE_PLUGINS = $$quote($${plugins}/$${PACKAGE_TARGET})
+    PACKAGE_DATAS   = $$quote($${datas}/$${PACKAGE_TARGET})
+    PACKAGE_DOCS   = $$quote($${docs}/$${PACKAGE_TARGET})
 } else:mac {
-    PACKAGE_PREFIX  = $$quote($$prefix/MacOS)
-    PACKAGE_PLUGINS = $$quote($$plugins)
-    PACKAGE_DATAS   = $$quote($$datas)
+    PACKAGE_PREFIX  = $$quote($${prefix}/MacOS)
+    PACKAGE_PLUGINS = $$quote($${plugins})
+    PACKAGE_DATAS   = $$quote($${datas})
+    PACKAGE_DOCS   = $$quote($${docs})
 } else:win32 {
-    PACKAGE_PREFIX  = $$quote($$prefix)
-    PACKAGE_PLUGINS = $$quote($$plugins)
-    PACKAGE_DATAS   = $$quote($$datas)
+    PACKAGE_PREFIX  = $$quote($${prefix})
+    PACKAGE_PLUGINS = $$quote($${plugins})
+    PACKAGE_DATAS   = $$quote($${datas})
+    PACKAGE_DOCS   = $$quote($${docs})
 }
 
 # define package install paths so source code can use them
 DEFINES *= "_PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
     "_PACKAGE_PLUGINS=\"\\\"$${PACKAGE_PLUGINS}\\\"\"" \
-    "_PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
+    "_PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\"" \
+    "_PACKAGE_DOCS=\"\\\"$${PACKAGE_DOCS}\\\"\""
 
 # qscintilla library
 include( qscintilla/qscintilla_check.pri )
