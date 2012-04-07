@@ -31,7 +31,7 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
     # overwrite some values to made no lib
     CONFIG  -= dll
     CONFIG  -= release
-    CONFIG  *= staticlib
+    CONFIG  *= staticlib exceptions
 
     # remove install script of qscintilla
     INSTALLS    -= header trans qsci target
