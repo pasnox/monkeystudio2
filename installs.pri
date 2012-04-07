@@ -10,10 +10,21 @@ include( config.pri )
     message( "MkS binary will be installed to : $$PACKAGE_PREFIX" )
     message( "MkS plugins will be installed to : $$PACKAGE_PLUGINS" )
     message( "MkS datas will be installed to : $$PACKAGE_DATAS" )
+    message( "MkS docs will be installed to : $$PACKAGE_DOCS" )
     message( "You can change this by giving qmake parameters variables: prefix, plugins, datas" )
     
     # path list - used for removing hidden files and crappy things
     install_folders = 
+    
+    # licenses, readme, changelog
+    monkey_docs.path = $${PACKAGE_DOCS}
+    monkey_docs.files = GPL-2 \
+        GPL-3 \
+        LGPL-3 \
+        dev-readme \
+        readme.txt \
+        ChangeLog
+    install_folders *= $${monkey_docs.path}
 
     # datas
     monkey_datas.path   = $${PACKAGE_DATAS}
@@ -27,7 +38,7 @@ include( config.pri )
     #monkey_debuggerIniFile.CONFIG *= no_check_exist
     #install_folders *= $${monkey_debuggerIniFile.path}
 
-    INSTALLS    = monkey_datas
+    INSTALLS    = monkey_datas monkey_docs
 
     unix:!mac {
         # plugins
@@ -68,7 +79,7 @@ include( config.pri )
         confFile = $${toolsFolder}/$${dataFolder}/qt.conf
         
         exists( $${confFile} ) {
-            qt_conf.path = $${qtDeployFolder}
+            qt_conf.path = $${PACKAGE_DATAS}
             qt_conf.files = $${confFile}
             
             INSTALLS *= qt_conf
@@ -116,8 +127,8 @@ include( config.pri )
     # kleen commands to be called after make install so possible crappy / hidden files are deleted
     for( folder, install_folders ) {
         win32:!cb_win32:kleen.commands += echo "Kleen command for native windows not created - please do it"
-        else:kleen.commands += find \"$${folder}\" -type d -name \"CVS\" -o -name \".svn\" | xargs -d \"\n\" rm -fr; \
-            find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\n\" rm -f; \
+        else:kleen.commands += find \"$${folder}\" -type d -name \"CVS\" -o -name \".svn\" | xargs -d \"\\n\" rm -fr; \
+            find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\\n\" rm -f; \
     }
     
     QMAKE_EXTRA_TARGETS *= kleen
