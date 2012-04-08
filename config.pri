@@ -1,31 +1,6 @@
-# helpers for crossbuilds
-Q_OS	= $$lower( $$QMAKE_HOST.os )
-win32:!isEqual( Q_OS, "windows" ):CONFIG *= cb_win32
-mac:!isEqual( Q_OS, "darwin" ):CONFIG *= cb_mac
-
-# get current path
-PACKAGE_PWD = $$PWD
-
-# package name
-PACKAGE_TARGET  = monkeystudio
-mac:PACKAGE_TARGET  = $$quote(Monkey Studio)
-
-# package destdir
-PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
-
-# temporary path for building
-PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
-
-unix|cb_win32|cb_mac { # build on ramdisk instead of physical hard disk if possible
-    UNIX_RAM_DISK   = /media/ramdisk
-    exists( $${UNIX_RAM_DISK} ) {
-        PACKAGE_BUILD_PATH  = $${UNIX_RAM_DISK}/$$replace(PACKAGE_TARGET," ","")
-    }
-}
-
 # build mode
-CONFIG  *= qt warn_on thread x11 windows rtti debug
-CONFIG  -= warn_off release debug_and_release x86 x86_64 ppc ppc64
+CONFIG  *= qt warn_on thread x11 windows rtti release
+CONFIG  -= warn_off debug debug_and_release x86 x86_64 ppc ppc64
 QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
@@ -40,31 +15,36 @@ mac {
     CONFIG( ppc ):LIBS *= -lgcc_eh
 }
 
+# get current path
+PACKAGE_PWD = $$PWD
+
+# helpers functions
+include( $${PACKAGE_PWD}/functions.pri )
+
+# package name
+PACKAGE_TARGET  = $$targetForMode( monkeystudio )
+mac:PACKAGE_TARGET  = $$targetForMode( "MonkeyStudio" )
+TARGET = $$targetForMode( $${TARGET} )
+
+# package destdir
+PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
+
+# temporary path for building
+PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
+RAMDISK_PATH = /media/ramdisk
+
+exists( $${RAMDISK_PATH} ) {
+    PACKAGE_BUILD_PATH  = $${RAMDISK_PATH}/monkeystudio
+}
+
+setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
+
 # define config mode paths
 CONFIG( debug, debug|release ) {
-    #Debug
-    message( Building in DEBUG for architecture $$QT_ARCH )
+    message( Building in DEBUG for $${Q_TARGET_ARCH} )
     CONFIG  *= console
-    unix:PACKAGE_TARGET = $$quote($$join(PACKAGE_TARGET,,,_debug))
-    else:PACKAGE_TARGET = $$quote($$join(PACKAGE_TARGET,,,d))
-    unix:TARGET = $$quote($$join(TARGET,,,_debug))
-    else:TARGET = $$quote($$join(TARGET,,,d))
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/debug/.obj/unix
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/debug/.obj/win32
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/debug/.obj/mac
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/debug/.ui
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/debug/.moc
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/debug/.rcc
 } else {
-    #Release
-    message( Building in RELEASE for architecture $$QT_ARCH )
-    mac:TARGET  = $$quote($$TARGET)
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/release/.obj/unix
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/release/.obj/win32
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/release/.obj/mac
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/release/.ui
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/release/.moc
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/release/.rcc
+    message( Building in RELEASE for $${Q_TARGET_ARCH} )
 }
 
 INCLUDEPATH *= $${UI_DIR} # some qmake versions has bug and do not do it automatically

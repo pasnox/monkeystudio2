@@ -40,4 +40,4 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 # include config file
 include( ../config.pri )
 
-DESTDIR = $${PACKAGE_BUILD_PATH}
+DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()

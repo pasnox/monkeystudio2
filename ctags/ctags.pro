@@ -1,8 +1,5 @@
 # Monkey Studio 2 Ctags library
 
-# include functions file
-include( ../functions.pri )
-
 # include config file
 include( ../config.pri )
 
@@ -12,7 +9,7 @@ include( ctags_shared.pri )
 TEMPLATE    = lib
 CONFIG  *= staticlib
 CONFIG  -= qt
-DESTDIR = $${PACKAGE_BUILD_PATH}
+DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 CTAGS_SOURCES_PATHS = $$getFolders( $${CTAGS_VERSION} )
 INCLUDEPATH *= $${CTAGS_VERSION}

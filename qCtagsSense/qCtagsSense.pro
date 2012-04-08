@@ -1,8 +1,5 @@
 # Monkey Studio 2 qCtagsSense library
 
-# include functions file
-include( ../functions.pri )
-
 # include config file
 include( ../config.pri )
 
@@ -13,7 +10,7 @@ TEMPLATE    = lib
 CONFIG  *= staticlib
 QT  *= sql
 DEFINES *= QCTAGSSENSE_EXPORT_BUILD
-DESTDIR = $${PACKAGE_BUILD_PATH}
+DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 QCTAGSSENSE_SOURCES_PATHS = $$getFolders( ./src, resources )
 INCLUDEPATH *= src

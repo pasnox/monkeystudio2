@@ -12,7 +12,7 @@ PRE_TARGETDEPS  *= $${PWD}
 
 # library integration
 CTAGS_TARGET    = ctags
-LIBS    *= -L$${PACKAGE_BUILD_PATH}
+LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 contains( TEMPLATE, .*app ) {
     CONFIG(debug, debug|release) {

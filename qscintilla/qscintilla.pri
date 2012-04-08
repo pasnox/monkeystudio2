@@ -17,7 +17,7 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
     PRE_TARGETDEPS  *= $${PWD}
 
     # library integration
-    LIBS    *= -L$${PACKAGE_BUILD_PATH}
+    LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 }
 
 QSCINTILLA_TARGET   = qscintilla2
