@@ -76,6 +76,7 @@ include( config.pri )
         qtDeployFolder = $${PACKAGE_DATAS}/qt
         toolsFolder = ../../tools
         !exists( $${toolsFolder} ):toolsFolder    = ../tools
+        !exists( $${toolsFolder} ):toolsFolder    = tools
         confFile = $${toolsFolder}/$${dataFolder}/qt.conf
         
         exists( $${confFile} ) {
@@ -128,7 +129,7 @@ include( config.pri )
     for( folder, install_folders ) {
         win32:!cb_win32:kleen.commands += echo "Kleen command for native windows not created - please do it"
         else:kleen.commands += find \"$${folder}\" -type d -name \"CVS\" -o -name \".svn\" | xargs -d \"\\n\" rm -fr; \
-            find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\\n\" rm -f; \
+            find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\\n\" rm -f;
     }
     
     QMAKE_EXTRA_TARGETS *= kleen
