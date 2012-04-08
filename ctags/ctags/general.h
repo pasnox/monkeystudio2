@@ -45,7 +45,7 @@
 /* Define standard error destination
  */
 #ifndef errout
-# define errout	stderr
+# define errout stderr
 #endif
 
 /* Define regex if supported */

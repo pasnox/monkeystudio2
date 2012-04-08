@@ -11,14 +11,14 @@ namespace qCtagsSense
 
 class QCTAGSSENSE_EXPORT Instance : public QObject
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	Instance( QObject* parent = 0 );
-	virtual ~Instance();
+    Instance( QObject* parent = 0 );
+    virtual ~Instance();
 
 protected:
-	qCtagsSense::Properties mProperties;
+    qCtagsSense::Properties mProperties;
 };
 
 }; // namespace qCtagsSense

@@ -4,9 +4,9 @@
 #include "parse.h"
 
 /*
-	procedure will return list for  file. Every time new list will be generated.
-	For every generated list memory must be freed using Ctags::freeTagEntryList
-	The const char* returned by languageTypeKinds & languageKinds must be freed by the caller.
+    procedure will return list for  file. Every time new list will be generated.
+    For every generated list memory must be freed using Ctags::freeTagEntryList
+    The const char* returned by languageTypeKinds & languageKinds must be freed by the caller.
 */
 
 extern void initCtags();
