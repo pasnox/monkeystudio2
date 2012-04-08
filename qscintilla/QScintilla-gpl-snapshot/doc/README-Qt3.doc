@@ -38,7 +38,7 @@ QScintilla also includes language bindings for
 <a href="http://www.riverbankcomputing.com/software/pyqt/">PyQt</a> v3 or v4
 is also installed.
 
-This version of QScintilla is based on Scintilla v2.25.
+This version of QScintilla is based on Scintilla v2.29.
 
 
 <h2>Licensing</h2>
@@ -134,7 +134,8 @@ also want to run:
 <h3>Installation on MacOS/X</h3>
 
 On MacOS/X you may need to pass <tt>-spec macx-g++</tt> in order to generate a
-Makefile, otherwise an XCode project file may be created.
+Makefile, otherwise an XCode project file may be created.  In particular the
+Qt Designer plugin will not load if you do not do this.
 
 You will probably also have to set your <tt>DYLD_LIBRARY_PATH</tt> environment
 variable to the directory in which the QScintilla library has been installed.

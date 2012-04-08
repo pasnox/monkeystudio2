@@ -50,6 +50,7 @@ public:
         KeywordSet6,
         KeywordSet7,
         KeywordSet8,
+        Label,
     };
 
 %If (Qsci_Qt4)

@@ -28,10 +28,16 @@
 #include "Qsci/qsciscintilla.h"
 
 #include <string.h>
+#include <qaction.h>
 #include <qapplication.h>
 #include <qcolor.h>
+#include <qevent.h>
+#include <qimage.h>
 #include <qiodevice.h>
+#include <qkeysequence.h>
 #include <qpoint.h>
+
+#include <qmenu.h>
 
 #include "Qsci/qsciabstractapis.h"
 #include "Qsci/qscicommandset.h"
@@ -104,6 +110,8 @@ QsciScintilla::QsciScintilla(QWidget *parent)
     QPalette pal = QApplication::palette();
     setColor(pal.text().color());
     setPaper(pal.base().color());
+    setSelectionForegroundColor(pal.highlightedText().color());
+    setSelectionBackgroundColor(pal.highlight().color());
 
 #if defined(Q_OS_WIN)
     setEolMode(EolWindows);
@@ -2395,6 +2403,20 @@ void QsciScintilla::setIndentationsUseTabs(bool tabs)
 }
 
 
+// Return the margin options.
+int QsciScintilla::marginOptions() const
+{
+    return SendScintilla(SCI_GETMARGINOPTIONS);
+}
+
+
+// Set the margin options.
+void QsciScintilla::setMarginOptions(int options)
+{
+    SendScintilla(SCI_SETMARGINOPTIONS, options);
+}
+
+
 // Return the margin type.
 QsciScintilla::MarginType QsciScintilla::marginType(int margin) const
 {
@@ -2619,6 +2641,28 @@ void QsciScintilla::setIndicatorForegroundColor(const QColor &col, int indicator
 }
 
 
+// Set the indicator outline colour.
+void QsciScintilla::setIndicatorOutlineColor(const QColor &col, int indicatorNumber)
+{
+    if (indicatorNumber <= INDIC_MAX)
+    {
+        int alpha = col.alpha();
+
+        // We ignore allocatedIndicators to allow any indicators defined
+        // elsewhere (e.g. in lexers) to be set.
+        if (indicatorNumber < 0)
+        {
+            for (int i = 0; i <= INDIC_MAX; ++i)
+                SendScintilla(SCI_INDICSETOUTLINEALPHA, i, alpha);
+        }
+        else
+        {
+            SendScintilla(SCI_INDICSETOUTLINEALPHA, indicatorNumber, alpha);
+        }
+    }
+}
+
+
 // Fill a range with an indicator.
 void QsciScintilla::fillIndicatorRange(int lineFrom, int indexFrom,
         int lineTo, int indexTo, int indicatorNumber)
@@ -2707,6 +2751,22 @@ int QsciScintilla::markerDefine(const QPixmap &pm, int markerNumber)
 
     if (markerNumber >= 0)
         SendScintilla(SCI_MARKERDEFINEPIXMAP, markerNumber, pm);
+
+    return markerNumber;
+}
+
+
+// Define a marker based on a QImage.
+int QsciScintilla::markerDefine(const QImage &im, int markerNumber)
+{
+    checkMarker(markerNumber);
+
+    if (markerNumber >= 0)
+    {
+        SendScintilla(SCI_RGBAIMAGESETHEIGHT, im.height());
+        SendScintilla(SCI_RGBAIMAGESETWIDTH, im.width());
+        SendScintilla(SCI_MARKERDEFINERGBAIMAGE, markerNumber, im);
+    }
 
     return markerNumber;
 }
@@ -2879,7 +2939,7 @@ void QsciScintilla::allocateId(int &id, unsigned &allocated, int min, int max)
     }
     else
     {
-        unsigned aids = allocated;
+        unsigned aids = allocated >> min;
 
         // Find the smallest unallocated identifier.
         for (id = min; id <= max; ++id)
@@ -2948,6 +3008,20 @@ void QsciScintilla::setMatchedBraceForegroundColor(const QColor &col)
 }
 
 
+// Set the matched brace indicator.
+void QsciScintilla::setMatchedBraceIndicator(int indicatorNumber)
+{
+    SendScintilla(SCI_BRACEHIGHLIGHTINDICATOR, 1, indicatorNumber);
+}
+
+
+// Reset the matched brace indicator.
+void QsciScintilla::resetMatchedBraceIndicator()
+{
+    SendScintilla(SCI_BRACEHIGHLIGHTINDICATOR, 0, 0L);
+}
+
+
 // Set the unmatched brace background colour.
 void QsciScintilla::setUnmatchedBraceBackgroundColor(const QColor &col)
 {
@@ -2959,6 +3033,20 @@ void QsciScintilla::setUnmatchedBraceBackgroundColor(const QColor &col)
 void QsciScintilla::setUnmatchedBraceForegroundColor(const QColor &col)
 {
     SendScintilla(SCI_STYLESETFORE, STYLE_BRACEBAD, col);
+}
+
+
+// Set the unmatched brace indicator.
+void QsciScintilla::setUnmatchedBraceIndicator(int indicatorNumber)
+{
+    SendScintilla(SCI_BRACEBADLIGHTINDICATOR, 1, indicatorNumber);
+}
+
+
+// Reset the unmatched brace indicator.
+void QsciScintilla::resetUnmatchedBraceIndicator()
+{
+    SendScintilla(SCI_BRACEBADLIGHTINDICATOR, 0, 0L);
 }
 
 
@@ -3465,10 +3553,19 @@ void QsciScintilla::recolor(int start, int end)
 }
 
 
-// Registered an image.
+// Registered a QPixmap image.
 void QsciScintilla::registerImage(int id, const QPixmap &pm)
 {
     SendScintilla(SCI_REGISTERIMAGE, id, pm);
+}
+
+
+// Registered a QImage image.
+void QsciScintilla::registerImage(int id, const QImage &im)
+{
+    SendScintilla(SCI_RGBAIMAGESETHEIGHT, im.height());
+    SendScintilla(SCI_RGBAIMAGESETWIDTH, im.width());
+    SendScintilla(SCI_REGISTERRGBAIMAGE, id, im);
 }
 
 
@@ -3924,8 +4021,122 @@ int QsciScintilla::mapModifiers(int modifiers)
     if (modifiers & SCMOD_ALT)
         state |= Qt::AltModifier;
 
-    if (modifiers & SCMOD_SUPER)
+    if (modifiers & (SCMOD_SUPER | SCMOD_META))
         state |= Qt::MetaModifier;
 
     return state;
 }
+
+
+// We no longer add features to the Qt3 version if it is a hassle.
+
+// Re-implemented to handle shortcut overrides.
+bool QsciScintilla::event(QEvent *e)
+{
+    if (e->type() == QEvent::ShortcutOverride && !isReadOnly())
+    {
+        QKeyEvent *ke = static_cast<QKeyEvent *>(e);
+
+        if (ke->key())
+        {
+            // We want ordinary characters.
+            if ((ke->modifiers() == Qt::NoModifier || ke->modifiers() == Qt::ShiftModifier || ke->modifiers() == Qt::KeypadModifier) && ke->key() < Qt::Key_Escape)
+            {
+                ke->accept();
+                return true;
+            }
+
+            // We want any key that is bound.
+            QsciCommand *cmd = stdCmds->boundTo(ke->key() | ke->modifiers());
+
+            if (cmd)
+            {
+                ke->accept();
+                return true;
+            }
+        }
+    }
+
+    return QsciScintillaBase::event(e);
+}
+
+
+// Re-implemented to implement a more Qt-like context menu.
+void QsciScintilla::contextMenuEvent(QContextMenuEvent *e)
+{
+    QMenu *menu = createStandardContextMenu();
+
+    if (menu)
+    {
+        menu->setAttribute(Qt::WA_DeleteOnClose);
+        menu->popup(e->globalPos());
+    }
+}
+
+
+// Create an instance of the standard context menu.
+QMenu *QsciScintilla::createStandardContextMenu()
+{
+    bool read_only = isReadOnly();
+    bool has_selection = hasSelectedText();
+    QMenu *menu = new QMenu(this);
+    QAction *action;
+
+    if (!read_only)
+    {
+        action = menu->addAction(tr("&Undo"), this, SLOT(undo()));
+        set_shortcut(action, QsciCommand::Undo);
+        action->setEnabled(isUndoAvailable());
+
+        action = menu->addAction(tr("&Redo"), this, SLOT(redo()));
+        set_shortcut(action, QsciCommand::Redo);
+        action->setEnabled(isRedoAvailable());
+
+        menu->addSeparator();
+
+        action = menu->addAction(tr("Cu&t"), this, SLOT(cut()));
+        set_shortcut(action, QsciCommand::SelectionCut);
+        action->setEnabled(has_selection);
+    }
+
+    action = menu->addAction(tr("&Copy"), this, SLOT(copy()));
+    set_shortcut(action, QsciCommand::SelectionCopy);
+    action->setEnabled(has_selection);
+
+    if (!read_only)
+    {
+        action = menu->addAction(tr("&Paste"), this, SLOT(paste()));
+        set_shortcut(action, QsciCommand::Paste);
+        action->setEnabled(SendScintilla(SCI_CANPASTE));
+
+        action = menu->addAction(tr("Delete"), this, SLOT(delete_selection()));
+        action->setEnabled(has_selection);
+    }
+
+    if (!menu->isEmpty())
+        menu->addSeparator();
+
+    action = menu->addAction(tr("Select All"), this, SLOT(selectAll()));
+    set_shortcut(action, QsciCommand::SelectAll);
+    action->setEnabled(length() != 0);
+
+    return menu;
+}
+
+
+// Set the shortcut for an action using any current key binding.
+void QsciScintilla::set_shortcut(QAction *action, QsciCommand::Command cmd_id) const
+{
+    QsciCommand *cmd = stdCmds->find(cmd_id);
+
+    if (cmd && cmd->key())
+        action->setShortcut(QKeySequence(cmd->key()));
+}
+
+
+// Delete the current selection.
+void QsciScintilla::delete_selection()
+{
+    SendScintilla(SCI_CLEAR);
+}
+

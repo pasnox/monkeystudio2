@@ -31,50 +31,50 @@ using namespace Scintilla;
 #endif
 
 static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80 && (isalnum(ch) || (ch == '_')));
+    return (ch < 0x80 && (isalnum(ch) || (ch == '_')));
 }
 
 static inline bool IsAKeywordChar(const int ch) {
-	return (ch < 0x80 && (isalnum(ch) || (ch == '_') || (ch == ' ')));
+    return (ch < 0x80 && (isalnum(ch) || (ch == '_') || (ch == ' ')));
 }
 
 static inline bool IsASetChar(const int ch) {
-	return (ch < 0x80 && (isalnum(ch) || (ch == '_') || (ch == '.') || (ch == '-')));
+    return (ch < 0x80 && (isalnum(ch) || (ch == '_') || (ch == '.') || (ch == '-')));
 }
 
 static inline bool IsAnOperator(char ch) {
-	// '.' left out as it is used to make up numbers
-	if (ch == '*' || ch == '/' || ch == '-' || ch == '+' ||
-		ch == '(' || ch == ')' || ch == '=' || ch == '^' ||
-		ch == '[' || ch == ']' || ch == '<' || ch == '&' ||
-		ch == '>' || ch == ',' || ch == '|' || ch == '~' ||
-		ch == '$' || ch == ':' || ch == '%')
-		return true;
-	return false;
+    // '.' left out as it is used to make up numbers
+    if (ch == '*' || ch == '/' || ch == '-' || ch == '+' ||
+        ch == '(' || ch == ')' || ch == '=' || ch == '^' ||
+        ch == '[' || ch == ']' || ch == '<' || ch == '&' ||
+        ch == '>' || ch == ',' || ch == '|' || ch == '~' ||
+        ch == '$' || ch == ':' || ch == '%')
+        return true;
+    return false;
 }
 
 static void ColouriseABAQUSDoc(unsigned int startPos, int length, int initStyle, WordList*[] /* *keywordlists[] */,
                             Accessor &styler) {
-	enum localState { KW_LINE_KW, KW_LINE_COMMA, KW_LINE_PAR, KW_LINE_EQ, KW_LINE_VAL, \
-					  DAT_LINE_VAL, DAT_LINE_COMMA,\
-					  COMMENT_LINE,\
-					  ST_ERROR, LINE_END } state ;
+    enum localState { KW_LINE_KW, KW_LINE_COMMA, KW_LINE_PAR, KW_LINE_EQ, KW_LINE_VAL, \
+                      DAT_LINE_VAL, DAT_LINE_COMMA,\
+                      COMMENT_LINE,\
+                      ST_ERROR, LINE_END } state ;
 
-	// Do not leak onto next line
-	state = LINE_END ;
-	initStyle = SCE_ABAQUS_DEFAULT;
-	StyleContext sc(startPos, length, initStyle, styler);
+    // Do not leak onto next line
+    state = LINE_END ;
+    initStyle = SCE_ABAQUS_DEFAULT;
+    StyleContext sc(startPos, length, initStyle, styler);
 
-	// Things are actually quite simple
-	// we have commentlines
-	// keywordlines and datalines
-	// On a data line there will only be colouring of numbers
-	// a keyword line is constructed as
-	// *word,[ paramname[=paramvalue]]*
-	// if the line ends with a , the keyword line continues onto the new line
+    // Things are actually quite simple
+    // we have commentlines
+    // keywordlines and datalines
+    // On a data line there will only be colouring of numbers
+    // a keyword line is constructed as
+    // *word,[ paramname[=paramvalue]]*
+    // if the line ends with a , the keyword line continues onto the new line
 
-	for (; sc.More(); sc.Forward()) {
-		switch ( state ) {
+    for (; sc.More(); sc.Forward()) {
+        switch ( state ) {
         case KW_LINE_KW :
             if ( sc.atLineEnd ) {
                 // finished the line in keyword state, switch to LINE_END
@@ -272,7 +272,7 @@ static void ColouriseABAQUSDoc(unsigned int startPos, int length, int initStyle,
                 }
             }
             break ;
-		  }
+          }
    }
    sc.Complete();
 }
@@ -302,18 +302,18 @@ static int character_classification[128] =
 };
 
 static bool IsSpace(int c) {
-	return c < 128 && (character_classification[c] & 1);
+    return c < 128 && (character_classification[c] & 1);
 }
 
 static bool IsIdentifier(int c) {
-	return c < 128 && (character_classification[c] & 4);
+    return c < 128 && (character_classification[c] & 4);
 }
 
 static int LowerCase(int c)
 {
-	if (c >= 'A' && c <= 'Z')
-		return 'a' + c - 'A';
-	return c;
+    if (c >= 'A' && c <= 'Z')
+        return 'a' + c - 'A';
+    return c;
 }
 
 static int LineEnd(int line, Accessor &styler)
@@ -395,7 +395,7 @@ static int LineType(int line, Accessor &styler) {
     int  wlen = 0;
 
     word[wlen] = '*' ;
-	wlen++ ;
+    wlen++ ;
 
     i++ ;
     while ( (i < eol_pos) && (wlen < 255) ) {
@@ -407,8 +407,8 @@ static int LineType(int line, Accessor &styler) {
 
         if ( IsIdentifier(c) ) {
             word[wlen] = ch ;
-			wlen++ ;
-		}
+            wlen++ ;
+        }
 
         i++ ;
     }
@@ -416,14 +416,14 @@ static int LineType(int line, Accessor &styler) {
     word[wlen] = 0 ;
 
     // Make a comparison
-	if ( !strcmp(word, "*step") ||
+    if ( !strcmp(word, "*step") ||
          !strcmp(word, "*part") ||
          !strcmp(word, "*instance") ||
          !strcmp(word, "*assembly")) {
        return 4+1 ;
     }
 
-	if ( !strcmp(word, "*endstep") ||
+    if ( !strcmp(word, "*endstep") ||
          !strcmp(word, "*endpart") ||
          !strcmp(word, "*endinstance") ||
          !strcmp(word, "*endassembly")) {
@@ -456,7 +456,7 @@ WordList *[], Accessor &styler) {
     // We want to deal with all the cases
     // To know the correct indentlevel, we need to look back to the
     // previous command line indentation level
-	// order of formatting keyline datalines commentlines
+    // order of formatting keyline datalines commentlines
     int beginData    = -1 ;
     int beginComment = -1 ;
     int prvKeyLine   = startLine ;
@@ -489,7 +489,7 @@ WordList *[], Accessor &styler) {
         if ( lineType == 8 ) {
             if ( beginComment < 0 ) {
                 beginComment = line ;
-			}
+            }
         }
 
         // Check for data line
@@ -501,8 +501,8 @@ WordList *[], Accessor &styler) {
                     beginData = line ;
                 }
             }
-			beginComment = -1 ;
-		}
+            beginComment = -1 ;
+        }
 
         // Check for keywordline.
         // As soon as a keyword line is encountered, we can set the
@@ -514,22 +514,22 @@ WordList *[], Accessor &styler) {
             // Write comments and data line
             if ( beginComment < 0 ) {
                 beginComment = line ;
-			}
+            }
 
             if ( beginData < 0 ) {
                 beginData = beginComment ;
-				if ( prvKeyLineTp != 5 )
-					SafeSetLevel(prvKeyLine, level, styler) ;
-				else
-					SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
+                if ( prvKeyLineTp != 5 )
+                    SafeSetLevel(prvKeyLine, level, styler) ;
+                else
+                    SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
             } else {
                 SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
             }
 
             int datLevel = level + 1 ;
-			if ( !(prvKeyLineTp & 4) ) {
-				datLevel = level ;
-			}
+            if ( !(prvKeyLineTp & 4) ) {
+                datLevel = level ;
+            }
 
             for ( int ll = beginData; ll < beginComment; ll++ )
                 SafeSetLevel(ll, datLevel, styler) ;
@@ -538,13 +538,13 @@ WordList *[], Accessor &styler) {
             // if we have a type 5 and type 6
             if ( prvKeyLineTp == 5 ) {
                 level += 1 ;
-			}
+            }
 
             if ( prvKeyLineTp == 6 ) {
                 level -= 1 ;
-				if ( level < 0 ) {
-					level = 0 ;
-				}
+                if ( level < 0 ) {
+                    level = 0 ;
+                }
             }
 
             for ( int lll = beginComment; lll < line; lll++ )
@@ -570,40 +570,40 @@ WordList *[], Accessor &styler) {
             int lineType = LineType(line, styler) ;
 
             if ( lineType != 8 ) {
-				if ( !(lineType & 4) )  {
-					beginComment = endLine + 1 ;
-				}
+                if ( !(lineType & 4) )  {
+                    beginComment = endLine + 1 ;
+                }
                 break ;
-			}
+            }
         }
     }
 
     if ( beginData < 0 ) {
         beginData = beginComment ;
-		if ( prvKeyLineTp != 5 )
-			SafeSetLevel(prvKeyLine, level, styler) ;
-		else
-			SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
+        if ( prvKeyLineTp != 5 )
+            SafeSetLevel(prvKeyLine, level, styler) ;
+        else
+            SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
     } else {
         SafeSetLevel(prvKeyLine, level | SC_FOLDLEVELHEADERFLAG, styler) ;
     }
 
     int datLevel = level + 1 ;
-	if ( !(prvKeyLineTp & 4) ) {
-		datLevel = level ;
-	}
+    if ( !(prvKeyLineTp & 4) ) {
+        datLevel = level ;
+    }
 
     for ( int ll = beginData; ll < beginComment; ll++ )
         SafeSetLevel(ll, datLevel, styler) ;
 
-	if ( prvKeyLineTp == 5 ) {
-		level += 1 ;
-	}
+    if ( prvKeyLineTp == 5 ) {
+        level += 1 ;
+    }
 
-	if ( prvKeyLineTp == 6 ) {
-		level -= 1 ;
-	}
-	for ( int m = beginComment; m <= endLine; m++ )
+    if ( prvKeyLineTp == 6 ) {
+        level -= 1 ;
+    }
+    for ( int m = beginComment; m <= endLine; m++ )
         SafeSetLevel(m, level, styler) ;
 }
 

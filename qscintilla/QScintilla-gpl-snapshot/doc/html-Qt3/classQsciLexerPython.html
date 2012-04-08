@@ -108,6 +108,8 @@ virtual int <b>indentationGuideView</b> () const
 <li>bool <a class="el" href="classQsciLexerPython.html#aa043e3c8d5dfbc11121fe22dffa1488b">foldCompact</a> () const 
 <li>bool <a class="el" href="classQsciLexerPython.html#a6cc0ded9ed11450a595879d1f704886f">foldQuotes</a> () const 
 <li><a class="el" href="classQsciLexerPython.html#a84118aff26655dcc4313d26d57d5f4fc">QsciLexerPython::IndentationWarning</a> <a class="el" href="classQsciLexerPython.html#a2ac187500902f253ad9ebfdfc1058d21">indentationWarning</a> () const 
+<li>void <a class="el" href="classQsciLexerPython.html#ade07472f3cc8a4cccbb0bb6b964f0356">setHighlightSubidentifiers</a> (bool enabled)
+<li>bool <a class="el" href="classQsciLexerPython.html#a0fc9c88935941af877a4447c6f8f959f">highlightSubidentifiers</a> () const 
 <li>void <a class="el" href="classQsciLexerPython.html#a5887a36e4a8d6ff54f4c796b33bc2eef">setStringsOverNewlineAllowed</a> (bool allowed)
 <li>bool <a class="el" href="classQsciLexerPython.html#a9d440e3602276cefddd261302542e52d">stringsOverNewlineAllowed</a> () const 
 <li>void <a class="el" href="classQsciLexerPython.html#accc3cd3ccf7d62840ded955400695b9d">setV2UnicodeAllowed</a> (bool allowed)
@@ -476,6 +478,45 @@ virtual int <b>indentationGuideView</b> () const
 
 </div>
 </div>
+<a class="anchor" id="ade07472f3cc8a4cccbb0bb6b964f0356"></a><!-- doxytag: member="QsciLexerPython::setHighlightSubidentifiers" ref="ade07472f3cc8a4cccbb0bb6b964f0356" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciLexerPython::setHighlightSubidentifiers </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>enabled</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>If <em>enabled</em> is true then sub-identifiers defined in keyword set 2 will be highlighted. For example, if it is false and "open" is defined in keyword set 2 then "foo.open" will not be highlighted. The default is true.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerPython.html#a0fc9c88935941af877a4447c6f8f959f">highlightSubidentifiers()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0fc9c88935941af877a4447c6f8f959f"></a><!-- doxytag: member="QsciLexerPython::highlightSubidentifiers" ref="a0fc9c88935941af877a4447c6f8f959f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerPython::highlightSubidentifiers </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if string literals are allowed to span newline characters.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerPython.html#ade07472f3cc8a4cccbb0bb6b964f0356">setHighlightSubidentifiers()</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a5887a36e4a8d6ff54f4c796b33bc2eef"></a><!-- doxytag: member="QsciLexerPython::setStringsOverNewlineAllowed" ref="a5887a36e4a8d6ff54f4c796b33bc2eef" args="(bool allowed)" -->
 <div class="memitem">
 <div class="memproto">
@@ -753,7 +794,7 @@ virtual int <b>indentationGuideView</b> () const
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 02:51:10 2011 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Jan 27 02:52:42 2012 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

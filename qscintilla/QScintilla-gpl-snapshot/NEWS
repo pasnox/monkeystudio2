@@ -1,3 +1,46 @@
+v2.6.1 ??? ??? ???
+  - Support SCI_NAMESPACE to enable all internal Scintilla classes to be put
+    into the Scintilla namespace.
+  - Building against Qt v3 is fixed.
+
+v2.6 11th November 2011
+  - Based on Scintilla v2.29.
+  - Added Command, command() and execute() to QsciCommand.
+  - Added boundTo() and find() to QsciCommandSet.
+  - Added createStandardContextMenu() to QsciScintilla.
+  - Added StraightBoxIndicator, DashesIndicator, DotsIndicator,
+    SquiggleLowIndicator and DotBoxIndicator to QsciScintilla::IndicatorStyle.
+  - Added markerDefine() to QsciScintilla.
+  - Added MoNone, MoSublineSelect, marginOptions() and setMarginOptions() to
+    QsciScintilla.
+  - Added registerImage() to QsciScintilla.
+  - Added setIndicatorOutlineColor() to QsciScintilla.
+  - Added setMatchedBraceIndicator(), resetMatchedBraceIndicator(),
+    setUnmatchedBraceIndicator() and resetUnmatchedBraceIndicator() to
+    QsciScintilla.
+  - Added highlightTripleQuotedStrings() and setHighlightTripleQuotedStrings()
+    to QsciLexerCpp.
+  - Added Label to QsciLexerLua.
+  - Added DoubleQuotedStringVar, Translation, RegexVar, SubstitutionVar,
+    BackticksVar, DoubleQuotedHereDocumentVar, BacktickHereDocumentVar,
+    QuotedStringQQVar, QuotedStringQXVar, QuotedStringQRVar, setFoldAtElse()
+    and foldAtElse() to QsciLexerPerl.
+  - Added highlightSubidentifiers() and setHighlightSubidentifiers() to
+    QsciLexerPython.
+  - Added INDIC_STRAIGHTBOX, INDIC_DASH, INDIC_DOTS, INDIC_SQUIGGLELOW and
+    INDIC_DOTBOX to QsciScintillaBase.
+  - Added SC_MARGINOPTION_NONE and SC_MARGINOPTION_SUBLINESELECT to
+    QsciScintillaBase.
+  - Added SC_MARK_RGBAIMAGE to QsciScintillaBase.
+  - Added SCI_BRACEBADLIGHTINDICATOR, SCI_BRACEHIGHLIGHTINDICATOR,
+    SCI_GETIDENTIFIER, SCI_GETMARGINOPTIONS, SCI_INDICGETOUTLINEALPHA,
+    SCI_INDICSETOUTLINEALPHA, SCI_MARKERDEFINERGBAIMAGE,
+    SCI_MARKERENABLEHIGHLIGHT, SCI_MARKERSETBACKSELECTED,
+    SCI_MOVESELECTEDLINESDOWN, SCI_MOVESELECTEDLINESUP, SCI_REGISTERRGBAIMAGE,
+    SCI_RGBAIMAGESETHEIGHT, SCI_RGBAIMAGESETWIDTH, SCI_SCROLLTOEND,
+    SCI_SCROLLTOSTART, SCI_SETEMPTYSELECTION, SCI_SETIDENTIFIER and
+    SCI_SETMARGINOPTIONS to QsciScintillaBase.
+
 v2.5.1 17th April 2011
   - Added QsciLexerMatlab and QsciLexerOctave.
 

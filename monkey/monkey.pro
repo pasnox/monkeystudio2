@@ -1,8 +1,5 @@
 # Monkey Studio 2 project file - 2005 - 2010
 
-# include functions file
-include( ../functions.pri )
-
 # include config file
 include( ../config.pri )
 
@@ -32,15 +29,8 @@ include( ../fresh/fresh.pri )
 # include qCtagsSense framework
 include( ../qCtagsSense/qCtagsSense.pri )
 
-CONFIG( debug, debug|release ) {
-    #Debug
-    win32-*g++*:LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
-    win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
-} else {
-    #Release
-    win32-*g++*:LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
-    win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
-}
+win32-*g++*:LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib
+win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib -lshell32
 
 mac:*-g++*:LIBS *= -Wl,-noall_load # stop importing all symbols
 else:*-g++*:LIBS    *= -Wl,--no-whole-archive # stop importing all symbols

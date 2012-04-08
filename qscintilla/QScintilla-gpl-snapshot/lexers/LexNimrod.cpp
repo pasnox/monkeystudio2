@@ -30,7 +30,7 @@ using namespace Scintilla;
 #endif
 
 static inline bool IsAWordChar(int ch) {
-	return (ch >= 0x80) || isalnum(ch) || ch == '_';
+    return (ch >= 0x80) || isalnum(ch) || ch == '_';
 }
 
 static int tillEndOfTripleQuote(Accessor &styler, int pos, int max) {
@@ -265,169 +265,169 @@ static void ColouriseNimrodDoc(unsigned int startPos, int length, int initStyle,
 }
 
 static bool IsCommentLine(int line, Accessor &styler) {
-	int pos = styler.LineStart(line);
-	int eol_pos = styler.LineStart(line + 1) - 1;
-	for (int i = pos; i < eol_pos; i++) {
-		char ch = styler[i];
-		if (ch == '#')
-			return true;
-		else if (ch != ' ' && ch != '\t')
-			return false;
-	}
-	return false;
+    int pos = styler.LineStart(line);
+    int eol_pos = styler.LineStart(line + 1) - 1;
+    for (int i = pos; i < eol_pos; i++) {
+        char ch = styler[i];
+        if (ch == '#')
+            return true;
+        else if (ch != ' ' && ch != '\t')
+            return false;
+    }
+    return false;
 }
 
 static bool IsQuoteLine(int line, Accessor &styler) {
-	int style = styler.StyleAt(styler.LineStart(line)) & 31;
-	return ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
+    int style = styler.StyleAt(styler.LineStart(line)) & 31;
+    return ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
 }
 
 
 static void FoldNimrodDoc(unsigned int startPos, int length,
                           int /*initStyle - unused*/,
                           WordList *[], Accessor &styler) {
-	const int maxPos = startPos + length;
-	const int maxLines = styler.GetLine(maxPos - 1); // Requested last line
-	const int docLines = styler.GetLine(styler.Length() - 1); // Available last line
-	const bool foldComment = styler.GetPropertyInt("fold.comment.nimrod") != 0;
-	const bool foldQuotes = styler.GetPropertyInt("fold.quotes.nimrod") != 0;
+    const int maxPos = startPos + length;
+    const int maxLines = styler.GetLine(maxPos - 1); // Requested last line
+    const int docLines = styler.GetLine(styler.Length() - 1); // Available last line
+    const bool foldComment = styler.GetPropertyInt("fold.comment.nimrod") != 0;
+    const bool foldQuotes = styler.GetPropertyInt("fold.quotes.nimrod") != 0;
 
-	// Backtrack to previous non-blank line so we can determine indent level
-	// for any white space lines (needed esp. within triple quoted strings)
-	// and so we can fix any preceding fold level (which is why we go back
-	// at least one line in all cases)
-	int spaceFlags = 0;
-	int lineCurrent = styler.GetLine(startPos);
-	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, NULL);
-	while (lineCurrent > 0) {
-		lineCurrent--;
-		indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, NULL);
-		if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG) &&
-		        (!IsCommentLine(lineCurrent, styler)) &&
-		        (!IsQuoteLine(lineCurrent, styler)))
-			break;
-	}
-	int indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
+    // Backtrack to previous non-blank line so we can determine indent level
+    // for any white space lines (needed esp. within triple quoted strings)
+    // and so we can fix any preceding fold level (which is why we go back
+    // at least one line in all cases)
+    int spaceFlags = 0;
+    int lineCurrent = styler.GetLine(startPos);
+    int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, NULL);
+    while (lineCurrent > 0) {
+        lineCurrent--;
+        indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, NULL);
+        if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG) &&
+                (!IsCommentLine(lineCurrent, styler)) &&
+                (!IsQuoteLine(lineCurrent, styler)))
+            break;
+    }
+    int indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
 
-	// Set up initial loop state
-	startPos = styler.LineStart(lineCurrent);
-	int prev_state = SCE_P_DEFAULT & 31;
-	if (lineCurrent >= 1)
-		prev_state = styler.StyleAt(startPos - 1) & 31;
-	int prevQuote = foldQuotes && ((prev_state == SCE_P_TRIPLE) ||
-	                               (prev_state == SCE_P_TRIPLEDOUBLE));
-	int prevComment = 0;
-	if (lineCurrent >= 1)
-		prevComment = foldComment && IsCommentLine(lineCurrent - 1, styler);
+    // Set up initial loop state
+    startPos = styler.LineStart(lineCurrent);
+    int prev_state = SCE_P_DEFAULT & 31;
+    if (lineCurrent >= 1)
+        prev_state = styler.StyleAt(startPos - 1) & 31;
+    int prevQuote = foldQuotes && ((prev_state == SCE_P_TRIPLE) ||
+                                   (prev_state == SCE_P_TRIPLEDOUBLE));
+    int prevComment = 0;
+    if (lineCurrent >= 1)
+        prevComment = foldComment && IsCommentLine(lineCurrent - 1, styler);
 
-	// Process all characters to end of requested range or end of any triple quote
-	// or comment that hangs over the end of the range.  Cap processing in all cases
-	// to end of document (in case of unclosed quote or comment at end).
-	while ((lineCurrent <= docLines) && ((lineCurrent <= maxLines) ||
-	                                      prevQuote || prevComment)) {
+    // Process all characters to end of requested range or end of any triple quote
+    // or comment that hangs over the end of the range.  Cap processing in all cases
+    // to end of document (in case of unclosed quote or comment at end).
+    while ((lineCurrent <= docLines) && ((lineCurrent <= maxLines) ||
+                                          prevQuote || prevComment)) {
 
-		// Gather info
-		int lev = indentCurrent;
-		int lineNext = lineCurrent + 1;
-		int indentNext = indentCurrent;
-		int quote = false;
-		if (lineNext <= docLines) {
-			// Information about next line is only available if not at end of document
-			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
-			int style = styler.StyleAt(styler.LineStart(lineNext)) & 31;
-			quote = foldQuotes && ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
-		}
-		const int quote_start = (quote && !prevQuote);
-		const int quote_continue = (quote && prevQuote);
-		const int comment = foldComment && IsCommentLine(lineCurrent, styler);
-		const int comment_start = (comment && !prevComment && (lineNext <= docLines) &&
-		                           IsCommentLine(lineNext, styler) &&
-		                           (lev > SC_FOLDLEVELBASE));
-		const int comment_continue = (comment && prevComment);
-		if ((!quote || !prevQuote) && !comment)
-			indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
-		if (quote)
-			indentNext = indentCurrentLevel;
-		if (indentNext & SC_FOLDLEVELWHITEFLAG)
-			indentNext = SC_FOLDLEVELWHITEFLAG | indentCurrentLevel;
+        // Gather info
+        int lev = indentCurrent;
+        int lineNext = lineCurrent + 1;
+        int indentNext = indentCurrent;
+        int quote = false;
+        if (lineNext <= docLines) {
+            // Information about next line is only available if not at end of document
+            indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
+            int style = styler.StyleAt(styler.LineStart(lineNext)) & 31;
+            quote = foldQuotes && ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
+        }
+        const int quote_start = (quote && !prevQuote);
+        const int quote_continue = (quote && prevQuote);
+        const int comment = foldComment && IsCommentLine(lineCurrent, styler);
+        const int comment_start = (comment && !prevComment && (lineNext <= docLines) &&
+                                   IsCommentLine(lineNext, styler) &&
+                                   (lev > SC_FOLDLEVELBASE));
+        const int comment_continue = (comment && prevComment);
+        if ((!quote || !prevQuote) && !comment)
+            indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
+        if (quote)
+            indentNext = indentCurrentLevel;
+        if (indentNext & SC_FOLDLEVELWHITEFLAG)
+            indentNext = SC_FOLDLEVELWHITEFLAG | indentCurrentLevel;
 
-		if (quote_start) {
-			// Place fold point at start of triple quoted string
-			lev |= SC_FOLDLEVELHEADERFLAG;
-		} else if (quote_continue || prevQuote) {
-			// Add level to rest of lines in the string
-			lev = lev + 1;
-		} else if (comment_start) {
-			// Place fold point at start of a block of comments
-			lev |= SC_FOLDLEVELHEADERFLAG;
-		} else if (comment_continue) {
-			// Add level to rest of lines in the block
-			lev = lev + 1;
-		}
+        if (quote_start) {
+            // Place fold point at start of triple quoted string
+            lev |= SC_FOLDLEVELHEADERFLAG;
+        } else if (quote_continue || prevQuote) {
+            // Add level to rest of lines in the string
+            lev = lev + 1;
+        } else if (comment_start) {
+            // Place fold point at start of a block of comments
+            lev |= SC_FOLDLEVELHEADERFLAG;
+        } else if (comment_continue) {
+            // Add level to rest of lines in the block
+            lev = lev + 1;
+        }
 
-		// Skip past any blank lines for next indent level info; we skip also
-		// comments (all comments, not just those starting in column 0)
-		// which effectively folds them into surrounding code rather
-		// than screwing up folding.
+        // Skip past any blank lines for next indent level info; we skip also
+        // comments (all comments, not just those starting in column 0)
+        // which effectively folds them into surrounding code rather
+        // than screwing up folding.
 
-		while (!quote &&
-		        (lineNext < docLines) &&
-		        ((indentNext & SC_FOLDLEVELWHITEFLAG) ||
-		         (lineNext <= docLines && IsCommentLine(lineNext, styler)))) {
+        while (!quote &&
+                (lineNext < docLines) &&
+                ((indentNext & SC_FOLDLEVELWHITEFLAG) ||
+                 (lineNext <= docLines && IsCommentLine(lineNext, styler)))) {
 
-			lineNext++;
-			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
-		}
+            lineNext++;
+            indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
+        }
 
-		const int levelAfterComments = indentNext & SC_FOLDLEVELNUMBERMASK;
-		const int levelBeforeComments =
-		    Maximum(indentCurrentLevel,levelAfterComments);
+        const int levelAfterComments = indentNext & SC_FOLDLEVELNUMBERMASK;
+        const int levelBeforeComments =
+            Maximum(indentCurrentLevel,levelAfterComments);
 
-		// Now set all the indent levels on the lines we skipped
-		// Do this from end to start.  Once we encounter one line
-		// which is indented more than the line after the end of
-		// the comment-block, use the level of the block before
+        // Now set all the indent levels on the lines we skipped
+        // Do this from end to start.  Once we encounter one line
+        // which is indented more than the line after the end of
+        // the comment-block, use the level of the block before
 
-		int skipLine = lineNext;
-		int skipLevel = levelAfterComments;
+        int skipLine = lineNext;
+        int skipLevel = levelAfterComments;
 
-		while (--skipLine > lineCurrent) {
-			int skipLineIndent = styler.IndentAmount(skipLine, &spaceFlags, NULL);
+        while (--skipLine > lineCurrent) {
+            int skipLineIndent = styler.IndentAmount(skipLine, &spaceFlags, NULL);
 
-			if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments)
-				skipLevel = levelBeforeComments;
+            if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments)
+                skipLevel = levelBeforeComments;
 
-			int whiteFlag = skipLineIndent & SC_FOLDLEVELWHITEFLAG;
+            int whiteFlag = skipLineIndent & SC_FOLDLEVELWHITEFLAG;
 
-			styler.SetLevel(skipLine, skipLevel | whiteFlag);
-		}
+            styler.SetLevel(skipLine, skipLevel | whiteFlag);
+        }
 
-		// Set fold header on non-quote/non-comment line
-		if (!quote && !comment && !(indentCurrent & SC_FOLDLEVELWHITEFLAG) ) {
-			if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) <
-			     (indentNext & SC_FOLDLEVELNUMBERMASK))
-				lev |= SC_FOLDLEVELHEADERFLAG;
-		}
+        // Set fold header on non-quote/non-comment line
+        if (!quote && !comment && !(indentCurrent & SC_FOLDLEVELWHITEFLAG) ) {
+            if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) <
+                 (indentNext & SC_FOLDLEVELNUMBERMASK))
+                lev |= SC_FOLDLEVELHEADERFLAG;
+        }
 
-		// Keep track of triple quote and block comment state of previous line
-		prevQuote = quote;
-		prevComment = comment_start || comment_continue;
+        // Keep track of triple quote and block comment state of previous line
+        prevQuote = quote;
+        prevComment = comment_start || comment_continue;
 
-		// Set fold level for this line and move to next line
-		styler.SetLevel(lineCurrent, lev);
-		indentCurrent = indentNext;
-		lineCurrent = lineNext;
-	}
+        // Set fold level for this line and move to next line
+        styler.SetLevel(lineCurrent, lev);
+        indentCurrent = indentNext;
+        lineCurrent = lineNext;
+    }
 
-	// NOTE: Cannot set level of last line here because indentCurrent doesn't have
-	// header flag set; the loop above is crafted to take care of this case!
-	//styler.SetLevel(lineCurrent, indentCurrent);
+    // NOTE: Cannot set level of last line here because indentCurrent doesn't have
+    // header flag set; the loop above is crafted to take care of this case!
+    //styler.SetLevel(lineCurrent, indentCurrent);
 }
 
 static const char * const nimrodWordListDesc[] = {
-	"Keywords",
-	0
+    "Keywords",
+    0
 };
 
 LexerModule lmNimrod(SCLEX_NIMROD, ColouriseNimrodDoc, "nimrod", FoldNimrodDoc,
-				     nimrodWordListDesc);
+                     nimrodWordListDesc);

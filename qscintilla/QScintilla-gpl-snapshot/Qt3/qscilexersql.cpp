@@ -468,10 +468,10 @@ void QsciLexerSQL::setFoldAtElse(bool fold)
 }
 
 
-// Set the "lexer.sql.fold.at.else" property.
+// Set the "fold.sql.at.else" property.
 void QsciLexerSQL::setAtElseProp()
 {
-    emit propertyChanged("lexer.sql.fold.at.else", (at_else ? "1" : "0"));
+    emit propertyChanged("fold.sql.at.else", (at_else ? "1" : "0"));
 }
 
 

@@ -105,7 +105,10 @@ public:
 
         //! A keyword defined in keyword set number 8.  The class must be
         //! sub-classed and re-implement keywords() to make use of this style.
-        KeywordSet8 = 19
+        KeywordSet8 = 19,
+
+        //! A label.
+        Label = 20
     };
 
     //! Construct a QsciLexerLua with parent \a parent and name \a name.  \a

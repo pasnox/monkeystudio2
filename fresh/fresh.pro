@@ -1,14 +1,11 @@
 # fresh lib project file
 
-# include functions file
-include( ../functions.pri )
-
 # include config file
 include( ../config.pri )
 
 TEMPLATE    = lib
 CONFIG  *= staticlib
-DESTDIR = $${PACKAGE_BUILD_PATH}
+DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 FRESH_SOURCES_PATHS = $$getFolders( ./objects ./widgets )
 INCLUDEPATH *= ./objects ./widgets

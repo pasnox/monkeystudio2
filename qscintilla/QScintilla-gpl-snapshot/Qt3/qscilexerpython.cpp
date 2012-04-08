@@ -42,7 +42,7 @@ QsciLexerPython::QsciLexerPython(QObject *parent, const char *name)
     : QsciLexer(parent, name),
       fold_comments(false), fold_compact(true), fold_quotes(false),
       indent_warn(NoWarning), strings_over_newline(false), v2_unicode(true),
-      v3_binary_octal(true), v3_bytes(true)
+      v3_binary_octal(true), v3_bytes(true), highlight_subids(true)
 {
 }
 
@@ -307,6 +307,7 @@ void QsciLexerPython::refreshProperties()
     setV2UnicodeProp();
     setV3BinaryOctalProp();
     setV3BytesProp();
+    setHighlightSubidsProp();
 }
 
 
@@ -373,6 +374,13 @@ bool QsciLexerPython::readProperties(QSettings &qs,const QString &prefix)
     else
         rc = false;
 
+    flag = qs.readBoolEntry(prefix + "highlightsubids", true, &ok);
+
+    if (ok)
+        highlight_subids = flag;
+    else
+        rc = false;
+
     return rc;
 }
 
@@ -404,6 +412,9 @@ bool QsciLexerPython::writeProperties(QSettings &qs,const QString &prefix) const
         rc = false;
 
     if (!qs.writeEntry(prefix + "v3bytes", v3_bytes))
+        rc = false;
+
+    if (!qs.writeEntry(prefix + "highlightsubids", highlight_subids))
         rc = false;
 
     return rc;
@@ -535,4 +546,21 @@ void QsciLexerPython::setV3BytesAllowed(bool allowed)
 void QsciLexerPython::setV3BytesProp()
 {
     emit propertyChanged("lexer.python.strings.b",(v3_bytes ? "1" : "0"));
+}
+
+
+// Set if sub-identifiers are highlighted.
+void QsciLexerPython::setHighlightSubidentifiers(bool enabled)
+{
+    highlight_subids = enabled;
+
+    setHighlightSubidsProp();
+}
+
+
+// Set the "lexer.python.keywords2.no.sub.identifiers" property.
+void QsciLexerPython::setHighlightSubidsProp()
+{
+    emit propertyChanged("lexer.python.keywords2.no.sub.identifiers",
+            (highlight_subids ? "0" : "1"));
 }

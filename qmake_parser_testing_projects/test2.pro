@@ -1,8 +1,8 @@
-XUP.QT_VERSION	= Qt System (Qt-4.7.4)
+XUP.QT_VERSION  = Qt System (Qt-4.7.4)
 
 HEADERS *= test \
-	okmichem \
-	kool
+    okmichem \
+    kool
 
 XUP.Command = mBuilder \
     mac_clean_pack \
@@ -21,4 +21,4 @@ XUP.Command = mBuilder \
     0 \
     1
 
-RC_FILE	*= app_icons/test.rc
+RC_FILE *= app_icons/test.rc

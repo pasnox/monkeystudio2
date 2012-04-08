@@ -39,12 +39,16 @@ extern "C++" {
 #include <QPointer>
 
 #include <Qsci/qsciglobal.h>
+#include <Qsci/qscicommand.h>
 #include <Qsci/qscidocument.h>
 #include <Qsci/qsciscintillabase.h>
 
 
 QT_BEGIN_NAMESPACE
+class QAction;
+class QImage;
 class QIODevice;
+class QMenu;
 class QPoint;
 QT_END_NAMESPACE
 
@@ -52,7 +56,7 @@ class QsciCommandSet;
 class QsciLexer;
 class QsciStyle;
 class QsciStyledText;
-class ListBoxQt;
+class QsciListBoxQt;
 
 
 //! \brief The QsciScintilla class implements a higher level, more Qt-like,
@@ -220,30 +224,58 @@ public:
 
     //! This enum defines the different indicator styles.
     enum IndicatorStyle {
-        // A single straight underline.
+        //! A single straight underline.
         PlainIndicator = INDIC_PLAIN,
 
-        // A squiggly underline.
+        //! A squiggly underline that requires 3 pixels of descender space.
         SquiggleIndicator = INDIC_SQUIGGLE,
 
-        // A line of small T shapes.
+        //! A line of small T shapes.
         TTIndicator = INDIC_TT,
 
-        // Diagonal hatching.
+        //! Diagonal hatching.
         DiagonalIndicator = INDIC_DIAGONAL,
 
-        // Strike out.
+        //! Strike out.
         StrikeIndicator = INDIC_STRIKE,
 
-        // An indicator with no visual appearence.
+        //! An indicator with no visual appearence.
         HiddenIndicator = INDIC_HIDDEN,
 
-        // A rectangle around the text.
+        //! A rectangle around the text.
         BoxIndicator = INDIC_BOX,
 
-        // A rectangle with rounded corners around the text with the interior
-        // more transparent than the border.
-        RoundBoxIndicator = INDIC_ROUNDBOX
+        //! A rectangle with rounded corners around the text with the interior
+        //! usually more transparent than the border.
+        RoundBoxIndicator = INDIC_ROUNDBOX,
+
+        //! A rectangle around the text with the interior usually more
+        //! transparent than the border.
+        StraightBoxIndicator = INDIC_STRAIGHTBOX,
+
+        //! A dashed underline.
+        DashesIndicator = INDIC_DASH,
+
+        //! A dotted underline.
+        DotsIndicator = INDIC_DOTS,
+
+        //! A squiggly underline that requires 2 pixels of descender space and
+        //! so will fit under smaller fonts.
+        SquiggleLowIndicator = INDIC_SQUIGGLELOW,
+
+        //! A dotted rectangle around the text with the interior usually more
+        //! transparent than the border.
+        DotBoxIndicator = INDIC_DOTBOX
+    };
+
+    //! This enum defines the different margin options.
+    enum {
+        //! Reset all margin options.
+        MoNone = SC_MARGINOPTION_NONE,
+
+        //! If this is set then only the first sub-line of a wrapped line will
+        //! be selected when clicking on a margin.
+        MoSublineSelect = SC_MARGINOPTION_SUBLINESELECT
     };
 
     //! This enum defines the different margin types.
@@ -578,6 +610,11 @@ public:
     //! \sa eolMode(), setEolMode()
     void convertEols(EolMode mode);
 
+    //! Create the standard context menu which is shown when the user clicks
+    //! with the right mouse button.  It is called from contextMenuEvent().
+    //! The menu's ownership is transferred to the caller.
+    QMenu *createStandardContextMenu();
+
     //! Returns the attached document.
     //!
     //! \sa setDocument()
@@ -833,6 +870,11 @@ public:
     //! \sa setMarginMask(), QsciMarker, SCI_GETMARGINMASKN
     int marginMarkerMask(int margin) const;
 
+    //! Returns the margin options.  The default is MoNone.
+    //!
+    //! \sa setMarginOptions(), MoNone, MoSublineSelect.
+    int marginOptions() const;
+
     //! Returns true if margin \a margin is sensitive to mouse clicks.
     //!
     //! \sa setMarginSensitivity(), marginClicked(), SCI_GETMARGINTYPEN
@@ -881,6 +923,12 @@ public:
     //! automatically allocated.  The marker number is returned or -1 if too
     //! many markers have been defined.
     int markerDefine(const QPixmap &pm, int markerNumber = -1);
+
+    //! Define a marker using a copy of the image \a im with the marker number
+    //! \a markerNumber.  If \a markerNumber is -1 then the marker number is
+    //! automatically allocated.  The marker number is returned or -1 if too
+    //! many markers have been defined.
+    int markerDefine(const QImage &im, int markerNumber = -1);
 
     //! Add an instance of marker number \a markerNumber to line number
     //! \a linenr.  A handle for the marker is returned which can be used to
@@ -960,6 +1008,12 @@ public:
     //!
     //! \sa clearRegisteredImages(), QsciLexer::apiLoad()
     void registerImage(int id, const QPixmap &pm);
+
+    //! Register an image \a im with ID \a id.  Registered images can be
+    //! displayed in auto-completion lists.
+    //!
+    //! \sa clearRegisteredImages(), QsciLexer::apiLoad()
+    void registerImage(int id, const QImage &im);
 
     //! Replace the current selection, set by a previous call to findFirst() or
     //! findNext(), with \a replaceStr.
@@ -1080,6 +1134,16 @@ public:
     //! If \a indicatorNumber is -1 then the colour of all indicators is set.
     void setIndicatorForegroundColor(const QColor &col, int indicatorNumber = -1);
 
+    //! Set the outline colour of indicator \a indicatorNumber to \a col.
+    //! If \a indicatorNumber is -1 then the colour of all indicators is set.
+    //! At the moment only the alpha value of the colour has any affect.
+    void setIndicatorOutlineColor(const QColor &col, int indicatorNumber = -1);
+
+    //! Set the margin options to \a options.
+    //!
+    //! \sa marginOptions(), MoNone, MoSublineSelect.
+    void setMarginOptions(int options);
+
     //! Set the margin text of line \a line with the text \a text using the
     //! style number \a style.
     void setMarginText(int line, const QString &text, int style);
@@ -1118,29 +1182,51 @@ public:
     //! \sa setMarkerBackgroundColor()
     void setMarkerForegroundColor(const QColor &col, int markerNumber = -1);
 
-    //! Set the background colour used to display matched braces to \a col.
-    //! The default is white.
+    //! Set the background colour used to display matched braces to \a col.  It
+    //! is ignored if an indicator is being used.  The default is white.
     //!
-    //! \sa setMatchedBraceForegroundColor()
+    //! \sa setMatchedBraceForegroundColor(), setMatchedBraceIndicator()
     void setMatchedBraceBackgroundColor(const QColor &col);
 
-    //! Set the foreground colour used to display matched braces to \a col.
-    //! The default is red.
+    //! Set the foreground colour used to display matched braces to \a col.  It
+    //! is ignored if an indicator is being used.  The default is red.
     //!
-    //! \sa setMatchedBraceBackgroundColor()
+    //! \sa setMatchedBraceBackgroundColor(), setMatchedBraceIndicator()
     void setMatchedBraceForegroundColor(const QColor &col);
 
-    //! Set the background colour used to display unmatched braces to \a col.
-    //! The default is white.
+    //! Set the indicator used to display matched braces to \a indicatorNumber.
+    //! The default is not to use an indicator.
     //!
-    //! \sa setUnmatchedBraceForegroundColor()
+    //! \sa resetMatchedBraceIndicator(), setMatchedBraceBackgroundColor()
+    void setMatchedBraceIndicator(int indicatorNumber);
+
+    //! Stop using an indicator to display matched braces.
+    //!
+    //! \sa setMatchedBraceIndicator()
+    void resetMatchedBraceIndicator();
+
+    //! Set the background colour used to display unmatched braces to \a col.
+    //! It is ignored if an indicator is being used.  The default is white.
+    //!
+    //! \sa setUnmatchedBraceForegroundColor(), setUnmatchedBraceIndicator()
     void setUnmatchedBraceBackgroundColor(const QColor &col);
 
     //! Set the foreground colour used to display unmatched braces to \a col.
-    //! The default is blue.
+    //! It is ignored if an indicator is being used.  The default is blue.
     //!
-    //! \sa setUnmatchedBraceBackgroundColor()
+    //! \sa setUnmatchedBraceBackgroundColor(), setUnmatchedBraceIndicator()
     void setUnmatchedBraceForegroundColor(const QColor &col);
+
+    //! Set the indicator used to display unmatched braces to
+    //! \a indicatorNumber.  The default is not to use an indicator.
+    //!
+    //! \sa resetUnmatchedBraceIndicator(), setUnmatchedBraceBackgroundColor()
+    void setUnmatchedBraceIndicator(int indicatorNumber);
+
+    //! Stop using an indicator to display unmatched braces.
+    //!
+    //! \sa setUnmatchedBraceIndicator()
+    void resetUnmatchedBraceIndicator();
 
     //! Set the visual flags displayed when a line is wrapped.  \a endFlag
     //! determines if and where the flag at the end of a line is displayed.
@@ -1728,8 +1814,8 @@ signals:
     //! This signal is emitted whenever the user clicks on an indicator.  \a
     //! line is the number of the line where the user clicked.  \a index is the
     //! character index within the line.  \a state is the state of the modifier
-    //! keys (Qt::ShiftModifier, Qt::ControlModifier and Qt::AltModifer) when
-    //! the user clicked.
+    //! keys (Qt::ShiftModifier, Qt::ControlModifier, Qt::AltModifer and
+    //! Qt::MetaModifier) when the user clicked.
     //!
     //! \sa indicatorReleased()
     void indicatorClicked(int line, int index, Qt::KeyboardModifiers state);
@@ -1737,8 +1823,8 @@ signals:
     //! This signal is emitted whenever the user releases the mouse on an
     //! indicator.  \a line is the number of the line where the user clicked.
     //! \a index is the character index within the line.  \a state is the state
-    //! of the modifier keys (Qt::ShiftModifier, Qt::ControlModifier and
-    //! Qt::AltModifer) when the user released the mouse.
+    //! of the modifier keys (Qt::ShiftModifier, Qt::ControlModifier,
+    //! Qt::AltModifer and Qt::MetaModifier) when the user released the mouse.
     //!
     //! \sa indicatorClicked()
     void indicatorReleased(int line, int index, Qt::KeyboardModifiers state);
@@ -1749,8 +1835,8 @@ signals:
     //! This signal is emitted whenever the user clicks on a sensitive margin.
     //! \a margin is the margin.  \a line is the number of the line where the
     //! user clicked.  \a state is the state of the modifier keys
-    //! (Qt::ShiftModifier, Qt::ControlModifier and Qt::AltModifer) when the
-    //! user clicked.
+    //! (Qt::ShiftModifier, Qt::ControlModifier, Qt::AltModifer and
+    //! Qt::MetaModifier) when the user clicked.
     //!
     //! \sa marginSensitivity(), setMarginSensitivity()
     void marginClicked(int margin, int line, Qt::KeyboardModifiers state);
@@ -1782,6 +1868,13 @@ signals:
     //! \sa showUserList()
     void userListActivated(int id, const QString &string);
 
+protected:
+    //! \reimp
+    virtual bool event(QEvent *e);
+
+    //! \reimp
+    virtual void contextMenuEvent(QContextMenuEvent *e);
+
 private slots:
     void handleCallTipClick(int dir);
     void handleCharAdded(int charadded);
@@ -1804,6 +1897,8 @@ private slots:
     void handleStylePaperChange(const QColor &c, int style);
 
     void handleUpdateUI(int updated);
+
+    void delete_selection();
 
 private:
     typedef QByteArray ScintillaString;
@@ -1906,13 +2001,15 @@ private:
     QByteArray explicit_fillups;
     bool fillups_enabled;
 
-    // The following allow ListBoxQt to distinguish between an auto-completion
-    // list and a user list, and to return the full selection of an
-    // auto-completion list.
-    friend class ListBoxQt;
+    // The following allow QsciListBoxQt to distinguish between an
+    // auto-completion list and a user list, and to return the full selection
+    // of an auto-completion list.
+    friend class QsciListBoxQt;
 
     QString acSelection;
     bool isAutoCompletionList() const;
+
+    void set_shortcut(QAction *action, QsciCommand::Command cmd_id) const;
 
     QsciScintilla(const QsciScintilla &);
     QsciScintilla &operator=(const QsciScintilla &);

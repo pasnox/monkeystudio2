@@ -100,7 +100,7 @@ QsciScintillaBase::QsciScintillaBase(QWidget *parent, const char *name,
 
     setFocusPolicy(WheelFocus);
 
-    sci = new ScintillaQt(this);
+    sci = new QsciScintillaQt(this);
 
     SendScintilla(SCI_SETCARETPERIOD, QApplication::cursorFlashTime() / 2);
 
@@ -298,7 +298,7 @@ long QsciScintillaBase::SendScintilla(unsigned int msg, int wParam) const
 long QsciScintillaBase::SendScintilla(unsigned int msg, long cpMin, long cpMax,
         char *lpstrText) const
 {
-    TextRange tr;
+    QSCI_SCI_NAMESPACE(TextRange) tr;
 
     tr.chrg.cpMin = cpMin;
     tr.chrg.cpMax = cpMax;
@@ -332,9 +332,9 @@ long QsciScintillaBase::SendScintilla(unsigned int msg, const QColor &col) const
 long QsciScintillaBase::SendScintilla(unsigned int msg, unsigned long wParam,
         QPainter *hdc, const QRect &rc, long cpMin, long cpMax) const
 {
-    RangeToFormat rf;
+    QSCI_SCI_NAMESPACE(RangeToFormat) rf;
 
-    rf.hdc = rf.hdcTarget = reinterpret_cast<SurfaceID>(hdc);
+    rf.hdc = rf.hdcTarget = reinterpret_cast<QSCI_SCI_NAMESPACE(SurfaceID)>(hdc);
 
     rf.rc.left = rc.left();
     rf.rc.top = rc.top();
@@ -356,6 +356,14 @@ long QsciScintillaBase::SendScintilla(unsigned int msg, unsigned long wParam,
 }
 
 
+// Overloaded message send.
+long QsciScintillaBase::SendScintilla(unsigned int msg, unsigned long wParam,
+        const QImage &lParam) const
+{
+    return sci->WndProc(msg, wParam, reinterpret_cast<sptr_t>(&lParam));
+}
+
+
 // Send a message to the real Scintilla widget using the low level Scintilla
 // API that returns a pointer result.
 void *QsciScintillaBase::SendScintillaPtrResult(unsigned int msg) const
@@ -365,7 +373,7 @@ void *QsciScintillaBase::SendScintillaPtrResult(unsigned int msg) const
 }
 
 
-// Handle the timer on behalf of the ScintillaQt instance.
+// Handle the timer on behalf of the QsciScintillaQt instance.
 void QsciScintillaBase::handleTimer()
 {
     sci->Tick();
@@ -375,7 +383,7 @@ void QsciScintillaBase::handleTimer()
 // Re-implemented to handle the context menu.
 void QsciScintillaBase::contextMenuEvent(QContextMenuEvent *e)
 {
-    sci->ContextMenu(Point(e->globalX(), e->globalY()));
+    sci->ContextMenu(QSCI_SCI_NAMESPACE(Point)(e->globalX(), e->globalY()));
 }
 
 
@@ -414,12 +422,20 @@ void QsciScintillaBase::handleSelection()
 // Handle key presses.
 void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
 {
-    unsigned key;
+    unsigned key, modifiers = 0;
     QCString utf8;
 
-    bool shift = e->state() & Qt::ShiftButton;
-    bool ctrl = e->state() & Qt::ControlButton;
-    bool alt = e->state() & Qt::AltButton;
+    if (e->state() & Qt::ShiftButton)
+        modifiers |= SCMOD_SHIFT;
+
+    if (e->state() & Qt::ControlButton)
+        modifiers |= SCMOD_CTRL;
+
+    if (e->state() & Qt::AltButton)
+        modifiers |= SCMOD_ALT;
+
+    if (e->state() & Qt::MetaButton)
+        modifiers |= SCMOD_META;
 
     switch (e->key())
     {
@@ -478,7 +494,7 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Backtab:
         // Scintilla assumes a backtab is shift-tab.
         key = SCK_TAB;
-        shift = true;
+        modifiers |= SCMOD_SHIFT;
         break;
 
     case Qt::Key_Return:
@@ -500,9 +516,9 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
 
     default:
         // See if the input was a single ASCII key.  If so it will be passed to
-        // KeyDown to allow it to be filtered.  Correct the modifiers and key
-        // for ASCII letters as Qt uses the ASCII code of uppercase letters for
-        // Key_A etc.
+        // KeyDownWithModifiers to allow it to be filtered.  Correct the
+        // modifiers and key for ASCII letters as Qt uses the ASCII code of
+        // uppercase letters for Key_A etc.
         utf8 = e->text().utf8();
 
         if (utf8.length() == 0)
@@ -514,11 +530,11 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
         else if (key >= 0x01 && key <= 0x1a)
             key += 0x40;
         else if (key >= 'A' && key <= 'Z')
-            shift = true;
+            modifiers |= true;
         else if (key >= 'a' && key <= 'z')
         {
             key -= 0x20;
-            shift = false;
+            modifiers &= ~SCMOD_SHIFT;
         }
     }
 
@@ -526,7 +542,7 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
     {
         bool consumed = false;
 
-        sci->KeyDown(key, shift, ctrl, alt, &consumed);
+        sci->KeyDownWithModifiers(key, modifiers, &consumed);
 
         if (consumed)
         {
@@ -561,13 +577,14 @@ void QsciScintillaBase::mouseDoubleClickEvent(QMouseEvent *e)
     setFocus();
 
     // Make sure Scintilla will interpret this as a double-click.
-    unsigned clickTime = sci->lastClickTime + Platform::DoubleClickTime() - 1;
+    unsigned clickTime = sci->lastClickTime + QSCI_SCI_NAMESPACE(Platform)::DoubleClickTime() - 1;
 
     bool shift = e->state() & Qt::ShiftButton;
     bool ctrl = e->state() & Qt::ControlButton;
     bool alt = e->state() & Qt::AltButton;
 
-    sci->ButtonDown(Point(e->x(), e->y()), clickTime, shift, ctrl, alt);
+    sci->ButtonDown(QSCI_SCI_NAMESPACE(Point)(e->x(), e->y()), clickTime,
+            shift, ctrl, alt);
 
     // Remember the current position and time in case it turns into a triple
     // click.
@@ -579,7 +596,7 @@ void QsciScintillaBase::mouseDoubleClickEvent(QMouseEvent *e)
 // Handle a mouse move.
 void QsciScintillaBase::mouseMoveEvent(QMouseEvent *e)
 {
-    sci->ButtonMove(Point(e->x(), e->y()));
+    sci->ButtonMove(QSCI_SCI_NAMESPACE(Point)(e->x(), e->y()));
 }
 
 
@@ -588,7 +605,7 @@ void QsciScintillaBase::mousePressEvent(QMouseEvent *e)
 {
     setFocus();
 
-    Point pt(e->x(), e->y());
+    QSCI_SCI_NAMESPACE(Point) pt(e->x(), e->y());
 
     if (e->button() == Qt::LeftButton)
     {
@@ -597,9 +614,9 @@ void QsciScintillaBase::mousePressEvent(QMouseEvent *e)
         // It is a triple click if the timer is running and the mouse hasn't
         // moved too much.
         if (triple_click.isActive() && (e->globalPos() - triple_click_at).manhattanLength() < QApplication::startDragDistance())
-            clickTime = sci->lastClickTime + Platform::DoubleClickTime() - 1;
+            clickTime = sci->lastClickTime + QSCI_SCI_NAMESPACE(Platform)::DoubleClickTime() - 1;
         else
-            clickTime = sci->lastClickTime + Platform::DoubleClickTime() + 1;
+            clickTime = sci->lastClickTime + QSCI_SCI_NAMESPACE(Platform)::DoubleClickTime() + 1;
 
         triple_click.stop();
 
@@ -641,7 +658,7 @@ void QsciScintillaBase::mouseReleaseEvent(QMouseEvent *e)
     {
         bool ctrl = e->state() & Qt::ControlButton;
 
-        sci->ButtonUp(Point(e->x(), e->y()), 0, ctrl);
+        sci->ButtonUp(QSCI_SCI_NAMESPACE(Point)(e->x(), e->y()), 0, ctrl);
     }
 }
 
@@ -684,7 +701,7 @@ void QsciScintillaBase::dragEnterEvent(QDragEnterEvent *e)
 // Handle drag leaves.
 void QsciScintillaBase::dragLeaveEvent(QDragLeaveEvent *)
 {
-    sci->SetDragPosition(SelectionPosition());
+    sci->SetDragPosition(QSCI_SCI_NAMESPACE(SelectionPosition)());
 }
 
 
@@ -692,7 +709,8 @@ void QsciScintillaBase::dragLeaveEvent(QDragLeaveEvent *)
 void QsciScintillaBase::dragMoveEvent(QDragMoveEvent *e)
 {
     sci->SetDragPosition(
-            sci->SPositionFromLocation(Point(e->pos().x(), e->pos().y()),
+            sci->SPositionFromLocation(
+                    QSCI_SCI_NAMESPACE(Point)(e->pos().x(), e->pos().y()),
                     false, false, sci->UserVirtualSpace()));
 
     if (sci->pdoc->IsReadOnly() || !QTextDrag::canDecode(e))

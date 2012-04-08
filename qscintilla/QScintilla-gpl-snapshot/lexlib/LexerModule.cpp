@@ -31,91 +31,91 @@ using namespace Scintilla;
 #endif
 
 LexerModule::LexerModule(int language_,
-	LexerFunction fnLexer_,
-	const char *languageName_,
-	LexerFunction fnFolder_,
+    LexerFunction fnLexer_,
+    const char *languageName_,
+    LexerFunction fnFolder_,
         const char *const wordListDescriptions_[],
-	int styleBits_) :
-	language(language_),
-	fnLexer(fnLexer_),
-	fnFolder(fnFolder_),
-	fnFactory(0),
-	wordListDescriptions(wordListDescriptions_),
-	styleBits(styleBits_),
-	languageName(languageName_) {
+    int styleBits_) :
+    language(language_),
+    fnLexer(fnLexer_),
+    fnFolder(fnFolder_),
+    fnFactory(0),
+    wordListDescriptions(wordListDescriptions_),
+    styleBits(styleBits_),
+    languageName(languageName_) {
 }
 
 LexerModule::LexerModule(int language_,
-	LexerFactoryFunction fnFactory_,
-	const char *languageName_,
-	const char * const wordListDescriptions_[],
-	int styleBits_) :
-	language(language_),
-	fnLexer(0),
-	fnFolder(0),
-	fnFactory(fnFactory_),
-	wordListDescriptions(wordListDescriptions_),
-	styleBits(styleBits_),
-	languageName(languageName_) {
+    LexerFactoryFunction fnFactory_,
+    const char *languageName_,
+    const char * const wordListDescriptions_[],
+    int styleBits_) :
+    language(language_),
+    fnLexer(0),
+    fnFolder(0),
+    fnFactory(fnFactory_),
+    wordListDescriptions(wordListDescriptions_),
+    styleBits(styleBits_),
+    languageName(languageName_) {
 }
 
 int LexerModule::GetNumWordLists() const {
-	if (wordListDescriptions == NULL) {
-		return -1;
-	} else {
-		int numWordLists = 0;
+    if (wordListDescriptions == NULL) {
+        return -1;
+    } else {
+        int numWordLists = 0;
 
-		while (wordListDescriptions[numWordLists]) {
-			++numWordLists;
-		}
+        while (wordListDescriptions[numWordLists]) {
+            ++numWordLists;
+        }
 
-		return numWordLists;
-	}
+        return numWordLists;
+    }
 }
 
 const char *LexerModule::GetWordListDescription(int index) const {
-	static const char *emptyStr = "";
+    static const char *emptyStr = "";
 
-	assert(index < GetNumWordLists());
-	if (index >= GetNumWordLists()) {
-		return emptyStr;
-	} else {
-		return wordListDescriptions[index];
- 	}
+    assert(index < GetNumWordLists());
+    if (index >= GetNumWordLists()) {
+        return emptyStr;
+    } else {
+        return wordListDescriptions[index];
+    }
 }
 
 int LexerModule::GetStyleBitsNeeded() const {
-	return styleBits;
+    return styleBits;
 }
 
 ILexer *LexerModule::Create() const {
-	if (fnFactory)
-		return fnFactory();
-	else
-		return new LexerSimple(this);
+    if (fnFactory)
+        return fnFactory();
+    else
+        return new LexerSimple(this);
 }
 
 void LexerModule::Lex(unsigned int startPos, int lengthDoc, int initStyle,
-	  WordList *keywordlists[], Accessor &styler) const {
-	if (fnLexer)
-		fnLexer(startPos, lengthDoc, initStyle, keywordlists, styler);
+      WordList *keywordlists[], Accessor &styler) const {
+    if (fnLexer)
+        fnLexer(startPos, lengthDoc, initStyle, keywordlists, styler);
 }
 
 void LexerModule::Fold(unsigned int startPos, int lengthDoc, int initStyle,
-	  WordList *keywordlists[], Accessor &styler) const {
-	if (fnFolder) {
-		int lineCurrent = styler.GetLine(startPos);
-		// Move back one line in case deletion wrecked current line fold state
-		if (lineCurrent > 0) {
-			lineCurrent--;
-			int newStartPos = styler.LineStart(lineCurrent);
-			lengthDoc += startPos - newStartPos;
-			startPos = newStartPos;
-			initStyle = 0;
-			if (startPos > 0) {
-				initStyle = styler.StyleAt(startPos - 1);
-			}
-		}
-		fnFolder(startPos, lengthDoc, initStyle, keywordlists, styler);
-	}
+      WordList *keywordlists[], Accessor &styler) const {
+    if (fnFolder) {
+        int lineCurrent = styler.GetLine(startPos);
+        // Move back one line in case deletion wrecked current line fold state
+        if (lineCurrent > 0) {
+            lineCurrent--;
+            int newStartPos = styler.LineStart(lineCurrent);
+            lengthDoc += startPos - newStartPos;
+            startPos = newStartPos;
+            initStyle = 0;
+            if (startPos > 0) {
+                initStyle = styler.StyleAt(startPos - 1);
+            }
+        }
+        fnFolder(startPos, lengthDoc, initStyle, keywordlists, styler);
+    }
 }

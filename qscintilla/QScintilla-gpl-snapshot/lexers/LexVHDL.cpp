@@ -146,17 +146,17 @@ static void ColouriseVHDLDoc(
 }
 //=============================================================================
 static bool IsCommentLine(int line, Accessor &styler) {
-	int pos = styler.LineStart(line);
-	int eol_pos = styler.LineStart(line + 1) - 1;
-	for (int i = pos; i < eol_pos; i++) {
-		char ch = styler[i];
-		char chNext = styler[i+1];
-		if ((ch == '-') && (chNext == '-'))
-			return true;
-		else if (ch != ' ' && ch != '\t')
-			return false;
-	}
-	return false;
+    int pos = styler.LineStart(line);
+    int eol_pos = styler.LineStart(line + 1) - 1;
+    for (int i = pos; i < eol_pos; i++) {
+        char ch = styler[i];
+        char chNext = styler[i+1];
+        if ((ch == '-') && (chNext == '-'))
+            return true;
+        else if (ch != ' ' && ch != '\t')
+            return false;
+    }
+    return false;
 }
 
 //=============================================================================
@@ -235,7 +235,7 @@ static void FoldNoBoxVHDLDoc(
       }
     }
   }
-  for(j=j+strlen(prevWord); j<endPos; j++)
+  for(j=j+static_cast<unsigned int>(strlen(prevWord)); j<endPos; j++)
   {
     char ch       = styler.SafeGetCharAt(j);
     int style     = styler.StyleAt(j);
@@ -271,7 +271,7 @@ static void FoldNoBoxVHDLDoc(
     styleNext       = styler.StyleAt(i + 1);
     bool atEOL      = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
-		if (foldComment && atEOL && IsCommentLine(lineCurrent, styler))
+        if (foldComment && atEOL && IsCommentLine(lineCurrent, styler))
     {
       if(!IsCommentLine(lineCurrent-1, styler) && IsCommentLine(lineCurrent+1, styler))
       {

@@ -47,24 +47,24 @@ ApplicationWindow::ApplicationWindow()
 
     openIcon = QPixmap( fileopen );
     QToolButton * fileOpen
-	= new QToolButton( openIcon, "Open File", QString::null,
-			   this, SLOT(choose()), fileTools, "open file" );
+    = new QToolButton( openIcon, "Open File", QString::null,
+               this, SLOT(choose()), fileTools, "open file" );
 
     saveIcon = QPixmap( filesave );
     QToolButton * fileSave
-	= new QToolButton( saveIcon, "Save File", QString::null,
-			   this, SLOT(save()), fileTools, "save file" );
+    = new QToolButton( saveIcon, "Save File", QString::null,
+               this, SLOT(save()), fileTools, "save file" );
 
     printIcon = QPixmap( fileprint );
     QToolButton * filePrint
-	= new QToolButton( printIcon, "Print File", QString::null,
-			   this, SLOT(print()), fileTools, "print file" );
+    = new QToolButton( printIcon, "Print File", QString::null,
+               this, SLOT(print()), fileTools, "print file" );
 
 
     (void)QWhatsThis::whatsThisButton( fileTools );
 
     const char * fileOpenText = "<p><img source=\"fileopen\"> "
-	         "Click this button to open a <em>new file</em>.<br>"
+             "Click this button to open a <em>new file</em>.<br>"
                  "You can also select the <b>Open</b> command "
                  "from the <b>File</b> menu.</p>";
 
@@ -81,8 +81,8 @@ ApplicationWindow::ApplicationWindow()
 
     const char * filePrintText = "Click this button to print the file you "
                  "are editing.\n"
-		 "You can also select the Print command "
-		 "from the File menu.";
+         "You can also select the Print command "
+         "from the File menu.";
 
     QWhatsThis::add( filePrint, filePrintText );
 
@@ -95,11 +95,11 @@ ApplicationWindow::ApplicationWindow()
 
     int id;
     id = file->insertItem( openIcon, "&Open...",
-			   this, SLOT(choose()), CTRL+Key_O );
+               this, SLOT(choose()), CTRL+Key_O );
     file->setWhatsThis( id, fileOpenText );
 
     id = file->insertItem( saveIcon, "&Save",
-			   this, SLOT(save()), CTRL+Key_S );
+               this, SLOT(save()), CTRL+Key_S );
     file->setWhatsThis( id, fileSaveText );
 
     id = file->insertItem( "Save &As...", this, SLOT(saveAs()) );
@@ -108,7 +108,7 @@ ApplicationWindow::ApplicationWindow()
     file->insertSeparator();
 
     id = file->insertItem( printIcon, "&Print...",
-			   this, SLOT(print()), CTRL+Key_P );
+               this, SLOT(print()), CTRL+Key_P );
     file->setWhatsThis( id, filePrintText );
 
     file->insertSeparator();
@@ -153,11 +153,11 @@ void ApplicationWindow::newDoc()
 void ApplicationWindow::choose()
 {
     QString fn = QFileDialog::getOpenFileName( QString::null, QString::null,
-					       this);
+                           this);
     if ( !fn.isEmpty() )
-	load( fn );
+    load( fn );
     else
-	statusBar()->message( "Loading aborted", 2000 );
+    statusBar()->message( "Loading aborted", 2000 );
 }
 
 
@@ -165,7 +165,7 @@ void ApplicationWindow::load( const QString &fileName )
 {
     QFile f( fileName );
     if ( !f.open( IO_ReadOnly ) )
-	return;
+    return;
 
     QTextStream ts( &f );
     e->setText( ts.read() );
@@ -178,16 +178,16 @@ void ApplicationWindow::load( const QString &fileName )
 void ApplicationWindow::save()
 {
     if ( filename.isEmpty() ) {
-	saveAs();
-	return;
+    saveAs();
+    return;
     }
 
     QString text = e->text();
     QFile f( filename );
     if ( !f.open( IO_WriteOnly ) ) {
-	statusBar()->message( QString("Could not write to %1").arg(filename),
-			      2000 );
-	return;
+    statusBar()->message( QString("Could not write to %1").arg(filename),
+                  2000 );
+    return;
     }
 
     QTextStream t( &f );
@@ -205,12 +205,12 @@ void ApplicationWindow::save()
 void ApplicationWindow::saveAs()
 {
     QString fn = QFileDialog::getSaveFileName( QString::null, QString::null,
-					       this );
+                           this );
     if ( !fn.isEmpty() ) {
-	filename = fn;
-	save();
+    filename = fn;
+    save();
     } else {
-	statusBar()->message( "Saving aborted", 2000 );
+    statusBar()->message( "Saving aborted", 2000 );
     }
 }
 
@@ -218,41 +218,41 @@ void ApplicationWindow::saveAs()
 void ApplicationWindow::print()
 {
     printer->setFullPage( TRUE );
-    if ( printer->setup(this) ) {		// printer dialog
-	statusBar()->message( "Printing..." );
+    if ( printer->setup(this) ) {       // printer dialog
+    statusBar()->message( "Printing..." );
 
-	if (printer->printRange( e ))
-	    statusBar()->message( "Printing completed", 2000 );
-	else
-	    statusBar()->message( "Error while printing", 2000 );
+    if (printer->printRange( e ))
+        statusBar()->message( "Printing completed", 2000 );
+    else
+        statusBar()->message( "Error while printing", 2000 );
     } else {
-	statusBar()->message( "Printing aborted", 2000 );
+    statusBar()->message( "Printing aborted", 2000 );
     }
 }
 
 void ApplicationWindow::closeEvent( QCloseEvent* ce )
 {
     if ( !e->isModified() ) {
-	ce->accept();
-	return;
+    ce->accept();
+    return;
     }
 
     switch( QMessageBox::information( this, "QScintilla Application Example",
-				      "Do you want to save the changes"
-				      " to the document?",
-				      "Yes", "No", "Cancel",
-				      0, 1 ) ) {
+                      "Do you want to save the changes"
+                      " to the document?",
+                      "Yes", "No", "Cancel",
+                      0, 1 ) ) {
     case 0:
-	save();
-	ce->accept();
-	break;
+    save();
+    ce->accept();
+    break;
     case 1:
-	ce->accept();
-	break;
+    ce->accept();
+    break;
     case 2:
     default: // just for sanity
-	ce->ignore();
-	break;
+    ce->ignore();
+    break;
     }
 }
 
@@ -260,8 +260,8 @@ void ApplicationWindow::closeEvent( QCloseEvent* ce )
 void ApplicationWindow::about()
 {
     QMessageBox::about( this, "QScintilla Application Example",
-			"This example demonstrates a simple use of "
-			"QsciScintilla and QsciPrinter.");
+            "This example demonstrates a simple use of "
+            "QsciScintilla and QsciPrinter.");
 }
 
 

@@ -137,7 +137,37 @@ public:
         FormatIdentifier = 41,
 
         //! A format body.
-        FormatBody = 42
+        FormatBody = 42,
+
+        //! A double-quoted string (interpolated variable).
+        DoubleQuotedStringVar = 43,
+
+        //! A translation.
+        Translation = 44,
+
+        //! A regular expression (interpolated variable).
+        RegexVar = 54,
+
+        //! A substitution (interpolated variable).
+        SubstitutionVar = 55,
+
+        //! Backticks (interpolated variable).
+        BackticksVar = 57,
+
+        //! A double quoted here document (interpolated variable).
+        DoubleQuotedHereDocumentVar = 61,
+
+        //! A backtick here document (interpolated variable).
+        BacktickHereDocumentVar = 62,
+
+        //! A quoted string (qq, interpolated variable).
+        QuotedStringQQVar = 64,
+
+        //! A quoted string (qx, interpolated variable).
+        QuotedStringQXVar = 65,
+
+        //! A quoted string (qr, interpolated variable).
+        QuotedStringQRVar = 66
     };
 
     //! Construct a QsciLexerPerl with parent \a parent.  \a parent is
@@ -193,6 +223,17 @@ public:
     //! Causes all properties to be refreshed by emitting the
     //! propertyChanged() signal as required.
     void refreshProperties();
+
+    //! If \a fold is true then "} else {" lines can be folded.  The default is
+    //! false.
+    //!
+    //! \sa foldAtElse()
+    void setFoldAtElse(bool fold);
+
+    //! Returns true if "} else {" lines can be folded.
+    //!
+    //! \sa setFoldAtElse()
+    bool foldAtElse() const {return fold_atelse;}
 
     //! Returns true if multi-line comment blocks can be folded.
     //!
@@ -251,11 +292,13 @@ protected:
     bool writeProperties(QSettings &qs,const QString &prefix) const;
 
 private:
+    void setAtElseProp();
     void setCommentProp();
     void setCompactProp();
     void setPackagesProp();
     void setPODBlocksProp();
 
+    bool fold_atelse;
     bool fold_comments;
     bool fold_compact;
     bool fold_packages;

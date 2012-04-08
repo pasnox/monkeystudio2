@@ -33,8 +33,8 @@
 // The ctor.
 QsciLexerPerl::QsciLexerPerl(QObject *parent, const char *name)
     : QsciLexer(parent, name),
-      fold_comments(false), fold_compact(true), fold_packages(true),
-      fold_pod_blocks(true)
+      fold_atelse(false), fold_comments(false), fold_compact(true),
+      fold_packages(true), fold_pod_blocks(true)
 {
 }
 
@@ -132,6 +132,7 @@ QColor QsciLexerPerl::defaultColor(int style) const
     case QuotedStringQR:
     case QuotedStringQW:
     case SubroutinePrototype:
+    case Translation:
         return QColor(0x00,0x00,0x00);
 
     case DataSection:
@@ -140,6 +141,17 @@ QColor QsciLexerPerl::defaultColor(int style) const
     case FormatIdentifier:
     case FormatBody:
         return QColor(0xc0,0x00,0xc0);
+
+    case DoubleQuotedStringVar:
+    case RegexVar:
+    case SubstitutionVar:
+    case BackticksVar:
+    case DoubleQuotedHereDocumentVar:
+    case BacktickHereDocumentVar:
+    case QuotedStringQQVar:
+    case QuotedStringQXVar:
+    case QuotedStringQRVar:
+        return QColor(0xd0, 0x00, 0x00);
     }
 
     return QsciLexer::defaultColor(style);
@@ -158,6 +170,8 @@ bool QsciLexerPerl::defaultEolFill(int style) const
     case BacktickHereDocument:
     case PODVerbatim:
     case FormatBody:
+    case DoubleQuotedHereDocumentVar:
+    case BacktickHereDocumentVar:
         return true;
     }
 
@@ -196,6 +210,13 @@ QFont QsciLexerPerl::defaultFont(int style) const
     case Operator:
     case DoubleQuotedHereDocument:
     case FormatIdentifier:
+    case RegexVar:
+    case SubstitutionVar:
+    case BackticksVar:
+    case DoubleQuotedHereDocumentVar:
+    case BacktickHereDocumentVar:
+    case QuotedStringQXVar:
+    case QuotedStringQRVar:
         f = QsciLexer::defaultFont(style);
         f.setBold(true);
         break;
@@ -217,6 +238,18 @@ QFont QsciLexerPerl::defaultFont(int style) const
     case SubroutinePrototype:
         f = QsciLexer::defaultFont(style);
         f.setItalic(true);
+        break;
+
+    case DoubleQuotedStringVar:
+    case QuotedStringQQVar:
+#if defined(Q_OS_WIN)
+        f = QFont("Courier New",10);
+#elif defined(Q_OS_MAC)
+        f = QFont("Courier", 12);
+#else
+        f = QFont("Bitstream Vera Sans Mono",9);
+#endif
+        f.setBold(true);
         break;
 
     default:
@@ -368,6 +401,36 @@ QString QsciLexerPerl::description(int style) const
 
     case FormatBody:
         return tr("Format body");
+
+    case DoubleQuotedStringVar:
+        return tr("Double-quoted string (interpolated variable)");
+
+    case Translation:
+        return tr("Translation");
+
+    case RegexVar:
+        return tr("Regular expression (interpolated variable)");
+
+    case SubstitutionVar:
+        return tr("Substitution (interpolated variable)");
+
+    case BackticksVar:
+        return tr("Backticks (interpolated variable)");
+
+    case DoubleQuotedHereDocumentVar:
+        return tr("Double-quoted here document (interpolated variable)");
+
+    case BacktickHereDocumentVar:
+        return tr("Backtick here document (interpolated variable)");
+
+    case QuotedStringQQVar:
+        return tr("Quoted string (qq, interpolated variable)");
+
+    case QuotedStringQXVar:
+        return tr("Quoted string (qx, interpolated variable)");
+
+    case QuotedStringQRVar:
+        return tr("Quoted string (qr, interpolated variable)");
     }
 
     return QString();
@@ -401,9 +464,12 @@ QColor QsciLexerPerl::defaultPaper(int style) const
         return QColor(0xa0,0xff,0xa0);
 
     case Substitution:
+    case Translation:
         return QColor(0xf0,0xe0,0x80);
 
     case Backticks:
+    case BackticksVar:
+    case QuotedStringQXVar:
         return QColor(0xa0,0x80,0x80);
 
     case DataSection:
@@ -413,6 +479,8 @@ QColor QsciLexerPerl::defaultPaper(int style) const
     case SingleQuotedHereDocument:
     case DoubleQuotedHereDocument:
     case BacktickHereDocument:
+    case DoubleQuotedHereDocumentVar:
+    case BacktickHereDocumentVar:
         return QColor(0xdd,0xd0,0xdd);
 
     case PODVerbatim:
@@ -429,6 +497,7 @@ QColor QsciLexerPerl::defaultPaper(int style) const
 // Refresh all properties.
 void QsciLexerPerl::refreshProperties()
 {
+    setAtElseProp();
     setCommentProp();
     setCompactProp();
     setPackagesProp();
@@ -442,6 +511,13 @@ bool QsciLexerPerl::readProperties(QSettings &qs,const QString &prefix)
     int rc = true;
 
     bool ok, flag;
+
+    flag = qs.readBoolEntry(prefix + "foldatelse", false, &ok);
+
+    if (ok)
+        fold_atelse = flag;
+    else
+        rc = false;
 
     flag = qs.readBoolEntry(prefix + "foldcomments", false, &ok);
 
@@ -479,6 +555,9 @@ bool QsciLexerPerl::readProperties(QSettings &qs,const QString &prefix)
 bool QsciLexerPerl::writeProperties(QSettings &qs,const QString &prefix) const
 {
     int rc = true;
+
+    if (!qs.writeEntry(prefix + "foldatelse", fold_atelse))
+        rc = false;
 
     if (!qs.writeEntry(prefix + "foldcomments", fold_comments))
         rc = false;
@@ -585,4 +664,20 @@ void QsciLexerPerl::setFoldPODBlocks(bool fold)
 void QsciLexerPerl::setPODBlocksProp()
 {
     emit propertyChanged("fold.perl.pod",(fold_pod_blocks ? "1" : "0"));
+}
+
+
+// Set if else can be folded.
+void QsciLexerPerl::setFoldAtElse(bool fold)
+{
+    fold_atelse = fold;
+
+    setAtElseProp();
+}
+
+
+// Set the "fold.perl.at.else" property.
+void QsciLexerPerl::setAtElseProp()
+{
+    emit propertyChanged("fold.perl.at.else",(fold_atelse ? "1" : "0"));
 }

@@ -241,6 +241,17 @@ public:
     //! \sa setDollarsAllowed()
     bool dollarsAllowed() const {return dollars;}
 
+    //! If \a enabled is true then triple quoted strings are highlighted.  The
+    //! default is false.
+    //!
+    //! \sa highlightTripleQuotedStrings()
+    void setHighlightTripleQuotedStrings(bool enabled);
+
+    //! Returns true of triple quoted strings should be highlighted.
+    //!
+    //! \sa setHighlightTripleQuotedStrings()
+    bool highlightTripleQuotedStrings() const {return highlight_triple;}
+
 public slots:
     //! If \a fold is true then "} else {" lines can be folded.  The
     //! default is false.
@@ -294,6 +305,7 @@ private:
     void setPreprocProp();
     void setStylePreprocProp();
     void setDollarsProp();
+    void setHighlightTripleProp();
 
     bool fold_atelse;
     bool fold_comments;
@@ -301,6 +313,7 @@ private:
     bool fold_preproc;
     bool style_preproc;
     bool dollars;
+    bool highlight_triple;
 
     bool nocase;
 

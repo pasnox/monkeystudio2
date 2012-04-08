@@ -1,10 +1,22 @@
-Q_OS    = $$lower( $$QMAKE_HOST.os )
-Q_OS_BUILD = $$Q_OS
-win32:Q_OS_BUILD = windows
+win32:!isEqual( $$lower( $${QMAKE_HOST.os} ), "windows" ):CONFIG *= cb_win32
+mac:!isEqual( $$lower( $${QMAKE_HOST.os} ), "darwin" ):CONFIG *= cb_mac
+
+Q_HOST = $${QMAKE_HOST.os}
+Q_TARGET = $${Q_HOST}
+Q_ARCH = $${QT_ARCH}
+
+cb_win32 {
+  Q_TARGET = Windows
+}
+
+cb_mac {
+  Q_TARGET = Darwin
+}
+
+Q_TARGET_ARCH = "$${Q_TARGET}-$${Q_ARCH}"
+
 Q_BACK_SLASH = \
 Q_SLASH = /
-
-win32:!isEqual( Q_OS, "windows" ):CONFIG    *= win32_crossbuild
 
 # lupdate/lrelease too buggy ( not full qmake interpreter ), so avoid functions def in this case
 isEmpty( translations_pass ) {
@@ -18,12 +30,12 @@ isEmpty( translations_pass ) {
         for( q_path, q_paths ) {
             command = "ls -RQ1 \"$$q_path\" | grep \":\" | sed \"s/://g\" | sed \"s/'/\\\\\\'/g\""
             mac|win32:command   = ls -R1 \"$$q_path\" | grep \":\" | sed \"s/://g\" | sed \"s/\'/\\\\\\\'/g\" | sed \"s/\\(.*\\)/\\\"\\1\\\"/g\"
-            win32:isEqual( Q_OS, windows ):command  = "for /D /R \"$$q_path\" %i in (*) do @echo \"%i\""
+            win32:!cb_win32:command  = "for /D /R \"$$q_path\" %i in (*) do @echo \"%i\""
 
             _q_folders  = $$system( $$command )
             _q_folders *= $$1
             
-            _q_folders = $$replace( _q_folders, $$Q_BACK_SLASH, $Q_SLASH )
+            _q_folders = $$replace( _q_folders, $$Q_BACK_SLASH, $$Q_SLASH )
 
             # loop paths
             for( q_folder, _q_folders ) {
@@ -99,10 +111,10 @@ isEmpty( translations_pass ) {
         q_build_path    = $$1
         q_mode  = $$buildMode()
 
-        OBJECTS_DIR = $${q_build_path}/$${q_mode}/$${q_os}/obj
-        UI_DIR  = $${q_build_path}/$${q_mode}/$${q_os}/ui
-        MOC_DIR = $${q_build_path}/$${q_mode}/$${q_os}/moc
-        RCC_DIR = $${q_build_path}/$${q_mode}/$${q_os}/rcc
+        OBJECTS_DIR = $${q_build_path}/$${Q_TARGET_ARCH}/$${q_mode}/obj
+        UI_DIR  = $${q_build_path}/$${Q_TARGET_ARCH}/$${q_mode}/ui
+        MOC_DIR = $${q_build_path}/$${Q_TARGET_ARCH}/$${q_mode}/moc
+        RCC_DIR = $${q_build_path}/$${Q_TARGET_ARCH}/$${q_mode}/rcc
 
         export( OBJECTS_DIR )
         export( UI_DIR )

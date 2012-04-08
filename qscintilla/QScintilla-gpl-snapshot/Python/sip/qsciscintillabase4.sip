@@ -293,6 +293,8 @@ public:
         SCI_LINESSPLIT,
         SCI_SETFOLDMARGINCOLOUR,
         SCI_SETFOLDMARGINHICOLOUR,
+        SCI_MARKERSETBACKSELECTED,
+        SCI_MARKERENABLEHIGHLIGHT,
         SCI_LINEDOWN,
         SCI_LINEDOWNEXTEND,
         SCI_LINEUP,
@@ -482,6 +484,8 @@ public:
         SCI_GETHOTSPOTACTIVEBACK,
         SCI_GETHOTSPOTACTIVEUNDERLINE,
         SCI_GETHOTSPOTSINGLELINE,
+        SCI_BRACEHIGHLIGHTINDICATOR,
+        SCI_BRACEBADLIGHTINDICATOR,
         SCI_SETINDICATORCURRENT,
         SCI_GETINDICATORCURRENT,
         SCI_SETINDICATORVALUE,
@@ -521,6 +525,7 @@ public:
         SCI_MARGINTEXTCLEARALL,
         SCI_MARGINSETSTYLEOFFSET,
         SCI_MARGINGETSTYLEOFFSET,
+        SCI_SETMARGINOPTIONS,
         SCI_ANNOTATIONSETTEXT,
         SCI_ANNOTATIONGETTEXT,
         SCI_ANNOTATIONSETSTYLE,
@@ -533,6 +538,10 @@ public:
         SCI_ANNOTATIONGETVISIBLE,
         SCI_ANNOTATIONSETSTYLEOFFSET,
         SCI_ANNOTATIONGETSTYLEOFFSET,
+        SCI_SETEMPTYSELECTION,
+        SCI_GETMARGINOPTIONS,
+        SCI_INDICSETOUTLINEALPHA,
+        SCI_INDICGETOUTLINEALPHA,
         SCI_ADDUNDOACTION,
         SCI_CHARPOSITIONFROMPOINT,
         SCI_CHARPOSITIONFROMPOINTCLOSE,
@@ -592,6 +601,16 @@ public:
         SCI_CHANGELEXERSTATE,
         SCI_CONTRACTEDFOLDNEXT,
         SCI_VERTICALCENTRECARET,
+        SCI_MOVESELECTEDLINESUP,
+        SCI_MOVESELECTEDLINESDOWN,
+        SCI_SETIDENTIFIER,
+        SCI_GETIDENTIFIER,
+        SCI_RGBAIMAGESETWIDTH,
+        SCI_RGBAIMAGESETHEIGHT,
+        SCI_MARKERDEFINERGBAIMAGE,
+        SCI_REGISTERRGBAIMAGE,
+        SCI_SCROLLTOSTART,
+        SCI_SCROLLTOEND,
         SCI_STARTRECORD,
         SCI_STOPRECORD,
         SCI_SETLEXER,
@@ -631,6 +650,11 @@ public:
         SC_EFF_QUALITY_NON_ANTIALIASED,
         SC_EFF_QUALITY_ANTIALIASED,
         SC_EFF_QUALITY_LCD_OPTIMIZED,
+    };
+
+    enum {
+        SC_MARGINOPTION_NONE,
+        SC_MARGINOPTION_SUBLINESELECT,
     };
 
     enum {
@@ -724,6 +748,7 @@ public:
         SC_MARK_LEFTRECT,
         SC_MARK_AVAILABLE,
         SC_MARK_UNDERLINE,
+        SC_MARK_RGBAIMAGE,
         SC_MARK_CHARACTER
     };
 
@@ -797,7 +822,6 @@ public:
     };
 
     enum {
-        INDIC_MAX,
         INDIC_PLAIN,
         INDIC_SQUIGGLE,
         INDIC_TT,
@@ -806,7 +830,14 @@ public:
         INDIC_HIDDEN,
         INDIC_BOX,
         INDIC_ROUNDBOX,
+        INDIC_STRAIGHTBOX,
+        INDIC_DASH,
+        INDIC_DOTS,
+        INDIC_SQUIGGLELOW,
+        INDIC_DOTBOX,
+
         INDIC_CONTAINER,
+        INDIC_MAX,
         INDIC0_MASK,
         INDIC1_MASK,
         INDIC2_MASK,
@@ -963,6 +994,7 @@ public:
         SCMOD_CTRL,
         SCMOD_ALT,
         SCMOD_SUPER,
+        SCMOD_META,
     };
 
     enum {
@@ -1158,6 +1190,8 @@ while (i >= 0);
             const QRect &rc, long cpMin, long cpMax) const;
     long SendScintilla(unsigned int msg, unsigned long wParam,
             const QPixmap &lParam) const;
+    long SendScintilla(unsigned int msg, unsigned long wParam,
+            const QImage &lParam) const;
 
     void *SendScintillaPtrResult(unsigned int msg) const;
 

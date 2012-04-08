@@ -99,7 +99,7 @@ enum
 
 
 // The ctor.
-ScintillaQt::ScintillaQt(QsciScintillaBase *qsb_)
+QsciScintillaQt::QsciScintillaQt(QsciScintillaBase *qsb_)
     : capturedMouse(false), qsb(qsb_)
 {
     wMain = qsb->viewport();
@@ -113,21 +113,21 @@ ScintillaQt::ScintillaQt(QsciScintillaBase *qsb_)
 
 
 // The dtor.
-ScintillaQt::~ScintillaQt()
+QsciScintillaQt::~QsciScintillaQt()
 { 
     Finalise();
 }
 
 
 // Initialise the instance.
-void ScintillaQt::Initialise()
+void QsciScintillaQt::Initialise()
 {
     SetTicking(true);
 }
 
 
 // Tidy up the instance.
-void ScintillaQt::Finalise()
+void QsciScintillaQt::Finalise()
 {
     SetTicking(false);
     ScintillaBase::Finalise();
@@ -135,7 +135,7 @@ void ScintillaQt::Finalise()
 
 
 // Start a drag.
-void ScintillaQt::StartDrag()
+void QsciScintillaQt::StartDrag()
 {
     inDragDrop = ddDragging;
 
@@ -146,13 +146,13 @@ void ScintillaQt::StartDrag()
     if (dobj->drag() && dobj->target() != qsb->viewport())
         ClearSelection();
 
-    SetDragPosition(SelectionPosition());
+    SetDragPosition(QSCI_SCI_NAMESPACE(SelectionPosition)());
     inDragDrop = ddNone;
 }
 
 
 // Re-implement to trap certain messages.
-sptr_t ScintillaQt::WndProc(unsigned int iMessage, uptr_t wParam,
+sptr_t QsciScintillaQt::WndProc(unsigned int iMessage, uptr_t wParam,
         sptr_t lParam)
 {
     switch (iMessage)
@@ -169,14 +169,14 @@ sptr_t ScintillaQt::WndProc(unsigned int iMessage, uptr_t wParam,
 
 
 // Windows nonsense.
-sptr_t ScintillaQt::DefWndProc(unsigned int, uptr_t, sptr_t)
+sptr_t QsciScintillaQt::DefWndProc(unsigned int, uptr_t, sptr_t)
 {
     return 0;
 }
 
 
 // Manage the timer.
-void ScintillaQt::SetTicking(bool on)
+void QsciScintillaQt::SetTicking(bool on)
 {
     if (timer.ticking != on)
     {
@@ -193,7 +193,7 @@ void ScintillaQt::SetTicking(bool on)
 
 
 // Grab or release the mouse (and keyboard).
-void ScintillaQt::SetMouseCapture(bool on)
+void QsciScintillaQt::SetMouseCapture(bool on)
 {
     if (mouseDownCaptures)
         if (on)
@@ -206,21 +206,21 @@ void ScintillaQt::SetMouseCapture(bool on)
 
 
 // Return true if the mouse/keyboard are currently grabbed.
-bool ScintillaQt::HaveMouseCapture()
+bool QsciScintillaQt::HaveMouseCapture()
 {
     return capturedMouse;
 }
 
 
 // Set the position of the vertical scrollbar.
-void ScintillaQt::SetVerticalScrollPos()
+void QsciScintillaQt::SetVerticalScrollPos()
 {
     qsb->verticalScrollBar()->setValue(topLine);
 }
 
 
 // Set the position of the horizontal scrollbar.
-void ScintillaQt::SetHorizontalScrollPos()
+void QsciScintillaQt::SetHorizontalScrollPos()
 {
     qsb->horizontalScrollBar()->setValue(xOffset);
 }
@@ -228,7 +228,7 @@ void ScintillaQt::SetHorizontalScrollPos()
 
 // Set the extent of the vertical and horizontal scrollbars and return true if
 // the view needs re-drawing.
-bool ScintillaQt::ModifyScrollBars(int nMax,int nPage)
+bool QsciScintillaQt::ModifyScrollBars(int nMax,int nPage)
 {
     qsb->verticalScrollBar()->setMinValue(0);
     qsb->horizontalScrollBar()->setMinValue(0);
@@ -246,7 +246,7 @@ bool ScintillaQt::ModifyScrollBars(int nMax,int nPage)
 
 
 // Called after SCI_SETWRAPMODE and SCI_SETHSCROLLBAR.
-void ScintillaQt::ReconfigureScrollBars()
+void QsciScintillaQt::ReconfigureScrollBars()
 {
     // Hide or show the scrollbars if needed.
     bool hsb = (horizontalScrollBarVisible && wrapState == eWrapNone);
@@ -264,7 +264,7 @@ void ScintillaQt::ReconfigureScrollBars()
 
 
 // Notify interested parties of any change in the document.
-void ScintillaQt::NotifyChange()
+void QsciScintillaQt::NotifyChange()
 {
     emit qsb->SCEN_CHANGE();
 }
@@ -272,7 +272,7 @@ void ScintillaQt::NotifyChange()
 
 // Notify interested parties of various events.  This is the main mapping
 // between Scintilla notifications and Qt signals.
-void ScintillaQt::NotifyParent(SCNotification scn)
+void QsciScintillaQt::NotifyParent(QSCI_SCI_NAMESPACE(SCNotification) scn)
 {
     switch (scn.nmhdr.code)
     {
@@ -407,7 +407,8 @@ void ScintillaQt::NotifyParent(SCNotification scn)
 
 
 // Convert a text range to a QString.
-QString ScintillaQt::textRange(const SelectionText *text) const
+QString QsciScintillaQt::textRange(
+        const QSCI_SCI_NAMESPACE(SelectionText) *text) const
 {
     if (!text->s)
         return QString();
@@ -421,18 +422,19 @@ QString ScintillaQt::textRange(const SelectionText *text) const
 
 
 // Copy the selected text to the clipboard.
-void ScintillaQt::CopyToClipboard(const SelectionText &selectedText)
+void QsciScintillaQt::CopyToClipboard(
+        const QSCI_SCI_NAMESPACE(SelectionText) &selectedText)
 {
     QApplication::clipboard()->setText(textRange(&selectedText));
 }
 
 
 // Implement copy.
-void ScintillaQt::Copy()
+void QsciScintillaQt::Copy()
 {
     if (!sel.Empty())
     {
-        SelectionText text;
+        QSCI_SCI_NAMESPACE(SelectionText) text;
 
         CopySelectionRange(&text);
         CopyToClipboard(text);
@@ -441,14 +443,14 @@ void ScintillaQt::Copy()
 
 
 // Implement pasting text.
-void ScintillaQt::Paste()
+void QsciScintillaQt::Paste()
 {
     pasteFromClipboard(QClipboard::Clipboard);
 }
 
 
 // Paste text from either the clipboard or selection.
-void ScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
+void QsciScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
 {
     int len;
     const char *s;
@@ -479,14 +481,15 @@ void ScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
 
     rectangular = false;
 
-    s = Document::TransformLineEnds(&len, s, len, pdoc->eolMode);
+    s = QSCI_SCI_NAMESPACE(Document)::TransformLineEnds(&len, s, len,
+            pdoc->eolMode);
 
-    UndoGroup ug(pdoc);
+    QSCI_SCI_NAMESPACE(UndoGroup) ug(pdoc);
 
     ClearSelection();
 
-    SelectionPosition start = sel.IsRectangular() ? sel.Rectangular().Start()
-            : sel.Range(sel.Main()).Start();
+    QSCI_SCI_NAMESPACE(SelectionPosition) start = sel.IsRectangular()
+            ? sel.Rectangular().Start() : sel.Range(sel.Main()).Start();
 
     if (rectangular)
         PasteRectangular(start, s, len);
@@ -501,12 +504,12 @@ void ScintillaQt::pasteFromClipboard(QClipboard::Mode mode)
 
 
 // Create a call tip window.
-void ScintillaQt::CreateCallTipWindow(PRectangle rc)
+void QsciScintillaQt::CreateCallTipWindow(QSCI_SCI_NAMESPACE(PRectangle) rc)
 {
     if (!ct.wCallTip.Created())
-        ct.wCallTip = ct.wDraw = new SciCallTip(qsb, this);
+        ct.wCallTip = ct.wDraw = new QsciSciCallTip(qsb, this);
 
-    SciCallTip *w = reinterpret_cast<SciCallTip *>(ct.wCallTip.GetID());
+    QsciSciCallTip *w = reinterpret_cast<QsciSciCallTip *>(ct.wCallTip.GetID());
 
     w->resize(rc.right - rc.left, rc.bottom - rc.top);
     ct.wCallTip.Show();
@@ -514,9 +517,9 @@ void ScintillaQt::CreateCallTipWindow(PRectangle rc)
 
 
 // Add an item to the right button menu.
-void ScintillaQt::AddToPopUp(const char *label, int cmd, bool enabled)
+void QsciScintillaQt::AddToPopUp(const char *label, int cmd, bool enabled)
 {
-    SciPopup *pm = static_cast<SciPopup *>(popup.GetID());
+    QsciSciPopup *pm = static_cast<QsciSciPopup *>(popup.GetID());
 
     if (*label)
         pm->addItem(qApp->translate("ContextMenu", label), cmd, enabled, this);
@@ -526,7 +529,7 @@ void ScintillaQt::AddToPopUp(const char *label, int cmd, bool enabled)
 
 
 // Claim the selection.
-void ScintillaQt::ClaimSelection()
+void QsciScintillaQt::ClaimSelection()
 {
     bool isSel = !sel.Empty();
 
@@ -537,7 +540,7 @@ void ScintillaQt::ClaimSelection()
         // If we support X11 style selection then make it available now.
         if (cb->supportsSelection())
         {
-            SelectionText text;
+            QSCI_SCI_NAMESPACE(SelectionText) text;
 
             CopySelectionRange(&text);
 
@@ -555,7 +558,7 @@ void ScintillaQt::ClaimSelection()
 
 
 // Unclaim the selection.
-void ScintillaQt::UnclaimSelection()
+void QsciScintillaQt::UnclaimSelection()
 {
     if (primarySelection)
     {
@@ -566,7 +569,7 @@ void ScintillaQt::UnclaimSelection()
 
 
 // Implemented to provide compatibility with the Windows version.
-sptr_t ScintillaQt::DirectFunction(ScintillaQt *sciThis, unsigned int iMessage,
+sptr_t QsciScintillaQt::DirectFunction(QsciScintillaQt *sciThis, unsigned int iMessage,
         uptr_t wParam, sptr_t lParam)
 {
     return sciThis->WndProc(iMessage,wParam,lParam);
@@ -574,9 +577,9 @@ sptr_t ScintillaQt::DirectFunction(ScintillaQt *sciThis, unsigned int iMessage,
 
 
 // Draw the contents of the widget.
-void ScintillaQt::paintEvent(QPaintEvent *e)
+void QsciScintillaQt::paintEvent(QPaintEvent *e)
 {
-    Surface *sw = Surface::Allocate();
+    QSCI_SCI_NAMESPACE(Surface) *sw = QSCI_SCI_NAMESPACE(Surface)::Allocate();
 
     if (!sw)
         return;
@@ -590,7 +593,7 @@ void ScintillaQt::paintEvent(QPaintEvent *e)
     rcPaint.right = qr.right() + 1;
     rcPaint.bottom = qr.bottom() + 1;
 
-    PRectangle rcText = GetTextRectangle();
+    QSCI_SCI_NAMESPACE(PRectangle) rcText = GetTextRectangle();
     paintingAllText = rcPaint.Contains(rcText);
 
     QPainter painter(qsb->viewport());

@@ -9,9 +9,6 @@ CONFIG  *= dll plugin
 # include config file
 include( $${PWD}/../config.pri )
 
-# include functions framework
-include( $${PACKAGE_PWD}/functions.pri )
-
 # include monkey framework
 include( $${PACKAGE_PWD}/monkey/monkey.pri )
 
@@ -34,20 +31,4 @@ unix:!mac:QMAKE_LFLAGS  -= -Wl,--no-undefined
 
 win32:QMAKE_LIBDIR  *= $${PACKAGE_DESTDIR}
 
-CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
-    #Debug
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/unix/$${TARGET}
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/win32/$${TARGET}
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/mac/$${TARGET}
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/plugins/debug/.moc
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/plugins/debug/.ui
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/plugins/debug/.rcc
-} else {
-    #Release
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/plugins/release/.obj/unix/$${TARGET}
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/plugins/release/.obj/win32/$${TARGET}
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/plugins/release/.obj/mac/$${TARGET}
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/plugins/release/.moc
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/plugins/release/.ui
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/plugins/release/.rcc
-}
+setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )

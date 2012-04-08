@@ -97,7 +97,17 @@ public:
         StrikeIndicator,
         HiddenIndicator,
         BoxIndicator,
-        RoundBoxIndicator
+        RoundBoxIndicator,
+        StraightBoxIndicator,
+        DashesIndicator,
+        DotsIndicator,
+        SquiggleLowIndicator,
+        DotBoxIndicator
+    };
+
+    enum {
+        MoNone,
+        MoSublineSelect,
     };
 
     enum MarginType {
@@ -216,6 +226,9 @@ public:
     QValueList<int> contractedFolds() const;
 %End
     void convertEols(EolMode mode);
+%If (Qsci_Qt4)
+    QMenu *createStandardContextMenu() /Factory/;
+%End
 
     QsciDocument document() const;
 
@@ -272,6 +285,7 @@ public:
 
     bool marginLineNumbers(int margin) const;
     int marginMarkerMask(int margin) const;
+    int marginOptions() const;
     bool marginSensitivity(int margin) const;
     MarginType marginType(int margin) const;
     int marginWidth(int margin) const;
@@ -279,6 +293,7 @@ public:
     int markerDefine(MarkerSymbol sym, int markerNumber = -1);
     int markerDefine(char ch, int markerNumber = -1);
     int markerDefine(const QPixmap &pm, int markerNumber = -1);
+    int markerDefine(const QImage &im, int markerNumber = -1);
     int markerAdd(int linenr, int markerNumber);
     unsigned markersAtLine(int linenr) const;
     void markerDelete(int linenr, int markerNumber = -1);
@@ -294,6 +309,7 @@ public:
     bool read(QIODevice *io) /ReleaseGIL/;
     virtual void recolor(int start = 0, int end = -1);
     void registerImage(int id, const QPixmap &pm);
+    void registerImage(int id, const QImage &im);
     virtual void replace(const QString &replaceStr);
     void resetFoldMarginColors();
     void setFoldMarginColors(const QColor &fore, const QColor &back);
@@ -328,7 +344,9 @@ public:
     void setIndicatorDrawUnder(bool under, int indicatorNumber = -1);
     void setIndicatorForegroundColor(const QColor &col,
             int indicatorNumber = -1);
+    void setIndicatorOutlineColor(const QColor &col, int indicatorNumber = -1);
 
+    void setMarginOptions(int options);
     void setMarginText(int line, const QString &text, int style);
     void setMarginText(int line, const QString &text, const QsciStyle &style);
     void setMarginText(int line, const QsciStyledText &text);
@@ -346,8 +364,12 @@ public:
 
     void setMatchedBraceBackgroundColor(const QColor &col);
     void setMatchedBraceForegroundColor(const QColor &col);
+    void setMatchedBraceIndicator(int indicatorNumber);
+    void resetMatchedBraceIndicator();
     void setUnmatchedBraceBackgroundColor(const QColor &col);
     void setUnmatchedBraceForegroundColor(const QColor &col);
+    void setUnmatchedBraceIndicator(int indicatorNumber);
+    void resetUnmatchedBraceIndicator();
 
     void setWrapVisualFlags(WrapVisualFlag endFlag,
             WrapVisualFlag startFlag = QsciScintilla::WrapFlagNone,
@@ -504,6 +526,12 @@ signals:
     void selectionChanged();
     void textChanged();
     void userListActivated(int id, const QString &string);
+
+protected:
+%If (Qsci_Qt4)
+    virtual bool event(QEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+%End
 
 private:
     QsciScintilla(const QsciScintilla &);

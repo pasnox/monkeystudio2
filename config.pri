@@ -1,67 +1,50 @@
-# helpers for crossbuilds
-Q_OS	= $$lower( $$QMAKE_HOST.os )
-win32:!isEqual( Q_OS, "windows" ):CONFIG *= cb_win32
-mac:!isEqual( Q_OS, "darwin" ):CONFIG *= cb_mac
-
-# get current path
-PACKAGE_PWD = $$PWD
-
-# package name
-PACKAGE_TARGET  = monkeystudio
-mac:PACKAGE_TARGET  = $$quote(Monkey Studio)
-
-# package destdir
-PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
-
-# temporary path for building
-PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
-
-unix|cb_win32|cb_mac { # build on ramdisk instead of physical hard disk if possible
-    UNIX_RAM_DISK   = /media/ramdisk
-    exists( $${UNIX_RAM_DISK} ) {
-        PACKAGE_BUILD_PATH  = $${UNIX_RAM_DISK}/$$replace(PACKAGE_TARGET," ","")
-    }
-}
-
 # build mode
 CONFIG  *= qt warn_on thread x11 windows rtti release
-CONFIG  -= warn_off debug debug_and_release
+CONFIG  -= warn_off debug debug_and_release x86 x86_64 ppc ppc64
 QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
 mac {
     QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
     #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
-    CONFIG  *= x86 ppc x86_64
+    CONFIG  *= x86
+    #CONFIG  *= x86_64
+    #CONFIG  *= ppc
+    #CONFIG  *= ppc64
     # this link is required for building the ppc port to avoid the undefined __Unwind_Resume symbol
     CONFIG( ppc ):LIBS *= -lgcc_eh
 }
 
+# get current path
+PACKAGE_PWD = $$PWD
+
+# helpers functions
+include( $${PACKAGE_PWD}/functions.pri )
+
+# package name
+PACKAGE_TARGET  = $$targetForMode( monkeystudio )
+mac:PACKAGE_TARGET  = $$targetForMode( "MonkeyStudio" )
+TARGET = $$targetForMode( $${TARGET} )
+
+# package destdir
+PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
+
+# temporary path for building
+PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
+RAMDISK_PATH = /media/ramdisk
+
+exists( $${RAMDISK_PATH} ) {
+    PACKAGE_BUILD_PATH  = $${RAMDISK_PATH}/monkeystudio
+}
+
+setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
+
 # define config mode paths
 CONFIG( debug, debug|release ) {
-    #Debug
-    message( Building in DEBUG for architecture $$QT_ARCH )
+    message( Building in DEBUG for $${Q_TARGET_ARCH} )
     CONFIG  *= console
-    unix:PACKAGE_TARGET = $$quote($$join(PACKAGE_TARGET,,,_debug))
-    else:PACKAGE_TARGET = $$quote($$join(PACKAGE_TARGET,,,d))
-    unix:TARGET = $$quote($$join(TARGET,,,_debug))
-    else:TARGET = $$quote($$join(TARGET,,,d))
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/debug/.obj/unix
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/debug/.obj/win32
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/debug/.obj/mac
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/debug/.ui
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/debug/.moc
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/debug/.rcc
 } else {
-    #Release
-    message( Building in RELEASE for architecture $$QT_ARCH )
-    mac:TARGET  = $$quote($$TARGET)
-    unix:OBJECTS_DIR    = $${PACKAGE_BUILD_PATH}/release/.obj/unix
-    win32:OBJECTS_DIR   = $${PACKAGE_BUILD_PATH}/release/.obj/win32
-    mac:OBJECTS_DIR = $${PACKAGE_BUILD_PATH}/release/.obj/mac
-    UI_DIR  = $${PACKAGE_BUILD_PATH}/release/.ui
-    MOC_DIR = $${PACKAGE_BUILD_PATH}/release/.moc
-    RCC_DIR = $${PACKAGE_BUILD_PATH}/release/.rcc
+    message( Building in RELEASE for $${Q_TARGET_ARCH} )
 }
 
 INCLUDEPATH *= $${UI_DIR} # some qmake versions has bug and do not do it automatically
@@ -81,7 +64,7 @@ CONFIG( debug, debug|release ) {
     PACKAGE_VERSION_STR = $${PACKAGE_VERSION}svn_release
 }
 
-PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}
+PACKAGE_VERSION_STR = $${PACKAGE_VERSION}
 
 # define variable for source code
 DEFINES *= "_PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
@@ -100,45 +83,56 @@ unix:!mac {
         # plugins path
         isEmpty( plugins ) {
             isEqual( QT_ARCH, "i386" ) {
-                plugins = $$prefix/lib
+                plugins = $${prefix}/lib
             } else {
-                plugins = $$prefix/lib64
+                plugins = $${prefix}/lib64
             }
         }
 
         # datas path
         isEmpty( datas ) {
-            datas   = $$prefix/share
+            datas   = $${prefix}/share
+        }
+        
+        # docs path
+        isEmpty( docs ) {
+            docs = $${datas}/doc
         }
     }
 } else:mac {
     prefix  = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
     plugins = $${prefix}/plugins
     datas   = $${prefix}/Resources
+    docs    = $${datas}
 } else:win32 {
     prefix  = $${PACKAGE_DESTDIR}
     plugins = $${prefix}/plugins
     datas   = $${prefix}
+    docs   = $${datas}
 }
 
 unix:!mac {
-    PACKAGE_PREFIX  = $$quote($$prefix/bin)
-    PACKAGE_PLUGINS = $$quote($$plugins/$$PACKAGE_TARGET)
-    PACKAGE_DATAS   = $$quote($$datas/$$PACKAGE_TARGET)
+    PACKAGE_PREFIX  = $$quote($${prefix}/bin)
+    PACKAGE_PLUGINS = $$quote($${plugins}/$${PACKAGE_TARGET})
+    PACKAGE_DATAS   = $$quote($${datas}/$${PACKAGE_TARGET})
+    PACKAGE_DOCS   = $$quote($${docs}/$${PACKAGE_TARGET})
 } else:mac {
-    PACKAGE_PREFIX  = $$quote($$prefix/MacOS)
-    PACKAGE_PLUGINS = $$quote($$plugins)
-    PACKAGE_DATAS   = $$quote($$datas)
+    PACKAGE_PREFIX  = $$quote($${prefix}/MacOS)
+    PACKAGE_PLUGINS = $$quote($${plugins})
+    PACKAGE_DATAS   = $$quote($${datas})
+    PACKAGE_DOCS   = $$quote($${docs})
 } else:win32 {
-    PACKAGE_PREFIX  = $$quote($$prefix)
-    PACKAGE_PLUGINS = $$quote($$plugins)
-    PACKAGE_DATAS   = $$quote($$datas)
+    PACKAGE_PREFIX  = $$quote($${prefix})
+    PACKAGE_PLUGINS = $$quote($${plugins})
+    PACKAGE_DATAS   = $$quote($${datas})
+    PACKAGE_DOCS   = $$quote($${docs})
 }
 
 # define package install paths so source code can use them
 DEFINES *= "_PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
     "_PACKAGE_PLUGINS=\"\\\"$${PACKAGE_PLUGINS}\\\"\"" \
-    "_PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
+    "_PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\"" \
+    "_PACKAGE_DOCS=\"\\\"$${PACKAGE_DOCS}\\\"\""
 
 # qscintilla library
 include( qscintilla/qscintilla_check.pri )

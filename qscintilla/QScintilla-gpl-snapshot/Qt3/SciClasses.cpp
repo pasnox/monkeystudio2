@@ -24,6 +24,7 @@
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
+#include "SciNamespace.h"
 #include "SciClasses.h"
 
 #include <qevent.h>
@@ -34,7 +35,7 @@
 
 
 // Create a call tip.
-SciCallTip::SciCallTip(QWidget *parent, ScintillaQt *sci_)
+QsciSciCallTip::QsciSciCallTip(QWidget *parent, QsciScintillaQt *sci_)
     : QWidget(parent, 0, Qt::WType_Popup|Qt::WStyle_Customize|Qt::WStyle_NoBorder),
       sci(sci_)
 {
@@ -45,7 +46,7 @@ SciCallTip::SciCallTip(QWidget *parent, ScintillaQt *sci_)
 
 
 // Destroy a call tip.
-SciCallTip::~SciCallTip()
+QsciSciCallTip::~QsciSciCallTip()
 {
     // Ensure that the main window doesn't receive a focus out event when
     // this is destroyed.
@@ -54,9 +55,9 @@ SciCallTip::~SciCallTip()
 
 
 // Paint a call tip.
-void SciCallTip::paintEvent(QPaintEvent *)
+void QsciSciCallTip::paintEvent(QPaintEvent *)
 {
-    Surface *surfaceWindow = Surface::Allocate();
+    QSCI_SCI_NAMESPACE(Surface) *surfaceWindow = QSCI_SCI_NAMESPACE(Surface)::Allocate();
 
     if (!surfaceWindow)
         return;
@@ -71,9 +72,9 @@ void SciCallTip::paintEvent(QPaintEvent *)
 
 
 // Handle a mouse press in a call tip.
-void SciCallTip::mousePressEvent(QMouseEvent *e)
+void QsciSciCallTip::mousePressEvent(QMouseEvent *e)
 {
-    Point pt;
+    QSCI_SCI_NAMESPACE(Point) pt;
 
     pt.x = e->x();
     pt.y = e->y();
@@ -87,8 +88,8 @@ void SciCallTip::mousePressEvent(QMouseEvent *e)
 
 
 // Add an item and associated command to the popup and enable it if required.
-void SciPopup::addItem(const QString &label, int cmd, bool enabled,
-        ScintillaQt *sci_)
+void QsciSciPopup::addItem(const QString &label, int cmd, bool enabled,
+        QsciScintillaQt *sci_)
 {
     insertItem(label, this, SLOT(on_triggered(int)), 0, cmd);
     setItemEnabled(cmd, enabled);
@@ -97,21 +98,21 @@ void SciPopup::addItem(const QString &label, int cmd, bool enabled,
 
 
 // Add a separator to the popup.
-void SciPopup::addSeparator()
+void QsciSciPopup::addSeparator()
 {
     insertSeparator();
 }
 
 
 // A slot to handle a menu action being triggered.
-void SciPopup::on_triggered(int cmd)
+void QsciSciPopup::on_triggered(int cmd)
 {
     sci->Command(cmd);
 }
 
 
 
-SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
+QsciSciListBox::QsciSciListBox(QWidget *parent, QsciListBoxQt *lbx_)
     : QListBox(parent,0,Qt::WType_Popup|Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WStaticContents), lbx(lbx_)
 {
     setFocusProxy(parent);
@@ -127,14 +128,14 @@ SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
 }
 
 
-int SciListBox::find(const QString &prefix)
+int QsciSciListBox::find(const QString &prefix)
 {
     return index(findItem(prefix, Qt::CaseSensitive|Qt::BeginsWith));
 }
 
 
 
-SciListBox::~SciListBox()
+QsciSciListBox::~QsciSciListBox()
 {
     // Ensure that the main widget doesn't get a focus out event when this is
     // destroyed.
@@ -142,7 +143,7 @@ SciListBox::~SciListBox()
 }
 
 
-void SciListBox::handleSelection()
+void QsciSciListBox::handleSelection()
 {
     if (lbx && lbx->cb_action)
         lbx->cb_action(lbx->cb_data);

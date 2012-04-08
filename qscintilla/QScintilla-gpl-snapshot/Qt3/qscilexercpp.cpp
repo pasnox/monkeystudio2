@@ -36,7 +36,7 @@ QsciLexerCPP::QsciLexerCPP(QObject *parent, const char *name,
     : QsciLexer(parent, name),
       fold_atelse(false), fold_comments(false), fold_compact(true),
       fold_preproc(true), style_preproc(false), dollars(true),
-      nocase(caseInsensitiveKeywords)
+      highlight_triple(false), nocase(caseInsensitiveKeywords)
 {
 }
 
@@ -463,6 +463,7 @@ void QsciLexerCPP::refreshProperties()
     setPreprocProp();
     setStylePreprocProp();
     setDollarsProp();
+    setHighlightTripleProp();
 }
 
 
@@ -515,6 +516,13 @@ bool QsciLexerCPP::readProperties(QSettings &qs,const QString &prefix)
     else
         rc = false;
 
+    flag = qs.readBoolEntry(prefix + "highlighttriple", false, &ok);
+
+    if (ok)
+        highlight_triple = flag;
+    else
+        rc = false;
+
     return rc;
 }
 
@@ -540,6 +548,9 @@ bool QsciLexerCPP::writeProperties(QSettings &qs,const QString &prefix) const
         rc = false;
 
     if (!qs.writeEntry(prefix + "dollars", dollars))
+        rc = false;
+
+    if (!qs.writeEntry(prefix + "highlighttriple", highlight_triple))
         rc = false;
 
     return rc;
@@ -639,4 +650,21 @@ void QsciLexerCPP::setDollarsAllowed(bool allowed)
 void QsciLexerCPP::setDollarsProp()
 {
     emit propertyChanged("lexer.cpp.allow.dollars",(dollars ? "1" : "0"));
+}
+
+
+// Set if triple quoted strings are highlighted.
+void QsciLexerCPP::setHighlightTripleQuotedStrings(bool enabled)
+{
+    highlight_triple = enabled;
+
+    setHighlightTripleProp();
+}
+
+
+// Set the "lexer.cpp.triplequoted.strings" property.
+void QsciLexerCPP::setHighlightTripleProp()
+{
+    emit propertyChanged("lexer.cpp.triplequoted.strings",
+            (highlight_triple ? "1" : "0"));
 }

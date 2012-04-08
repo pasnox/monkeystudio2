@@ -62,6 +62,16 @@ public:
         SubroutinePrototype,
         FormatIdentifier,
         FormatBody,
+        DoubleQuotedStringVar,
+        Translation,
+        RegexVar,
+        SubstitutionVar,
+        BackticksVar,
+        DoubleQuotedHereDocumentVar,
+        BacktickHereDocumentVar,
+        QuotedStringQQVar,
+        QuotedStringQXVar,
+        QuotedStringQRVar,
     };
 
 %If (Qsci_Qt4)
@@ -86,6 +96,8 @@ public:
     bool foldComments() const;
     bool foldCompact() const;
 
+    void setFoldAtElse(bool fold);
+    bool foldAtElse() const;
     void setFoldPackages(bool fold);
     bool foldPackages() const;
     void setFoldPODBlocks(bool fold);

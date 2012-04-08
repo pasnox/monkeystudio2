@@ -101,6 +101,8 @@ public:
     bool stylePreprocessor() const;
     void setDollarsAllowed(bool allowed);
     bool dollarsAllowed() const;
+    void setHighlightTripleQuotedStrings(bool enable);
+    bool highlightTripleQuotedStrings() const;
 
 public slots:
     virtual void setFoldAtElse(bool fold);

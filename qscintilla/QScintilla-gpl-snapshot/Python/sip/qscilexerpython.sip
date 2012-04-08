@@ -81,6 +81,8 @@ public:
     bool foldCompact() const;
     bool foldQuotes() const;
     QsciLexerPython::IndentationWarning indentationWarning() const;
+    void setHighlightSubidentifiers(bool enabled);
+    bool highlightSubidentifiers() const;
     void setStringsOverNewlineAllowed(bool allowed);
     bool stringsOverNewlineAllowed() const;
     void setV2UnicodeAllowed(bool allowed);

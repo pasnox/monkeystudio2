@@ -42,13 +42,14 @@ extern "C++" {
 
 QT_BEGIN_NAMESPACE
 class QColor;
+class QImage;
 class QPainter;
 class QPixmap;
 class QObject;
 class QScrollBar;
 QT_END_NAMESPACE
 
-class ScintillaQt;
+class QsciScintillaQt;
 
 
 //! \brief The QsciScintillaBase class implements the Scintilla editor widget
@@ -232,7 +233,8 @@ public:
         //! \a wParam is the number of the marker.
         //! \a lParam is the marker symbol and is one of the SC_MARK_* values.
         //!
-        //! \sa SCI_MARKERADD, SCI_MARKERDEFINEPIXMAP
+        //! \sa SCI_MARKERADD, SCI_MARKERDEFINEPIXMAP,
+        //! SCI_MARKERDEFINERGBAIMAGE
         SCI_MARKERDEFINE = 2040,
 
         //! This message sets the foreground colour used to draw a marker.  A
@@ -308,7 +310,7 @@ public:
         //! ports of Scintilla this is a pointer to either raw or textual XPM
         //! image data.
         //!
-        //! \sa SCI_MARKERDEFINE
+        //! \sa SCI_MARKERDEFINE, SCI_MARKERDEFINERGBAIMAGE
         SCI_MARKERDEFINEPIXMAP = 2049,
 
         //! This message sets what can be displayed in a margin.
@@ -1004,6 +1006,12 @@ public:
         SCI_SETFOLDMARGINHICOLOUR = 2291,
 
         //!
+        SCI_MARKERSETBACKSELECTED = 2292,
+
+        //!
+        SCI_MARKERENABLEHIGHLIGHT = 2293,
+
+        //!
         SCI_LINEDOWN = 2300,
 
         //!
@@ -1313,7 +1321,7 @@ public:
         //! ports of Scintilla this is a pointer to either raw or textual XPM
         //! image data.
         //!
-        //! \sa SCI_CLEARREGISTEREDIMAGES
+        //! \sa SCI_CLEARREGISTEREDIMAGES, SCI_REGISTERRGBAIMAGE
         SCI_REGISTERIMAGE = 2405,
 
         //!
@@ -1324,7 +1332,7 @@ public:
 
         //! This message de-registers all currently registered images.
         //!
-        //! \sa SCI_REGISTERIMAGE
+        //! \sa SCI_REGISTERIMAGE, SCI_REGISTERRGBAIMAGE
         SCI_CLEARREGISTEREDIMAGES = 2408,
 
         //!
@@ -1580,6 +1588,12 @@ public:
         SCI_GETHOTSPOTSINGLELINE = 2497,
 
         //!
+        SCI_BRACEHIGHLIGHTINDICATOR = 2498,
+
+        //!
+        SCI_BRACEBADLIGHTINDICATOR = 2499,
+
+        //!
         SCI_SETINDICATORCURRENT = 2500,
 
         //!
@@ -1699,6 +1713,9 @@ public:
         SCI_MARGINGETSTYLEOFFSET = 2538,
 
         //!
+        SCI_SETMARGINOPTIONS = 2539,
+
+        //!
         SCI_ANNOTATIONSETTEXT = 2540,
 
         //!
@@ -1733,6 +1750,18 @@ public:
 
         //!
         SCI_ANNOTATIONGETSTYLEOFFSET = 2551,
+
+        //!
+        SCI_SETEMPTYSELECTION = 2556,
+
+        //!
+        SCI_GETMARGINOPTIONS = 2557,
+
+        //!
+        SCI_INDICSETOUTLINEALPHA = 2558,
+
+        //!
+        SCI_INDICGETOUTLINEALPHA = 2559,
 
         //!
         SCI_ADDUNDOACTION = 2560,
@@ -1912,6 +1941,57 @@ public:
         SCI_VERTICALCENTRECARET = 2619,
 
         //!
+        SCI_MOVESELECTEDLINESUP = 2620,
+
+        //!
+        SCI_MOVESELECTEDLINESDOWN = 2621,
+
+        //!
+        SCI_SETIDENTIFIER = 2622,
+
+        //!
+        SCI_GETIDENTIFIER = 2623,
+
+        //! This message sets the width of an RGBA image specified by a future
+        //! call to SCI_MARKERDEFINERGBAIMAGE or SCI_REGISTERRGBAIMAGE.
+        //!
+        //! \sa SCI_RGBAIMAGESETHEIGHT, SCI_MARKERDEFINERGBAIMAGE,
+        //! SCI_REGISTERRGBAIMAGE.
+        SCI_RGBAIMAGESETWIDTH = 2624,
+
+        //! This message sets the height of an RGBA image specified by a future
+        //! call to SCI_MARKERDEFINERGBAIMAGE or SCI_REGISTERRGBAIMAGE.
+        //!
+        //! \sa SCI_RGBAIMAGESETWIDTH, SCI_MARKERDEFINERGBAIMAGE,
+        //! SCI_REGISTERRGBAIMAGE.
+        SCI_RGBAIMAGESETHEIGHT = 2625,
+
+        //! This message sets the symbol used to draw one of the 32 markers to
+        //! an RGBA image.  RGBA images use the SC_MARK_RGBAIMAGE marker
+        //! symbol.
+        //! \a wParam is the number of the marker.
+        //! \a lParam is a pointer to a QImage instance.  Note that in other
+        //! ports of Scintilla this is a pointer to raw RGBA image data.
+        //!
+        //! \sa SCI_MARKERDEFINE, SCI_MARKERDEFINEPIXMAP
+        SCI_MARKERDEFINERGBAIMAGE = 2626,
+
+        //! This message takes a copy of an image and registers it so that it
+        //! can be refered to by a unique integer identifier.
+        //! \a wParam is the image's identifier.
+        //! \a lParam is a pointer to a QImage instance.  Note that in other
+        //! ports of Scintilla this is a pointer to raw RGBA image data.
+        //!
+        //! \sa SCI_CLEARREGISTEREDIMAGES, SCI_REGISTERIMAGE
+        SCI_REGISTERRGBAIMAGE = 2627,
+
+        //!
+        SCI_SCROLLTOSTART = 2628,
+
+        //!
+        SCI_SCROLLTOEND = 2629,
+
+        //!
         SCI_STARTRECORD = 3001,
 
         //!
@@ -1996,6 +2076,12 @@ public:
         SC_EFF_QUALITY_NON_ANTIALIASED = 1,
         SC_EFF_QUALITY_ANTIALIASED = 2,
         SC_EFF_QUALITY_LCD_OPTIMIZED = 3
+    };
+
+    enum
+    {
+        SC_MARGINOPTION_NONE = 0x00,
+        SC_MARGINOPTION_SUBLINESELECT = 0x01
     };
 
     enum
@@ -2173,6 +2259,9 @@ public:
         //! The line is underlined using the marker's background color.
         SC_MARK_UNDERLINE = 29,
 
+        //! A RGBA format image.
+        SC_MARK_RGBAIMAGE = 30,
+
         //! Characters can be used as symbols by adding this to the ASCII value
         //! of the character.
         SC_MARK_CHARACTER = 10000
@@ -2287,7 +2376,6 @@ public:
 
     enum
     {
-        INDIC_MAX = 31,
         INDIC_PLAIN = 0,
         INDIC_SQUIGGLE = 1,
         INDIC_TT = 2,
@@ -2296,7 +2384,14 @@ public:
         INDIC_HIDDEN = 5,
         INDIC_BOX = 6,
         INDIC_ROUNDBOX = 7,
+        INDIC_STRAIGHTBOX = 8,
+        INDIC_DASH = 9,
+        INDIC_DOTS = 10,
+        INDIC_SQUIGGLELOW = 11,
+        INDIC_DOTBOX = 12,
+
         INDIC_CONTAINER = 8,
+        INDIC_MAX = 31,
         INDIC0_MASK = 0x20,
         INDIC1_MASK = 0x40,
         INDIC2_MASK = 0x80,
@@ -2471,14 +2566,19 @@ public:
         //! Shift key.
         SCMOD_SHIFT = 1,
 
-        //! Control key.
+        //! Control key (the Command key on OS/X, the Ctrl key on other
+        //! platforms).
         SCMOD_CTRL = 2,
 
         //! Alt key.
         SCMOD_ALT = 4,
 
-        //! Meta key.
-        SCMOD_SUPER = 8
+        //! This is the same as SCMOD_META on all platforms.
+        SCMOD_SUPER = 8,
+
+        //! Meta key (the Ctrl key on OS/X, the Windows key on other
+        //! platforms).
+        SCMOD_META = 16
     };
 
     //! This enum defines the different language lexers.
@@ -2849,6 +2949,10 @@ public:
     long SendScintilla(unsigned int msg, unsigned long wParam,
             const QPixmap &lParam) const;
 
+    //! \overload
+    long SendScintilla(unsigned int msg, unsigned long wParam,
+            const QImage &lParam) const;
+
     //! Send the Scintilla message \a msg and return a pointer result.
     void *SendScintillaPtrResult(unsigned int msg) const;
 
@@ -3071,10 +3175,10 @@ private slots:
     void handleSelection();
 
 private:
-    // This is needed to allow ScintillaQt to emit this class's signals.
-    friend class ScintillaQt;
+    // This is needed to allow QsciScintillaQt to emit this class's signals.
+    friend class QsciScintillaQt;
 
-    ScintillaQt *sci;
+    QsciScintillaQt *sci;
     QPoint triple_click_at;
     QTimer triple_click;
     QScrollBar *vsb;

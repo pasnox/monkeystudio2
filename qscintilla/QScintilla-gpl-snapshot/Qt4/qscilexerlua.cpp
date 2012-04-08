@@ -114,6 +114,7 @@ QColor QsciLexerLua::defaultColor(int style) const
         return QColor(0x7f,0x00,0x7f);
 
     case Preprocessor:
+    case Label:
         return QColor(0x7f,0x7f,0x00);
 
     case Operator:
@@ -284,6 +285,9 @@ QString QsciLexerLua::description(int style) const
 
     case KeywordSet8:
         return tr("User defined 4");
+
+    case Label:
+        return tr("Label");
     }
 
     return QString();

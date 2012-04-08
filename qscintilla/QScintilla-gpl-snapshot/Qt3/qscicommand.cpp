@@ -36,21 +36,28 @@ static int convert(int key);
 
 
 // The ctor.
-QsciCommand::QsciCommand(QsciScintilla *qs, int msg, int key, int altkey,
-        const char *desc)
-    : qsCmd(qs), msgCmd(msg), qkey(key), qaltkey(altkey), descCmd(desc)
+QsciCommand::QsciCommand(QsciScintilla *qs, QsciCommand::Command cmd, int key,
+        int altkey, const char *desc)
+    : qsCmd(qs), scicmd(cmd), qkey(key), qaltkey(altkey), descCmd(desc)
 {
     scikey = convert(qkey);
 
     if (scikey)
         qsCmd->SendScintilla(QsciScintillaBase::SCI_ASSIGNCMDKEY, scikey,
-                msgCmd);
+                scicmd);
 
     scialtkey = convert(qaltkey);
 
     if (scialtkey)
         qsCmd->SendScintilla(QsciScintillaBase::SCI_ASSIGNCMDKEY, scialtkey,
-                msgCmd);
+                scicmd);
+}
+
+
+// Execute the command.
+void QsciCommand::execute()
+{
+    qsCmd->SendScintilla(scicmd);
 }
 
 
@@ -92,7 +99,7 @@ void QsciCommand::bindKey(int key,int &qk,int &scik)
     scik = new_scikey;
 
     if (scik)
-        qsCmd->SendScintilla(QsciScintillaBase::SCI_ASSIGNCMDKEY, scik, msgCmd);
+        qsCmd->SendScintilla(QsciScintillaBase::SCI_ASSIGNCMDKEY, scik, scicmd);
 }
 
 
@@ -120,7 +127,7 @@ static int convert(int key)
         sci_mod |= QsciScintillaBase::SCMOD_ALT;
 
     if (key & Qt::META)
-        sci_mod |= QsciScintillaBase::SCMOD_SUPER;
+        sci_mod |= QsciScintillaBase::SCMOD_META;
 
     key &= ~Qt::MODIFIER_MASK;
 

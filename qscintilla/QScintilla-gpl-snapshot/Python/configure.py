@@ -59,7 +59,7 @@ else:
 
 
 # This must be kept in sync with qscintilla.pro.
-QSCI_API_MAJOR = 7
+QSCI_API_MAJOR = 8
 
 
 # Initialise the globals.
@@ -84,7 +84,7 @@ def create_optparser():
         setattr(parser.values, option.dest, os.path.abspath(value))
 
     p = optparse.OptionParser(usage="python %prog [options]",
-            version="snapshot-2.5.2-9c37c180ba8d")
+            version="snapshot-2.6.1-e8ccaf398640")
 
     p.add_option("-a", "--apidir", action="callback", default=None,
             type="string", metavar="DIR", dest="qscidir",
@@ -184,8 +184,8 @@ def check_qscintilla():
             # Because we include the Python bindings with the C++ code we can
             # reasonably force the same version to be used and not bother about
             # versioning.
-            if sciversstr != "snapshot-2.5.2-9c37c180ba8d":
-                sipconfig.error("QScintilla %s is being used but the Python bindings snapshot-2.5.2-9c37c180ba8d are being built.  Please use matching versions." % sciversstr)
+            if sciversstr != "snapshot-2.6.1-e8ccaf398640":
+                sipconfig.error("QScintilla %s is being used but the Python bindings snapshot-2.6.1-e8ccaf398640 are being built.  Please use matching versions." % sciversstr)
 
             sipconfig.inform("QScintilla %s is being used." % sciversstr)
         else:

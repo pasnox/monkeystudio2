@@ -41,6 +41,8 @@
 #include <qdesktopwidget.h>
 #include <qpolygon.h>
 
+#include "SciNamespace.h"
+
 #include "Platform.h"
 #include "XPM.h"
 
@@ -49,6 +51,8 @@
 
 #include "FontQuality.h"
 
+
+QSCI_BEGIN_SCI_NAMESPACE
 
 // Type convertors.
 static QFont *PFont(FontID fid)
@@ -61,9 +65,9 @@ static QWidget *PWindow(WindowID wid)
     return reinterpret_cast<QWidget *>(wid);
 }
 
-static SciPopup *PMenu(MenuID mid)
+static QsciSciPopup *PMenu(MenuID mid)
 {
-    return reinterpret_cast<SciPopup *>(mid);
+    return reinterpret_cast<QsciSciPopup *>(mid);
 }
 
 
@@ -202,6 +206,7 @@ public:
     void AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill,
             int alphaFill, ColourAllocated outline, int alphaOutline,
             int flags);
+    void DrawRGBAImage(PRectangle rc, int width, int height, const unsigned char *pixelsImage);
     void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back);
     void Copy(PRectangle rc, Point from, Surface &surfaceSource);
 
@@ -509,6 +514,20 @@ void SurfaceImpl::DrawXPM(PRectangle rc, const XPM *xpm)
     painter->drawPixmap(x, y, qpm);
 }
 
+void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height,
+        const unsigned char *pixelsImage)
+{
+    Q_ASSERT(painter);
+
+    int x, y;
+    const QImage *qim = reinterpret_cast<const QImage *>(pixelsImage);
+
+    x = rc.left + (rc.Width() - width) / 2;
+    y = rc.top + (rc.Height() - height) / 2;
+
+    painter->drawImage(x, y, *qim);
+}
+
 void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len,
         int *positions)
 {
@@ -517,11 +536,13 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len,
 
     // The position for each byte of a character is the offset from the start
     // where the following character should be drawn.
-    int i_byte = 0, width = 0;
+    int i_byte = 0;
 
     for (int i_char = 0; i_char < qs.length(); ++i_char)
     {
-        width += fm.width(qs.at(i_char));
+        // We can't just add the individual character widths together because
+        // of kerning.
+        int width = fm.width(qs.left(i_char + 1));
 
         if (unicodeMode)
         {
@@ -783,12 +804,12 @@ Menu::Menu() : mid(0)
 void Menu::CreatePopUp()
 {
     Destroy();
-    mid = new SciPopup();
+    mid = new QsciSciPopup();
 }
 
 void Menu::Destroy()
 {
-    SciPopup *m = PMenu(mid);
+    QsciSciPopup *m = PMenu(mid);
 
     if (m)
     {
@@ -1010,3 +1031,5 @@ void Platform::Assert(const char *c, const char *file, int line)
 {
     qFatal("Assertion [%s] failed at %s %d\n", c, file, line);
 }
+
+QSCI_END_SCI_NAMESPACE

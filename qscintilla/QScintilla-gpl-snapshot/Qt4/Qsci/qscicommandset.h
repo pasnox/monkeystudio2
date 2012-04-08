@@ -76,6 +76,12 @@ public:
     //! The alternate keys bindings for all commands are removed.
     void clearAlternateKeys();
 
+    // Find the command that is bound to \a key.
+    QsciCommand *boundTo(int key) const;
+
+    // Find a specific command \a command.
+    QsciCommand *find(QsciCommand::Command command) const;
+
 private:
     friend class QsciScintilla;
 

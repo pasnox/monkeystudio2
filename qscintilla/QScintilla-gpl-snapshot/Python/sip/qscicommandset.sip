@@ -43,6 +43,9 @@ public:
     void clearKeys();
     void clearAlternateKeys();
 
+    QsciCommand *boundTo(int key) const;
+    QsciCommand *find(QsciCommand::Command command) const;
+
 private:
     QsciCommandSet(QsciScintilla *qs);
     ~QsciCommandSet();
