@@ -10,22 +10,22 @@ class XUPItem;
 
 class UIXUPEditor : public QDialog, public Ui::UIXUPEditor
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	UIXUPEditor( XUPProjectItem* project, QWidget* parent = 0 );
-	virtual ~UIXUPEditor();
-	
+    UIXUPEditor( XUPProjectItem* project, QWidget* parent = 0 );
+    virtual ~UIXUPEditor();
+    
 protected:
-	XUPProjectItem* mProject;
-	
-	void updateMainFileComboBox( const QString& selectFile );
-	
-	void init( XUPProjectItem* project );
+    XUPProjectItem* mProject;
+    
+    void updateMainFileComboBox( const QString& selectFile );
+    
+    void init( XUPProjectItem* project );
 
 protected slots:
-	
-	void accept();
+    
+    void accept();
 };
 
 #endif // UISIMPLEQMAKEEDITOR_H

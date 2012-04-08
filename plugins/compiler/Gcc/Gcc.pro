@@ -1,7 +1,7 @@
-TARGET	= Gcc
+TARGET  = Gcc
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
+DESTDIR = $$MONKEY_PLUGINS_DIR/compiler
 
-HEADERS	= src/Gcc.h
+HEADERS = src/Gcc.h
 
-SOURCES	= src/Gcc.cpp
+SOURCES = src/Gcc.cpp

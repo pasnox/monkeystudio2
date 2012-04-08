@@ -7,11 +7,11 @@
 
 class UIPostIt : public QMainWindow, public Ui::UIPostIt
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	UIPostIt( QWidget* parent = 0 );
-	~UIPostIt();
+    UIPostIt( QWidget* parent = 0 );
+    ~UIPostIt();
 
 private:
         void loadNotes();
@@ -21,7 +21,7 @@ private:
 
 protected slots:
         void on_tbAdd_clicked();
-		void on_tbEdit_clicked();
+        void on_tbEdit_clicked();
         void on_tbDelete_clicked();
         void on_tbClear_clicked();
         void on_lstNotes_currentItemChanged ( QListWidgetItem * current, QListWidgetItem * previous );

@@ -1,4 +1,4 @@
 # coveragemeter
-#FORMS	+= UITestReport.ui
-#HEADERS	+= UITestReport.h
-#SOURCES	+= UITestReport.cpp
+#FORMS  += UITestReport.ui
+#HEADERS    += UITestReport.h
+#SOURCES    += UITestReport.cpp

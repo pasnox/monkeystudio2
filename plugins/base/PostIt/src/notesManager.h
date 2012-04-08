@@ -15,7 +15,7 @@ class notesManager
         void removeElement( const uint id );
         void removeAllElements();
 
-		QString getTitleElement( const uint id ) const;
+        QString getTitleElement( const uint id ) const;
         QDomElement getElement( const uint id ) const;
         QStringList getElements() const;
 

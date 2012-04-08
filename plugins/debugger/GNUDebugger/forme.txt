@@ -145,45 +145,45 @@ V1.3.1 pre-release
 
 V1.3.1 Test
 
-test:								linux:		windows:	mac:
+test:                               linux:      windows:    mac:
 --------------------------------------------------------------------------------------------------------------------------------------
 
-Ajouter la gestion des enable / disable breakpoint		ok		ok
-Modifier le chargement du fichier d'init			ok		ok
+Ajouter la gestion des enable / disable breakpoint      ok      ok
+Modifier le chargement du fichier d'init            ok      ok
 
-Modifier le install.pri						ok		ok
-Passer en GNUDebugger v1.3 sur le depot 			ok		ok
+Modifier le install.pri                     ok      ok
+Passer en GNUDebugger v1.3 sur le depot             ok      ok
 
-Ajouter la prise en charge des accents				ok		ok
-Ajouter la prise en charge des espaces				ok		ok
+Ajouter la prise en charge des accents              ok      ok
+Ajouter la prise en charge des espaces              ok      ok
 
-le lancement de gdb						ok		ok
-le chargement target sur split line (done)			ok		ok
-l'ajout breakpoint						ok		ok
-suppression breakpoint						ok		ok
-tester a grand vitesse del / sup break				ok		ok
+le lancement de gdb                     ok      ok
+le chargement target sur split line (done)          ok      ok
+l'ajout breakpoint                      ok      ok
+suppression breakpoint                      ok      ok
+tester a grand vitesse del / sup break              ok      ok
 
-fermeture / overture fichier					ok		ok
-les retour des breakpoints d'un fichier				ok		ok
-le move breakpoint de gdb					ok		ok
-ouverture fichier si gdb est en fonction			ok		ok
+fermeture / overture fichier                    ok      ok
+les retour des breakpoints d'un fichier             ok      ok
+le move breakpoint de gdb                   ok      ok
+ouverture fichier si gdb est en fonction            ok      ok
 
-supprimer breakpoint / backtrace sur quit			ok		ok
-supprimer backtrace sur stop					ok		ok
-desibled / enabled action					ok		ok
+supprimer breakpoint / backtrace sur quit           ok      ok
+supprimer backtrace sur stop                    ok      ok
+desibled / enabled action                   ok      ok
 
-gdb version (bug affichage sous linux)				ok		ok
-gdb path							ok		ok
+gdb version (bug affichage sous linux)              ok      ok
+gdb path                            ok      ok
 
-setting manager							ok		ok
-setting desabled /enabled addOn					ok		ok
+setting manager                         ok      ok
+setting desabled /enabled addOn                 ok      ok
 
-si move breakpoint sur une ligne comportant deja un bp		ok		ok
+si move breakpoint sur une ligne comportant deja un bp      ok      ok
 Note: breakpoint 12 also set at pc 0x40d476.
 
-detection de bp hit / end-stepping-range			ok		ok
+detection de bp hit / end-stepping-range            ok      ok
 
-si on fait rapidement step / over le parser n'est pas pret	ok		ok
+si on fait rapidement step / over le parser n'est pas pret  ok      ok
 ajouter la fonction Parser->isReady() 
 
 

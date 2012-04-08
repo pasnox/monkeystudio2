@@ -7,30 +7,30 @@ class qCtagsSenseEntry;
 
 class qCtagsSenseSearchPopup : public QTreeView
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	qCtagsSenseSearchPopup( QWidget* widget );
-	virtual ~qCtagsSenseSearchPopup();
-	
-	void setWidget( QWidget* widget );
-	inline QWidget* widget() const { return mWidget; }
-	
-	void showPopup( const QRect& rect = QRect() );
+    qCtagsSenseSearchPopup( QWidget* widget );
+    virtual ~qCtagsSenseSearchPopup();
+    
+    void setWidget( QWidget* widget );
+    inline QWidget* widget() const { return mWidget; }
+    
+    void showPopup( const QRect& rect = QRect() );
 
 protected:
-	bool eatFocusOut;
-	QWidget* mWidget;
-	
-	virtual bool eventFilter( QObject* object, QEvent* event );
-	bool searchPopupEventFilter( QEvent* event );
+    bool eatFocusOut;
+    QWidget* mWidget;
+    
+    virtual bool eventFilter( QObject* object, QEvent* event );
+    bool searchPopupEventFilter( QEvent* event );
 
 protected slots:
-	void _q_activated( const QModelIndex& index );
+    void _q_activated( const QModelIndex& index );
 
 signals:
-	void fileNameActivated( const QString& fileName );
-	void entryActivated( qCtagsSenseEntry* entry );
+    void fileNameActivated( const QString& fileName );
+    void entryActivated( qCtagsSenseEntry* entry );
 };
 
 #endif // QCTAGSSENSESEARCHPOPUP_H

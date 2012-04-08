@@ -1,2 +1,2 @@
-TEMPLATE	= subdirs
-SUBDIRS	= lib bridge
+TEMPLATE    = subdirs
+SUBDIRS = lib bridge

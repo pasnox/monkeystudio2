@@ -1,35 +1,35 @@
 /****************************************************************************
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 /*!
-	\file gdbToolTip.cpp
-	\date 16/05/09
-	\author Xiantia
-	\version 1.4.0
-	\brief Show the value of a variable in Tooltip. This class is an AddOn for GNU debugger.
+    \file gdbToolTip.cpp
+    \date 16/05/09
+    \author Xiantia
+    \version 1.4.0
+    \brief Show the value of a variable in Tooltip. This class is an AddOn for GNU debugger.
 */
 /*
 
-	GdbToolTip class
+    GdbToolTip class
 
 
-	Xiantia@gmail.com
+    Xiantia@gmail.com
 
-	for Debugger v1.4.0
+    for Debugger v1.4.0
 */
 
 #include "gdbToolTip.h"
@@ -37,49 +37,49 @@
 
 #include <QtDebug>
 /*!
-	\details Create new object
-	\param parent of this object
+    \details Create new object
+    \param parent of this object
 */
 GdbToolTip::GdbToolTip(QObject * parent) : GdbAddonBase(parent),mLatence(500)
 {
 
-	GdbCore::KernelDispatcher()->add(this);
-	GdbCore::Interpreter()->remove(name());
+    GdbCore::KernelDispatcher()->add(this);
+    GdbCore::Interpreter()->remove(name());
 
-	setEnabled(true);
-	setWaitEndProcess(false);
-	enteredShowVar = false;
+    setEnabled(true);
+    setWaitEndProcess(false);
+    enteredShowVar = false;
 
-	interpreterValue = GdbCore::Interpreter()->add(
-		name(),
-		QRegExp("^print .*"), 
-		QRegExp("^\\$\\d+\\s+=\\s+.*"),
-		"^done,className=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
+    interpreterValue = GdbCore::Interpreter()->add(
+        name(),
+        QRegExp("^print .*"), 
+        QRegExp("^\\$\\d+\\s+=\\s+.*"),
+        "^done,className=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
 
-	// connect interpreters to functions
-	Connect.add(this, interpreterValue, &GdbToolTip::onValue);
+    // connect interpreters to functions
+    Connect.add(this, interpreterValue, &GdbToolTip::onValue);
 
-	interpreterType = GdbCore::Interpreter()->add(
-	name(),
-	QRegExp("^whatis .*"), 
-	QRegExp("^type\\s+=\\s+.*"),
-		"^done,className=\"" + name() + "\",event=\"WatchType\",answerGdb=\"");
+    interpreterType = GdbCore::Interpreter()->add(
+    name(),
+    QRegExp("^whatis .*"), 
+    QRegExp("^type\\s+=\\s+.*"),
+        "^done,className=\"" + name() + "\",event=\"WatchType\",answerGdb=\"");
 
-	// connect interpreters to functions
-	Connect.add(this, interpreterType, &GdbToolTip::onType);
+    // connect interpreters to functions
+    Connect.add(this, interpreterType, &GdbToolTip::onType);
 
 
-	// create sequencer 
-	Sequencer = new GdbSequencer(this);
+    // create sequencer 
+    Sequencer = new GdbSequencer(this);
 
-	timer.setSingleShot(true);
-	connect(&timer,SIGNAL(timeout()), this, SLOT(onTimer()));
+    timer.setSingleShot(true);
+    connect(&timer,SIGNAL(timeout()), this, SLOT(onTimer()));
 }
 
 //
 
 /*!
-	\details None.
+    \details None.
 */
 GdbToolTip::~GdbToolTip()
 {
@@ -89,21 +89,21 @@ GdbToolTip::~GdbToolTip()
 
 QString GdbToolTip::name()
 {
-	return "GdbToolTip";
+    return "GdbToolTip";
 }
 
 //
 
 QPointer<QWidget> GdbToolTip::widget()
 {
-	return (QPointer<QWidget>)( NULL );
+    return (QPointer<QWidget>)( NULL );
 }
 
 //
 
 QIcon GdbToolTip::icon()
 {
-	return QIcon();
+    return QIcon();
 }
 
 //
@@ -117,11 +117,11 @@ QIcon GdbToolTip::icon()
  *
  * In your constructor class :
  * \code
- *	interpreterValue = GdbCore::Parser()->addInterpreter(
- *	name(),
- *	QRegExp("^print .*"), 
- *	QRegExp("^\\$\\d+\\s+=\\s+.*"),
- *	"^info,interpreter=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
+ *  interpreterValue = GdbCore::Parser()->addInterpreter(
+ *  name(),
+ *  QRegExp("^print .*"), 
+ *  QRegExp("^\\$\\d+\\s+=\\s+.*"),
+ *  "^info,interpreter=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
  *
  * Connect.add(this, interpreterValue, &GdbToolTip::onValue);
  * \endcode
@@ -142,21 +142,21 @@ QIcon GdbToolTip::icon()
 
 void GdbToolTip::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect.call( i, id, s);
+    Connect.call( i, id, s);
 }
 
 // Gdb status
 
 void GdbToolTip::gdbStarted()
 {
-	setWaitEndProcess(false);
+    setWaitEndProcess(false);
 }
 
 //
 
 void GdbToolTip::gdbFinished()
 {
-	setWaitEndProcess(false);
+    setWaitEndProcess(false);
 }
 
 //
@@ -175,53 +175,53 @@ void GdbToolTip::targetExited(const int & , const QString & ){}
 
 void GdbToolTip::done(const int & id, const QString & st )
 {
-	if(id>0) mRawData += findValue(st,"answerGdb");
+    if(id>0) mRawData += findValue(st,"answerGdb");
 }
 
 void GdbToolTip::prompt(const int &, const QString & )
 {
 
-	// promt from watch print command
-	if(Sequencer->currentCmd() == "WatchValue")
-	{
-		if(isWaitEndProcess())
-		{
-			//possible error
-			mToolTipString = "<u><center><b>" + mCurrentVarName + "</b></center></u><br><b><img src=\":/icons/func.png\" />";
-			mToolTipString += " Value :</b><br>" + Qt::escape(mRawData);
-		}
-		else
-		{
-			mToolTipString = "<u><center><b>" + mCurrentVarName + "</b></center></u><br><b> <img src=\":/icons/var.png\" />";
-			mToolTipString += " Value :</b><br>" + Qt::escape(mValue);
-		}
-		mRawData.clear();
-		setWaitEndProcess(true);
-		Sequencer->next();
-		return;
-	}
+    // promt from watch print command
+    if(Sequencer->currentCmd() == "WatchValue")
+    {
+        if(isWaitEndProcess())
+        {
+            //possible error
+            mToolTipString = "<u><center><b>" + mCurrentVarName + "</b></center></u><br><b><img src=\":/icons/func.png\" />";
+            mToolTipString += " Value :</b><br>" + Qt::escape(mRawData);
+        }
+        else
+        {
+            mToolTipString = "<u><center><b>" + mCurrentVarName + "</b></center></u><br><b> <img src=\":/icons/var.png\" />";
+            mToolTipString += " Value :</b><br>" + Qt::escape(mValue);
+        }
+        mRawData.clear();
+        setWaitEndProcess(true);
+        Sequencer->next();
+        return;
+    }
 
 
-	if(Sequencer->currentCmd() == "WatchType")
-	{
-		if(isWaitEndProcess())
-		{
-			//possible error
-			mToolTipString += "<br><br><b><img src=\":/icons/func.png\" />";
-			mToolTipString += " Type :</b><br>" + Qt::escape(mRawData);
-		}
-		else
-		{
-			mToolTipString += "<br><br><b><img src=\":/icons/var.png\" />";
-			mToolTipString += " Type :</b><br>" + Qt::escape(mType);
-		}
-		QToolTip::showText(QCursor::pos (), mToolTipString , NULL);
-		mRawData.clear();
-		enteredShowVar = false;
-		mToolTipString.clear();
-		setWaitEndProcess(false);
-		Sequencer->remove();
-	}
+    if(Sequencer->currentCmd() == "WatchType")
+    {
+        if(isWaitEndProcess())
+        {
+            //possible error
+            mToolTipString += "<br><br><b><img src=\":/icons/func.png\" />";
+            mToolTipString += " Type :</b><br>" + Qt::escape(mRawData);
+        }
+        else
+        {
+            mToolTipString += "<br><br><b><img src=\":/icons/var.png\" />";
+            mToolTipString += " Type :</b><br>" + Qt::escape(mType);
+        }
+        QToolTip::showText(QCursor::pos (), mToolTipString , NULL);
+        mRawData.clear();
+        enteredShowVar = false;
+        mToolTipString.clear();
+        setWaitEndProcess(false);
+        Sequencer->remove();
+    }
 }
 
 // Interpreters
@@ -232,9 +232,9 @@ void GdbToolTip::prompt(const int &, const QString & )
 */
 void GdbToolTip::onValue(int, QString s)
 {
-	QString v = findValue(s,"answerGdb");
-	mValue = v.right(v.length() - v.indexOf(" = ") - 3); // delete -> $x = ....
-	setWaitEndProcess(false);
+    QString v = findValue(s,"answerGdb");
+    mValue = v.right(v.length() - v.indexOf(" = ") - 3); // delete -> $x = ....
+    setWaitEndProcess(false);
 }
 
 
@@ -245,9 +245,9 @@ void GdbToolTip::onValue(int, QString s)
 */
 void GdbToolTip::onType(int, QString s)
 {
-	QString v = findValue(s,"answerGdb");
-	mType = v.right(v.length() - v.indexOf(" = ") - 3); // delete -> type = ....
-	setWaitEndProcess(false);
+    QString v = findValue(s,"answerGdb");
+    mType = v.right(v.length() - v.indexOf(" = ") - 3); // delete -> type = ....
+    setWaitEndProcess(false);
 }
 
 // slot from Qsci
@@ -259,23 +259,23 @@ void GdbToolTip::onType(int, QString s)
 */
 void GdbToolTip::onRequestShowVar(const QString & n)
 {
-	if(!enteredShowVar && GdbCore::Controler()->isGdbStarted() && GdbCore::Controler()->isTargetStopped())
-	{
-		mCurrentVarName = n;
+    if(!enteredShowVar && GdbCore::Controler()->isGdbStarted() && GdbCore::Controler()->isTargetStopped())
+    {
+        mCurrentVarName = n;
 /* fixed 1.4.0 use now latency */
-/*		enteredShowVar = true;
-		mToolTipString.clear();
-		QToolTip::hideText();
+/*      enteredShowVar = true;
+        mToolTipString.clear();
+        QToolTip::hideText();
 
-		QList<SequencerCmd> s;
-		s  << SequencerCmd("WatchValue", "print " + n) <<  SequencerCmd("WatchType", "whatis " + n) ; 
-		Sequencer->add(name() , s);
-		Sequencer->start();
-		setWaitEndProcess(true);
+        QList<SequencerCmd> s;
+        s  << SequencerCmd("WatchValue", "print " + n) <<  SequencerCmd("WatchType", "whatis " + n) ; 
+        Sequencer->add(name() , s);
+        Sequencer->start();
+        setWaitEndProcess(true);
 */
-		timer.stop();
-		timer.start(mLatence);
-	}
+        timer.stop();
+        timer.start(mLatence);
+    }
 }
 
 /**
@@ -284,15 +284,15 @@ void GdbToolTip::onRequestShowVar(const QString & n)
 */
 void GdbToolTip::onTimer()
 {
-	/* since v1.4.0 */
+    /* since v1.4.0 */
 
-	enteredShowVar = true;
-	mToolTipString.clear();
-	QToolTip::hideText();
+    enteredShowVar = true;
+    mToolTipString.clear();
+    QToolTip::hideText();
 
-	QList<SequencerCmd> s;
-	s  << SequencerCmd("WatchValue", "print " + mCurrentVarName) <<  SequencerCmd("WatchType", "whatis " + mCurrentVarName) ; 
-	Sequencer->add(name() , s);
-	Sequencer->start();
-	setWaitEndProcess(true);
+    QList<SequencerCmd> s;
+    s  << SequencerCmd("WatchValue", "print " + mCurrentVarName) <<  SequencerCmd("WatchType", "whatis " + mCurrentVarName) ; 
+    Sequencer->add(name() , s);
+    Sequencer->start();
+    setWaitEndProcess(true);
 }

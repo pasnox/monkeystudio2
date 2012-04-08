@@ -7,18 +7,18 @@ class UIPostIt;
 
 class PostIt : public BasePlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin )
-	
-protected:	
-	void fillPluginInfos();
-	virtual bool install();
-	virtual bool uninstall();
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin )
+    
+protected:  
+    void fillPluginInfos();
+    virtual bool install();
+    virtual bool uninstall();
 
-	QPointer<UIPostIt> mPostIt;
+    QPointer<UIPostIt> mPostIt;
 
 protected slots:
-	void action_triggered();
+    void action_triggered();
 };
 
 #endif // POSTIT_H

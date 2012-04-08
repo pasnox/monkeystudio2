@@ -7,14 +7,14 @@ class XUPItem;
 
 class XUPProjectEditor : public XUPPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin XUPPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin XUPPlugin )
 
 public:
-	XUPProjectEditor();
-	virtual ~XUPProjectEditor();
-	virtual bool setEnabled( bool );
-	virtual bool editProject( XUPItem* project );
+    XUPProjectEditor();
+    virtual ~XUPProjectEditor();
+    virtual bool setEnabled( bool );
+    virtual bool editProject( XUPItem* project );
 };
 
 #endif // XUPPROJECTEDITOR_H

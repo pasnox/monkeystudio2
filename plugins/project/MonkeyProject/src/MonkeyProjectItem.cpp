@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : MonkeyProjectItem.cpp

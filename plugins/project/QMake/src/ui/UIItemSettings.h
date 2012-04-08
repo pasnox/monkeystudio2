@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : UIItemSettings.h
@@ -37,21 +37,21 @@ class ProjectItem;
 
 class UIItemSettings : public QDialog, public Ui::UIItemSettings, public QSingleton<UIItemSettings>
 {
-	Q_OBJECT
-	friend class QSingleton<UIItemSettings>;
-	friend class QValueFileFolderEdit;
-	
+    Q_OBJECT
+    friend class QSingleton<UIItemSettings>;
+    friend class QValueFileFolderEdit;
+    
 public:
-	static bool edit( ProjectItem*, QWidget* = 0 );
-	
+    static bool edit( ProjectItem*, QWidget* = 0 );
+    
 protected:
-	UIItemSettings( ProjectItem* );
-	
-	ProjectItem* mItem;
-	
+    UIItemSettings( ProjectItem* );
+    
+    ProjectItem* mItem;
+    
 private slots:
-	void accept();
-	
+    void accept();
+    
 };
 
 #endif // UIITEMSETTINGS_H

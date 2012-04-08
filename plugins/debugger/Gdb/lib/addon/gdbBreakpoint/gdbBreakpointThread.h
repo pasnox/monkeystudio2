@@ -10,17 +10,17 @@ class GdbBreakpoint;
 
 class GdbBreakpointThread : public QThread
 {
-	 Q_OBJECT
+     Q_OBJECT
 public:
-	GdbBreakpointThread(GdbBreakpoint*);
-	~GdbBreakpointThread();
-	void restoreBreakpoint(QStringList);
-	void run();
-	void next();
-	bool mStop;
+    GdbBreakpointThread(GdbBreakpoint*);
+    ~GdbBreakpointThread();
+    void restoreBreakpoint(QStringList);
+    void run();
+    void next();
+    bool mStop;
 
 private:
-	GdbBreakpoint *parent;
-	QStringList mBreakpointPending;
+    GdbBreakpoint *parent;
+    QStringList mBreakpointPending;
 };
 #endif

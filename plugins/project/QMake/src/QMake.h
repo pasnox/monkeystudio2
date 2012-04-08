@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : QMake.h
@@ -33,14 +33,14 @@
 
 class QMake : public ProjectPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin ProjectPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin ProjectPlugin )
 
 public:
-	QMake();
-	virtual bool setEnabled( bool );
-	virtual QWidget* settingsWidget();
-	virtual ProjectItem* getProjectItem( const QString& );
+    QMake();
+    virtual bool setEnabled( bool );
+    virtual QWidget* settingsWidget();
+    virtual ProjectItem* getProjectItem( const QString& );
 
 };
 

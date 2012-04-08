@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : MonkeyProject.h
@@ -35,14 +35,14 @@ class MonkeyProjectItem;
 
 class MonkeyProject : public ProjectPlugin
 {
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin ProjectPlugin )
+    Q_OBJECT
+    Q_INTERFACES( BasePlugin ProjectPlugin )
 
 public:
-	MonkeyProject();
-	ProjectItem* getProjectItem( const QString& );
-	
-	bool setEnabled( bool b);
+    MonkeyProject();
+    ProjectItem* getProjectItem( const QString& );
+    
+    bool setEnabled( bool b);
 };
 
 #endif // MONKEYPROJECT_H

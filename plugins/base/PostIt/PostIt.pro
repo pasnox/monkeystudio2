@@ -1,18 +1,18 @@
-TARGET	= PostIt
+TARGET  = PostIt
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
-INCLUDEPATH	*= src src/ui
+DESTDIR = $$MONKEY_PLUGINS_DIR/base
+INCLUDEPATH *= src src/ui
 
-QT	+= xml
+QT  += xml
 
-RESOURCES	= src/resources/PostIt.qrc
+RESOURCES   = src/resources/PostIt.qrc
 
-FORMS	= src/ui/UIPostIt.ui
+FORMS   = src/ui/UIPostIt.ui
 
-HEADERS	= src/PostIt.h \
-	src/ui/UIPostIt.h \
-	src/notesManager.h
+HEADERS = src/PostIt.h \
+    src/ui/UIPostIt.h \
+    src/notesManager.h
 
-SOURCES	= src/PostIt.cpp \
-	src/ui/UIPostIt.cpp \
-	src/notesManager.cpp
+SOURCES = src/PostIt.cpp \
+    src/ui/UIPostIt.cpp \
+    src/notesManager.cpp

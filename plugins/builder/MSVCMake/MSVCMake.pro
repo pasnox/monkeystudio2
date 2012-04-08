@@ -1,9 +1,9 @@
-TARGET	= MSVCMake
+TARGET  = MSVCMake
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/builder
+DESTDIR = $$MONKEY_PLUGINS_DIR/builder
 
-HEADERS	= src/MSVCMake.h \
-	src/MSVCMakeParser.h
+HEADERS = src/MSVCMake.h \
+    src/MSVCMakeParser.h
 
-SOURCES	= src/MSVCMake.cpp \
-	src/MSVCMakeParser.cpp
+SOURCES = src/MSVCMake.cpp \
+    src/MSVCMakeParser.cpp

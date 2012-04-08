@@ -1,26 +1,26 @@
 /****************************************************************************
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 /*!
-	\file gdbCore.cpp
-	\date 2008-01-14T00:27:39
-	\author xiantia
-	\version 1.3.2
-	\brief Derived by all Addons
+    \file gdbCore.cpp
+    \date 2008-01-14T00:27:39
+    \author xiantia
+    \version 1.3.2
+    \brief Derived by all Addons
 */
 
 #include "gdbCore.h"
@@ -31,16 +31,16 @@
 */
 GdbCore::GdbCore(QObject * parent) : QObject (parent)
 {
-	mParser = GdbParser::instance(); 
-	mProcess = GdbProcess::instance(); 
+    mParser = GdbParser::instance(); 
+    mProcess = GdbProcess::instance(); 
 
-	watchDog.setSingleShot(true);
-	connect(&watchDog, SIGNAL(timeout()), this , SLOT(onTimer()));
-	
-	setWantAllMessages(false);
-	setEnabled(true);
-	setWaitEndProcess(false);
-	mTime = 5000;
+    watchDog.setSingleShot(true);
+    connect(&watchDog, SIGNAL(timeout()), this , SLOT(onTimer()));
+    
+    setWantAllMessages(false);
+    setEnabled(true);
+    setWaitEndProcess(false);
+    mTime = 5000;
 }
 
 /*!
@@ -58,16 +58,16 @@ GdbCore::~GdbCore()
  */
 void GdbCore::showMessage(QString string, int time, SHOW brush)
 {
-	QColor b;
-	switch(brush)
-	{
-	case _WARNING_ : b.setRgb(240,240,100); break;
-	case _INFO_ : b.setRgb(120,250,100); break;
-	case _CRITICAL_ : b.setRgb(255,35,35);
+    QColor b;
+    switch(brush)
+    {
+    case _WARNING_ : b.setRgb(240,240,100); break;
+    case _INFO_ : b.setRgb(120,250,100); break;
+    case _CRITICAL_ : b.setRgb(255,35,35);
 
-	}
+    }
 
-	MonkeyCore::statusBar()->appendMessage( string, time ,QPixmap(), QBrush(brush));
+    MonkeyCore::statusBar()->appendMessage( string, time ,QPixmap(), QBrush(brush));
 }
 
 /*!
@@ -81,10 +81,10 @@ void GdbCore::showMessage(QString string, int time, SHOW brush)
  * In your constructor class :
  * \code
  * interpreterBacktrace = Parser()->addInterpreter(
- * 	name(), // name of AddOn
- * 	QRegExp("^bt"), // command send to Gdb
- * 	QRegExp("^#\\d+\\sw+\\sat\\s.*:\\d+"), // parse just your line, in this case "#1 0x345FD at main.cpp:34"
- * 	"^info,interpreter=\"" + name() + "\",event=\"Backtrace\",answerGdb=\""); // answerExtention
+ *  name(), // name of AddOn
+ *  QRegExp("^bt"), // command send to Gdb
+ *  QRegExp("^#\\d+\\sw+\\sat\\s.*:\\d+"), // parse just your line, in this case "#1 0x345FD at main.cpp:34"
+ *  "^info,interpreter=\"" + name() + "\",event=\"Backtrace\",answerGdb=\""); // answerExtention
  *
  * Connect.add(this, interpreterBacktrace, &AddOnClassName::onValue);
  * \endcode
@@ -148,10 +148,10 @@ bool GdbCore::isEnabled() { return mEnabled;}
 */
 void GdbCore::setWaitEndProcess(const bool & b)
 { 
-	if(b ) 
-		watchDog.start(mTime); 
-	else watchDog.stop();
-	mWaitEndProcess = b;
+    if(b ) 
+        watchDog.start(mTime); 
+    else watchDog.stop();
+    mWaitEndProcess = b;
 }
 
 /*!
@@ -169,11 +169,11 @@ bool GdbCore::isWaitEndProcess() { return mWaitEndProcess;}
  */
 void GdbCore::onTimer()
 {
-	if(isWaitEndProcess())
-	{
-		showMessage("Detecting kernel panic : " + name() , 2500, _WARNING_);
-		setWaitEndProcess(false);
-	}
+    if(isWaitEndProcess())
+    {
+        showMessage("Detecting kernel panic : " + name() , 2500, _WARNING_);
+        setWaitEndProcess(false);
+    }
 }
 
 /*!
@@ -192,23 +192,23 @@ void GdbCore::onTimer()
 */
 QString GdbCore::findValue(const QString & st , const QString & key)
 {
-	QStringList l = st.split("\",");
-	
-	foreach(QString s, l)
-	{
-		QString k = s.left(s.indexOf("="));
-		QString v = s.right(s.length() - s.indexOf("=") - 1);
-		if(k == key ) return v.remove("\"");
-	}
-	return QString();
+    QStringList l = st.split("\",");
+    
+    foreach(QString s, l)
+    {
+        QString k = s.left(s.indexOf("="));
+        QString v = s.right(s.length() - s.indexOf("=") - 1);
+        if(k == key ) return v.remove("\"");
+    }
+    return QString();
 }
 
 /*!
-	\details Set the time for watchDog
-	\param t is the time for watchDog. If no answer occure from GdbParser and time out, a message is show Monkey status bar. 
-	\sa setWaitEndProcess(), isWaitEndProcess(), onTimer()
+    \details Set the time for watchDog
+    \param t is the time for watchDog. If no answer occure from GdbParser and time out, a message is show Monkey status bar. 
+    \sa setWaitEndProcess(), isWaitEndProcess(), onTimer()
 */
 void GdbCore::setWatchDogTime(int t)
 {
-	mTime = t;
+    mTime = t;
 }

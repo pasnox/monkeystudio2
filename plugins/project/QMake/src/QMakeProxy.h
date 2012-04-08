@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : QMakeProxy.h
@@ -36,18 +36,18 @@ class ProjectItem;
 
 class QMakeProxy : public ProjectsProxy
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	QMakeProxy( ProjectsModel*, ProjectItem* );
-	
+    QMakeProxy( ProjectsModel*, ProjectItem* );
+    
 protected:
-	bool filterAcceptsRow( int, const QModelIndex& ) const;
-	ProjectItem* mProject;
-	
+    bool filterAcceptsRow( int, const QModelIndex& ) const;
+    ProjectItem* mProject;
+    
 public slots:
-	virtual void setFiltering( bool );
-	
+    virtual void setFiltering( bool );
+    
 };
 
 #endif // QMAKEPROXY_H

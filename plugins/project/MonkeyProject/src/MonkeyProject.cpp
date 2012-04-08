@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : MonkeyProject.cpp
@@ -33,40 +33,40 @@
 
 MonkeyProject::MonkeyProject()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "MonkeyProject" );
-	mPluginInfos.Description = tr( "Plugin for managing projects without any project file" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
-	mPluginInfos.Type = BasePlugin::iProject;
-	mPluginInfos.Name = "MonkeyProject";
-	mPluginInfos.Version = "0.0.1";
-	mPluginInfos.Enabled = false;
-	mSuffixes["MonkeyProject"] = QStringList("*.monkey");
+    // set plugin infos
+    mPluginInfos.Caption = tr( "MonkeyProject" );
+    mPluginInfos.Description = tr( "Plugin for managing projects without any project file" );
+    mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
+    mPluginInfos.Type = BasePlugin::iProject;
+    mPluginInfos.Name = "MonkeyProject";
+    mPluginInfos.Version = "0.0.1";
+    mPluginInfos.Enabled = false;
+    mSuffixes["MonkeyProject"] = QStringList("*.monkey");
 }
 
 ProjectItem* MonkeyProject::getProjectItem( const QString& s )
 {
-	// don t open project if plugin is not enabled
-	if ( !isEnabled() || !QDir::match( mSuffixes[tr( "MonkeyProject" )], s ) )
-		return 0;
-	
-	// create project item
-	ProjectItem* it = new MonkeyProjectItem( ProjectItem::ProjectType );
-	
-	// set project filename
-	it->setValue( s );
-	
-	// set item plugin
-	it->setPlugin( this );
-	
-	// return item
-	return it;
+    // don t open project if plugin is not enabled
+    if ( !isEnabled() || !QDir::match( mSuffixes[tr( "MonkeyProject" )], s ) )
+        return 0;
+    
+    // create project item
+    ProjectItem* it = new MonkeyProjectItem( ProjectItem::ProjectType );
+    
+    // set project filename
+    it->setValue( s );
+    
+    // set item plugin
+    it->setPlugin( this );
+    
+    // return item
+    return it;
 }
 
 bool MonkeyProject::setEnabled (bool en)
 {
-	mPluginInfos.Enabled = en;
-	return true;
+    mPluginInfos.Enabled = en;
+    return true;
 };
 
 Q_EXPORT_PLUGIN2( ProjectMonkeyProject, MonkeyProject )

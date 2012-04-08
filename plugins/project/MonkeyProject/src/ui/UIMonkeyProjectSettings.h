@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : UIMonkeyProjectSettings.h
@@ -37,20 +37,20 @@
 
 class UIMonkeyProjectSettings : public QDialog, Ui_UIMonkeyProjectSettings
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	UIMonkeyProjectSettings (MonkeyProjectItem* project);
+    UIMonkeyProjectSettings (MonkeyProjectItem* project);
 
-	QList<MonkeyProjectItem::Target> targets;
+    QList<MonkeyProjectItem::Target> targets;
 private slots:
-	void accept ();
-	void selectedRowChanged(int);
-	void actionNameEdited(QString name);
-	void addAction ();
-	void removeAction ();
-	void actionCommandEdited ();
+    void accept ();
+    void selectedRowChanged(int);
+    void actionNameEdited(QString name);
+    void addAction ();
+    void removeAction ();
+    void actionCommandEdited ();
 private:
-	MonkeyProjectItem* project;
+    MonkeyProjectItem* project;
 };
 
 #endif // UINOPROJECTPROJECTSETTINGS_H

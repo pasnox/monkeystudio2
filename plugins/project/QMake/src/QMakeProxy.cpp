@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**      Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Project Plugins
 ** FileName  : QMakeProxy.cpp
@@ -31,50 +31,50 @@
 #include "UISettingsQMake.h"
 
 QMakeProxy::QMakeProxy( ProjectsModel* m, ProjectItem* i )
-	: ProjectsProxy( m )
+    : ProjectsProxy( m )
 {
-	Q_ASSERT( i != 0 );
-	mProject = i;
+    Q_ASSERT( i != 0 );
+    mProject = i;
 }
 
 bool isDirectParent( ProjectItem* it, ProjectItem* pit )
 {
-	bool b = false;
-	for ( int i = 0; i < it->rowCount(); i++ )
-	{
-		ProjectItem* cit = it->child( i );
-		b = cit == pit;
-		if ( !b && cit->hasChildren() )
-			b = isDirectParent( cit, pit );
-		if ( b )
-			return true;
-	}
-	return b;
+    bool b = false;
+    for ( int i = 0; i < it->rowCount(); i++ )
+    {
+        ProjectItem* cit = it->child( i );
+        b = cit == pit;
+        if ( !b && cit->hasChildren() )
+            b = isDirectParent( cit, pit );
+        if ( b )
+            return true;
+    }
+    return b;
 }
 
 bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 {
-	if ( !mFiltering )
-		return true;
-	ProjectItem* it = projectsModel()->itemFromIndex( sourceModel()->index( r, 0, i ) );
-	int f = it->data( filterRole() ).toInt();
-	// check role
-	bool b = mNegateFilter ? !mFilterRoles.contains( f ) : mFilterRoles.contains( f );
-	// check child visibility
-	if ( !b )
-		for ( int j = 0; j < it->rowCount(); j++ )
-			if ( filterAcceptsRow( j, it->index() ) )
-				return true;
-	// return state
-	return it->project() == mProject ? b : isDirectParent( it, mProject );
+    if ( !mFiltering )
+        return true;
+    ProjectItem* it = projectsModel()->itemFromIndex( sourceModel()->index( r, 0, i ) );
+    int f = it->data( filterRole() ).toInt();
+    // check role
+    bool b = mNegateFilter ? !mFilterRoles.contains( f ) : mFilterRoles.contains( f );
+    // check child visibility
+    if ( !b )
+        for ( int j = 0; j < it->rowCount(); j++ )
+            if ( filterAcceptsRow( j, it->index() ) )
+                return true;
+    // return state
+    return it->project() == mProject ? b : isDirectParent( it, mProject );
 }
 
 void QMakeProxy::setFiltering( bool b )
 {
-	if ( b == mFiltering )
-		return;
-	mFiltering = b;
-	emit filteringChanged( mFiltering );
-	invalidateFilter();
+    if ( b == mFiltering )
+        return;
+    mFiltering = b;
+    emit filteringChanged( mFiltering );
+    invalidateFilter();
 }
 

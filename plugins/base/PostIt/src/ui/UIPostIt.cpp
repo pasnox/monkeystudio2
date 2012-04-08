@@ -11,7 +11,7 @@
 
 //constructor
 UIPostIt::UIPostIt( QWidget* w )
-	: QMainWindow( w, Qt::Tool )
+    : QMainWindow( w, Qt::Tool )
 {
     // init widget
     setupUi( this );
