@@ -16,6 +16,19 @@ include( config.pri )
     # path list - used for removing hidden files and crappy things
     install_folders = 
     
+    mac {
+        dataFolder  = macos
+    } else:win32 {
+        dataFolder = windows
+    } else {
+        dataFolder = unix
+    }
+    
+    toolsFolder = ../../tools
+    !exists( $${toolsFolder} ):toolsFolder    = ../tools
+    !exists( $${toolsFolder} ):toolsFolder    = tools
+    toolsDataFolder = $${toolsFolder}/data/$${dataFolder}
+    
     # licenses, readme, changelog
     monkey_docs.path = $${PACKAGE_DOCS}
     monkey_docs.files = GPL-2 \
@@ -55,36 +68,24 @@ include( config.pri )
 
         # desktop file
         monkey_desktop.path = $${prefix}/share/applications
-        monkey_desktop.files    = links/monkeystudio.desktop
+        monkey_desktop.files    = $${toolsDataFolder}/monkeystudio.desktop
         install_folders *= $${monkey_desktop.path}
 
         # desktop icon file
         monkey_desktopicon.path = $${prefix}/share/pixmaps
-        monkey_desktopicon.files    = links/monkeystudio.png
+        monkey_desktopicon.files    = $${toolsDataFolder}/monkeystudio.png
         install_folders *= $${monkey_desktopicon.path}
 
         INSTALLS    *= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
     }
     
     mac|win32 {
-        mac {
-            dataFolder  = data_macos
-        } else {
-            dataFolder = data_windows
-        }
-        
         qtDeployFolder = $${PACKAGE_DATAS}/qt
-        toolsFolder = ../../tools
-        !exists( $${toolsFolder} ):toolsFolder    = ../tools
-        !exists( $${toolsFolder} ):toolsFolder    = tools
-        confFile = $${toolsFolder}/$${dataFolder}/qt.conf
+        confFile = $${toolsDataFolder}/qt.conf
         
-        exists( $${confFile} ) {
-            qt_conf.path = $${PACKAGE_DATAS}
-            qt_conf.files = $${confFile}
-            
-            INSTALLS *= qt_conf
-        }
+        qt_conf.path = $${PACKAGE_DATAS}
+        qt_conf.files = $${confFile}
+        install_folders *= $${qt_conf.path}
         
         qt_documentation.path = $${qtDeployFolder}/doc/qch
         qt_documentation.files = $$[QT_INSTALL_DOCS]/qch/assistant*.qch
@@ -110,7 +111,7 @@ include( config.pri )
         qt_translations.files *= $$[QT_INSTALL_TRANSLATIONS]/qvfb*.ts
         install_folders *= $${qt_translations.path}
         
-        INSTALLS *= qt_documentation qt_translations
+        INSTALLS *= qt_conf qt_documentation qt_translations
     }
     
     mac {
