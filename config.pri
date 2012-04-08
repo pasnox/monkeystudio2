@@ -1,6 +1,6 @@
 # build mode
-CONFIG  *= qt warn_on thread x11 windows rtti release
-CONFIG  -= warn_off debug debug_and_release x86 x86_64 ppc ppc64
+CONFIG  *= qt warn_on thread x11 windows rtti debug
+CONFIG  -= warn_off release debug_and_release x86 x86_64 ppc ppc64
 QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
