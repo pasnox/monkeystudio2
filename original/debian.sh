@@ -13,36 +13,36 @@ package_name=monkeystudio
 version=$1
 if [ "$version" = '' ]
 then
-	version=1.8.x
+    version=1.8.x
 fi
 
 # monkey revision
 revision=$2
 if [ "$revision" = '' ]
 then
-	revision=xxxx
+    revision=xxxx
 fi
 
 # architecture
 arch=$3
 if [ "$arch" = '' ]
 then
-	arch=i386
+    arch=i386
 fi
 
 # gpg id
 id=$4
 if [ "$id" = '' ]
 then
-	id=ED11858D
+    id=ED11858D
 fi
 
 # svn url
 if [ "$5" = 'dev' ]
 then
-	svn=svn://monkeystudio.org/monkeyrepos/v2/branches/dev
+    svn=svn://monkeystudio.org/monkeyrepos/v2/branches/dev
 else
-	svn=svn://monkeystudio.org/monkeyrepos/v2/trunk
+    svn=svn://monkeystudio.org/monkeyrepos/v2/trunk
 fi
 
 echo $svn
@@ -59,36 +59,36 @@ package_orig=$package.orig.tar.gz
 
 createSourceOrig()
 {
-	# parameters
-	# 1 = revision
-	# 2 = package
-	# 3 = package orig
+    # parameters
+    # 1 = revision
+    # 2 = package
+    # 3 = package orig
 
-	# remove dir if needed
-	rm -R ./$2
+    # remove dir if needed
+    rm -R ./$2
 
-	# export repository
-	svn export -r $1 -q $svn ./$2
-	
-	# create orig tarball
-	tar czf ../$3 ./$2
-	
-	# delete svn export
-	rm -R ./$2
+    # export repository
+    svn export -r $1 -q $svn ./$2
+    
+    # create orig tarball
+    tar czf ../$3 ./$2
+    
+    # delete svn export
+    rm -R ./$2
 }
 
 updateChangeLog()
 {
-	# parameters
-	# 1 = package orig
-	# 2 = package version
-	
-	# get fullname and email of packager associate with gpg id
-	export DEBFULLNAME=''
-	export DEBEMAIL="$(gpg --list-key $id | grep -m 1 ^uid | sed 's/^uid[ ]*//')"
-	
-	# update changelog
-	uupdate -u ../$1 -v $2
+    # parameters
+    # 1 = package orig
+    # 2 = package version
+    
+    # get fullname and email of packager associate with gpg id
+    export DEBFULLNAME=''
+    export DEBEMAIL="$(gpg --list-key $id | grep -m 1 ^uid | sed 's/^uid[ ]*//')"
+    
+    # update changelog
+    uupdate -u ../$1 -v $2
 }
 
 # creating source tarball
