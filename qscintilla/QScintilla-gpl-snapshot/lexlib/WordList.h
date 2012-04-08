@@ -16,22 +16,22 @@ namespace Scintilla {
  */
 class WordList {
 public:
-	// Each word contains at least one character - a empty word acts as sentinel at the end.
-	char **words;
-	char *list;
-	int len;
-	bool onlyLineEnds;	///< Delimited by any white space or only line ends
-	int starts[256];
-	WordList(bool onlyLineEnds_ = false) :
-		words(0), list(0), len(0), onlyLineEnds(onlyLineEnds_)
-		{}
-	~WordList() { Clear(); }
-	operator bool() const { return len ? true : false; }
-	bool operator!=(const WordList &other) const;
-	void Clear();
-	void Set(const char *s);
-	bool InList(const char *s) const;
-	bool InListAbbreviated(const char *s, const char marker) const;
+    // Each word contains at least one character - a empty word acts as sentinel at the end.
+    char **words;
+    char *list;
+    int len;
+    bool onlyLineEnds;  ///< Delimited by any white space or only line ends
+    int starts[256];
+    WordList(bool onlyLineEnds_ = false) :
+        words(0), list(0), len(0), onlyLineEnds(onlyLineEnds_)
+        {}
+    ~WordList() { Clear(); }
+    operator bool() const { return len ? true : false; }
+    bool operator!=(const WordList &other) const;
+    void Clear();
+    void Set(const char *s);
+    bool InList(const char *s) const;
+    bool InListAbbreviated(const char *s, const char marker) const;
 };
 
 #ifdef SCI_NAMESPACE
