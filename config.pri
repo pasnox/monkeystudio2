@@ -54,22 +54,14 @@ QMAKE_TARGET_COMPANY    = "The Monkey Studio Team"
 QMAKE_TARGET_PRODUCT    = "Monkey Studio IDE"
 QMAKE_TARGET_DESCRIPTION    = "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT  = "(C) 2005 - 2011 Filipe AZEVEDO and $$QMAKE_TARGET_COMPANY"
-PACKAGE_DOMAIN  = "monkeystudio.org"
-
-PACKAGE_VERSION = 1.9.0.1
+QMAKE_TARGET_DOMAIN  = "monkeystudio.org"
+QMAKE_TARGET_VERSION = 1.9.0.1
 
 CONFIG( debug, debug|release ) {
-    PACKAGE_VERSION_STR = $${PACKAGE_VERSION}svn_debug
+    QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}svn_debug
 } else {
-    PACKAGE_VERSION_STR = $${PACKAGE_VERSION}svn_release
+    QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}svn_release
 }
-
-# define variable for source code
-DEFINES *= "_PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
-    "_PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\"" \
-    "_PACKAGE_VERSION_STR=\"\\\"$${PACKAGE_VERSION_STR}\\\"\"" \
-    "_PACKAGE_DOMAIN=\"\\\"$${PACKAGE_DOMAIN}\\\"\"" \
-    "_PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
 
 # get package install paths
 
@@ -125,12 +117,6 @@ unix:!mac {
     PACKAGE_DATAS   = $$quote($${datas})
     PACKAGE_DOCS   = $$quote($${docs})
 }
-
-# define package install paths so source code can use them
-DEFINES *= "_PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
-    "_PACKAGE_PLUGINS=\"\\\"$${PACKAGE_PLUGINS}\\\"\"" \
-    "_PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\"" \
-    "_PACKAGE_DOCS=\"\\\"$${PACKAGE_DOCS}\\\"\""
 
 # qscintilla library
 include( qscintilla/qscintilla_check.pri )
