@@ -53,9 +53,9 @@ INCLUDEPATH *= $${UI_DIR} # some qmake versions has bug and do not do it automat
 QMAKE_TARGET_COMPANY    = "The Monkey Studio Team"
 QMAKE_TARGET_PRODUCT    = "Monkey Studio IDE"
 QMAKE_TARGET_DESCRIPTION    = "Crossplatform Integrated Development Environment"
-QMAKE_TARGET_COPYRIGHT  = "(C) 2005 - 2011 Filipe AZEVEDO and $$QMAKE_TARGET_COMPANY"
+QMAKE_TARGET_COPYRIGHT  = "\\251 2005 - 2011 Filipe AZEVEDO and $$QMAKE_TARGET_COMPANY"
 QMAKE_TARGET_DOMAIN  = "monkeystudio.org"
-QMAKE_TARGET_VERSION = 1.9.0.1
+QMAKE_TARGET_VERSION = 1.9.0.2
 
 CONFIG( debug, debug|release ) {
     QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}svn_debug
