@@ -524,6 +524,7 @@ QAction* XUPProjectItem::addSeparator( const QString& mnu )
     const QString name = QString( "%1_generated_separator" ).arg( i++ );
     QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( name ) );
     action->setSeparator( true );
+    Q_ASSERT( !mInstalledActions.keys().contains( name ) );
     mInstalledActions[ name ] = action;
     return action;
 }
@@ -692,7 +693,11 @@ UIXUPEditor* XUPProjectItem::newEditDialog() const
 
 void XUPProjectItem::executeCommand( const QString& name )
 {
-    mInstalledActions.value( name )->trigger();
+    QAction* action = mInstalledActions.value( name );
+    
+    if ( action ) {
+        action->trigger();
+    }
 }
 
 void XUPProjectItem::projectCustomActionTriggered()
