@@ -28,8 +28,8 @@
     }
 
     MAIN_H.target = $$basename( MAIN_H.file )
-    win32:!cb_win32:MAIN_H.commands = echo \"$${MAIN_H.content}\" > $${MAIN_H.file}
-    else:MAIN_H.commands = echo \"$${MAIN_H.content}\" > $${MAIN_H.file}
+    win32:!cb_win32:MAIN_H.commands = echo \" $${MAIN_H.content}\" > $${MAIN_H.file}
+    else:MAIN_H.commands = echo \" $${MAIN_H.content}\" > $${MAIN_H.file}
     
     message( Generating $${MAIN_H.target}... )
     system( $${MAIN_H.commands} )
