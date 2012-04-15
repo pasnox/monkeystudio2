@@ -399,14 +399,24 @@ QStringList QtVersionManager::possibleQtPaths() const
 #else
 QStringList QtVersionManager::possibleQtPaths() const
 {
-    QDir dir( "/usr/local/Trolltech" );
-    const QFileInfoList files = pMonkeyStudio::getFolders( dir, QStringList( "Qt*" ), false );
+    QDir dir;
+    QFileInfoList files;
     QStringList paths;
 
     paths << QString::null; // for qmake available in PATH
 
+    // default build install path
+    dir = QDir( "/usr/local/Trolltech" );
+    files = pMonkeyStudio::getFolders( dir, QStringList( "Qt*" ), false );
     foreach ( const QFileInfo& file, files ) {
         paths << file.absoluteFilePath();
+    }
+
+    // qt sdk install path
+    dir = QDir( QString( "%1/QtSDK/Desktop/Qt" ).arg( QString::fromLocal8Bit( qgetenv( "HOME" ) ) ) );
+    files = pMonkeyStudio::getFolders( dir, QStringList( "*" ), false );
+    foreach ( const QFileInfo& file, files ) {
+        paths << QString( "%1/gcc" ).arg( file.absoluteFilePath() );
     }
 
     return paths;
