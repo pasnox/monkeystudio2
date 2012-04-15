@@ -22,15 +22,14 @@
 
     MAIN_H.file = src/main.h
 
-
     exists( $${MAIN_H.file} ) {
         win32:!cb_win32:system( del $${MAIN_H.file} )
         else:system( rm $${MAIN_H.file} )
     }
 
     MAIN_H.target = $$basename( MAIN_H.file )
-    win32:!cb_win32:MAIN_H.commands = echo \" $${MAIN_H.content}\" > $${MAIN_H.file}
-    else:MAIN_H.commands = echo \" $${MAIN_H.content}\" > $${MAIN_H.file}
+    win32:!cb_win32:MAIN_H.commands = echo \"$${MAIN_H.content}\" > $${MAIN_H.file}
+    else:MAIN_H.commands = echo \"$${MAIN_H.content}\" > $${MAIN_H.file}
     
     message( Generating $${MAIN_H.target}... )
     system( $${MAIN_H.commands} )
