@@ -1,3 +1,28 @@
+2012-04-17 19:28  pasnox
+
+	* [r4422] /v2/branches/dev/config.pri,
+	  /v2/branches/dev/functions.pri,
+	  /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Fix compatibility with qmake / qt 4.7.4 ( I was using Qt 4.8.1).
+	  Update copyrights years.
+
+2012-04-17 18:47  pasnox
+
+	* [r4421]
+	  /v2/branches/dev/monkey/src/commandlinemanager/CommandLineManager.cpp,
+	  /v2/branches/dev/monkey/src/main.cpp,
+	  /v2/branches/dev/plugins/child/QtAssistant/src/MkSQtDocInstaller.cpp,
+	  /v2/branches/dev/plugins/xup/QMake/src/QtVersionManager.cpp:
+	  
+	  Fix some include files
+
+2012-04-17 17:25  pasnox
+
+	* [r4417] /v2/branches/dev/ChangeLog:
+	  
+	  Update changelog
+
 2012-04-17 17:02  pasnox
 
 	* [r4416]
