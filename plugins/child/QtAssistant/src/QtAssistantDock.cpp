@@ -362,7 +362,7 @@ void QtAssistantDock::open_customContextMenuRequested( const QPoint& pos )
     if ( widget == mHelpEngine->contentWidget() )
     {
         const QModelIndex index = mHelpEngine->contentWidget()->indexAt( pos );
-        const QHelpContentItem* ci = mHelpEngine->contentModel()->contentItemAt( index );
+        const QHelpContentItem* ci = index.isValid() ? mHelpEngine->contentModel()->contentItemAt( index ) : 0;
         url = ci ? ci->url() : url;
         aCopy->setEnabled( index.isValid() );
         aSelectAll->setEnabled( false );

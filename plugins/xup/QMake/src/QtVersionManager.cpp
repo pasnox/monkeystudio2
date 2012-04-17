@@ -30,7 +30,7 @@
 const QString QtVersionManager::mQtVersionKey = "Versions";
 const QString QtVersionManager::mQtModuleKey = "Modules";
 const QString QtVersionManager::mQtConfigurationKey = "Configurations";
-const QRegExp QtVersionManager::mQtVersionRegExp( "4\\.[\\d\\w-_\\.]+" );
+const QRegExp QtVersionManager::mQtVersionRegExp( "\\d\\.\\d\\.\\d[\\d\\w-_]*" );
 const QRegExp QtVersionManager::mQtQMakeRegExp( QString( "QMake version (?:[\\d\\w-_\\.]+)(?:\\r|\\n|\\r\\n)Using Qt version (%1) in (.*)" ).arg( QtVersionManager::mQtVersionRegExp.pattern() ) );
 const QRegExp QtVersionManager::mQtUninstallRegExp( "Qt (?:OpenSource|SDK|Commercial) .*" );
 
@@ -399,14 +399,24 @@ QStringList QtVersionManager::possibleQtPaths() const
 #else
 QStringList QtVersionManager::possibleQtPaths() const
 {
-    QDir dir( "/usr/local/Trolltech" );
-    const QFileInfoList files = pMonkeyStudio::getFolders( dir, QStringList( "Qt*" ), false );
+    QDir dir;
+    QFileInfoList files;
     QStringList paths;
 
     paths << QString::null; // for qmake available in PATH
 
+    // default build install path
+    dir = QDir( "/usr/local/Trolltech" );
+    files = pMonkeyStudio::getFolders( dir, QStringList( "Qt*" ), false );
     foreach ( const QFileInfo& file, files ) {
         paths << file.absoluteFilePath();
+    }
+
+    // qt sdk install path
+    dir = QDir( QString( "%1/QtSDK/Desktop/Qt" ).arg( QString::fromLocal8Bit( qgetenv( "HOME" ) ) ) );
+    files = pMonkeyStudio::getFolders( dir, QStringList( "*" ), false );
+    foreach ( const QFileInfo& file, files ) {
+        paths << QString( "%1/gcc" ).arg( file.absoluteFilePath() );
     }
 
     return paths;
@@ -445,8 +455,13 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
         {
             const QString qversion = mQtQMakeRegExp.cap( 1 );
             const QString qpath = QDir::toNativeSeparators( mQtQMakeRegExp.cap( 2 ).replace( "\\", "/" ).section( '/', 0, -2 ) );
+            QString caption = QString( "Qt System (%1)" ).arg( qversion );
+            
+            if ( !path.isEmpty() ) {
+                caption = QString( "Qt System (%1/%2)" ).arg( qversion ).arg( QFileInfo( qpath ).fileName() );
+            }
 
-            sysQt.Version = QString( "Qt System (%1)" ).arg( path.isEmpty() ? qversion : QFileInfo( qpath ).fileName() );
+            sysQt.Version = caption;
             sysQt.Path = path.isEmpty() ? QString::null : qpath;
             sysQt.Default = hasDefaultVersion ? false : true;
             sysQt.QMakeSpec = QString::null;

@@ -5,6 +5,7 @@ include( ../config.pri )
 
 TEMPLATE    = app
 TARGET  = $$PACKAGE_TARGET
+VERSION = $$QMAKE_TARGET_VERSION
 DEFINES *= MONKEY_CORE_BUILD
 DESTDIR = $$PACKAGE_DESTDIR
 
@@ -35,6 +36,8 @@ win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildM
 mac:*-g++*:LIBS *= -Wl,-noall_load # stop importing all symbols
 else:*-g++*:LIBS    *= -Wl,--no-whole-archive # stop importing all symbols
 
+include( auto_main_h.pri )
+
 mac:ICON    = src/resources/icons/application/monkey2.icns
 win32:RC_FILE   *= monkey.rc
 
@@ -58,8 +61,7 @@ FORMS   *= src/maininterface/ui/UIAbout.ui \
     src/xupmanager/gui/MainEditor.ui \
     src/consolemanager/CommandEditor.ui
 
-HEADERS *= src/main.h \
-    src/maininterface/ui/UIAbout.h \
+HEADERS *= src/maininterface/ui/UIAbout.h \
     src/maininterface/ui/UISettings.h \
     src/recentsmanager/pRecentsManager.h \
     src/workspace/pAbstractChild.h \

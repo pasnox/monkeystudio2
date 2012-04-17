@@ -21,6 +21,7 @@
 
 #include <pSettings.h>
 
+#include <QStringList>
 #include <QFile>
 #include <QDomDocument>
 
@@ -34,10 +35,7 @@ struct QtVersion
 
     quint32 hash() const
     {
-            return Path.isEmpty()
-                ? qHash( QString( "%1/%2" ).arg( Version ).arg( QMakeSpec ) )
-                : qHash( QString( "%1/%2" ).arg( Path ).arg( QMakeSpec )/*.arg( QMakeParameters ).arg( HasQt4Suffix )*/ )
-            ;
+        return qHash( ( QStringList( Version ) << Path << QMakeSpec ).join( ":" ) );
     }
 
     bool isValid() const

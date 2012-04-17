@@ -881,7 +881,9 @@ void QMakeProjectItem::installCommandsV2()
     
     // call qmake to generate makefiles
     if ( files.isEmpty() ) {
-        executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );
+        if ( version.isValid() ) {
+            executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );
+        }
     }
     // iterate each makefiles
     else {
@@ -992,6 +994,39 @@ void QMakeProjectItem::installCommandsV2()
                 addCommand( "mBuilder", cmd );
             }
         }
+    }
+    
+    // create default version
+    if ( !version.isValid() && mInstalledActions.isEmpty() ) {
+        pCommand cmd = makeCommand;
+        
+        // build
+        cmd.setName( actionTypeToString( QMakeProjectItem::BuildFlag ) );
+        cmd.setText( actionTypeToText( QMakeProjectItem::BuildFlag ) );
+        cmd.setCommand( cmd.command() );
+        addCommand( "mBuilder", cmd );
+        
+        // clean
+        cmd.setName( actionTypeToString( QMakeProjectItem::CleanFlag ) );
+        cmd.setText( actionTypeToText( QMakeProjectItem::CleanFlag ) );
+        cmd.setCommand( QString( "%1 clean" ).arg( cmd.command() ) );
+        addCommand( "mBuilder", cmd );
+        
+        // distclean
+        cmd.setName( actionTypeToString( QMakeProjectItem::DistcleanFlag ) );
+        cmd.setText( actionTypeToText( QMakeProjectItem::DistcleanFlag ) );
+        cmd.setCommand( QString( "%1 distclean" ).arg( cmd.command() ) );
+        addCommand( "mBuilder", cmd );
+        
+        // execute
+        cmd.setName( actionTypeToString( QMakeProjectItem::ExecuteFlag ) );
+        cmd.setText( actionTypeToText( QMakeProjectItem::ExecuteFlag ) );
+        cmd.setCommand( "$target$" );
+        cmd.setWorkingDirectory( QString::null );
+        cmd.setParsers( QStringList() );
+        cmd.setTryAllParsers( false );
+        cmd.setExecutableCheckingType( XUPProjectItem::DefaultTarget );
+        addCommand( "mBuilder", cmd );
     }
     
     // install defaults commands

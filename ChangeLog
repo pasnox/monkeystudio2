@@ -1,3 +1,101 @@
+2012-04-17 17:02  pasnox
+
+	* [r4416]
+	  /v2/branches/dev/plugins/xup/QMake/src/QtVersionManager.cpp,
+	  /v2/branches/dev/plugins/xup/QMake/src/QtVersionManager.h:
+	  
+	  Correctly handle Linux/Mac OS X default SDK installations
+
+2012-04-15 17:02  pasnox
+
+	* [r4410]
+	  /v2/branches/dev/plugins/xup/QMake/src/QtVersionManager.cpp:
+	  
+	  Fix launchpad bug #976845 (qt sdk discovering)
+
+2012-04-15 16:59  pasnox
+
+	* [r4409] /v2/branches/dev/build.pro:
+	  
+	  Update default qt version
+
+2012-04-15 16:58  pasnox
+
+	* [r4408] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Small update for main.h generation script
+
+2012-04-15 16:37  pasnox
+
+	* [r4407] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Small update for main.h generation script
+
+2012-04-14 20:55  pasnox
+
+	* [r4405] /v2/branches/dev/build.pro:
+	  
+	  Fix default target to be debug in dev branches.
+
+2012-04-14 20:49  pasnox
+
+	* [r4404]
+	  /v2/branches/dev/plugins/child/QtAssistant/src/QtAssistantDock.cpp:
+	  
+	  Fix crash of launchpad bug #908921
+
+2012-04-14 20:49  pasnox
+
+	* [r4403]
+	  /v2/branches/dev/monkey/src/xupmanager/core/XUPProjectItem.cpp:
+	  
+	  Fix crash of launchpad bug #976845
+
+2012-04-14 20:38  pasnox
+
+	* [r4402] /v2/branches/dev/monkey/main.h.template:
+	  
+	  Inform the main.h is a generated file.
+
+2012-04-14 20:37  pasnox
+
+	* [r4401]
+	  /v2/branches/dev/plugins/xup/QMake/src/QMakeProjectItem.cpp:
+	  
+	  Fix crash of launchpad bug #976845
+
+2012-04-14 20:16  pasnox
+
+	* [r4400] /v2/branches/dev/config.pri:
+	  
+	  Set copyrights symbol.
+	  Update mks version
+
+2012-04-10 02:36  pasnox
+
+	* [r4399] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Only generate the main.h when calling qmake or project file
+	  changed.
+
+2012-04-10 02:25  pasnox
+
+	* [r4398] /v2/branches/dev/config.pri,
+	  /v2/branches/dev/monkey/auto_main_h.pri,
+	  /v2/branches/dev/monkey/main.h.template,
+	  /v2/branches/dev/monkey/monkey.pro,
+	  /v2/branches/dev/monkey/src/main.h:
+	  
+	  Remove hard coded defines and add rules to auto generate main.h.
+	  This will allow to better rebuild of files depending main as they
+	  will no longer use command line defines.
+
+2012-04-08 20:58  pasnox
+
+	* [r4395] /v2/branches/dev/ChangeLog:
+	  
+	  Update changelog
+
 2012-04-08 20:44  pasnox
 
 	* [r4394]
