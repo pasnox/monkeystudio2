@@ -5,20 +5,20 @@
 
     for( variable, variables ) {
         name = $${variable}
-        name = $$replace( name, \", )
-        name = $$replace( name, \\$, )
-        name = $$replace( name, \\{, )
-        name = $$replace( name, \\}, )
-        name = $$replace( name, \\\\n, )
+        name = $$replace( name, $${Q_QUOTE}, "" )
+        name = $$replace( name, $${Q_DOLLAR}, "" )
+        name = $$replace( name, $${Q_OPENING_BRACE}, "" )
+        name = $$replace( name, $${Q_CLOSING_BRACE}, "" )
+        name = $$replace( name, $${Q_EOL}, "" )
         
-        MAIN_H.content = $$replace( MAIN_H.content, \\$\\$\\{$${name}\\}, $$eval( $${name} ) )
+        MAIN_H.content = $$replace( MAIN_H.content, $${Q_DOLLAR}$${Q_DOLLAR}$${Q_OPENING_BRACE}$${name}$${Q_CLOSING_BRACE}, $$eval( $${name} ) )
         
         #message( --- Found: $$variable ($$name) - $$eval( $$name ) )
     }
 
-    MAIN_H.content = $$replace( MAIN_H.content, \", \\\" )
+    MAIN_H.content = $$replace( MAIN_H.content, $${Q_QUOTE}, \\$${Q_QUOTE} )
     #MAIN_H.content = $$join( MAIN_H.content )
-    #MAIN_H.content = $$replace( MAIN_H.content, "\\\\n ", "\\n" )
+    #MAIN_H.content = $$replace( MAIN_H.content, "$${Q_EOL} ", "\\n" )
 
     MAIN_H.file = src/main.h
 

@@ -17,9 +17,9 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "MkSQtDocInstaller.h"
-#include "main.h"
 #include "3rdparty/qtdocinstaller.h"
 
+#include <main.h>
 #include <coremanager/MonkeyCore.h>
 #include <pQueuedMessageToolBar.h>
 #include <settingsmanager/Settings.h>
