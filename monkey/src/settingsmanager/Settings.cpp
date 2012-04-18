@@ -107,12 +107,9 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
     if ( appIsInstalled ) {
         QString path = appPath;
 #ifdef Q_OS_MAC
-        path = QString( "/../.." ).arg( path );
+        path = QString( "/../../.." ).arg( path );
 #endif
         path = QString( "%1/../datas" ).arg( path );
-        
-        qWarning( qPrintable( path ) );
-        
         appIsInstalled = !QFile::exists( path );
     }
 
@@ -200,15 +197,6 @@ void Settings::setDefaultSettings()
     setStoragePaths( Settings::SP_TEMPLATES, templatesPaths );
     setStoragePaths( Settings::SP_TRANSLATIONS, translationsPaths );
     setStoragePaths( Settings::SP_SCRIPTS, scriptsPaths );
-    
-    qWarning()
-        << pluginsPaths
-        << apisPaths
-        << templatesPaths
-        << translationsPaths
-        << scriptsPaths
-        << scriptsPath
-    ;
 
     // apis
     foreach ( const QString& path, apisPaths ) {
