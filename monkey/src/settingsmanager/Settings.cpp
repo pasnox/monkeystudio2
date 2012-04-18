@@ -109,7 +109,7 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 #ifdef Q_OS_MAC
         path = QString( "/../.." ).arg( path );
 #endif
-        path = QString( "%1/datas" ).arg( path );
+        path = QString( "%1/../datas" ).arg( path );
         
         qWarning( qPrintable( path ) );
         
