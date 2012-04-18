@@ -63,7 +63,7 @@ CONFIG( debug, debug|release ) {
     QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}svn_release
 }
 
-PACKAGE_VERSION_STR = $${PACKAGE_VERSION}
+QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}
 
 # get package install paths
 
