@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QStringList>
 #include <QDir>
+#include <QDebug>
 
 Settings::Settings( QObject* o )
     : pSettings( o )
@@ -85,7 +86,6 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
     if ( !result.isEmpty() ) {
         return result;
     }
-
     // End compatibility layer
 
     const QString appPath = qApp->applicationDirPath();
@@ -102,6 +102,16 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
     appIsInstalled = QFile::exists( PACKAGE_PREFIX ) && QFile::exists( PACKAGE_DATAS );
     basePath = PACKAGE_DATAS;
 #endif
+    
+    // if datas/* folder exists, then the application is not installed
+    if ( appIsInstalled ) {
+        QString path = appPath;
+#ifdef Q_OS_MAC
+        path = QString( "/../../.." ).arg( path );
+#endif
+        path = QString( "%1/../datas" ).arg( path );
+        appIsInstalled = !QFile::exists( path );
+    }
 
     if ( !appIsInstalled ) {
         return storagePathsOutOfBox( type, appPath );
