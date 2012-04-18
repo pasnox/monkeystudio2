@@ -1,3 +1,33 @@
+2012-04-18 17:28  pasnox
+
+	* [r4432] /v2/branches/dev/monkey/src/settingsmanager/Settings.cpp:
+	  
+	  Fix installed application detection.
+
+2012-04-18 17:05  pasnox
+
+	* [r4430] /v2/branches/dev/monkey/src/settingsmanager/Settings.cpp:
+	  
+	  Better checking of installed app
+
+2012-04-18 17:04  pasnox
+
+	* [r4429] /v2/branches/dev/monkey/src/settingsmanager/Settings.cpp:
+	  
+	  Better checking of installed app
+
+2012-04-18 16:29  pasnox
+
+	* [r4428] /v2/branches/dev/monkey/src/main.cpp:
+	  
+	  Fix settings file properties
+
+2012-04-17 19:38  pasnox
+
+	* [r4423] /v2/branches/dev/ChangeLog:
+	  
+	  Update changelog, really ready for release 1.9.0.2
+
 2012-04-17 19:28  pasnox
 
 	* [r4422] /v2/branches/dev/config.pri,
