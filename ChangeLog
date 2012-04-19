@@ -1,3 +1,27 @@
+2012-04-19 19:43  pasnox
+
+	* [r4437] /v2/branches/dev/monkey/auto_main_h.pri,
+	  /v2/branches/dev/monkey/main.h.in,
+	  /v2/branches/dev/monkey/main.h.template:
+	  
+	  Rename main.h.template as main.h.in
+	  Update project file according to this change.
+
+2012-04-19 19:40  pasnox
+
+	* [r4436] /v2/branches/dev/functions.pri,
+	  /v2/branches/dev/monkey/auto_main_h.pri,
+	  /v2/branches/dev/monkey/main.h.template:
+	  
+	  Fix main.h generation for old qmake and better handling for other
+	  os than linux.
+
+2012-04-18 17:58  pasnox
+
+	* [r4433] /v2/branches/dev/ChangeLog:
+	  
+	  Update changelog
+
 2012-04-18 17:28  pasnox
 
 	* [r4432] /v2/branches/dev/monkey/src/settingsmanager/Settings.cpp:
