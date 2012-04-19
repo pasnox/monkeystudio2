@@ -15,13 +15,12 @@ cb_mac {
 
 Q_TARGET_ARCH = "$${Q_TARGET}-$${Q_ARCH}"
 
-Q_BACK_SLASH = \
-Q_SLASH = /
-Q_QUOTE = \"
-Q_DOLLAR = \\$
-Q_OPENING_BRACE = \\{
-Q_CLOSING_BRACE = \\}
-Q_EOL = \\\\n
+Q_BACK_SLASH = "\\"
+Q_SLASH = "/"
+Q_QUOTE = "\""
+Q_DOLLAR = "\\$"
+Q_OPENING_BRACE = "\\{"
+Q_CLOSING_BRACE = "\\}"
 
 # lupdate/lrelease too buggy ( not full qmake interpreter ), so avoid functions def in this case
 isEmpty( translations_pass ) {
