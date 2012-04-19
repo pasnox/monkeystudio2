@@ -1,7 +1,7 @@
 /*
     /!\ WARNING: THIS FILE IS AUTO GENERATED
         DO NOT EDIT, CONTENT WILL BE LOST
-        INSTEAD EDIT main.h.template FILE
+        INSTEAD EDIT main.h.in FILE
 */
 /****************************************************************************
     Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team

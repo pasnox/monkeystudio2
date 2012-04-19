@@ -1,5 +1,5 @@
 !build_pass {
-    MAIN_H.source = main.h.template
+    MAIN_H.source = main.h.in
     MAIN_H.target = src/main.h
     MAIN_H.content = $$cat( $${MAIN_H.source}, false )
 
