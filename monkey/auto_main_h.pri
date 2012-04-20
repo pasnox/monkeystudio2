@@ -17,8 +17,9 @@
         #message( --- Found: $$variable ($$name) - $$eval( $$name ) )
     }
 
-    mac:MAIN_H.content = $$replace( MAIN_H.content, $${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
-    else:MAIN_H.content = $$replace( MAIN_H.content, $${Q_BACK_SLASH}$${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
+    #mac:MAIN_H.content = $$replace( MAIN_H.content, $${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
+    #else:MAIN_H.content = $$replace( MAIN_H.content, $${Q_BACK_SLASH}$${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
+    MAIN_H.content = $$replace( MAIN_H.content, $${Q_BACK_SLASH}$${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
     MAIN_H.content = $$replace( MAIN_H.content, $${Q_QUOTE}, $${Q_BACK_SLASH}$${Q_QUOTE} )
 
     exists( $${MAIN_H.target} ) {
