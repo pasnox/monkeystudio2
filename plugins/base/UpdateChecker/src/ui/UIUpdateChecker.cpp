@@ -140,7 +140,8 @@ QString UpdateItem::displayText() const
 QString UpdateItem::versionString() const
 {
     const QString text = title();
-    QRegExp rx( ".*mks_([\\d\\.\\d\\.\\d\\.\\d]{1,}[\\w]*)-svn.*" );
+    //QRegExp rx( ".*mks_([\\d\\.\\d\\.\\d\\.\\d]{1,}[\\w]*)-svn.*" );
+    QRegExp rx( ".*(?:mks|monkeystudio).*([\\d\\.\\d\\.\\d\\.\\d]+[\\w]*).*\\..*" );
     
     if ( rx.exactMatch( text ) )
     {
