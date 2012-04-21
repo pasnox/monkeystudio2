@@ -9,7 +9,7 @@
 	
 	exists( $${MAIN_H.target} ) {
         win32:!cb_win32 {
-			system( "%COMSPEC% /C \"del $${MAIN_H.target}\"" )
+			system( "del $${MAIN_H.target}" )
 		} else {
 			system( "rm $${MAIN_H.target}" )
 		}
@@ -51,7 +51,7 @@
 	
 	win32:!cb_win32 {
 		MAIN_H.content = $$replace( MAIN_H.content, "\\n", ">> $${MAIN_H.target} && echo." )
-		MAIN_H.commands = "%COMSPEC% /C \"echo ^ $${MAIN_H.content} >> $${MAIN_H.target}\""
+		MAIN_H.commands = "echo ^ $${MAIN_H.content} >> $${MAIN_H.target}"
 		system( $${MAIN_H.commands} )
 	} else {
 		MAIN_H.commands = "echo \" $${MAIN_H.content}\" > $${MAIN_H.target}"
