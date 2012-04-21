@@ -129,11 +129,23 @@ include( config.pri )
     }
     
     # kleen commands to be called after make install so possible crappy / hidden files are deleted
+	
+	# don't show executed commands
+	win32:!cb_win32:kleen.commands += "@echo off &"
+	
     for( folder, install_folders ) {
-        win32:!cb_win32:kleen.commands += echo "Kleen command for native windows not created - please do it"
-        else:kleen.commands += find \"$${folder}\" -type d -name \"CVS\" -o -name \".svn\" | xargs -d \"\\n\" rm -fr; \
-            find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\\n\" rm -f;
+        win32:!cb_win32 {
+			folder = $$replace( folder, $${Q_SLASH}, $${Q_BACK_SLASH} )
+			kleen.commands += "( @for /f %%i in ('dir /ad /b /s \"$${folder}\\*CVS\" \"$${folder}\\*.svn\" 2^> nul') do @rd /s /q \"%%i\" ) &" \
+				"( @for /f %%i in ('dir /a-d /b /s \"$${folder}\\*.a\" \"$${folder}\\*.lib\" 2^> nul') do @del /f \"%%i\" ) &"
+		} else {
+			kleen.commands += "find \"$${folder}\" -type d -name \"CVS\" -o -name \".svn\" | xargs -d \"\\n\" rm -fr; " \
+				"find \"$${folder}\" -type f -name \"*.a\" -o -name \"*.lib\" | xargs -d \"\\n\" rm -f; "
+		}
     }
+	
+	# silently exit for non existing folders
+	win32:!cb_win32:kleen.commands += "@exit 0"
     
     QMAKE_EXTRA_TARGETS *= kleen
 }
