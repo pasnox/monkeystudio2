@@ -26,7 +26,6 @@
         name = $$replace( name, $${Q_CLOSING_BRACE}, "" )
         
         MAIN_H.content = $$replace( MAIN_H.content, $${Q_DOLLAR}$${Q_DOLLAR}$${Q_OPENING_BRACE}$${name}$${Q_CLOSING_BRACE}, $$eval( $${name} ) )
-        
         #message( --- Found: $$variable ($$name) - $$eval( $$name ) )
     }
 	
@@ -52,12 +51,11 @@
 	win32:!cb_win32 {
 		MAIN_H.content = $$replace( MAIN_H.content, "\\n", ">> $${MAIN_H.target} && echo." )
 		MAIN_H.commands = "echo ^ $${MAIN_H.content} >> $${MAIN_H.target}"
-		system( $${MAIN_H.commands} )
 	} else {
 		MAIN_H.commands = "echo \" $${MAIN_H.content}\" > $${MAIN_H.target}"
-		system( $${MAIN_H.commands} )
 	}
 	
+	system( $${MAIN_H.commands} )
 	#message( $${MAIN_H.content} )
 	#message( $${MAIN_H.commands} )
 }
