@@ -3,6 +3,8 @@
 include( config.pri )
 
 !build_pass {
+	cb_win32:message( "Crossbuilding for Windows" )
+	cb_mac:message( "Crossbuilding for Darwin" )
     isEqual( SYSTEM_QSCINTILLA, 1 ):message( "Using system QScintilla library" )
     else:message( "Using integrated QScintilla library" )
     message( "You can change qscintilla link type by giving the qmake parameter variable: ('qmake -set system_qscintilla 0' or qmake -set system_qscintilla 1')" )
