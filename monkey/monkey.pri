@@ -8,5 +8,5 @@ INCLUDEPATH *= $${PWD}/src
 PRE_TARGETDEPS  *= $${PWD}
 
 # library integration
-LIBS    *= -L$${PACKAGE_BUILD_PATH}
+LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 win32:LIBS  *= -l$${PACKAGE_TARGET}
