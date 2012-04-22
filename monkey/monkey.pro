@@ -15,7 +15,7 @@ INCLUDEPATH *= src
 #INCLUDEPATH    *= $${MONKEY_SOURCES_PATHS}
 DEPENDPATH  *= $${MONKEY_SOURCES_PATHS}
 
-LIBS    *= -L$${PACKAGE_BUILD_PATH}
+LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 mac:*-g++*:LIBS *= -Wl,-all_load # import all symbols as the not used ones too
 else:*-g++*:LIBS    *= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++*:LIBS *= -dynamic

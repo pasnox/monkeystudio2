@@ -1,8 +1,19 @@
-win32:!isEqual( $$lower( $${QMAKE_HOST.os} ), "windows" ):CONFIG *= cb_win32
-mac:!isEqual( $$lower( $${QMAKE_HOST.os} ), "darwin" ):CONFIG *= cb_mac
+Q_HOST_OS = $${QMAKE_HOST.os}
+Q_LOWER_HOST_OS = $$lower( $${Q_HOST_OS} )
 
-Q_HOST = $${QMAKE_HOST.os}
-Q_TARGET = $${Q_HOST}
+win32 {
+	!isEqual(  Q_LOWER_HOST_OS, "windows" ) {
+		CONFIG *= cb_win32
+	}
+}
+
+mac {
+	!isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
+		CONFIG *= cb_mac
+	}
+}
+
+Q_TARGET = $${Q_HOST_OS}
 Q_ARCH = $${QT_ARCH}
 
 cb_win32 {

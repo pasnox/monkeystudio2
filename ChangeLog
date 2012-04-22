@@ -1,3 +1,83 @@
+2012-04-21 23:38  pasnox
+
+	* [r4451] /v2/branches/dev/installs.pri:
+	  
+	  kleen command is now working natively on windows too.
+	  MkS is now fully ready and buildable on all major os !
+
+2012-04-21 23:36  pasnox
+
+	* [r4450] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Small update in main.h generation
+
+2012-04-21 23:22  pasnox
+
+	* [r4449] /v2/branches/dev/monkey/monkey.pri,
+	  /v2/branches/dev/monkey/monkey.pro,
+	  /v2/branches/dev/plugins/plugins.pri:
+	  
+	  Fix lib path.
+	  Build plugins in plugins subdirectory to avoid conflicts on
+	  windows ( php.c / PHP.cpp ).
+
+2012-04-21 19:28  pasnox
+
+	* [r4448] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Remove comspec variable as it's not needed.
+
+2012-04-21 17:10  pasnox
+
+	* [r4447] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  main.h generation can be done on native windows os too now!
+
+2012-04-21 17:08  pasnox
+
+	* [r4446] /v2/branches/dev/monkey/main.h.in:
+	  
+	  Set better warning
+
+2012-04-21 17:07  pasnox
+
+	* [r4445] /v2/branches/dev/installs.pri:
+	  
+	  Inform we are crossbuilding
+
+2012-04-21 17:06  pasnox
+
+	* [r4444] /v2/branches/dev/functions.pri:
+	  
+	  Correctly discovers cross builds.
+
+2012-04-20 19:49  pasnox
+
+	* [r4443] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Revert change as on friends mac it does not works.
+	  It seem my shell / terminal is auto escaping things... so let
+	  standard and universal replace command.
+
+2012-04-20 19:37  pasnox
+
+	* [r4442]
+	  /v2/branches/dev/plugins/base/UpdateChecker/src/ui/UIUpdateChecker.cpp:
+	  
+	  Fix regexp so it can handle old and new mks release names.
+
+2012-04-20 18:03  pasnox
+
+	* [r4441] /v2/branches/dev/monkey/auto_main_h.pri:
+	  
+	  Fix main.h generation on mac os x
+
+2012-04-19 19:50  pasnox
+
+	* [r4438] /v2/branches/dev/ChangeLog:
+	  
+	  Update changelog
+
 2012-04-19 19:43  pasnox
 
 	* [r4437] /v2/branches/dev/monkey/auto_main_h.pri,
