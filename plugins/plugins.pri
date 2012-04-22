@@ -31,4 +31,4 @@ unix:!mac:QMAKE_LFLAGS  -= -Wl,--no-undefined
 
 win32:QMAKE_LIBDIR  *= $${PACKAGE_DESTDIR}
 
-setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
+setTemporaryDirectories( $${PACKAGE_BUILD_PATH}/plugins )
