@@ -64,8 +64,10 @@ QLabel* StatusBar::label( StatusBar::LabelType type )
 
 void StatusBar::setMessage( const QString& message )
 {
-    showMessage( message );
-    setToolTip( message );
+    if ( currentMessage() != message ) {
+        showMessage( message );
+        setToolTip( message );
+    }
 }
 
 void StatusBar::setModified( bool modified )
