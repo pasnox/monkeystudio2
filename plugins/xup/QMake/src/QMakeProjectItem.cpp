@@ -805,6 +805,12 @@ QString QMakeProjectItem::defaultActionTypeToText( QMakeProjectItem::DefaultActi
     return actionTypeToText( QMakeProjectItem::ActionType( type ) );
 }
 
+void QMakeProjectItem::executeCommand( const QString& name )
+{
+    mLastCommand = command( name );
+    XUPProjectItem::executeCommand( name );
+}
+
 void QMakeProjectItem::installCommandsV2()
 {
     const QString suffix = QFileInfo( fileName() ).suffix().toLower();
@@ -1461,12 +1467,20 @@ void QMakeProjectItem::consoleManager_commandFinished( const pCommand& cmd, int 
     Q_UNUSED( exitCode );
     Q_UNUSED( exitStatus );
     
-    if ( stringToActionType( cmd.name() ) != QMakeProjectItem::QMakeFlag ) {
+    if ( cmd.project() != this || cmd.project() != MonkeyCore::projectsManager()->currentProject() ) {
         return;
     }
     
-    if ( cmd.project() != this || cmd.project() != MonkeyCore::projectsManager()->currentProject() ) {
+    if ( stringToActionType( cmd.name() ) != QMakeProjectItem::QMakeFlag ) {
+        mLastCommand = pCommand();
         return;
+    }
+    
+    if ( exitStatus == QProcess::CrashExit || exitCode != 0 ) {
+        if ( mLastCommand.name() == cmd.name() ) {
+            mLastCommand = pCommand();
+            return;
+        }
     }
     
     uninstallCommands();
