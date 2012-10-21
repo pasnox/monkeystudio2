@@ -54,6 +54,7 @@ public:
     virtual QString projectType() const;
     virtual bool open( const QString& fileName, const QString& codec );
     virtual QString targetFilePath( XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget );
+    virtual void executeCommand( const QString& name );
     virtual void installCommandsV2();
     virtual void installCommands();
     virtual XUPProjectItemCacheBackend* cacheBackend() const;

@@ -805,6 +805,12 @@ QString QMakeProjectItem::defaultActionTypeToText( QMakeProjectItem::DefaultActi
     return actionTypeToText( QMakeProjectItem::ActionType( type ) );
 }
 
+void QMakeProjectItem::executeCommand( const QString& name )
+{
+    mLastCommand = command( name );
+    XUPProjectItem::executeCommand( name );
+}
+
 void QMakeProjectItem::installCommandsV2()
 {
     const QString suffix = QFileInfo( fileName() ).suffix().toLower();
@@ -1471,7 +1477,7 @@ void QMakeProjectItem::consoleManager_commandFinished( const pCommand& cmd, int 
     }
     
     if ( exitStatus == QProcess::CrashExit || exitCode != 0 ) {
-        if ( mLastCommand == cmd ) {
+        if ( mLastCommand.name() == cmd.name() ) {
             mLastCommand = pCommand();
             return;
         }
