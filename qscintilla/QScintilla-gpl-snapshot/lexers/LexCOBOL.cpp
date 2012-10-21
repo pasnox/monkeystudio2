@@ -54,15 +54,15 @@ inline bool isCOBOLwordstart(char ch)
     }
 
 static int CountBits(int nBits)
-    {
-    int count = 0;
-    for (int i = 0; i < 32; ++i)
-        {
-        count += nBits & 1;
-        nBits >>= 1;
-        }
-    return count;
-    }
+	{
+	int count = 0;
+	for (int i = 0; i < 32; ++i)
+		{
+		count += nBits & 1;
+		nBits >>= 1;
+		}
+	return count;
+	}
 
 static void getRange(unsigned int start,
         unsigned int end,
@@ -95,14 +95,14 @@ static int classifyWordCOBOL(unsigned int start, unsigned int end, /*WordList &k
     char chAttr = SCE_C_IDENTIFIER;
     if (isdigit(s[0]) || (s[0] == '.') || (s[0] == 'v')) {
         chAttr = SCE_C_NUMBER;
-        char *p = s + 1;
-        while (*p) {
-            if ((!isdigit(*p) && (*p) != 'v') && isCOBOLwordchar(*p)) {
-                chAttr = SCE_C_IDENTIFIER;
-                break;
-            }
-            ++p;
-        }
+		char *p = s + 1;
+		while (*p) {
+			if ((!isdigit(*p) && (*p) != 'v') && isCOBOLwordchar(*p)) {
+				chAttr = SCE_C_IDENTIFIER;
+			    break;
+			}
+			++p;
+		}
     }
     else {
         if (a_keywords.InList(s)) {
@@ -118,22 +118,22 @@ static int classifyWordCOBOL(unsigned int start, unsigned int end, /*WordList &k
     if (*bAarea) {
         if (strcmp(s, "division") == 0) {
             ret = IN_DIVISION;
-            // we've determined the containment, anything else is just ignored for those purposes
-            *bAarea = false;
-        } else if (strcmp(s, "declaratives") == 0) {
+			// we've determined the containment, anything else is just ignored for those purposes
+			*bAarea = false;
+		} else if (strcmp(s, "declaratives") == 0) {
             ret = IN_DIVISION | IN_DECLARATIVES;
-            if (nContainment & IN_DECLARATIVES)
-                ret |= NOT_HEADER | IN_SECTION;
-            // we've determined the containment, anything else is just ignored for those purposes
-            *bAarea = false;
-        } else if (strcmp(s, "section") == 0) {
+			if (nContainment & IN_DECLARATIVES)
+				ret |= NOT_HEADER | IN_SECTION;
+			// we've determined the containment, anything else is just ignored for those purposes
+			*bAarea = false;
+		} else if (strcmp(s, "section") == 0) {
             ret = (nContainment &~ IN_PARAGRAPH) | IN_SECTION;
-            // we've determined the containment, anything else is just ignored for those purposes
-            *bAarea = false;
-        } else if (strcmp(s, "end") == 0 && (nContainment & IN_DECLARATIVES)) {
+			// we've determined the containment, anything else is just ignored for those purposes
+			*bAarea = false;
+		} else if (strcmp(s, "end") == 0 && (nContainment & IN_DECLARATIVES)) {
             ret = IN_DIVISION | IN_DECLARATIVES | IN_SECTION | NOT_HEADER;
-        } else {
-            ret = nContainment | IN_PARAGRAPH;
+		} else {
+			ret = nContainment | IN_PARAGRAPH;
         }
     }
     ColourTo(styler, end, chAttr);
@@ -158,7 +158,7 @@ static void ColouriseCOBOLDoc(unsigned int startPos, int length, int initStyle, 
     if (currentLine > 0) {
         styler.SetLineState(currentLine, styler.GetLineState(currentLine-1));
         nContainment = styler.GetLineState(currentLine);
-        nContainment &= ~NOT_HEADER;
+		nContainment &= ~NOT_HEADER;
     } else {
         styler.SetLineState(currentLine, 0);
         nContainment = 0;
@@ -167,20 +167,20 @@ static void ColouriseCOBOLDoc(unsigned int startPos, int length, int initStyle, 
     styler.StartSegment(startPos);
     bool bNewLine = true;
     bool bAarea = !isspacechar(chNext);
-    int column = 0;
+	int column = 0;
     for (unsigned int i = startPos; i < lengthDoc; i++) {
         char ch = chNext;
 
         chNext = styler.SafeGetCharAt(i + 1);
 
-        ++column;
+		++column;
 
         if (bNewLine) {
-            column = 0;
+			column = 0;
         }
-        if (column <= 1 && !bAarea) {
-            bAarea = !isspacechar(ch);
-            }
+		if (column <= 1 && !bAarea) {
+			bAarea = !isspacechar(ch);
+			}
         bool bSetNewLine = false;
         if ((ch == '\r' && chNext != '\n') || (ch == '\n')) {
             // Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
@@ -193,8 +193,8 @@ static void ColouriseCOBOLDoc(unsigned int startPos, int length, int initStyle, 
             styler.SetLineState(currentLine, nContainment);
             currentLine++;
             bSetNewLine = true;
-            if (nContainment & NOT_HEADER)
-                nContainment &= ~(NOT_HEADER | IN_DECLARATIVES | IN_SECTION);
+			if (nContainment & NOT_HEADER)
+				nContainment &= ~(NOT_HEADER | IN_DECLARATIVES | IN_SECTION);
         }
 
         if (styler.IsLeadByte(ch)) {
@@ -299,10 +299,10 @@ static void ColouriseCOBOLDoc(unsigned int startPos, int length, int initStyle, 
         }
         chPrev = ch;
         bNewLine = bSetNewLine;
-        if (bNewLine)
-            {
-            bAarea = false;
-            }
+		if (bNewLine)
+			{
+			bAarea = false;
+			}
     }
     ColourTo(styler, lengthDoc - 1, state);
 }
@@ -318,26 +318,26 @@ static void FoldCOBOLDoc(unsigned int startPos, int length, int, WordList *[],
 
     bool bNewLine = true;
     bool bAarea = !isspacechar(chNext);
-    int column = 0;
-    bool bComment = false;
+	int column = 0;
+	bool bComment = false;
     for (unsigned int i = startPos; i < endPos; i++) {
         char ch = chNext;
         chNext = styler.SafeGetCharAt(i + 1);
-        ++column;
+		++column;
 
         if (bNewLine) {
-            column = 0;
-            bComment = (ch == '*' || ch == '/' || ch == '?');
+			column = 0;
+			bComment = (ch == '*' || ch == '/' || ch == '?');
         }
-        if (column <= 1 && !bAarea) {
-            bAarea = !isspacechar(ch);
-            }
+		if (column <= 1 && !bAarea) {
+			bAarea = !isspacechar(ch);
+			}
         bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
         if (atEOL) {
-            int nContainment = styler.GetLineState(lineCurrent);
+			int nContainment = styler.GetLineState(lineCurrent);
             int lev = CountBits(nContainment & IN_FLAGS) | SC_FOLDLEVELBASE;
-            if (bAarea && !bComment)
-                --lev;
+			if (bAarea && !bComment)
+				--lev;
             if (visibleChars == 0 && foldCompact)
                 lev |= SC_FOLDLEVELWHITEFLAG;
             if ((bAarea) && (visibleChars > 0) && !(nContainment & NOT_HEADER) && !bComment)
@@ -345,14 +345,14 @@ static void FoldCOBOLDoc(unsigned int startPos, int length, int, WordList *[],
             if (lev != styler.LevelAt(lineCurrent)) {
                 styler.SetLevel(lineCurrent, lev);
             }
-            if ((lev & SC_FOLDLEVELNUMBERMASK) <= (levelPrev & SC_FOLDLEVELNUMBERMASK)) {
-                // this level is at the same level or less than the previous line
-                // therefore these is nothing for the previous header to collapse, so remove the header
-                styler.SetLevel(lineCurrent - 1, levelPrev & ~SC_FOLDLEVELHEADERFLAG);
-            }
+			if ((lev & SC_FOLDLEVELNUMBERMASK) <= (levelPrev & SC_FOLDLEVELNUMBERMASK)) {
+				// this level is at the same level or less than the previous line
+				// therefore these is nothing for the previous header to collapse, so remove the header
+				styler.SetLevel(lineCurrent - 1, levelPrev & ~SC_FOLDLEVELHEADERFLAG);
+			}
             levelPrev = lev;
             visibleChars = 0;
-            bAarea = false;
+			bAarea = false;
             bNewLine = true;
             lineCurrent++;
         } else {

@@ -27,9 +27,9 @@ QScintilla is a port or Scintilla to the Qt GUI toolkit from
 system supported by Qt (eg. Windows, UNIX/Linux, MacOS/X).  QScintilla works
 with both Qt v3 and v4.
 
-This documentation describes QScintilla for Qt
-v3.
-The QScintilla APIs for Qt v3 and Qt v4 are almost identical.  The main
+This documentation describes QScintilla for
+Qt v3.
+The QScintilla APIs for Qt v3 and Qt v4 and v5 are almost identical.  The main
 difference is that the QsciScintillaBase class is derived from a different Qt
 class.
 
@@ -102,8 +102,8 @@ To build and install QScintilla, run:
     make install
 </pre>
 
-If you have both Qt v3 and v4 installed then make sure you use the correct
-version of <tt>qmake</tt>.
+If you have multiple versions of Qt installed then make sure you use the
+correct version of <tt>qmake</tt>.
 
 
 <h3>Installation on Windows</h3>

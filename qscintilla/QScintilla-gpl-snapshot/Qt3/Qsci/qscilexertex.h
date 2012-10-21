@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerTeX class.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -78,7 +78,7 @@ public:
     //! languages.
     const char *lexer() const;
 
-    //! \internal Returns the string of characters that comprise a word.
+    //! Returns the string of characters that comprise a word.
     const char *wordCharacters() const;
 
     //! Returns the foreground colour of the text for style number \a style.

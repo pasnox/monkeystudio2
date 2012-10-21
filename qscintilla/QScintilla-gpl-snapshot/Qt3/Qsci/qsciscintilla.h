@@ -1,7 +1,7 @@
 // This module defines the "official" high-level API of the Qt port of
 // Scintilla.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -674,7 +674,7 @@ public:
     void fillIndicatorRange(int lineFrom, int indexFrom, int lineTo,
             int indexTo, int indicatorNumber);
 
-    //! Find the next occurrence of the string \a expr and return true if
+    //! Find the first occurrence of the string \a expr and return true if
     //! \a expr was found, otherwise returns false.  If \a expr is found it
     //! becomes the current selection.
     //!
@@ -703,14 +703,45 @@ public:
     //! POSIX compatible manner by interpreting bare ( and ) as tagged sections
     //! rather than \( and \).
     //!
-    //! \sa findNext(), replace()
+    //! \sa findFirstInSelection(), findNext(), replace()
     virtual bool findFirst(const QString &expr, bool re, bool cs, bool wo,
             bool wrap, bool forward = true, int line = -1, int index = -1,
             bool show = true, bool posix = false);
 
-    //! Find the next occurence of the string found using findFirst().
+    //! Find the first occurrence of the string \a expr in the current
+    //! selection and return true if \a expr was found, otherwise returns
+    //! false.  If \a expr is found it becomes the current selection.  The
+    //! original selection is restored when a subsequent call to findNext()
+    //! returns false.
     //!
-    //! \sa findFirst(), replace()
+    //! If \a re is true then \a expr is interpreted as a regular expression
+    //! rather than a simple string.
+    //!
+    //! If \a cs is true then the search is case sensitive.
+    //!
+    //! If \a wo is true then the search looks for whole word matches only,
+    //! otherwise it searches for any matching text.
+    //!
+    //! If \a forward is true (the default) then the search is forward from the
+    //! start to the end of the selection, otherwise it is backwards from the
+    //! end to the start of the selection.
+    //!
+    //! If \a show is true (the default) then any text found is made visible
+    //! (ie. it is unfolded).
+    //!
+    //! If \a posix is true then a regular expression is treated in a more
+    //! POSIX compatible manner by interpreting bare ( and ) as tagged sections
+    //! rather than \( and \).
+    //!
+    //! \sa findFirstInSelection(), findNext(), replace()
+    virtual bool findFirstInSelection(const QString &expr, bool re, bool cs,
+            bool wo, bool forward = true, bool show = true,
+            bool posix = false);
+
+    //! Find the next occurence of the string found using findFirst() or
+    //! findFirstInSelection().
+    //!
+    //! \sa findFirst(), findFirstInSelection(), replace()
     virtual bool findNext();
 
     //! Returns the number of the first visible line.
@@ -975,6 +1006,11 @@ public:
     //! \sa markerFindNext()
     int markerFindPrevious(int linenr, unsigned mask) const;
 
+    //! Returns true if text entered by the user will overwrite existing text.
+    //!
+    //! \sa setOverwriteMode()
+    bool overwriteMode() const;
+
     //! Returns the widget's paper (ie. background) colour.
     //!
     //! \sa setPaper()
@@ -1012,10 +1048,10 @@ public:
     //! \sa clearRegisteredImages(), QsciLexer::apiLoad()
     void registerImage(int id, const QImage &im);
 
-    //! Replace the current selection, set by a previous call to findFirst() or
-    //! findNext(), with \a replaceStr.
+    //! Replace the current selection, set by a previous call to findFirst(),
+    //! findFirstInSelection() or findNext(), with \a replaceStr.
     //!
-    //! \sa findFirst(), findNext()
+    //! \sa findFirst(), findFirstInSelection(), findNext()
     virtual void replace(const QString &replaceStr);
 
     //! Reset the fold margin colours to their defaults.
@@ -1263,6 +1299,12 @@ public:
     //! \sa extraDescent(), setExtraAscent()
     void setExtraDescent(int extra);
 
+    //! Text entered by the user will overwrite existing text if \a overwrite
+    //! is true.
+    //!
+    //! \sa overwriteMode()
+    void setOverwriteMode(bool overwrite);
+
     //! Sets the background colour of visible whitespace to \a col.  If \a col
     //! is an invalid color (the default) then the color specified by the
     //! current lexer is used.
@@ -1330,6 +1372,10 @@ public:
     //!
     //! \sa setWhitespaceVisibility()
     WhitespaceVisibility whitespaceVisibility() const;
+
+    //! Returns the word at the \a line line number and \a index character
+    //! index.
+    QString wordAtLineIndex(int line, int index) const;
 
     //! Returns the word at the \a point pixel coordinates.
     QString wordAtPoint(const QPoint &point) const;
@@ -1944,20 +1990,29 @@ private:
     void insertAtPos(const QString &text, int pos);
     static int mapModifiers(int modifiers);
 
+    QString wordAtPosition(int position) const;
+
     ScintillaString styleText(const QValueList<QsciStyledText> &styled_text,
             char **styles, int style_offset = 0);
 
     struct FindState
     {
-        FindState() : inProgress(0) {}
+        enum Status
+        {
+            Finding,
+            FindingInSelection,
+            Idle
+        };
 
-        bool inProgress;
+        FindState() : status(Idle) {}
+
+        Status status;
         QString expr;
         bool wrap;
         bool forward;
         int flags;
-        long startpos;
-        long endpos;
+        long startpos, startpos_orig;
+        long endpos, endpos_orig;
         bool show;
     };
 

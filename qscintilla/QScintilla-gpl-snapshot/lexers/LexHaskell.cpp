@@ -104,32 +104,32 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
          // String
       else if (sc.state == SCE_HA_STRING) {
          if (sc.ch == '\"') {
-            sc.Forward();
+			sc.Forward();
             styler.ColourTo(sc.currentPos-1, sc.state);
             sc.ChangeState(SCE_HA_DEFAULT);
          } else if (sc.ch == '\\') {
             sc.Forward(2);
          } else if (sc.atLineEnd) {
-            styler.ColourTo(sc.currentPos-1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
-         } else {
-            sc.Forward();
-         }
+			styler.ColourTo(sc.currentPos-1, sc.state);
+			sc.ChangeState(SCE_HA_DEFAULT);
+		 } else {
+			sc.Forward();
+		 }
       }
          // Char
       else if (sc.state == SCE_HA_CHARACTER) {
          if (sc.ch == '\'') {
-            sc.Forward();
+			sc.Forward();
             styler.ColourTo(sc.currentPos-1, sc.state);
             sc.ChangeState(SCE_HA_DEFAULT);
          } else if (sc.ch == '\\') {
             sc.Forward(2);
          } else if (sc.atLineEnd) {
-            styler.ColourTo(sc.currentPos-1, sc.state);
-            sc.ChangeState(SCE_HA_DEFAULT);
-         } else {
-            sc.Forward();
-         }
+			styler.ColourTo(sc.currentPos-1, sc.state);
+			sc.ChangeState(SCE_HA_DEFAULT);
+		 } else {
+			sc.Forward();
+		 }
       }
          // Number
       else if (sc.state == SCE_HA_NUMBER) {
@@ -138,9 +138,9 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
          } else if ((xmode == 10) &&
                     (sc.ch == 'e' || sc.ch == 'E') &&
                     (IsADigit(sc.chNext) || sc.chNext == '+' || sc.chNext == '-')) {
-            sc.Forward();
-            if (sc.ch == '+' || sc.ch == '-')
-                sc.Forward();
+			sc.Forward();
+			if (sc.ch == '+' || sc.ch == '-')
+				sc.Forward();
          } else {
             styler.ColourTo(sc.currentPos - 1, sc.state);
             sc.ChangeState(SCE_HA_DEFAULT);
@@ -177,7 +177,7 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
                    style     = SCE_HA_KEYWORD;
                }
             } else if (mode == HA_MODE_FFI) {
-               if (ffi.InList(s)) {
+			   if (ffi.InList(s)) {
                   style = SCE_HA_KEYWORD;
                   new_mode = HA_MODE_FFI;
                }
@@ -185,7 +185,7 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
             else if (mode == HA_MODE_TYPE) {
                if (strcmp(s,"family") == 0)
                   style    = SCE_HA_KEYWORD;
-            }
+			}
             styler.ColourTo(sc.currentPos - 1, style);
             if (strcmp(s,"import") == 0 && mode != HA_MODE_FFI)
                new_mode = HA_MODE_IMPORT1;
@@ -225,10 +225,10 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
             }
          } else {
             if (sc.atLineEnd) {
-                // Remember the line state for future incremental lexing
-                styler.SetLineState(lineCurrent, (xmode << 4) | mode);
-                lineCurrent++;
-            }
+				// Remember the line state for future incremental lexing
+				styler.SetLineState(lineCurrent, (xmode << 4) | mode);
+				lineCurrent++;
+			}
             sc.Forward();
          }
       }
@@ -241,17 +241,17 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
             styler.ColourTo(sc.currentPos - 1, sc.state);
             sc.ChangeState(SCE_HA_NUMBER);
             if (sc.ch == '0' && (sc.chNext == 'X' || sc.chNext == 'x')) {
-                // Match anything starting with "0x" or "0X", too
-                sc.Forward(2);
-                xmode = 16;
+				// Match anything starting with "0x" or "0X", too
+				sc.Forward(2);
+				xmode = 16;
             } else if (sc.ch == '0' && (sc.chNext == 'O' || sc.chNext == 'o')) {
-                // Match anything starting with "0x" or "0X", too
-                sc.Forward(2);
-                xmode = 8;
+				// Match anything starting with "0x" or "0X", too
+				sc.Forward(2);
+				xmode = 8;
             } else {
-                sc.Forward();
-                xmode = 10;
-            }
+				sc.Forward();
+				xmode = 10;
+			}
             mode = HA_MODE_DEFAULT;
          }
          // Comment line
@@ -282,11 +282,11 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
          else if (sc.ch == '(' || sc.ch == ')' ||
                   sc.ch == '{' || sc.ch == '}' ||
                   sc.ch == '[' || sc.ch == ']') {
-            styler.ColourTo(sc.currentPos - 1, sc.state);
-            sc.Forward();
-            styler.ColourTo(sc.currentPos - 1, SCE_HA_OPERATOR);
-            mode = HA_MODE_DEFAULT;
-         }
+			styler.ColourTo(sc.currentPos - 1, sc.state);
+			sc.Forward();
+			styler.ColourTo(sc.currentPos - 1, SCE_HA_OPERATOR);
+			mode = HA_MODE_DEFAULT;
+		 }
          // Operator
          else if (isascii(sc.ch) && isoperator(static_cast<char>(sc.ch))) {
             styler.ColourTo(sc.currentPos - 1, sc.state);
@@ -301,10 +301,10 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
             sc.ChangeState(SCE_HA_IDENTIFIER);
          } else {
             if (sc.atLineEnd) {
-                // Remember the line state for future incremental lexing
-                styler.SetLineState(lineCurrent, (xmode << 4) | mode);
-                lineCurrent++;
-            }
+				// Remember the line state for future incremental lexing
+				styler.SetLineState(lineCurrent, (xmode << 4) | mode);
+				lineCurrent++;
+			}
             sc.Forward();
          }
       }

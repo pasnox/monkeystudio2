@@ -331,6 +331,7 @@ void <a class="el" href="classQsciScintilla.html#a29e0cbc36bafac84bc1c755b6ee26a
 <li>int <a class="el" href="classQsciScintilla.html#ad2ac6461629e762b2f987c164d79e63b">extraDescent</a> () const 
 <li>void <a class="el" href="classQsciScintilla.html#a44d1c322098eb0cf44cf78e866ed80cb">fillIndicatorRange</a> (int lineFrom, int indexFrom, int lineTo, int indexTo, int indicatorNumber)
 <li>virtual bool <a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst</a> (const QString &amp;expr, bool re, bool cs, bool wo, bool wrap, bool forward=true, int line=-1, int index=-1, bool show=true, bool posix=false)
+<li>virtual bool <a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection</a> (const QString &amp;expr, bool re, bool cs, bool wo, bool forward=true, bool show=true, bool posix=false)
 <li>virtual bool <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext</a> ()
 <li>int <a class="el" href="classQsciScintilla.html#ac4ac7095b4236d8f0850a1cef1b792cb">firstVisibleLine</a> () const 
 <li><a class="el" href="classQsciScintilla.html#ae478a896ae32a30e8a375049a3d477e0">FoldStyle</a> <a class="el" href="classQsciScintilla.html#aacc9c4793e8a9c2225e3c73d929093d6">folding</a> () const 
@@ -377,6 +378,7 @@ int <a class="el" href="classQsciScintilla.html#aad42b7161eb9e4b3ad5dedecf12249a
 <li>int <a class="el" href="classQsciScintilla.html#afa64cdb0cbc57673600dd399a4adecb0">markerLine</a> (int mhandle) const 
 <li>int <a class="el" href="classQsciScintilla.html#aa9d417194083656115b2ce7028040835">markerFindNext</a> (int linenr, unsigned mask) const 
 <li>int <a class="el" href="classQsciScintilla.html#a55aeeb0e0dd0700cf9b248bbc9ac77f1">markerFindPrevious</a> (int linenr, unsigned mask) const 
+<li>bool <a class="el" href="classQsciScintilla.html#a9a623e31794900edb7ae17527f5bc4c0">overwriteMode</a> () const 
 <li>QColor <a class="el" href="classQsciScintilla.html#a58b875bb9976807c1b52ee4ec54e7963">paper</a> () const 
 <li>int <a class="el" href="classQsciScintilla.html#a540654e6e1bf1d2f8953e6260ba3121c">positionFromLineIndex</a> (int line, int index) const 
 <li>bool <a class="el" href="classQsciScintilla.html#a89e46329c110449b2e7334ccf623ceed">read</a> (QIODevice *io)
@@ -428,6 +430,7 @@ void <a class="el" href="classQsciScintilla.html#ad85546712df2387738e63be38dc41d
 <li>void <a class="el" href="classQsciScintilla.html#a7e36f3595e0d89910b9322dc5295152d">setSelectionToEol</a> (bool filled)
 <li>void <a class="el" href="classQsciScintilla.html#a87e61d47e344dbbb84c4608fdc8536d0">setExtraAscent</a> (int extra)
 <li>void <a class="el" href="classQsciScintilla.html#a06458817a42498ee65e890c36f63453e">setExtraDescent</a> (int extra)
+<li>void <a class="el" href="classQsciScintilla.html#aa627ee937acaae02dc0c5b468fd2643b">setOverwriteMode</a> (bool overwrite)
 <li>void <a class="el" href="classQsciScintilla.html#a9fdd43a276cf3d9a3e7cc86dc7f280f5">setWhitespaceBackgroundColor</a> (const QColor &amp;col)
 <li>void <a class="el" href="classQsciScintilla.html#a67177e2b1d8584d8cf8f1b276174b258">setWhitespaceForegroundColor</a> (const QColor &amp;col)
 <li>void <a class="el" href="classQsciScintilla.html#a7436ea4b640c312fd07945e9b436e19b">setWhitespaceSize</a> (int size)
@@ -443,6 +446,7 @@ void <a class="el" href="classQsciScintilla.html#ad85546712df2387738e63be38dc41d
 int <a class="el" href="classQsciScintilla.html#aa8e248aa86d5ddce7ef3988170011b65">textHeight</a> (int linenr) const 
 <li>int <a class="el" href="classQsciScintilla.html#adfe850a6051f9b63fd3647bff30fec25">whitespaceSize</a> () const 
 <li><a class="el" href="classQsciScintilla.html#ab83469cc9550eadcd5d4e8ca3d20d07b">WhitespaceVisibility</a> <a class="el" href="classQsciScintilla.html#a929dbacaee4791154de7f5cf188d467d">whitespaceVisibility</a> () const 
+<li>QString <a class="el" href="classQsciScintilla.html#a025403ce98b750e8f276e3bb8647f5cc">wordAtLineIndex</a> (int line, int index) const 
 <li><a class="anchor" id="af6ff6d63f13aab28979985135203df70"></a><!-- doxytag: member="QsciScintilla::wordAtPoint" ref="af6ff6d63f13aab28979985135203df70" args="(const QPoint &amp;point) const " -->
 QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab28979985135203df70">wordAtPoint</a> (const QPoint &amp;point) const 
 <li>const char * <a class="el" href="classQsciScintilla.html#ae6c5175bf8e8097ccbaedb5bcdb53610">wordCharacters</a> () const 
@@ -1948,7 +1952,7 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
       </table>
 </div>
 <div class="memdoc">
-<p>Find the next occurrence of the string <em>expr</em> and return true if <em>expr</em> was found, otherwise returns false. If <em>expr</em> is found it becomes the current selection.</p>
+<p>Find the first occurrence of the string <em>expr</em> and return true if <em>expr</em> was found, otherwise returns false. If <em>expr</em> is found it becomes the current selection.</p>
 <p>If <em>re</em> is true then <em>expr</em> is interpreted as a regular expression rather than a simple string.</p>
 <p>If <em>cs</em> is true then the search is case sensitive.</p>
 <p>If <em>wo</em> is true then the search looks for whole word matches only, otherwise it searches for any matching text.</p>
@@ -1957,7 +1961,72 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
 <p>If either <em>line</em> or <em>index</em> are negative (the default) then the search begins from the current cursor position. Otherwise the search begins at position <em>index</em> of line <em>line</em>.</p>
 <p>If <em>show</em> is true (the default) then any text found is made visible (ie. it is unfolded).</p>
 <p>If <em>posix</em> is true then a regular expression is treated in a more POSIX compatible manner by interpreting bare ( and ) as tagged sections rather than \( and \).</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a>, <a class="el" href="classQsciScintilla.html#ad8a7afc4f25e04e805b7e291d5df1d35">replace()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a>, <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a>, <a class="el" href="classQsciScintilla.html#ad8a7afc4f25e04e805b7e291d5df1d35">replace()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5959492f61eee7b6ef40660d7ae221d6"></a><!-- doxytag: member="QsciScintilla::findFirstInSelection" ref="a5959492f61eee7b6ef40660d7ae221d6" args="(const QString &amp;expr, bool re, bool cs, bool wo, bool forward=true, bool show=true, bool posix=false)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool QsciScintilla::findFirstInSelection </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>expr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>re</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>cs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>wo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>forward</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>show</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>posix</em> = <code>false</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Find the first occurrence of the string <em>expr</em> in the current selection and return true if <em>expr</em> was found, otherwise returns false. If <em>expr</em> is found it becomes the current selection. The original selection is restored when a subsequent call to <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a> returns false.</p>
+<p>If <em>re</em> is true then <em>expr</em> is interpreted as a regular expression rather than a simple string.</p>
+<p>If <em>cs</em> is true then the search is case sensitive.</p>
+<p>If <em>wo</em> is true then the search looks for whole word matches only, otherwise it searches for any matching text.</p>
+<p>If <em>forward</em> is true (the default) then the search is forward from the start to the end of the selection, otherwise it is backwards from the end to the start of the selection.</p>
+<p>If <em>show</em> is true (the default) then any text found is made visible (ie. it is unfolded).</p>
+<p>If <em>posix</em> is true then a regular expression is treated in a more POSIX compatible manner by interpreting bare ( and ) as tagged sections rather than \( and \).</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a>, <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a>, <a class="el" href="classQsciScintilla.html#ad8a7afc4f25e04e805b7e291d5df1d35">replace()</a> </dd></dl>
 
 </div>
 </div>
@@ -1975,8 +2044,8 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
       </table>
 </div>
 <div class="memdoc">
-<p>Find the next occurence of the string found using <a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>, <a class="el" href="classQsciScintilla.html#ad8a7afc4f25e04e805b7e291d5df1d35">replace()</a> </dd></dl>
+<p>Find the next occurence of the string found using <a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a> or <a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a>.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>, <a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a>, <a class="el" href="classQsciScintilla.html#ad8a7afc4f25e04e805b7e291d5df1d35">replace()</a> </dd></dl>
 
 </div>
 </div>
@@ -2906,6 +2975,25 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
 
 </div>
 </div>
+<a class="anchor" id="a9a623e31794900edb7ae17527f5bc4c0"></a><!-- doxytag: member="QsciScintilla::overwriteMode" ref="a9a623e31794900edb7ae17527f5bc4c0" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciScintilla::overwriteMode </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if text entered by the user will overwrite existing text.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#aa627ee937acaae02dc0c5b468fd2643b">setOverwriteMode()</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a58b875bb9976807c1b52ee4ec54e7963"></a><!-- doxytag: member="QsciScintilla::paper" ref="a58b875bb9976807c1b52ee4ec54e7963" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -3075,8 +3163,8 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
       </table>
 </div>
 <div class="memdoc">
-<p>Replace the current selection, set by a previous call to <a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a> or <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a>, with <em>replaceStr</em>.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>, <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a> </dd></dl>
+<p>Replace the current selection, set by a previous call to <a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>, <a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a> or <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a>, with <em>replaceStr</em>.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a37ac2bea94eafcfa639173557a821200">findFirst()</a>, <a class="el" href="classQsciScintilla.html#a5959492f61eee7b6ef40660d7ae221d6">findFirstInSelection()</a>, <a class="el" href="classQsciScintilla.html#adc2560a55f77a14329db8409dba11c54">findNext()</a> </dd></dl>
 
 </div>
 </div>
@@ -4024,6 +4112,26 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
 
 </div>
 </div>
+<a class="anchor" id="aa627ee937acaae02dc0c5b468fd2643b"></a><!-- doxytag: member="QsciScintilla::setOverwriteMode" ref="aa627ee937acaae02dc0c5b468fd2643b" args="(bool overwrite)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setOverwriteMode </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>overwrite</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Text entered by the user will overwrite existing text if <em>overwrite</em> is true.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#a9a623e31794900edb7ae17527f5bc4c0">overwriteMode()</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9fdd43a276cf3d9a3e7cc86dc7f280f5"></a><!-- doxytag: member="QsciScintilla::setWhitespaceBackgroundColor" ref="a9fdd43a276cf3d9a3e7cc86dc7f280f5" args="(const QColor &amp;col)" -->
 <div class="memitem">
 <div class="memproto">
@@ -4243,6 +4351,34 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
 <div class="memdoc">
 <p>Returns the visibility of whitespace.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#aa2bca1d2d137ea4a3f944a4f41f98a94">setWhitespaceVisibility()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a025403ce98b750e8f276e3bb8647f5cc"></a><!-- doxytag: member="QsciScintilla::wordAtLineIndex" ref="a025403ce98b750e8f276e3bb8647f5cc" args="(int line, int index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString QsciScintilla::wordAtLineIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the word at the <em>line</em> line number and <em>index</em> character index. </p>
 
 </div>
 </div>
@@ -6046,7 +6182,7 @@ QString <a class="el" href="classQsciScintilla.html#af6ff6d63f13aab2897998513520
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Jan 27 02:52:42 2012 for QScintilla by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed Oct 10 02:30:32 2012 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
