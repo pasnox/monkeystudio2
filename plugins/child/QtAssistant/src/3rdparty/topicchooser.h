@@ -48,7 +48,7 @@
 #include <QMap>
 #include <QString>
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 QT_BEGIN_NAMESPACE
 

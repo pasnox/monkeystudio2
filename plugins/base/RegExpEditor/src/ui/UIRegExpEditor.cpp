@@ -93,7 +93,7 @@ void UIRegExpEditor::on_tbFind_clicked()
         parent->setToolTip( 0,QString( "Main capture on iteration %1" ).arg( count ) );
         parent->setExpanded( true );
         // child item
-        for ( int i = 1; i < regexp.numCaptures(); i++ )
+        for ( int i = 1; i < regexp.captureCount(); i++ )
         {
             QTreeWidgetItem* child = new QTreeWidgetItem( parent );
             child->setText( 0,regexp.cap( i ) );

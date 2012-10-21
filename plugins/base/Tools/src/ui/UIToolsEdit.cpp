@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QFileInfo>
+#include <QMimeData>
 #include <QUrl>
 #include <QWhatsThis>
 #include <QImageReader>

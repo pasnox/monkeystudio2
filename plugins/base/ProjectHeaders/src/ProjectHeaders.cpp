@@ -54,4 +54,6 @@ bool ProjectHeaders::uninstall()
 void ProjectHeaders::processLicensing()
 { UIProjectHeaders( QApplication::activeWindow(), this ).exec(); }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2( BaseProjectHeaders, ProjectHeaders )
+#endif

@@ -42,23 +42,23 @@
 #include "bookmarkmanager.h"
 //#include "centralwidget.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QIcon>
-#include <QtGui/QStyle>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtCore/QEvent>
-#include <QtGui/QComboBox>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMessageBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QToolButton>
-#include <QtGui/QPushButton>
-#include <QtGui/QApplication>
-#include <QtHelp/QHelpEngineCore>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QSortFilterProxyModel>
+#include <QMenu>
+#include <QIcon>
+#include <QStyle>
+#include <QLabel>
+#include <QLayout>
+#include <QEvent>
+#include <QComboBox>
+#include <QKeyEvent>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QToolButton>
+#include <QPushButton>
+#include <QApplication>
+#include <QHelpEngineCore>
+#include <QDialogButtonBox>
+#include <QSortFilterProxyModel>
 
 QT_BEGIN_NAMESPACE
 

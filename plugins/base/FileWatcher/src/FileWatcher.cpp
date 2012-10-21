@@ -212,4 +212,6 @@ void FileWatcher::currentDocumentChanged( pAbstractChild* document )
     Q_UNUSED( document );
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2( BaseFileWatcher, FileWatcher )
+#endif

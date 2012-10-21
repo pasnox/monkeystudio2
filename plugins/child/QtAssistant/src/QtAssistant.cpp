@@ -87,4 +87,6 @@ void QtAssistant::helpShown()
     workspace->setCurrentDocument( child );
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2( ChildQtAssistant, QtAssistant )
+#endif
