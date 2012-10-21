@@ -1,4 +1,4 @@
-XUP.QT_VERSION = Qt System (4.8.1)
+XUP.QT_VERSION = Qt System (4.8.3)
 XUP.WIN_PLATFORM_TARGET_RELEASE = bin/monkeystudio.exe
 XUP.WIN_PLATFORM_TARGET_DEBUG = bin/monkeystudiod.exe
 XUP.WIN_PLATFORM_TARGET_DEFAULT = bin/monkeystudiod.exe
