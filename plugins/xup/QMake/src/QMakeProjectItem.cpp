@@ -1461,12 +1461,20 @@ void QMakeProjectItem::consoleManager_commandFinished( const pCommand& cmd, int 
     Q_UNUSED( exitCode );
     Q_UNUSED( exitStatus );
     
-    if ( stringToActionType( cmd.name() ) != QMakeProjectItem::QMakeFlag ) {
+    if ( cmd.project() != this || cmd.project() != MonkeyCore::projectsManager()->currentProject() ) {
         return;
     }
     
-    if ( cmd.project() != this || cmd.project() != MonkeyCore::projectsManager()->currentProject() ) {
+    if ( stringToActionType( cmd.name() ) != QMakeProjectItem::QMakeFlag ) {
+        mLastCommand = pCommand();
         return;
+    }
+    
+    if ( exitStatus == QProcess::CrashExit || exitCode != 0 ) {
+        if ( mLastCommand == cmd ) {
+            mLastCommand = pCommand();
+            return;
+        }
     }
     
     uninstallCommands();

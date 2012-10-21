@@ -111,6 +111,7 @@ public:
     
 protected:
     static QMakeProjectItemCacheBackend mCacheBackend;
+    pCommand mLastCommand;
     
     virtual UIXUPEditor* newEditDialog() const;
     
