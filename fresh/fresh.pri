@@ -8,6 +8,7 @@ PRE_TARGETDEPS  *= $${PWD}
 
 # library integration
 FRESH_TARGET    = fresh
+greaterThan(QT_MAJOR_VERSION, 4):QT *= widgets
 LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 contains( TEMPLATE, .*app ) {

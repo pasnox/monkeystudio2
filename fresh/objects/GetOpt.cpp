@@ -111,7 +111,17 @@ GetOpt::GetOpt()
         qFatal( "GetOpt: requires a QApplication instance to be constructed first" );
     }
 
+#if QT_VERSION < 0x050000
     init( qApp->argc(), qApp->argv(), 1 );
+#else
+    args = qApp->arguments();
+    
+    if ( !args.isEmpty() ) {
+        args.removeFirst();
+    }
+    
+    init( 0, 0 );
+#endif
 }
 
 /**
@@ -124,7 +134,19 @@ GetOpt::GetOpt( int offset )
         qFatal( "GetOpt: requires a QApplication instance to be constructed first" );
     }
 
+#if QT_VERSION < 0x050000
     init( qApp->argc(), qApp->argv(), offset );
+#else
+    args = qApp->arguments();
+    
+    for ( int i = 0; i < offset; i++ ) {
+        if ( !args.isEmpty() ) {
+            args.removeFirst();
+        }
+    }
+    
+    init( 0, 0 );
+#endif
 }
 
 /**

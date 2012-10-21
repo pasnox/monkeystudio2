@@ -8,6 +8,7 @@ include( ../ctags/ctags.pri )
 
 TEMPLATE    = lib
 CONFIG  *= staticlib
+greaterThan(QT_MAJOR_VERSION, 4):QT *= widgets
 QT  *= sql
 DEFINES *= QCTAGSSENSE_EXPORT_BUILD
 DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()

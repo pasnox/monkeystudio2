@@ -807,7 +807,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -939,7 +939,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -1168,7 +1168,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -1223,7 +1223,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -1515,7 +1515,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>3</number>
               </property>
               <property name="segmentStyle">
@@ -1649,7 +1649,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -1749,7 +1749,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">
@@ -2140,7 +2140,7 @@ You can quickly change it using the dock context menu.</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="numDigits">
+              <property name="digitCount">
                <number>2</number>
               </property>
               <property name="segmentStyle">

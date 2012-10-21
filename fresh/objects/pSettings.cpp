@@ -70,9 +70,9 @@ QString pSettings::getIniFile( const QString& name, const QString& version )
 #ifdef Q_OS_MAC
     return QDir::convertSeparators( QString( "%1/../%2 %3.ini" ).arg( QApplication::applicationDirPath() ).arg( name ).arg( version ) );
 #elif defined Q_OS_WIN
-    return QDir::convertSeparators( QString( "%1/%2 %3.ini" ).arg( QApplication::applicationDirPath() ).arg( name ).arg( version ) );
+    return QDir::toNativeSeparators( QString( "%1/%2 %3.ini" ).arg( QApplication::applicationDirPath() ).arg( name ).arg( version ) );
 #else
-    return QDir::convertSeparators( QString( "%1/.%2/%3 %4.ini" ).arg( QDir::homePath() ).arg( mProgramName ).arg( name ).arg( version ) );
+    return QDir::toNativeSeparators( QString( "%1/.%2/%3 %4.ini" ).arg( QDir::homePath() ).arg( mProgramName ).arg( name ).arg( version ) );
 #endif
 }
 

@@ -5,6 +5,7 @@ include( ../config.pri )
 
 TEMPLATE    = lib
 CONFIG  *= staticlib
+greaterThan(QT_MAJOR_VERSION, 4):QT *= widgets
 DESTDIR = $${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 
 FRESH_SOURCES_PATHS = $$getFolders( ./objects ./widgets )
@@ -49,11 +50,6 @@ HEADERS *= objects/GetOpt.h \
     widgets/pQueuedStatusBar.h \
     widgets/pStringListEditor.h \
     widgets/pTabBar.h \
-    widgets/pTabbedMainWindow.h \
-    widgets/pTabbedWorkspace.h \
-    widgets/pTabbedWorkspaceCorner.h \
-    widgets/pTabbedWorkspaceCornerButton.h \
-    widgets/pTabbedWorkspaceRightCorner.h \
     widgets/pTreeComboBox.h \
     objects/pStylesActionGroup.h \
     widgets/pStylesToolButton.h \
@@ -67,7 +63,8 @@ HEADERS *= objects/GetOpt.h \
     widgets/TranslationDialog.h \
     objects/pGenericTableModel.h \
     widgets/pCheckComboBox.h \
-    widgets/pLocaleModel.h
+    widgets/pLocaleModel.h \
+    widgets/pTabbedWorkspaceCornerButton.h
 
 SOURCES *= objects/GetOpt.cpp \
     objects/pIconManager.cpp \
@@ -96,11 +93,6 @@ SOURCES *= objects/GetOpt.cpp \
     widgets/pQueuedStatusBar.cpp \
     widgets/pStringListEditor.cpp \
     widgets/pTabBar.cpp \
-    widgets/pTabbedMainWindow.cpp \
-    widgets/pTabbedWorkspace.cpp \
-    widgets/pTabbedWorkspaceCorner.cpp \
-    widgets/pTabbedWorkspaceCornerButton.cpp \
-    widgets/pTabbedWorkspaceRightCorner.cpp \
     widgets/pTreeComboBox.cpp \
     objects/pStylesActionGroup.cpp \
     widgets/pStylesToolButton.cpp \
@@ -114,4 +106,17 @@ SOURCES *= objects/GetOpt.cpp \
     widgets/TranslationDialog.cpp \
     objects/pGenericTableModel.cpp \
     widgets/pCheckComboBox.cpp \
-    widgets/pLocaleModel.cpp
+    widgets/pLocaleModel.cpp \
+    widgets/pTabbedWorkspaceCornerButton.cpp
+
+!greaterThan(QT_MAJOR_VERSION, 4) {
+    HEADERS *= widgets/pTabbedMainWindow.h \
+        widgets/pTabbedWorkspace.h \
+        widgets/pTabbedWorkspaceCorner.h \
+        widgets/pTabbedWorkspaceRightCorner.h
+    
+    SOURCES *= widgets/pTabbedMainWindow.cpp \
+        widgets/pTabbedWorkspace.cpp \
+        widgets/pTabbedWorkspaceCorner.cpp \
+        widgets/pTabbedWorkspaceRightCorner.cpp
+}
