@@ -154,7 +154,7 @@ public:
     void addCommands( const QString& mnu, const QList<pCommand>& cmds );
     pCommand command( const QString& name ) const;
     pCommand command( QAction* action ) const;
-    void executeCommand( const QString& name );
+    virtual void executeCommand( const QString& name );
     virtual void addCommand( const QString& mnu, const pCommand& cmd );
     
     // return the cache backend used by  cache()
