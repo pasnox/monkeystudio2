@@ -10,8 +10,11 @@ greaterThan(QT_MAJOR_VERSION, 4):include( $${PWD}/auto_qt5_plugin.json.pri )
 isEmpty( TARGET ) {
     error( "You must define TARGET for your plugin." )
 } else {
+    greaterThan(QT_MAJOR_VERSION, 4) {
+        DEFINES  *= "PLUGIN_JSON=\"\\\"$${OUT_PWD}/$${TARGET}.json\\\"\""
+        autoGenerateFile( $${PWD}/qt5_plugin.json.in, $${OUT_PWD}/$${TARGET}.json )
+    }
     DEFINES  *= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
-    greaterThan(QT_MAJOR_VERSION, 4):autoGenerateFile( $${PWD}/qt5_plugin.json.in, $${OUT_PWD}/$${TARGET}.json )
 }
 
 # include config file

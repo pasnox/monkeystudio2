@@ -28,6 +28,9 @@ class QtDesignerManager;
 class QtDesigner : public QObject, public ChildPlugin
 {
     Q_OBJECT
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA( IID "org.monkeystudio.MonkeyStudio.ChildPlugin/1.0" /*FILE PLUGIN_JSON*/ )
+#endif
     Q_INTERFACES( BasePlugin ChildPlugin )
     
 protected:  
