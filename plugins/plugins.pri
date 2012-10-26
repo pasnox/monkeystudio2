@@ -3,8 +3,16 @@
 TEMPLATE    = lib
 CONFIG  *= dll plugin
 
+# include script for auto generate files
+greaterThan(QT_MAJOR_VERSION, 4):include( $${PWD}/auto_qt5_plugin.json.pri )
+
 # set plugin name define
-!isEmpty( TARGET ):DEFINES  *= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
+isEmpty( TARGET ) {
+    error( "You must define TARGET for your plugin." )
+} else {
+    DEFINES  *= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
+    greaterThan(QT_MAJOR_VERSION, 4):autoGenerateFile( $${PWD}/qt5_plugin.json.in, $${OUT_PWD}/$${TARGET}.json )
+}
 
 # include config file
 include( $${PWD}/../config.pri )
