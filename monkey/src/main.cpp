@@ -45,7 +45,7 @@ int main( int argc, char** argv )
     QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
 
     // init pSettings
-    pSettings::setIniInformations( PACKAGE_NAME, PACKAGE_VERSION );
+    pSettings::setIniInformations( PACKAGE_NAME, PACKAGE_VERSION_STR );
 
     // parse command line arguments
     CommandLineManager clm;
