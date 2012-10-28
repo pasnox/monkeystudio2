@@ -688,9 +688,9 @@ QList<QByteArray> QMakeProjectItem::makefileRules( const QString& filePath ) con
     return rules.values();
 }
 
-QFileInfoList QMakeProjectItem::makefiles() const
+QFileInfoList QMakeProjectItem::makefiles( const QString& directory ) const
 {
-    QDir dir( path() );
+    QDir dir( directory );
     dir.refresh();
     return pMonkeyStudio::getFiles( dir, QStringList( "*Makefile*" ), false );
 }
@@ -813,7 +813,8 @@ void QMakeProjectItem::executeCommand( const QString& name )
 
 void QMakeProjectItem::installCommandsV2()
 {
-    const QString suffix = QFileInfo( fileName() ).suffix().toLower();
+    const QFileInfo fileInfo( fileName() );
+    const QString suffix = fileInfo.suffix().toLower();
     
     // Only call qmake and generate commands for true projects, and not include project files
     if ( suffix != "pro" ) {
@@ -833,12 +834,18 @@ void QMakeProjectItem::installCommandsV2()
     if ( version.isValid() ) {
         pCommand cmd;
         
+        QString workingDirectory = "$cpp$";
+        
+        if ( pMonkeyStudio::isShadowBuildActivated() ) {
+            workingDirectory = pMonkeyStudio::shadowBuildDirectory( shadowBuildName() );
+        }
+        
         // qmake command
         cmd = pCommand();
         cmd.setName( defaultActionTypeToString( QMakeProjectItem::QMake ) );
         cmd.setText( defaultActionTypeToText( QMakeProjectItem::QMake ) );
         cmd.setCommand( QString( "%1 %2 $cp$" ).arg( version.qmake() ).arg( version.qmakeParameters() ) );
-        cmd.setWorkingDirectory( "$cpp$" );
+        cmd.setWorkingDirectory( workingDirectory );
         cmd.setProject( this );
         cmd.setSkipOnError( false );
         cmd.addParser( "QMake" );
@@ -878,12 +885,12 @@ void QMakeProjectItem::installCommandsV2()
     }
     
     builderCommand.setProject( this );
-    builderCommand.setWorkingDirectory( path() );
+    builderCommand.setWorkingDirectory( pMonkeyStudio::isShadowBuildActivated() ? pMonkeyStudio::shadowBuildDirectory( shadowBuildName() ) : path() );
     builderCommand.setSkipOnError( false );
     
-    QDir dir( path() );
+    QDir dir( builderCommand.workingDirectory() );
     const pCommand makeCommand = builderCommand;
-    const QFileInfoList files = makefiles();
+    const QFileInfoList files = makefiles( dir.path() );
     
     // call qmake to generate makefiles
     if ( files.isEmpty() ) {
@@ -1404,6 +1411,23 @@ CLIToolPlugin* QMakeProjectItem::builder() const
     return MonkeyCore::pluginsManager()->plugin<CLIToolPlugin*>( PluginsManager::stAll, name );
 }
 
+QString QMakeProjectItem::shadowBuildName() const
+{
+    QMakeProjectItem* project = qobject_cast<QMakeProjectItem*>( topLevelProject() );
+    QString target = project->cachedVariableValue( "TARGET" );
+    
+    // dirty hack because of bad qmake interpreter
+    if ( QString( target ).replace( " ", "" ) == "((,))" || target.contains( "(" ) || target.contains( ")" ) ) {
+        target.clear();
+    }
+    
+    if ( target.isEmpty() ) {
+        target = QFileInfo( project->fileName() ).baseName();
+    }
+    
+    return target;
+}
+
 void QMakeProjectItem::projectCustomActionTriggered()
 {
     QAction* action = qobject_cast<QAction*>( sender() );
@@ -1413,7 +1437,6 @@ void QMakeProjectItem::projectCustomActionTriggered()
     }
     
     const pCommand cmd = command( action );
-    QDir dir( path() );
     
     switch ( stringToActionType( cmd.name() ) ) {
         case QMakeProjectItem::QMake:
@@ -1449,7 +1472,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             break;
         }
         default: {
-            const QFileInfoList files = makefiles();
+            const QFileInfoList files = makefiles( pMonkeyStudio::isShadowBuildActivated() ? pMonkeyStudio::shadowBuildDirectory( shadowBuildName() ) : path() );
             
             if ( files.isEmpty() ) {
                 executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );

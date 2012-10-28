@@ -124,8 +124,8 @@ protected:
     bool handleSubdirs( XUPItem* subdirs );
     // return the makefile rules
     QList<QByteArray> makefileRules( const QString& filePath ) const;
-    // return a list of QFileFo pointing to makefile files
-    QFileInfoList makefiles() const;
+    // return a list of QFileInfo pointing to makefile files
+    QFileInfoList makefiles( const QString& directory ) const;
     // return a title cased string
     QString toTitleCase( const QString& string ) const;
     // return string version of flags
@@ -138,6 +138,8 @@ protected:
     QString defaultActionTypeToText( QMakeProjectItem::DefaultActionType type ) const;
     
     CLIToolPlugin* builder() const;
+    
+    QString shadowBuildName() const;
 
 protected slots:
     virtual void projectCustomActionTriggered();
