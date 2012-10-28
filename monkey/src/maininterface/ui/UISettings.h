@@ -79,6 +79,7 @@ private slots:
     void on_pbAbbreviationsAdd_clicked();
     void on_pbAbbreviationsRemove_clicked();
     void on_teAbbreviationsCode_textChanged();
+    void on_tbShadowBuild_clicked();
 };
 
 #endif // UISETTINGS_H

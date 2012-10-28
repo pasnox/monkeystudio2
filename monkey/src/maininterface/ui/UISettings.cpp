@@ -334,6 +334,11 @@ void UISettings::loadSettings()
     
     // environment variables editor
     eveVariables->setVariables( MonkeyCore::consoleManager()->environmentVariablesManager()->variables(), true );
+    
+    // shadow build
+    gbShadowBuild->setChecked( isShadowBuildActivated() );
+    leShadowBuild->setText( shadowBuildDirectory() );
+    
 }
 
 void UISettings::saveSettings()
@@ -496,6 +501,10 @@ void UISettings::saveSettings()
     // environment variables editor
     MonkeyCore::consoleManager()->environmentVariablesManager()->setVariables( eveVariables->variables() );
     MonkeyCore::consoleManager()->environmentVariablesManager()->save();
+    
+    // shadow build
+    setShadowBuildActivated( gbShadowBuild->isChecked() );
+    setShadowBuildDirectory( leShadowBuild->text() );
 
     // flush settings to disk
     s->sync();
@@ -945,6 +954,15 @@ void UISettings::on_teAbbreviationsCode_textChanged()
     QTreeWidgetItem* it = twAbbreviations->selectedItems().value( 0 );
     if ( it )
         it->setData( 0, Qt::UserRole, teAbbreviationsCode->toPlainText() );
+}
+
+void UISettings::on_tbShadowBuild_clicked()
+{
+    const QString directory = QFileDialog::getExistingDirectory( this, tr( "Choose the directory for shadow builds" ), leShadowBuild->text(), QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog );
+    
+    if ( !directory.isEmpty() ) {
+        leShadowBuild->setText( directory );
+    }
 }
 
 void UISettings::reject()

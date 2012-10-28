@@ -249,6 +249,11 @@ namespace pMonkeyStudio
     Q_MONKEY_EXPORT QsciScintilla::WrapVisualFlag endWrapVisualFlag();
     Q_MONKEY_EXPORT void setWrappedLineIndentWidth( int witdh );
     Q_MONKEY_EXPORT int wrappedLineIndentWidth();
+    // Shadow Build
+    Q_MONKEY_EXPORT bool isShadowBuildActivated();
+    Q_MONKEY_EXPORT void setShadowBuildActivated( bool activated );
+    Q_MONKEY_EXPORT QString shadowBuildDirectory();
+    Q_MONKEY_EXPORT void setShadowBuildDirectory( const QString& directory );
 };
 
 #endif // PMONKEYSTUDIO_H
