@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <layout class="QGridLayout">
+  <layout class="QGridLayout" name="gridLayout_7">
    <property name="margin">
     <number>5</number>
    </property>
@@ -223,10 +223,10 @@
    <item row="1" column="1">
     <widget class="QStackedWidget" name="swPages">
      <property name="currentIndex">
-      <number>16</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pGeneral">
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="gridLayout_8">
        <property name="margin">
         <number>0</number>
        </property>
@@ -238,7 +238,7 @@
          <property name="title">
           <string>&amp;Project Settings</string>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_9">
           <property name="margin">
            <number>5</number>
           </property>
@@ -281,7 +281,7 @@
          <property name="title">
           <string>&amp;Workspace</string>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_10">
           <property name="margin">
            <number>5</number>
           </property>
@@ -995,7 +995,7 @@ You can quickly change it using the dock context menu.</string>
              </widget>
             </item>
             <item>
-             <layout class="QGridLayout">
+             <layout class="QGridLayout" name="gridLayout_11">
               <property name="spacing">
                <number>3</number>
               </property>
@@ -1085,7 +1085,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="title">
           <string>Indentation</string>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_12">
           <item row="0" column="0">
            <widget class="QCheckBox" name="cbAutoIndent">
             <property name="text">
@@ -1320,7 +1320,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_14">
           <property name="margin">
            <number>5</number>
           </property>
@@ -1328,7 +1328,7 @@ You can quickly change it using the dock context menu.</string>
            <number>3</number>
           </property>
           <item row="1" column="0" colspan="2">
-           <layout class="QGridLayout">
+           <layout class="QGridLayout" name="gridLayout_15">
             <property name="spacing">
              <number>3</number>
             </property>
@@ -1450,7 +1450,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_16">
           <property name="margin">
            <number>5</number>
           </property>
@@ -1578,7 +1578,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_17">
           <property name="margin">
            <number>5</number>
           </property>
@@ -2105,7 +2105,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_18">
           <property name="margin">
            <number>5</number>
           </property>
@@ -2259,7 +2259,7 @@ You can quickly change it using the dock context menu.</string>
          <property name="title">
           <string>APIs</string>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout_19">
           <property name="margin">
            <number>5</number>
           </property>
@@ -2317,7 +2317,7 @@ You can quickly change it using the dock context menu.</string>
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersAssociations">
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="gridLayout_20">
        <property name="margin">
         <number>0</number>
        </property>
@@ -2393,7 +2393,7 @@ You can quickly change it using the dock context menu.</string>
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersHighlighting">
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="gridLayout_22">
        <property name="margin">
         <number>0</number>
        </property>
@@ -2733,7 +2733,7 @@ You can quickly change it using the dock context menu.</string>
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="gridLayout_23">
          <property name="spacing">
           <number>3</number>
          </property>
