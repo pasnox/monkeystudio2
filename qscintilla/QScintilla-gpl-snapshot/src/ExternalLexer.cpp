@@ -36,8 +36,8 @@ LexerManager *LexerManager::theInstance = NULL;
 //------------------------------------------
 
 void ExternalLexerModule::SetExternal(GetLexerFactoryFunction fFactory, int index) {
-    fneFactory = fFactory;
-    fnFactory = fFactory(index);
+	fneFactory = fFactory;
+	fnFactory = fFactory(index);
 }
 
 //------------------------------------------
@@ -47,75 +47,75 @@ void ExternalLexerModule::SetExternal(GetLexerFactoryFunction fFactory, int inde
 //------------------------------------------
 
 LexerLibrary::LexerLibrary(const char *ModuleName) {
-    // Initialise some members...
-    first = NULL;
-    last = NULL;
+	// Initialise some members...
+	first = NULL;
+	last = NULL;
 
-    // Load the DLL
-    lib = DynamicLibrary::Load(ModuleName);
-    if (lib->IsValid()) {
-        m_sModuleName = ModuleName;
-        //Cannot use reinterpret_cast because: ANSI C++ forbids casting between pointers to functions and objects
-        GetLexerCountFn GetLexerCount = (GetLexerCountFn)(sptr_t)lib->FindFunction("GetLexerCount");
+	// Load the DLL
+	lib = DynamicLibrary::Load(ModuleName);
+	if (lib->IsValid()) {
+		m_sModuleName = ModuleName;
+		//Cannot use reinterpret_cast because: ANSI C++ forbids casting between pointers to functions and objects
+		GetLexerCountFn GetLexerCount = (GetLexerCountFn)(sptr_t)lib->FindFunction("GetLexerCount");
 
-        if (GetLexerCount) {
-            ExternalLexerModule *lex;
-            LexerMinder *lm;
+		if (GetLexerCount) {
+			ExternalLexerModule *lex;
+			LexerMinder *lm;
 
-            // Find functions in the DLL
-            GetLexerNameFn GetLexerName = (GetLexerNameFn)(sptr_t)lib->FindFunction("GetLexerName");
-            GetLexerFactoryFunction fnFactory = (GetLexerFactoryFunction)(sptr_t)lib->FindFunction("GetLexerFactory");
+			// Find functions in the DLL
+			GetLexerNameFn GetLexerName = (GetLexerNameFn)(sptr_t)lib->FindFunction("GetLexerName");
+			GetLexerFactoryFunction fnFactory = (GetLexerFactoryFunction)(sptr_t)lib->FindFunction("GetLexerFactory");
 
-            // Assign a buffer for the lexer name.
-            char lexname[100];
-            strcpy(lexname, "");
+			// Assign a buffer for the lexer name.
+			char lexname[100];
+			strcpy(lexname, "");
 
-            int nl = GetLexerCount();
+			int nl = GetLexerCount();
 
-            for (int i = 0; i < nl; i++) {
-                GetLexerName(i, lexname, 100);
-                lex = new ExternalLexerModule(SCLEX_AUTOMATIC, NULL, lexname, NULL);
-                Catalogue::AddLexerModule(lex);
+			for (int i = 0; i < nl; i++) {
+				GetLexerName(i, lexname, 100);
+				lex = new ExternalLexerModule(SCLEX_AUTOMATIC, NULL, lexname, NULL);
+				Catalogue::AddLexerModule(lex);
 
-                // Create a LexerMinder so we don't leak the ExternalLexerModule...
-                lm = new LexerMinder;
-                lm->self = lex;
-                lm->next = NULL;
-                if (first != NULL) {
-                    last->next = lm;
-                    last = lm;
-                } else {
-                    first = lm;
-                    last = lm;
-                }
+				// Create a LexerMinder so we don't leak the ExternalLexerModule...
+				lm = new LexerMinder;
+				lm->self = lex;
+				lm->next = NULL;
+				if (first != NULL) {
+					last->next = lm;
+					last = lm;
+				} else {
+					first = lm;
+					last = lm;
+				}
 
-                // The external lexer needs to know how to call into its DLL to
-                // do its lexing and folding, we tell it here.
-                lex->SetExternal(fnFactory, i);
-            }
-        }
-    }
-    next = NULL;
+				// The external lexer needs to know how to call into its DLL to
+				// do its lexing and folding, we tell it here.
+				lex->SetExternal(fnFactory, i);
+			}
+		}
+	}
+	next = NULL;
 }
 
 LexerLibrary::~LexerLibrary() {
-    Release();
-    delete lib;
+	Release();
+	delete lib;
 }
 
 void LexerLibrary::Release() {
-    LexerMinder *lm;
-    LexerMinder *lmNext;
-    lm = first;
-    while (NULL != lm) {
-        lmNext = lm->next;
-        delete lm->self;
-        delete lm;
-        lm = lmNext;
-    }
+	LexerMinder *lm;
+	LexerMinder *lmNext;
+	lm = first;
+	while (NULL != lm) {
+		lmNext = lm->next;
+		delete lm->self;
+		delete lm;
+		lm = lmNext;
+	}
 
-    first = NULL;
-    last = NULL;
+	first = NULL;
+	last = NULL;
 }
 
 //------------------------------------------
@@ -126,58 +126,58 @@ void LexerLibrary::Release() {
 
 /// Return the single LexerManager instance...
 LexerManager *LexerManager::GetInstance() {
-    if (!theInstance)
-        theInstance = new LexerManager;
-    return theInstance;
+	if (!theInstance)
+		theInstance = new LexerManager;
+	return theInstance;
 }
 
 /// Delete any LexerManager instance...
 void LexerManager::DeleteInstance() {
-    delete theInstance;
-    theInstance = NULL;
+	delete theInstance;
+	theInstance = NULL;
 }
 
 /// protected constructor - this is a singleton...
 LexerManager::LexerManager() {
-    first = NULL;
-    last = NULL;
+	first = NULL;
+	last = NULL;
 }
 
 LexerManager::~LexerManager() {
-    Clear();
+	Clear();
 }
 
 void LexerManager::Load(const char *path) {
-    LoadLexerLibrary(path);
+	LoadLexerLibrary(path);
 }
 
 void LexerManager::LoadLexerLibrary(const char *module) {
-    for (LexerLibrary *ll = first; ll; ll= ll->next) {
-        if (strcmp(ll->m_sModuleName.c_str(), module) == 0)
-            return;
-    }
-    LexerLibrary *lib = new LexerLibrary(module);
-    if (NULL != first) {
-        last->next = lib;
-        last = lib;
-    } else {
-        first = lib;
-        last = lib;
-    }
+	for (LexerLibrary *ll = first; ll; ll= ll->next) {
+		if (strcmp(ll->m_sModuleName.c_str(), module) == 0)
+			return;
+	}
+	LexerLibrary *lib = new LexerLibrary(module);
+	if (NULL != first) {
+		last->next = lib;
+		last = lib;
+	} else {
+		first = lib;
+		last = lib;
+	}
 }
 
 void LexerManager::Clear() {
-    if (NULL != first) {
-        LexerLibrary *cur = first;
-        LexerLibrary *next;
-        while (cur) {
-            next = cur->next;
-            delete cur;
-            cur = next;
-        }
-        first = NULL;
-        last = NULL;
-    }
+	if (NULL != first) {
+		LexerLibrary *cur = first;
+		LexerLibrary *next;
+		while (cur) {
+			next = cur->next;
+			delete cur;
+			cur = next;
+		}
+		first = NULL;
+		last = NULL;
+	}
 }
 
 //------------------------------------------
@@ -187,7 +187,7 @@ void LexerManager::Clear() {
 //------------------------------------------
 
 LMMinder::~LMMinder() {
-    LexerManager::DeleteInstance();
+	LexerManager::DeleteInstance();
 }
 
 LMMinder minder;

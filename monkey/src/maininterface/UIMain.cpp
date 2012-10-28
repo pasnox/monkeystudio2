@@ -38,6 +38,7 @@
 #include <QCloseEvent>
 #include <QMenu>
 #include <QStyleFactory>
+#include <QMimeData>
 #include <QDebug>
 
 UIMain::UIMain( QWidget* p )

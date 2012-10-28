@@ -33,8 +33,8 @@
 
 #include "widgethostconstants.h"
 
-#include <QtGui/QWidget>
-#include <QtCore/QVector>
+#include <QWidget>
+#include <QVector>
 
 QT_FORWARD_DECLARE_CLASS(QDesignerFormWindowInterface)
 QT_FORWARD_DECLARE_CLASS(QFrame)

@@ -4,6 +4,7 @@
 include( ../config.pri )
 
 TEMPLATE    = app
+greaterThan(QT_MAJOR_VERSION, 4):QT *= widgets printsupport
 TARGET  = $$PACKAGE_TARGET
 VERSION = $$QMAKE_TARGET_VERSION
 DEFINES *= MONKEY_CORE_BUILD

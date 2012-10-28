@@ -67,4 +67,6 @@ void Ctags2Api::UICtags2Api_show()
     setSettingsValue( "Letter", w.cbLetter->currentText() );
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2( BaseCtags2Api, Ctags2Api )
+#endif

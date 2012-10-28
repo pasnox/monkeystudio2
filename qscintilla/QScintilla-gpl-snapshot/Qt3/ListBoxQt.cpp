@@ -1,7 +1,7 @@
 // This module implements the specialisation of QListBox that handles the
 // Scintilla double-click callback.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -252,6 +252,7 @@ void QsciListBoxQt::RegisterRGBAImage(int type, int, int,
     QPixmap pm;
 
     pm.convertFromImage(*reinterpret_cast<const QImage *>(pixelsImage));
+
     xset.insert(type, pm);
 }
 

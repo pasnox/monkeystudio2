@@ -1,6 +1,6 @@
 // This module implements the QsciLexerPerl class.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -68,6 +68,26 @@ QStringList QsciLexerPerl::autoCompletionWordSeparators() const
     wl << "::" << "->";
 
     return wl;
+}
+
+
+// Return the list of characters that can start a block.
+const char *QsciLexerPerl::blockStart(int *style) const
+{
+    if (style)
+        *style = Operator;
+
+    return "{";
+}
+
+
+// Return the list of characters that can end a block.
+const char *QsciLexerPerl::blockEnd(int *style) const
+{
+    if (style)
+        *style = Operator;
+
+    return "}";
 }
 
 

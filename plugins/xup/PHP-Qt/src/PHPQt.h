@@ -25,6 +25,9 @@
 class PHPQt : public QObject, public XUPPlugin
 {
     Q_OBJECT
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA( IID "org.monkeystudio.MonkeyStudio.XUPPlugin/1.0" /*FILE PLUGIN_JSON*/ )
+#endif
     Q_INTERFACES( BasePlugin XUPPlugin )
 
 protected:

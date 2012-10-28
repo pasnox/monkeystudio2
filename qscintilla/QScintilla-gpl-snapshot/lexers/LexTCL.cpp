@@ -29,65 +29,65 @@ using namespace Scintilla;
 
 // Extended to accept accented characters
 static inline bool IsAWordChar(int ch) {
-    return ch >= 0x80 ||
+	return ch >= 0x80 ||
         (isalnum(ch) || ch == '_' || ch ==':' || ch=='.'); // : name space separator
 }
 
 static inline bool IsAWordStart(int ch) {
-    return ch >= 0x80 || (ch ==':' || isalpha(ch) || ch == '_');
+	return ch >= 0x80 || (ch ==':' || isalpha(ch) || ch == '_');
 }
 
 static inline bool IsANumberChar(int ch) {
-    // Not exactly following number definition (several dots are seen as OK, etc.)
-    // but probably enough in most cases.
-    return (ch < 0x80) &&
-           (IsADigit(ch, 0x10) || toupper(ch) == 'E' ||
-            ch == '.' || ch == '-' || ch == '+');
+	// Not exactly following number definition (several dots are seen as OK, etc.)
+	// but probably enough in most cases.
+	return (ch < 0x80) &&
+	       (IsADigit(ch, 0x10) || toupper(ch) == 'E' ||
+	        ch == '.' || ch == '-' || ch == '+');
 }
 
 static void ColouriseTCLDoc(unsigned int startPos, int length, int , WordList *keywordlists[], Accessor &styler) {
 #define  isComment(s) (s==SCE_TCL_COMMENT || s==SCE_TCL_COMMENTLINE || s==SCE_TCL_COMMENT_BOX || s==SCE_TCL_BLOCK_COMMENT)
-    bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
-    bool commentLevel = false;
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool commentLevel = false;
     bool subBrace = false; // substitution begin with a brace ${.....}
-    enum tLineState {LS_DEFAULT, LS_OPEN_COMMENT, LS_OPEN_DOUBLE_QUOTE, LS_COMMENT_BOX, LS_MASK_STATE = 0xf,
+	enum tLineState {LS_DEFAULT, LS_OPEN_COMMENT, LS_OPEN_DOUBLE_QUOTE, LS_COMMENT_BOX, LS_MASK_STATE = 0xf,
         LS_COMMAND_EXPECTED = 16, LS_BRACE_ONLY = 32 } lineState = LS_DEFAULT;
-    bool prevSlash = false;
-    int currentLevel = 0;
+	bool prevSlash = false;
+	int currentLevel = 0;
     bool expected = 0;
     bool subParen = 0;
 
-    int currentLine = styler.GetLine(startPos);
+	int currentLine = styler.GetLine(startPos);
     if (currentLine > 0)
         currentLine--;
-    length += startPos - styler.LineStart(currentLine);
-    // make sure lines overlap
-    startPos = styler.LineStart(currentLine);
+	length += startPos - styler.LineStart(currentLine);
+	// make sure lines overlap
+	startPos = styler.LineStart(currentLine);
 
-    WordList &keywords = *keywordlists[0];
-    WordList &keywords2 = *keywordlists[1];
-    WordList &keywords3 = *keywordlists[2];
-    WordList &keywords4 = *keywordlists[3];
-    WordList &keywords5 = *keywordlists[4];
-    WordList &keywords6 = *keywordlists[5];
-    WordList &keywords7 = *keywordlists[6];
+	WordList &keywords = *keywordlists[0];
+	WordList &keywords2 = *keywordlists[1];
+	WordList &keywords3 = *keywordlists[2];
+	WordList &keywords4 = *keywordlists[3];
+	WordList &keywords5 = *keywordlists[4];
+	WordList &keywords6 = *keywordlists[5];
+	WordList &keywords7 = *keywordlists[6];
     WordList &keywords8 = *keywordlists[7];
     WordList &keywords9 = *keywordlists[8];
 
-    if (currentLine > 0) {
+	if (currentLine > 0) {
         int ls = styler.GetLineState(currentLine - 1);
-        lineState = tLineState(ls & LS_MASK_STATE);
-        expected = LS_COMMAND_EXPECTED == tLineState(ls & LS_COMMAND_EXPECTED);
+		lineState = tLineState(ls & LS_MASK_STATE);
+		expected = LS_COMMAND_EXPECTED == tLineState(ls & LS_COMMAND_EXPECTED);
         subBrace = LS_BRACE_ONLY == tLineState(ls & LS_BRACE_ONLY);
-        currentLevel = styler.LevelAt(currentLine - 1) >> 17;
-        commentLevel = (styler.LevelAt(currentLine - 1) >> 16) & 1;
-    } else
-        styler.SetLevel(0, SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG);
-    bool visibleChars = false;
+		currentLevel = styler.LevelAt(currentLine - 1) >> 17;
+		commentLevel = (styler.LevelAt(currentLine - 1) >> 16) & 1;
+	} else
+		styler.SetLevel(0, SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG);
+	bool visibleChars = false;
 
-    int previousLevel = currentLevel;
+	int previousLevel = currentLevel;
     StyleContext sc(startPos, length, SCE_TCL_DEFAULT, styler);
-    for (; ; sc.Forward()) {
+	for (; ; sc.Forward()) {
 next:
         if (sc.ch=='\r' && sc.chNext == '\n') // only ignore \r on PC process on the mac
             continue;
@@ -181,40 +181,40 @@ next:
                 sc.SetState(SCE_TCL_DEFAULT);
             }
         }
-        if (atEnd)
-            break;
+		if (atEnd)
+			break;
         if (sc.atLineEnd) {
             lineState = LS_DEFAULT;
-            currentLine = styler.GetLine(sc.currentPos);
-            if (foldComment && sc.state!=SCE_TCL_COMMENT && isComment(sc.state)) {
-                if (currentLevel == 0) {
-                    ++currentLevel;
-                    commentLevel = true;
-                }
-            } else {
-                if (visibleChars && commentLevel) {
-                    --currentLevel;
-                    --previousLevel;
-                    commentLevel = false;
-                }
-            }
-            int flag = 0;
-            if (!visibleChars)
-                flag = SC_FOLDLEVELWHITEFLAG;
-            if (currentLevel > previousLevel)
-                flag = SC_FOLDLEVELHEADERFLAG;
-            styler.SetLevel(currentLine, flag + previousLevel + SC_FOLDLEVELBASE + (currentLevel << 17) + (commentLevel << 16));
+			currentLine = styler.GetLine(sc.currentPos);
+			if (foldComment && sc.state!=SCE_TCL_COMMENT && isComment(sc.state)) {
+				if (currentLevel == 0) {
+					++currentLevel;
+					commentLevel = true;
+				}
+			} else {
+				if (visibleChars && commentLevel) {
+					--currentLevel;
+					--previousLevel;
+					commentLevel = false;
+				}
+			}
+			int flag = 0;
+			if (!visibleChars)
+				flag = SC_FOLDLEVELWHITEFLAG;
+			if (currentLevel > previousLevel)
+				flag = SC_FOLDLEVELHEADERFLAG;
+			styler.SetLevel(currentLine, flag + previousLevel + SC_FOLDLEVELBASE + (currentLevel << 17) + (commentLevel << 16));
 
-            // Update the line state, so it can be seen by next line
-            if (sc.state == SCE_TCL_IN_QUOTE)
-                lineState = LS_OPEN_DOUBLE_QUOTE;
-            else {
-                 if (prevSlash) {
-                    if (isComment(sc.state))
-                        lineState = LS_OPEN_COMMENT;
+			// Update the line state, so it can be seen by next line
+			if (sc.state == SCE_TCL_IN_QUOTE)
+				lineState = LS_OPEN_DOUBLE_QUOTE;
+			else {
+			     if (prevSlash) {
+				    if (isComment(sc.state))
+					    lineState = LS_OPEN_COMMENT;
                 } else if (sc.state == SCE_TCL_COMMENT_BOX)
                     lineState = LS_COMMENT_BOX;
-            }
+			}
             styler.SetLineState(currentLine,
                 (subBrace ? LS_BRACE_ONLY : 0) |
                 (expected ? LS_COMMAND_EXPECTED : 0)  | lineState);
@@ -224,56 +224,56 @@ next:
                 sc.ForwardSetState(SCE_TCL_IN_QUOTE);
             else
                 sc.ForwardSetState(SCE_TCL_DEFAULT);
-            prevSlash = false;
-            previousLevel = currentLevel;
-            goto next;
-        }
+			prevSlash = false;
+			previousLevel = currentLevel;
+			goto next;
+		}
 
-        if (prevSlash) {
+		if (prevSlash) {
             prevSlash = false;
             if (sc.ch == '#' && IsANumberChar(sc.chNext))
                 sc.ForwardSetState(SCE_TCL_NUMBER);
             continue;
-        }
+		}
         prevSlash = sc.ch == '\\';
         if (isComment(sc.state))
             continue;
-        if (sc.atLineStart) {
-            visibleChars = false;
-            if (sc.state!=SCE_TCL_IN_QUOTE && !isComment(sc.state))
+		if (sc.atLineStart) {
+			visibleChars = false;
+			if (sc.state!=SCE_TCL_IN_QUOTE && !isComment(sc.state))
             {
-                sc.SetState(SCE_TCL_DEFAULT);
+				sc.SetState(SCE_TCL_DEFAULT);
                 expected = IsAWordStart(sc.ch)|| isspacechar(static_cast<unsigned char>(sc.ch));
             }
-        }
+		}
 
-        switch (sc.state) {
-        case SCE_TCL_NUMBER:
-            if (!IsANumberChar(sc.ch))
-                sc.SetState(SCE_TCL_DEFAULT);
-            break;
-        case SCE_TCL_IN_QUOTE:
-            if (sc.ch == '"') {
-                sc.ForwardSetState(SCE_TCL_DEFAULT);
-                visibleChars = true; // necessary if a " is the first and only character on a line
-                goto next;
-            } else if (sc.ch == '[' || sc.ch == ']' || sc.ch == '$') {
-                sc.SetState(SCE_TCL_OPERATOR);
+		switch (sc.state) {
+		case SCE_TCL_NUMBER:
+			if (!IsANumberChar(sc.ch))
+				sc.SetState(SCE_TCL_DEFAULT);
+			break;
+		case SCE_TCL_IN_QUOTE:
+			if (sc.ch == '"') {
+				sc.ForwardSetState(SCE_TCL_DEFAULT);
+				visibleChars = true; // necessary if a " is the first and only character on a line
+				goto next;
+			} else if (sc.ch == '[' || sc.ch == ']' || sc.ch == '$') {
+				sc.SetState(SCE_TCL_OPERATOR);
                 expected = sc.ch == '[';
                 sc.ForwardSetState(SCE_TCL_IN_QUOTE);
-                goto next;
-            }
+				goto next;
+			}
             continue;
         case SCE_TCL_OPERATOR:
-            sc.SetState(SCE_TCL_DEFAULT);
-            break;
-        }
+			sc.SetState(SCE_TCL_DEFAULT);
+			break;
+		}
 
-        if (sc.ch == '#') {
-            if (visibleChars) {
+		if (sc.ch == '#') {
+			if (visibleChars) {
                 if (sc.state != SCE_TCL_IN_QUOTE && expected)
-                    sc.SetState(SCE_TCL_COMMENT);
-            } else {
+					sc.SetState(SCE_TCL_COMMENT);
+			} else {
                 sc.SetState(SCE_TCL_COMMENTLINE);
                 if (sc.chNext == '~')
                     sc.SetState(SCE_TCL_BLOCK_COMMENT);
@@ -282,45 +282,45 @@ next:
             }
         }
 
-        if (!isspacechar(static_cast<unsigned char>(sc.ch))) {
-            visibleChars = true;
-        }
+		if (!isspacechar(static_cast<unsigned char>(sc.ch))) {
+			visibleChars = true;
+		}
 
-        if (sc.ch == '\\') {
-            prevSlash = true;
-            continue;
-        }
+		if (sc.ch == '\\') {
+			prevSlash = true;
+			continue;
+		}
 
-        // Determine if a new state should be entered.
-        if (sc.state == SCE_TCL_DEFAULT) {
+		// Determine if a new state should be entered.
+		if (sc.state == SCE_TCL_DEFAULT) {
             if (IsAWordStart(sc.ch)) {
-                sc.SetState(SCE_TCL_IDENTIFIER);
-            } else if (IsADigit(sc.ch) && !IsAWordChar(sc.chPrev)) {
-                sc.SetState(SCE_TCL_NUMBER);
-            } else {
-                switch (sc.ch) {
-                case '\"':
-                    sc.SetState(SCE_TCL_IN_QUOTE);
-                    break;
-                case '{':
-                    sc.SetState(SCE_TCL_OPERATOR);
+				sc.SetState(SCE_TCL_IDENTIFIER);
+			} else if (IsADigit(sc.ch) && !IsAWordChar(sc.chPrev)) {
+				sc.SetState(SCE_TCL_NUMBER);
+			} else {
+				switch (sc.ch) {
+				case '\"':
+					sc.SetState(SCE_TCL_IN_QUOTE);
+					break;
+				case '{':
+					sc.SetState(SCE_TCL_OPERATOR);
+					expected = true;
+					++currentLevel;
+					break;
+				case '}':
+					sc.SetState(SCE_TCL_OPERATOR);
+					--currentLevel;
+					break;
+				case '[':
                     expected = true;
-                    ++currentLevel;
-                    break;
-                case '}':
-                    sc.SetState(SCE_TCL_OPERATOR);
-                    --currentLevel;
-                    break;
-                case '[':
+				case ']':
+				case '(':
+				case ')':
+					sc.SetState(SCE_TCL_OPERATOR);
+					break;
+				case ';':
                     expected = true;
-                case ']':
-                case '(':
-                case ')':
-                    sc.SetState(SCE_TCL_OPERATOR);
-                    break;
-                case ';':
-                    expected = true;
-                    break;
+					break;
                 case '$':
                     subParen = 0;
                     if (sc.chNext != '{') {
@@ -345,11 +345,11 @@ next:
                     if (isoperator(static_cast<char>(sc.ch))) {
                         sc.SetState(SCE_TCL_OPERATOR);
                     }
-                }
-            }
-        }
-    }
-    sc.Complete();
+				}
+			}
+		}
+	}
+	sc.Complete();
 }
 
 static const char * const tclWordListDesc[] = {

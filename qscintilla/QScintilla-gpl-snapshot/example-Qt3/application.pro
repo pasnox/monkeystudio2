@@ -1,10 +1,10 @@
-TEMPLATE    = app
-TARGET      = application
+TEMPLATE	= app
+TARGET		= application
 
-CONFIG      += qt warn_on release
+CONFIG		+= qt warn_on release
 
-LIBS        += -lqscintilla2
+LIBS		+= -lqscintilla2
 
-HEADERS     = application.h
-SOURCES     = application.cpp \
-          main.cpp
+HEADERS		= application.h
+SOURCES		= application.cpp \
+		  main.cpp

@@ -83,29 +83,29 @@ static bool IsSolWordStart(char ch)
 
 static int GetSolStringState(Accessor &styler, int i, int *nextIndex)
 {
-    char ch = styler.SafeGetCharAt(i);
-    char chNext = styler.SafeGetCharAt(i + 1);
+	char ch = styler.SafeGetCharAt(i);
+	char chNext = styler.SafeGetCharAt(i + 1);
 
         if (ch != '\"' && ch != '\'')
         {
             *nextIndex = i + 1;
             return SCE_SCRIPTOL_DEFAULT;
-    }
+	}
         // ch is either single or double quotes in string
         // code below seem non-sense but is here for future extensions
-    if (ch == chNext && ch == styler.SafeGetCharAt(i + 2))
+	if (ch == chNext && ch == styler.SafeGetCharAt(i + 2))
         {
           *nextIndex = i + 3;
           if(ch == '\"') return SCE_SCRIPTOL_TRIPLE;
           if(ch == '\'') return SCE_SCRIPTOL_TRIPLE;
           return SCE_SCRIPTOL_STRING;
-    }
+	}
         else
         {
           *nextIndex = i + 1;
           if (ch == '"') return SCE_SCRIPTOL_STRING;
           else           return SCE_SCRIPTOL_STRING;
-    }
+	}
 }
 
 
@@ -113,10 +113,10 @@ static void ColouriseSolDoc(unsigned int startPos, int length, int initStyle,
                             WordList *keywordlists[], Accessor &styler)
  {
 
-    int lengthDoc = startPos + length;
+	int lengthDoc = startPos + length;
         char stringType = '\"';
 
-    if (startPos > 0)
+	if (startPos > 0)
         {
             int lineCurrent = styler.GetLine(startPos);
             if (lineCurrent > 0)
@@ -125,27 +125,27 @@ static void ColouriseSolDoc(unsigned int startPos, int length, int initStyle,
               if (startPos == 0) initStyle = SCE_SCRIPTOL_DEFAULT;
               else               initStyle = styler.StyleAt(startPos-1);
             }
-    }
+	}
 
-    styler.StartAt(startPos, 127);
+	styler.StartAt(startPos, 127);
 
-    WordList &keywords = *keywordlists[0];
+	WordList &keywords = *keywordlists[0];
 
-    int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
-    char prevWord[200];
-    prevWord[0] = '\0';
+	int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
+	char prevWord[200];
+	prevWord[0] = '\0';
         if (length == 0)  return;
 
-    int state = initStyle & 31;
+	int state = initStyle & 31;
 
-    int nextIndex = 0;
+	int nextIndex = 0;
         char chPrev  = ' ';
         char chPrev2 = ' ';
         char chNext  = styler[startPos];
-    styler.StartSegment(startPos);
-    bool atStartLine = true;
-    int spaceFlags = 0;
-    for (int i = startPos; i < lengthDoc; i++)
+	styler.StartSegment(startPos);
+	bool atStartLine = true;
+	int spaceFlags = 0;
+	for (int i = startPos; i < lengthDoc; i++)
         {
 
          if (atStartLine)
@@ -335,25 +335,25 @@ static void ColouriseSolDoc(unsigned int startPos, int length, int initStyle,
            }
           chPrev2 = chPrev;
           chPrev = ch;
-    }
+	}
         if (state == SCE_SCRIPTOL_KEYWORD)
         {
             ClassifyWordSol(styler.GetStartSegment(),
                  lengthDoc-1, keywords, styler, prevWord);
-    }
+	}
         else
         {
             styler.ColourTo(lengthDoc-1, state);
-    }
+	}
 }
 
 static void FoldSolDoc(unsigned int startPos, int length, int initStyle,
-                           WordList *[], Accessor &styler)
+						   WordList *[], Accessor &styler)
  {
-    int lengthDoc = startPos + length;
+	int lengthDoc = startPos + length;
 
-    int lineCurrent = styler.GetLine(startPos);
-    if (startPos > 0)
+	int lineCurrent = styler.GetLine(startPos);
+	if (startPos > 0)
         {
           if (lineCurrent > 0)
           {
@@ -364,20 +364,20 @@ static void FoldSolDoc(unsigned int startPos, int length, int initStyle,
                else
                     initStyle = styler.StyleAt(startPos-1);
            }
-    }
-    int state = initStyle & 31;
-    int spaceFlags = 0;
+	}
+	int state = initStyle & 31;
+	int spaceFlags = 0;
         int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsSolComment);
         if ((state == SCE_SCRIPTOL_TRIPLE))
              indentCurrent |= SC_FOLDLEVELWHITEFLAG;
-    char chNext = styler[startPos];
-    for (int i = startPos; i < lengthDoc; i++)
+	char chNext = styler[startPos];
+	for (int i = startPos; i < lengthDoc; i++)
          {
-        char ch = chNext;
-        chNext = styler.SafeGetCharAt(i + 1);
-        int style = styler.StyleAt(i) & 31;
+		char ch = chNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+		int style = styler.StyleAt(i) & 31;
 
-        if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc))
+		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc))
                 {
                    int lev = indentCurrent;
                    int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsSolComment);
@@ -404,8 +404,8 @@ static void FoldSolDoc(unsigned int startPos, int length, int initStyle,
                    indentCurrent = indentNext;
                    styler.SetLevel(lineCurrent, lev);
                    lineCurrent++;
-        }
-    }
+		}
+	}
 }
 
 LexerModule lmScriptol(SCLEX_SCRIPTOL, ColouriseSolDoc, "scriptol", FoldSolDoc);

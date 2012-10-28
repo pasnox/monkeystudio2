@@ -106,7 +106,7 @@ void XUPProjectItemHelper::addCommandProperty( XUPItem* variableItem, const QStr
 
 void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const MenuCommandListMap& commands )
 {
-    bool emptyCommands = true;
+    /*bool emptyCommands = true;
     
     foreach ( const QString& menu, commands.keys() ) {
         if ( commands[ menu ].isEmpty() ) {
@@ -115,7 +115,7 @@ void XUPProjectItemHelper::setProjectCommands( XUPProjectItem* project, const Me
         
         emptyCommands = false;
         break;
-    }
+    }*/
     
     XUPItem* commandsScope = project;
     

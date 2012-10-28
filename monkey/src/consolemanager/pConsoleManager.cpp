@@ -546,6 +546,15 @@ void pConsoleManager::executeProcess()
             }
         }
         
+        // define PWD variable as it looks it's not automatically defined by QProcess even when explicitly using working directory
+        const int index = variables.indexOf( QRegExp( QString( "^PWD=.*$" ) ) );
+        
+        if ( index != -1 ) {
+            variables.removeAt( index );
+        }
+        
+        variables.prepend( QString( "PWD=%1" ).arg( workingDirectory().isEmpty() ? QDir::homePath() : workingDirectory() ) );
+        
         setEnvironment( variables );
         
         mCommands.first() = c;

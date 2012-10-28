@@ -1,6 +1,6 @@
 // This module implements the "official" low-level API.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -29,6 +29,7 @@
 #include <qclipboard.h>
 #include <qcolor.h>
 #include <qscrollbar.h>
+#include <qtextcodec.h>
 
 #include <qdragobject.h>
 #include <qevent.h>
@@ -99,6 +100,11 @@ QsciScintillaBase::QsciScintillaBase(QWidget *parent, const char *name,
     txtarea->installEventFilter(this);
 
     setFocusPolicy(WheelFocus);
+
+// FIXME: QMacPasteboardMime isn't in Qt v5-beta1.
+#if QT_VERSION >= 0x040200 && defined(Q_OS_MAC) && QT_VERSION < 0x050000
+    RectangularPasteboardMime::initialise();
+#endif
 
     sci = new QsciScintillaQt(this);
 
@@ -423,7 +429,6 @@ void QsciScintillaBase::handleSelection()
 void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
 {
     unsigned key, modifiers = 0;
-    QCString utf8;
 
     if (e->state() & Qt::ShiftButton)
         modifiers |= SCMOD_SHIFT;
@@ -515,27 +520,7 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
         break;
 
     default:
-        // See if the input was a single ASCII key.  If so it will be passed to
-        // KeyDownWithModifiers to allow it to be filtered.  Correct the
-        // modifiers and key for ASCII letters as Qt uses the ASCII code of
-        // uppercase letters for Key_A etc.
-        utf8 = e->text().utf8();
-
-        if (utf8.length() == 0)
-            key = e->key();
-        else if (utf8.length() != 1)
-            key = 0;
-        else if ((key = utf8[0]) >= 0x80)
-            key = 0;
-        else if (key >= 0x01 && key <= 0x1a)
-            key += 0x40;
-        else if (key >= 'A' && key <= 'Z')
-            modifiers |= true;
-        else if (key >= 'a' && key <= 'z')
-        {
-            key -= 0x20;
-            modifiers &= ~SCMOD_SHIFT;
-        }
+        key = e->key();
     }
 
     if (key)
@@ -551,15 +536,33 @@ void QsciScintillaBase::keyPressEvent(QKeyEvent *e)
         }
     }
 
-    // Add the text if it has a compatible size depending on what Unicode mode
-    // we are in.
-    if (utf8.length() > 0 && (sci->IsUnicodeMode() || utf8.length() == 1))
+    QString text = e->text();
+
+    if (!text.isEmpty() && text[0].isPrint())
     {
-        sci->AddCharUTF(utf8.data(), utf8.length());
+        QCString enc_text;
+
+        if (sci->IsUnicodeMode())
+        {
+            enc_text = text.utf8();
+        }
+        else
+        {
+            static QTextCodec *codec = 0;
+
+            if (!codec)
+                codec = QTextCodec::codecForName("ISO 8859-1");
+
+            enc_text = codec->fromUnicode(text);
+        }
+
+        sci->AddCharUTF(enc_text.data(), enc_text.length());
         e->accept();
     }
     else
+    {
         QWidget::keyPressEvent(e);
+    }
 }
 
 
@@ -644,7 +647,9 @@ void QsciScintillaBase::mousePressEvent(QMouseEvent *e)
         {
             int pos = sci->PositionFromLocation(pt);
 
+            sci->sel.Clear();
             sci->SetSelection(pos, pos);
+
             sci->pasteFromClipboard(QClipboard::Selection);
         }
     }
@@ -727,6 +732,7 @@ void QsciScintillaBase::dragMoveEvent(QDragMoveEvent *e)
 void QsciScintillaBase::dropEvent(QDropEvent *e)
 {
     bool moving;
+    int len;
     const char *s;
     bool rectangular;
 
@@ -742,21 +748,30 @@ void QsciScintillaBase::dropEvent(QDropEvent *e)
 
     e->acceptAction();
 
-    QCString cs;
+    QCString bytes;
 
     if (sci->IsUnicodeMode())
     {
-        cs = text.utf8();
-        s = cs.data();
+        bytes = text.utf8();
+
+        len = bytes.length();
+        s = bytes.data();
     }
     else
     {
         s = text.latin1();
+        len = (s ? qstrlen(s) : 0);
     }
 
     rectangular = false;
 
+    s = QSCI_SCI_NAMESPACE(Document)::TransformLineEnds(&len, s, len,
+                sci->pdoc->eolMode);
+
     sci->DropAt(sci->posDrop, s, moving, rectangular);
+
+    delete[] s;
+
     sci->Redraw();
 }
 

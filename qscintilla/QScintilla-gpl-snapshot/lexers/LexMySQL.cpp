@@ -33,25 +33,25 @@ using namespace Scintilla;
 #endif
 
 static inline bool IsAWordChar(int ch) {
-    return (ch < 0x80) && (isalnum(ch) || ch == '_');
+	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
 static inline bool IsAWordStart(int ch) {
-    return (ch < 0x80) && (isalpha(ch) || ch == '_');
+	return (ch < 0x80) && (isalpha(ch) || ch == '_');
 }
 
 static inline bool IsADoxygenChar(int ch) {
-    return (islower(ch) || ch == '$' || ch == '@' ||
-            ch == '\\' || ch == '&' || ch == '<' ||
-            ch == '>' || ch == '#' || ch == '{' ||
-            ch == '}' || ch == '[' || ch == ']');
+	return (islower(ch) || ch == '$' || ch == '@' ||
+	        ch == '\\' || ch == '&' || ch == '<' ||
+	        ch == '>' || ch == '#' || ch == '{' ||
+	        ch == '}' || ch == '[' || ch == ']');
 }
 
 static inline bool IsANumberChar(int ch) {
-    // Not exactly following number definition (several dots are seen as OK, etc.)
-    // but probably enough in most cases.
-    return (ch < 0x80) &&
-            (isdigit(ch) || toupper(ch) == 'E' ||
+	// Not exactly following number definition (several dots are seen as OK, etc.)
+	// but probably enough in most cases.
+	return (ch < 0x80) &&
+	        (isdigit(ch) || toupper(ch) == 'E' ||
              ch == '.' || ch == '-' || ch == '+');
 }
 
@@ -96,12 +96,12 @@ static void CheckForKeyword(StyleContext& sc, WordList* keywordlists[])
 static void ColouriseMySQLDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
                             Accessor &styler)
 {
-    StyleContext sc(startPos, length, initStyle, styler);
+	StyleContext sc(startPos, length, initStyle, styler);
 
-    for (; sc.More(); sc.Forward())
+	for (; sc.More(); sc.Forward())
   {
-        // Determine if the current state should terminate.
-        switch (sc.state)
+		// Determine if the current state should terminate.
+		switch (sc.state)
     {
       case SCE_MYSQL_OPERATOR:
         sc.SetState(SCE_MYSQL_DEFAULT);
@@ -148,11 +148,11 @@ static void ColouriseMySQLDoc(unsigned int startPos, int length, int initStyle, 
         if (sc.ch == '`')
         {
           if (sc.chNext == '`')
-            sc.Forward();   // Ignore it
+            sc.Forward();	// Ignore it
           else
             sc.ForwardSetState(SCE_MYSQL_DEFAULT);
-                }
-            break;
+				}
+  			break;
       case SCE_MYSQL_COMMENT:
       case SCE_MYSQL_HIDDENCOMMAND:
         if (sc.Match('*', '/'))
@@ -284,7 +284,7 @@ static void ColouriseMySQLDoc(unsigned int startPos, int length, int initStyle, 
  */
 static bool IsStreamCommentStyle(int style)
 {
-    return style == SCE_MYSQL_COMMENT;
+	return style == SCE_MYSQL_COMMENT;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -310,35 +310,35 @@ bool MatchIgnoreCase(Accessor &styler, int currentPos, const char *s)
 // level store to make it easy to pick up with each increment.
 static void FoldMySQLDoc(unsigned int startPos, int length, int initStyle, WordList *[], Accessor &styler)
 {
-    bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
-    bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
-    bool foldOnlyBegin = styler.GetPropertyInt("fold.sql.only.begin", 0) != 0;
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	bool foldOnlyBegin = styler.GetPropertyInt("fold.sql.only.begin", 0) != 0;
 
-    int visibleChars = 0;
-    int lineCurrent = styler.GetLine(startPos);
-    int levelCurrent = SC_FOLDLEVELBASE;
-    if (lineCurrent > 0)
-        levelCurrent = styler.LevelAt(lineCurrent - 1) >> 16;
-    int levelNext = levelCurrent;
+	int visibleChars = 0;
+	int lineCurrent = styler.GetLine(startPos);
+	int levelCurrent = SC_FOLDLEVELBASE;
+	if (lineCurrent > 0)
+		levelCurrent = styler.LevelAt(lineCurrent - 1) >> 16;
+	int levelNext = levelCurrent;
 
-    int styleNext = styler.StyleAt(startPos);
-    int style = initStyle;
-    
+	int styleNext = styler.StyleAt(startPos);
+	int style = initStyle;
+	
   bool endPending = false;
-    bool whenPending = false;
-    bool elseIfPending = false;
+	bool whenPending = false;
+	bool elseIfPending = false;
 
   char nextChar = styler.SafeGetCharAt(startPos);
   for (unsigned int i = startPos; length > 0; i++, length--)
   {
-        int stylePrev = style;
-        style = styleNext;
-        styleNext = styler.StyleAt(i + 1);
+		int stylePrev = style;
+		style = styleNext;
+		styleNext = styler.StyleAt(i + 1);
     
     char currentChar = nextChar;
     nextChar = styler.SafeGetCharAt(i + 1);
-        bool atEOL = (currentChar == '\r' && nextChar != '\n') || (currentChar == '\n');
-    
+		bool atEOL = (currentChar == '\r' && nextChar != '\n') || (currentChar == '\n');
+	
     switch (style)
     {
       case SCE_MYSQL_COMMENT:
@@ -510,7 +510,7 @@ static void FoldMySQLDoc(unsigned int startPos, int length, int initStyle, WordL
       visibleChars = 0;
     }
 
-        if (!isspacechar(currentChar))
+		if (!isspacechar(currentChar))
       visibleChars++;
   }
 }
@@ -518,16 +518,16 @@ static void FoldMySQLDoc(unsigned int startPos, int length, int initStyle, WordL
 //--------------------------------------------------------------------------------------------------
 
 static const char * const mysqlWordListDesc[] = {
-    "Major Keywords",
-    "Keywords",
-    "Database Objects",
-    "Functions",
-    "System Variables",
-    "Procedure keywords",
-    "User Keywords 1",
-    "User Keywords 2",
-    "User Keywords 3",
-    0
+	"Major Keywords",
+	"Keywords",
+	"Database Objects",
+	"Functions",
+	"System Variables",
+	"Procedure keywords",
+	"User Keywords 1",
+	"User Keywords 2",
+	"User Keywords 3",
+	0
 };
 
 LexerModule lmMySQL(SCLEX_MYSQL, ColouriseMySQLDoc, "mysql", FoldMySQLDoc, mysqlWordListDesc);

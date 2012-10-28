@@ -37,6 +37,7 @@
 
 class Q_MONKEY_EXPORT BasePlugin
 {
+    Q_GADGET
     friend class PluginsManager; // for call fillPluginInfo()
     
 public:

@@ -14,53 +14,53 @@
     <style type="text/css">
 <!--
 /*<![CDATA[*/
-    CODE { font-weight: bold; font-family: Consolas,Bitstream Vera Sans Mono,Courier New,monospace; }
-    A:visited { color: blue; }
-    A:hover { text-decoration: underline ! important; }
-    A.message { text-decoration: none; font-weight: bold; font-family: Consolas,Bitstream Vera Sans Mono,Courier New,monospace; }
-    A.toc { text-decoration: none; }
-    A.jump { text-decoration: none; }
-    .S0 {
-        color: #808080;
-    }
-    .S2 {
-        font-family: 'Comic Sans MS';
-        color: #007F00;
-        font-size: 9pt;
-    }
-    .S3 {
-        font-family: 'Comic Sans MS';
-        color: #3F703F;
-        font-size: 9pt;
-    }
-    .S4 {
-        color: #007F7F;
-    }
-    .S5 {
-        font-weight: bold;
-        color: #00007F;
-    }
-    .S9 {
-        color: #7F7F00;
-    }
-    .S10 {
-        font-weight: bold;
-        color: #000000;
-    }
-    .S17 {
-        font-family: 'Comic Sans MS';
-        color: #3060A0;
-        font-size: 9pt;
-    }
-    DIV.highlighted {
-        background: #F7FCF7;
-        border: 1px solid #C0D7C0;
-        margin: 0.3em 3em;
-        padding: 0.3em 0.6em;
-        font-family: 'Verdana';
-        color: #000000;
-        font-size: 10pt;
-    }
+	CODE { font-weight: bold; font-family: Consolas,Bitstream Vera Sans Mono,Courier New,monospace; }
+	A:visited { color: blue; }
+	A:hover { text-decoration: underline ! important; }
+	A.message { text-decoration: none; font-weight: bold; font-family: Consolas,Bitstream Vera Sans Mono,Courier New,monospace; }
+	A.toc { text-decoration: none; }
+	A.jump { text-decoration: none; }
+	.S0 {
+		color: #808080;
+	}
+	.S2 {
+		font-family: 'Comic Sans MS';
+		color: #007F00;
+		font-size: 9pt;
+	}
+	.S3 {
+		font-family: 'Comic Sans MS';
+		color: #3F703F;
+		font-size: 9pt;
+	}
+	.S4 {
+		color: #007F7F;
+	}
+	.S5 {
+		font-weight: bold;
+		color: #00007F;
+	}
+	.S9 {
+		color: #7F7F00;
+	}
+	.S10 {
+		font-weight: bold;
+		color: #000000;
+	}
+	.S17 {
+		font-family: 'Comic Sans MS';
+		color: #3060A0;
+		font-size: 9pt;
+	}
+	DIV.highlighted {
+		background: #F7FCF7;
+		border: 1px solid #C0D7C0;
+		margin: 0.3em 3em;
+		padding: 0.3em 0.6em;
+		font-family: 'Verdana';
+		color: #000000;
+		font-size: 10pt;
+	}
 /*]]>*/
 -->
     </style>
@@ -263,7 +263,7 @@
 
           <td>o <a class="toc" href="#Indicators">Indicators</a></td>
 
-    <td>o <a class="toc" href="#Autocompletion">Autocompletion</a></td>
+	<td>o <a class="toc" href="#Autocompletion">Autocompletion</a></td>
         </tr>
 
         <tr>
@@ -271,7 +271,7 @@
 
           <td>o <a class="toc" href="#CallTips">Call tips</a></td>
 
-    <td>o <a class="toc" href="#KeyboardCommands">Keyboard commands</a></td>
+	<td>o <a class="toc" href="#KeyboardCommands">Keyboard commands</a></td>
         </tr>
 
         <tr>
@@ -316,10 +316,10 @@
 
         <tr>
           <td>o <a class="toc" href="#DeprecatedMessages">Deprecated messages</a></td>
-      
+	  
           <td>o <a class="toc" href="#EditMessagesNeverSupportedByScintilla">Edit messages never
           supported by Scintilla</a></td>
-      
+	  
           <td>o <a class="toc" href="#BuildingScintilla">Building Scintilla</a></td>
 
         </tr>
@@ -3696,7 +3696,7 @@ struct Sci_TextToFind {
           <td>A rectangle with rounded corners around the text using translucent drawing with the
               interior usually more transparent than the border. You can use
               <a class="message" href="#SCI_INDICSETALPHA">SCI_INDICSETALPHA</a> and
-              <a class="message" href="#SCI_INDICSETOUTLINEALPHA">SCI_INDICSETOUTLINEALPHA</a>
+			  <a class="message" href="#SCI_INDICSETOUTLINEALPHA">SCI_INDICSETOUTLINEALPHA</a>
               to control the alpha transparency values. The default alpha values are 30 for fill colour and 50 for outline colour.</td>
         </tr>
 
@@ -3708,7 +3708,7 @@ struct Sci_TextToFind {
           <td>A rectangle around the text using translucent drawing with the
               interior usually more transparent than the border. You can use
               <a class="message" href="#SCI_INDICSETALPHA">SCI_INDICSETALPHA</a> and
-              <a class="message" href="#SCI_INDICSETOUTLINEALPHA">SCI_INDICSETOUTLINEALPHA</a>
+			  <a class="message" href="#SCI_INDICSETOUTLINEALPHA">SCI_INDICSETOUTLINEALPHA</a>
               to control the alpha transparency values. The default alpha values are 30 for fill colour and 50 for outline colour.</td>
         </tr>
 
@@ -3734,7 +3734,7 @@ struct Sci_TextToFind {
           <td align="center">11</td>
 
           <td>Similar to <code>INDIC_SQUIGGLE</code> but only using 2 vertical pixels
-      so will fit under small fonts.</td>
+	  so will fit under small fonts.</td>
         </tr>
 
         <tr>
@@ -5154,7 +5154,7 @@ sptr_t CallScintilla(unsigned int iMessage, uptr_t wParam, sptr_t lParam){
     <p><b id="SCI_SETWRAPINDENTMODE">SCI_SETWRAPINDENTMODE(int indentMode)</b><br />
      <b id="SCI_GETWRAPINDENTMODE">SCI_GETWRAPINDENTMODE</b><br />
                 Wrapped sublines can be indented to the position of their first subline or one more indent level.
-      The default is <code>SC_WRAPINDENT_FIXED</code>.
+	  The default is <code>SC_WRAPINDENT_FIXED</code>.
                 The modes are:
     </p>
 
@@ -5172,7 +5172,7 @@ sptr_t CallScintilla(unsigned int iMessage, uptr_t wParam, sptr_t lParam){
           <td align="left"><code>SC_WRAPINDENT_FIXED</code></td>
           <td align="center">0</td>
           <td>Wrapped sublines aligned to left of window plus amount set by
-      <a class="message" href="#SCI_SETWRAPSTARTINDENT">SCI_SETWRAPSTARTINDENT</a></td>
+	  <a class="message" href="#SCI_SETWRAPSTARTINDENT">SCI_SETWRAPSTARTINDENT</a></td>
         </tr>
 
         <tr>
@@ -5828,38 +5828,38 @@ struct NotifyHeader {   // This matches the Win32 NMHDR structure
 };
 
 struct SCNotification {
-    struct Sci_NotifyHeader nmhdr;
-    int position;
-    /* SCN_STYLENEEDED, SCN_DOUBLECLICK, SCN_MODIFIED, SCN_MARGINCLICK, */
-    /* SCN_NEEDSHOWN, SCN_DWELLSTART, SCN_DWELLEND, SCN_CALLTIPCLICK, */
-    /* SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, SCN_HOTSPOTRELEASECLICK, */
-    /* SCN_INDICATORCLICK, SCN_INDICATORRELEASE, */
-    /* SCN_USERLISTSELECTION, SCN_AUTOCSELECTION */
+	struct Sci_NotifyHeader nmhdr;
+	int position;
+	/* SCN_STYLENEEDED, SCN_DOUBLECLICK, SCN_MODIFIED, SCN_MARGINCLICK, */
+	/* SCN_NEEDSHOWN, SCN_DWELLSTART, SCN_DWELLEND, SCN_CALLTIPCLICK, */
+	/* SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, SCN_HOTSPOTRELEASECLICK, */
+	/* SCN_INDICATORCLICK, SCN_INDICATORRELEASE, */
+	/* SCN_USERLISTSELECTION, SCN_AUTOCSELECTION */
 
-    int ch;     /* SCN_CHARADDED, SCN_KEY */
-    int modifiers;
-    /* SCN_KEY, SCN_DOUBLECLICK, SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, */
-    /* SCN_HOTSPOTRELEASECLICK, SCN_INDICATORCLICK, SCN_INDICATORRELEASE, */
+	int ch;		/* SCN_CHARADDED, SCN_KEY */
+	int modifiers;
+	/* SCN_KEY, SCN_DOUBLECLICK, SCN_HOTSPOTCLICK, SCN_HOTSPOTDOUBLECLICK, */
+	/* SCN_HOTSPOTRELEASECLICK, SCN_INDICATORCLICK, SCN_INDICATORRELEASE, */
 
-    int modificationType;   /* SCN_MODIFIED */
-    const char *text;
-    /* SCN_MODIFIED, SCN_USERLISTSELECTION, SCN_AUTOCSELECTION, SCN_URIDROPPED */
+	int modificationType;	/* SCN_MODIFIED */
+	const char *text;
+	/* SCN_MODIFIED, SCN_USERLISTSELECTION, SCN_AUTOCSELECTION, SCN_URIDROPPED */
 
-    int length;     /* SCN_MODIFIED */
-    int linesAdded; /* SCN_MODIFIED */
-    int message;    /* SCN_MACRORECORD */
-    uptr_t wParam;  /* SCN_MACRORECORD */
-    sptr_t lParam;  /* SCN_MACRORECORD */
-    int line;       /* SCN_MODIFIED */
-    int foldLevelNow;   /* SCN_MODIFIED */
-    int foldLevelPrev;  /* SCN_MODIFIED */
-    int margin;     /* SCN_MARGINCLICK */
-    int listType;   /* SCN_USERLISTSELECTION */
-    int x;          /* SCN_DWELLSTART, SCN_DWELLEND */
-    int y;      /* SCN_DWELLSTART, SCN_DWELLEND */
-    int token;      /* SCN_MODIFIED with SC_MOD_CONTAINER */
-    int annotationLinesAdded;   /* SCN_MODIFIED with SC_MOD_CHANGEANNOTATION */
-    int updated;    /* SCN_UPDATEUI */
+	int length;		/* SCN_MODIFIED */
+	int linesAdded;	/* SCN_MODIFIED */
+	int message;	/* SCN_MACRORECORD */
+	uptr_t wParam;	/* SCN_MACRORECORD */
+	sptr_t lParam;	/* SCN_MACRORECORD */
+	int line;		/* SCN_MODIFIED */
+	int foldLevelNow;	/* SCN_MODIFIED */
+	int foldLevelPrev;	/* SCN_MODIFIED */
+	int margin;		/* SCN_MARGINCLICK */
+	int listType;	/* SCN_USERLISTSELECTION */
+	int x;			/* SCN_DWELLSTART, SCN_DWELLEND */
+	int y;		/* SCN_DWELLSTART, SCN_DWELLEND */
+	int token;		/* SCN_MODIFIED with SC_MOD_CONTAINER */
+	int annotationLinesAdded;	/* SCN_MODIFIED with SC_MOD_CHANGEANNOTATION */
+	int updated;	/* SCN_UPDATEUI */
 };
 </pre>
 
@@ -6328,7 +6328,7 @@ href="#SCI_POSITIONFROMLINE">SCI_POSITIONFROMLINE</a>(lineNumber);
           <td align="center">0x40000</td>
 
           <td>This is set on for actions that the container stored into the undo stack with
-      <a class="message" href="#SCI_ADDUNDOACTION"><code>SCI_ADDUNDOACTION</code></a>.
+	  <a class="message" href="#SCI_ADDUNDOACTION"><code>SCI_ADDUNDOACTION</code></a>.
           </td>
 
           <td>token</td>

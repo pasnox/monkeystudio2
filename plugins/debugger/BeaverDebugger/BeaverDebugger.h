@@ -41,6 +41,9 @@ class XUPProjectItem;
 class BeaverDebugger : public QObject, public DebuggerPlugin
 {
     Q_OBJECT
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA( IID "org.monkeystudio.MonkeyStudio.DebuggerPlugin/1.0" /*FILE PLUGIN_JSON*/ )
+#endif
     Q_INTERFACES( BasePlugin DebuggerPlugin )
     
     enum TryFindResult

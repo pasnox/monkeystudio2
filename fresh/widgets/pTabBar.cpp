@@ -23,6 +23,8 @@
 #include <QIcon>
 #include <QPainter>
 #include <QAction>
+#include <QMimeData>
+#include <QDrag>
 
 /*!
     \details Create a new pTabBar object

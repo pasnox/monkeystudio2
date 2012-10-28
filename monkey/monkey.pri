@@ -8,5 +8,6 @@ INCLUDEPATH *= $${PWD}/src
 PRE_TARGETDEPS  *= $${PWD}
 
 # library integration
+greaterThan(QT_MAJOR_VERSION, 4):QT *= widgets printsupport
 LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
 win32:LIBS  *= -l$${PACKAGE_TARGET}

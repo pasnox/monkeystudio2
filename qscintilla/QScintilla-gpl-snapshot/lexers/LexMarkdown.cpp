@@ -136,7 +136,7 @@ static bool IsValidHrule(const unsigned int endPos, StyleContext &sc) {
             }
             else {
                 sc.SetState(SCE_MARKDOWN_DEFAULT);
-        return false;
+		return false;
             }
         }
     }

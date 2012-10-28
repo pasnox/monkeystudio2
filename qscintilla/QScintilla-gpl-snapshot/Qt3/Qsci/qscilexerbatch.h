@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerBatch class.
 //
-// Copyright (c) 2011 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -85,7 +85,7 @@ public:
     //! languages.
     const char *lexer() const;
 
-    //! \internal Returns the string of characters that comprise a word.
+    //! Returns the string of characters that comprise a word.
     const char *wordCharacters() const;
 
     //! \internal Returns true if the language is case sensitive.

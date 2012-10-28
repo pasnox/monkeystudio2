@@ -32,7 +32,7 @@
 
 #include "namespace_global.h"
 
-#include <QtGui/QScrollArea>
+#include <QScrollArea>
 
 QT_FORWARD_DECLARE_CLASS(QDesignerFormWindowInterface)
 

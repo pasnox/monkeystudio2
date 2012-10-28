@@ -16,14 +16,14 @@ namespace Scintilla {
  */
 class Indicator {
 public:
-    int style;
-    bool under;
-    ColourPair fore;
-    int fillAlpha;
-    int outlineAlpha;
-    Indicator() : style(INDIC_PLAIN), under(false), fore(ColourDesired(0,0,0)), fillAlpha(30), outlineAlpha(50) {
-    }
-    void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine);
+	int style;
+	bool under;
+	ColourPair fore;
+	int fillAlpha;
+	int outlineAlpha;
+	Indicator() : style(INDIC_PLAIN), under(false), fore(ColourDesired(0,0,0)), fillAlpha(30), outlineAlpha(50) {
+	}
+	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine);
 };
 
 #ifdef SCI_NAMESPACE
