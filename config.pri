@@ -30,7 +30,8 @@ TARGET = $$targetForMode( $${TARGET} )
 PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
 
 # temporary path for building
-PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
+#PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
+PACKAGE_BUILD_PATH  = $$(PWD)/build
 RAMDISK_PATH = /media/ramdisk
 
 exists( $${RAMDISK_PATH} ) {
