@@ -1097,7 +1097,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="255"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eliminar</translation>
     </message>
     <message>
         <location filename="../../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="258"/>

@@ -511,7 +511,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/pluginsmanager/BasePlugin.cpp" line="50"/>
         <source>Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отладчик</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/BasePlugin.cpp" line="52"/>
