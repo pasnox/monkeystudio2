@@ -51,7 +51,7 @@ bool Irc::uninstall()
 {
     // delete docks
     delete mIrcDock;
-    return false;
+    return true;
 }
 
 #if QT_VERSION < 0x050000

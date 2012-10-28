@@ -33,7 +33,7 @@ class Irc : public QObject, public BasePlugin
     Q_INTERFACES( BasePlugin )
 
 protected:  
-    void fillPluginInfos();
+    virtual void fillPluginInfos();
     virtual bool install();
     virtual bool uninstall();
     
