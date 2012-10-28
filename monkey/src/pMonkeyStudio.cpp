@@ -1752,9 +1752,9 @@ void pMonkeyStudio::setShadowBuildActivated( bool activated )
     MonkeyCore::settings()->setValue( settingsPath() +"/ShadowBuildActivated", activated );
 }
 
-QString pMonkeyStudio::shadowBuildDirectory()
+QString pMonkeyStudio::shadowBuildDirectory( const QString& extended )
 {
-    const QString directory = MonkeyCore::settings()->value( settingsPath() +"/ShadowBuildDirectory", QDir::tempPath() ).toString();
+    QString directory = MonkeyCore::settings()->value( settingsPath() +"/ShadowBuildDirectory", QDir::tempPath() ).toString();
     
     if ( !directory.isEmpty() ) {
         if ( !QFile::exists( directory ) && !QDir().mkpath( directory ) ) {
@@ -1768,6 +1768,18 @@ QString pMonkeyStudio::shadowBuildDirectory()
         }
     }
     
+    directory = QDir::toNativeSeparators( QDir::cleanPath( QString( "%1/%2" ).arg( directory ).arg( extended ) ) );
+    
+    if ( !QFile::exists( directory ) && !QDir().mkpath( directory ) ) {
+        qWarning( "%s: Can't create directory '%s'", Q_FUNC_INFO, qPrintable( directory ) );
+        return QString::null;
+    }
+    
+    if ( !QFileInfo( directory ).isWritable() ) {
+        qWarning( "%s: Can't write in directory '%s'", Q_FUNC_INFO, qPrintable( directory ) );
+        return QString::null;
+    }
+    
     return directory;
 }
 
@@ -1775,4 +1787,3 @@ void pMonkeyStudio::setShadowBuildDirectory( const QString& directory )
 {
     MonkeyCore::settings()->setValue( settingsPath() +"/ShadowBuildDirectory", directory );
 }
-

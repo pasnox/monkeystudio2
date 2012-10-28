@@ -252,7 +252,7 @@ namespace pMonkeyStudio
     // Shadow Build
     Q_MONKEY_EXPORT bool isShadowBuildActivated();
     Q_MONKEY_EXPORT void setShadowBuildActivated( bool activated );
-    Q_MONKEY_EXPORT QString shadowBuildDirectory();
+    Q_MONKEY_EXPORT QString shadowBuildDirectory( const QString& extended = QString::null );
     Q_MONKEY_EXPORT void setShadowBuildDirectory( const QString& directory );
 };
 
