@@ -837,7 +837,7 @@ void QMakeProjectItem::installCommandsV2()
         QString workingDirectory = "$cpp$";
         
         if ( pMonkeyStudio::isShadowBuildActivated() ) {
-            workingDirectory = pMonkeyStudio::shadowBuildDirectory( shadowBuildName() );
+            workingDirectory = shadowBuildPath();
         }
         
         // qmake command
@@ -885,7 +885,7 @@ void QMakeProjectItem::installCommandsV2()
     }
     
     builderCommand.setProject( this );
-    builderCommand.setWorkingDirectory( pMonkeyStudio::isShadowBuildActivated() ? pMonkeyStudio::shadowBuildDirectory( shadowBuildName() ) : path() );
+    builderCommand.setWorkingDirectory( pMonkeyStudio::isShadowBuildActivated() ? shadowBuildPath() : path() );
     builderCommand.setSkipOnError( false );
     
     QDir dir( builderCommand.workingDirectory() );
@@ -1411,21 +1411,14 @@ CLIToolPlugin* QMakeProjectItem::builder() const
     return MonkeyCore::pluginsManager()->plugin<CLIToolPlugin*>( PluginsManager::stAll, name );
 }
 
-QString QMakeProjectItem::shadowBuildName() const
+QString QMakeProjectItem::shadowBuildPath() const
 {
-    QMakeProjectItem* project = qobject_cast<QMakeProjectItem*>( topLevelProject() );
-    QString target = project->cachedVariableValue( "TARGET" );
-    
-    // dirty hack because of bad qmake interpreter
-    if ( QString( target ).replace( " ", "" ) == "((,))" || target.contains( "(" ) || target.contains( ")" ) ) {
-        target.clear();
-    }
-    
-    if ( target.isEmpty() ) {
-        target = QFileInfo( project->fileName() ).baseName();
-    }
-    
-    return target;
+    const XUPProjectItem* tlp = topLevelProject();
+    return pMonkeyStudio::shadowBuildDirectory( // shadow build root path
+        QString( "%1/%2" )
+            .arg( QFileInfo( tlp->fileName() ).baseName() )  // project root folder
+            .arg( path().remove( 0, tlp->path().length() ) ) // project/subproject walk tree path
+    );
 }
 
 void QMakeProjectItem::projectCustomActionTriggered()
@@ -1472,7 +1465,7 @@ void QMakeProjectItem::projectCustomActionTriggered()
             break;
         }
         default: {
-            const QFileInfoList files = makefiles( pMonkeyStudio::isShadowBuildActivated() ? pMonkeyStudio::shadowBuildDirectory( shadowBuildName() ) : path() );
+            const QFileInfoList files = makefiles( pMonkeyStudio::isShadowBuildActivated() ? shadowBuildPath() : path() );
             
             if ( files.isEmpty() ) {
                 executeCommand( defaultActionTypeToString( QMakeProjectItem::QMake ) );

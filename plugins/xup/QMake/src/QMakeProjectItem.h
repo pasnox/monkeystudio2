@@ -139,7 +139,7 @@ protected:
     
     CLIToolPlugin* builder() const;
     
-    QString shadowBuildName() const;
+    QString shadowBuildPath() const;
 
 protected slots:
     virtual void projectCustomActionTriggered();
