@@ -21,7 +21,11 @@
 #include <QWidget>
 
 MkSDesignerIntegration::MkSDesignerIntegration( QDesignerFormEditorInterface* core, QObject* parent )
-    : qdesigner_internal::QDesignerIntegration( core, parent )
+    :
+#if QT_VERSION < 0x050000
+qdesigner_internal::
+#endif
+QDesignerIntegration( core, parent )
 {
 }
 

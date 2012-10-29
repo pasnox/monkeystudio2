@@ -23,8 +23,13 @@
 #include <QActionGroup>
 #include <QWidgetAction>
 
-namespace qdesigner_internal {
+#if QT_VERSION >= 0x050000
     class QDesignerIntegration;
+#endif
+namespace qdesigner_internal {
+#if QT_VERSION < 0x050000
+    class QDesignerIntegration;
+#endif
 #if QT_VERSION >= 0x040500
     class PreviewManager;
 #endif
@@ -48,7 +53,11 @@ public:
     virtual ~QtDesignerManager();
 
     QDesignerFormEditorInterface* core();
-    inline qdesigner_internal::QDesignerIntegration* integration() const { return mIntegration; }
+    inline
+#if QT_VERSION < 0x050000
+    qdesigner_internal::
+#endif
+    QDesignerIntegration* integration() const { return mIntegration; }
     inline QAction* editWidgetsAction() const { return aEditWidgets; }
     inline QWidgetAction* previewFormAction() const { return aPreview; }
     inline QList<QAction*> modesActions() const { return aModes->actions(); }
@@ -63,7 +72,10 @@ public:
 
 protected:
     QDesignerFormEditorInterface* mCore;
-    qdesigner_internal::QDesignerIntegration* mIntegration;
+#if QT_VERSION < 0x050000
+    qdesigner_internal::
+#endif
+    QDesignerIntegration* mIntegration;
 #if QT_VERSION >= 0x040500
     qdesigner_internal::PreviewManager* mPreviewer;
 #endif

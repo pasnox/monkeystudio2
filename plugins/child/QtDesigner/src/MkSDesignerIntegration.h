@@ -19,11 +19,21 @@
 #ifndef MKSDESIGNERINTEGRATION_H
 #define MKSDESIGNERINTEGRATION_H
 
+#include <QtGlobal>
+
+#if QT_VERSION < 0x050000
 #include "qdesigner_integration_p.h"
+#else
+#include "abstractintegration.h"
+#endif
 
 class QDesignerFormEditorInterface;
 
-class MkSDesignerIntegration : public qdesigner_internal::QDesignerIntegration
+class MkSDesignerIntegration : public
+#if QT_VERSION < 0x050000
+qdesigner_internal::
+#endif
+QDesignerIntegration
 {
     Q_OBJECT
     
