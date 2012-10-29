@@ -1768,7 +1768,7 @@ QString pMonkeyStudio::shadowBuildDirectory( const QString& extended )
         }
     }
     
-    directory = QDir::toNativeSeparators( QDir::cleanPath( QString( "%1/%2" ).arg( directory ).arg( extended ) ) );
+    directory = QString( "%1/%2" ).arg( directory ).arg( extended );
     
     if ( !QFile::exists( directory ) && !QDir().mkpath( directory ) ) {
         qWarning( "%s: Can't create directory '%s'", Q_FUNC_INFO, qPrintable( directory ) );
@@ -1780,7 +1780,7 @@ QString pMonkeyStudio::shadowBuildDirectory( const QString& extended )
         return QString::null;
     }
     
-    return directory;
+    return QDir::toNativeSeparators( QDir::cleanPath( directory ) );
 }
 
 void pMonkeyStudio::setShadowBuildDirectory( const QString& directory )
