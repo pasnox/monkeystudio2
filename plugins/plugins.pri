@@ -4,7 +4,7 @@ TEMPLATE    = lib
 CONFIG  *= dll plugin
 
 # include script for auto generate files
-greaterThan(QT_MAJOR_VERSION, 4):include( $${PWD}/auto_qt5_plugin.json.pri )
+greaterThan(QT_MAJOR_VERSION, 4):include( $${PWD}/../monkey/autoGenerateFile.pri )
 
 # set plugin name define
 isEmpty( TARGET ) {
