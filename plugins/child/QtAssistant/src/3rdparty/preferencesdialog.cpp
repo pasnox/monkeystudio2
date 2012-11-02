@@ -48,15 +48,15 @@
 
 #include <QtAlgorithms>
 
-#include <QtGui/QHeaderView>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QMenu>
-#include <QtGui/QFontDatabase>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QHeaderView>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QMenu>
+#include <QFontDatabase>
+#include <QApplication>
+#include <QDesktopWidget>
 
-#include <QtHelp/QHelpEngineCore>
+#include <QHelpEngineCore>
 
 QT_BEGIN_NAMESPACE
 

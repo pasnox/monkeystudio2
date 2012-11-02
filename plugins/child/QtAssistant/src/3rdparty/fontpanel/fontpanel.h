@@ -55,9 +55,9 @@
 #ifndef FONTPANEL_H
 #define FONTPANEL_H
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QFont>
-#include <QtGui/QFontDatabase>
+#include <QGroupBox>
+#include <QFont>
+#include <QFontDatabase>
 
 QT_BEGIN_NAMESPACE
 
