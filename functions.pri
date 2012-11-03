@@ -2,15 +2,15 @@ Q_HOST_OS = $${QMAKE_HOST.os}
 Q_LOWER_HOST_OS = $$lower( $${Q_HOST_OS} )
 
 win32 {
-	!isEqual(  Q_LOWER_HOST_OS, "windows" ) {
-		CONFIG *= cb_win32
-	}
+    !isEqual(  Q_LOWER_HOST_OS, "windows" ) {
+        CONFIG *= cb_win32
+    }
 }
 
 mac {
-	!isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
-		CONFIG *= cb_mac
-	}
+    !isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
+        CONFIG *= cb_mac
+    }
 }
 
 Q_TARGET = $${Q_HOST_OS}

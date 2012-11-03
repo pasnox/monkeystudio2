@@ -29,40 +29,40 @@ using namespace Scintilla;
 #endif
 
 int SCI_METHOD LexerNoExceptions::PropertySet(const char *key, const char *val) {
-	try {
-		return LexerBase::PropertySet(key, val);
-	} catch (...) {
-		// Should not throw into caller as may be compiled with different compiler or options
-	}
-	return -1;
+    try {
+        return LexerBase::PropertySet(key, val);
+    } catch (...) {
+        // Should not throw into caller as may be compiled with different compiler or options
+    }
+    return -1;
 }
 
 int SCI_METHOD LexerNoExceptions::WordListSet(int n, const char *wl) {
-	try {
-		return LexerBase::WordListSet(n, wl);
-	} catch (...) {
-		// Should not throw into caller as may be compiled with different compiler or options
-	}
-	return -1;
+    try {
+        return LexerBase::WordListSet(n, wl);
+    } catch (...) {
+        // Should not throw into caller as may be compiled with different compiler or options
+    }
+    return -1;
 }
 
 void SCI_METHOD LexerNoExceptions::Lex(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
-	try {
-		Accessor astyler(pAccess, &props);
-		Lexer(startPos, length, initStyle, pAccess, astyler);
-		astyler.Flush();
-	} catch (...) {
-		// Should not throw into caller as may be compiled with different compiler or options
-		pAccess->SetErrorStatus(SC_STATUS_FAILURE);
-	}
+    try {
+        Accessor astyler(pAccess, &props);
+        Lexer(startPos, length, initStyle, pAccess, astyler);
+        astyler.Flush();
+    } catch (...) {
+        // Should not throw into caller as may be compiled with different compiler or options
+        pAccess->SetErrorStatus(SC_STATUS_FAILURE);
+    }
 }
 void SCI_METHOD LexerNoExceptions::Fold(unsigned int startPos, int length, int initStyle, IDocument *pAccess) {
-	try {
-		Accessor astyler(pAccess, &props);
-		Folder(startPos, length, initStyle, pAccess, astyler);
-		astyler.Flush();
-	} catch (...) {
-		// Should not throw into caller as may be compiled with different compiler or options
-		pAccess->SetErrorStatus(SC_STATUS_FAILURE);
-	}
+    try {
+        Accessor astyler(pAccess, &props);
+        Folder(startPos, length, initStyle, pAccess, astyler);
+        astyler.Flush();
+    } catch (...) {
+        // Should not throw into caller as may be compiled with different compiler or options
+        pAccess->SetErrorStatus(SC_STATUS_FAILURE);
+    }
 }
