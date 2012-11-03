@@ -23,7 +23,6 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QDesktopServices>
-#include <QWebHistory>
 #include <QWheelEvent>
 
 class HelpNetworkReply : public QNetworkReply
@@ -189,35 +188,41 @@ void QtAssistantViewer::setSource( const QUrl& url )
     load( url );
 }
 
+int QtAssistantViewer::zoom() const
+{
+    return textSizeMultiplier();
+}
+
+void QtAssistantViewer::setZoom( int zoom )
+{
+    setTextSizeMultiplier( zoom );
+}
+
 void QtAssistantViewer::resetZoom()
 {
-    setTextSizeMultiplier( 1.0 );
+    setZoom( 1 );
 }
 
 void QtAssistantViewer::zoomIn( int range )
 {
-    Q_UNUSED( range );
-    setTextSizeMultiplier( textSizeMultiplier() +.5 );
+    setZoom( zoom() +range );
 }
 
 void QtAssistantViewer::zoomOut( int range )
 {
-    Q_UNUSED( range );
-    setTextSizeMultiplier( textSizeMultiplier() -.5 );
+    setZoom( zoom() -range );
 }
 
 void QtAssistantViewer::home()
 {
-    if ( history()->canGoBack() )
-    {
+    if ( history()->canGoBack() ) {
         history()->goToItem( history()->backItems( history()->count() ).first() );
     }
 }
 
 void QtAssistantViewer::wheelEvent( QWheelEvent* e )
 {
-    if ( e->modifiers() & Qt::ControlModifier )
-    {
+    if ( e->modifiers() & Qt::ControlModifier ) {
         const int delta = e->delta();
         if ( delta > 0 )
             zoomOut();
@@ -226,19 +231,18 @@ void QtAssistantViewer::wheelEvent( QWheelEvent* e )
         e->accept();
         return;
     }
+    
     QWebView::wheelEvent( e );
 }
 
 void QtAssistantViewer::mouseReleaseEvent( QMouseEvent* e )
 {
-    if ( e->button() == Qt::XButton1 )
-    {
+    if ( e->button() == Qt::XButton1 ) {
         triggerPageAction( QWebPage::Back );
         return;
     }
 
-    if ( e->button() == Qt::XButton2 )
-    {
+    if ( e->button() == Qt::XButton2 ) {
         triggerPageAction( QWebPage::Forward );
         return;
     }

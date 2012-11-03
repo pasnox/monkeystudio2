@@ -26,10 +26,8 @@
 
 #include <QVBoxLayout>
 #include <QTabWidget>
-#include <QWebFrame>
 #include <QPrintDialog>
 #include <QComboBox>
-#include <QWebHistory>
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -169,25 +167,25 @@ bool QtAssistantChild::isModified() const
 bool QtAssistantChild::isUndoAvailable() const
 {
     QtAssistantViewer* viewer = this->viewer();
-    return viewer ? viewer->pageAction( QWebPage::Undo )->isEnabled() : false;
+    return viewer ? viewer->isUndoAvailable() : false;
 }
 
 bool QtAssistantChild::isRedoAvailable() const
 {
     QtAssistantViewer* viewer = this->viewer();
-    return viewer ? viewer->pageAction( QWebPage::Redo )->isEnabled() : false;
+    return viewer ? viewer->isRedoAvailable() : false;
 }
 
 bool QtAssistantChild::isCopyAvailable() const
 {
     QtAssistantViewer* viewer = this->viewer();
-    return viewer ? viewer->pageAction( QWebPage::Copy )->isEnabled() : false;
+    return viewer ? viewer->isCopyAvailable() : false;
 }
 
 bool QtAssistantChild::isPasteAvailable() const
 {
     QtAssistantViewer* viewer = this->viewer();
-    return viewer ? viewer->pageAction( QWebPage::Paste )->isEnabled() : false;
+    return viewer ? viewer->isPasteAvailable() : false;
 }
 
 bool QtAssistantChild::isGoToAvailable() const
@@ -205,7 +203,7 @@ QtAssistantViewer* QtAssistantChild::viewer( int index ) const
     return qobject_cast<QtAssistantViewer*>( twPages->widget( index == -1 ? twPages->currentIndex() : index ) );
 }
 
-QtAssistantViewer* QtAssistantChild::newEmptyViewer( qreal zoom )
+QtAssistantViewer* QtAssistantChild::newEmptyViewer( int zoom )
 {
     QtAssistantViewer* viewer = new QtAssistantViewer( mEngine, this );
 
@@ -215,7 +213,7 @@ QtAssistantViewer* QtAssistantChild::newEmptyViewer( qreal zoom )
         viewer->setFont( font );
     }
 
-    viewer->setTextSizeMultiplier( zoom );
+    viewer->setZoom( zoom );
 
     twPages->addTab( viewer, tr( "Loading..." ) );
     twPages->setCurrentWidget( viewer );
@@ -232,43 +230,67 @@ void QtAssistantChild::find( QString ttf, bool forward, bool backward )
     QPalette pal = isSearch->editFind->palette();
     pal.setColor( QPalette::Active, QPalette::Base, Qt::white );
 
-    Q_UNUSED( backward )
-
-    if ( viewer )
-    {
+    if ( viewer ) {
+        isSearch->labelWrapped->hide();
+        
+#if defined( WEBKIT_VIEWER )
         QWebPage::FindFlags options;
-
-        if ( !forward )
-        {
+        
+        if ( !forward || backward ) {
             options |= QWebPage::FindBackward;
         }
 
-        if ( isSearch->checkCase->isChecked() )
-        {
+        if ( isSearch->checkCase->isChecked() ) {
             options |= QWebPage::FindCaseSensitively;
         }
 
-        bool found = viewer->findText( ttf, options );
-        isSearch->labelWrapped->hide();
-
-        if ( !found )
-        {
+        if ( !viewer->findText( ttf, options ) ) {
             options |= QWebPage::FindWrapsAroundDocument;
-            found = viewer->findText( ttf, options );
 
-            if ( !found )
-            {
+            if ( !viewer->findText( ttf, options ) ) {
                 pal.setColor( QPalette::Active, QPalette::Base, QColor( 255, 102, 102 ) );
             }
-            else
-            {
+            else {
                 isSearch->labelWrapped->show();
             }
         }
+#else
+        QTextDocument::FindFlags options;
+        
+        if ( !forward || backward ) {
+            options |= QTextDocument::FindBackward;
+        }
+        
+        if ( isSearch->checkCase->isChecked() ) {
+            options |= QTextDocument::FindCaseSensitively;
+        }
+        
+        if ( isSearch->checkWholeWords->isChecked() ) {
+            options |= QTextDocument::FindWholeWords;
+        }
+        
+        if ( !viewer->find( ttf, options ) ) {
+            const QTextCursor oldCursor = viewer->textCursor();
+            QTextCursor cursor( viewer->document() );
+            
+            if ( !forward || backward ) {
+                cursor.movePosition( QTextCursor::End );
+            }
+            
+            viewer->setTextCursor( cursor );
+
+            if ( !viewer->find( ttf, options ) ) {
+                viewer->setTextCursor( oldCursor );
+                pal.setColor( QPalette::Active, QPalette::Base, QColor( 255, 102, 102 ) );
+            }
+            else {
+                isSearch->labelWrapped->show();
+            }
+        }
+#endif
     }
 
-    if ( !isSearch->isVisible() )
-    {
+    if ( !isSearch->isVisible() ) {
         isSearch->show();
     }
 
@@ -278,31 +300,31 @@ void QtAssistantChild::find( QString ttf, bool forward, bool backward )
 void QtAssistantChild::undo()
 {
     QtAssistantViewer* viewer = this->viewer();
-    if ( viewer ) viewer->triggerPageAction( QWebPage::Undo );
+    if ( viewer ) viewer->undo();
 }
 
 void QtAssistantChild::redo()
 {
     QtAssistantViewer* viewer = this->viewer();
-    if ( viewer ) viewer->triggerPageAction( QWebPage::Redo );
+    if ( viewer ) viewer->redo();
 }
 
 void QtAssistantChild::cut()
 {
     QtAssistantViewer* viewer = this->viewer();
-    if ( viewer ) viewer->triggerPageAction( QWebPage::Cut );
+    if ( viewer ) viewer->cut();
 }
 
 void QtAssistantChild::copy()
 {
     QtAssistantViewer* viewer = this->viewer();
-    if ( viewer ) viewer->triggerPageAction( QWebPage::Copy );
+    if ( viewer ) viewer->copy();
 }
 
 void QtAssistantChild::paste()
 {
     QtAssistantViewer* viewer = this->viewer();
-    if ( viewer ) viewer->triggerPageAction( QWebPage::Paste );
+    if ( viewer ) viewer->paste();
 }
 
 void QtAssistantChild::goTo()
@@ -350,7 +372,7 @@ void QtAssistantChild::backupFileAs( const QString& fileName )
 
     file.resize( 0 );
     QTextCodec* codec = this->codec();
-    const QByteArray data = codec->fromUnicode( viewer->page()->mainFrame()->toHtml() );
+    const QByteArray data = codec->fromUnicode( viewer->toHtml() );
 
     if ( file.write( data ) == -1 )
     {
@@ -501,7 +523,7 @@ void QtAssistantChild::saveSession()
         if ( !viewer->source().isEmpty() && viewer->source().isValid() )
         {
             currentPages.append( viewer->source().toString() ).append( sep );
-            zoomCount.append( QString::number( viewer->textSizeMultiplier() ) ).append( sep );
+            zoomCount.append( QString::number( viewer->zoom() ) ).append( sep );
         }
     }
 
@@ -567,7 +589,7 @@ void QtAssistantChild::nextTab()
 
 void QtAssistantChild::previousPage()
 {
-    viewer()->back();
+    viewer()->backward();
     updateContextActions();
 }
 
@@ -633,19 +655,20 @@ void QtAssistantChild::updateContextActions()
 
     if ( viewer && twPages->currentWidget() )
     {
+        const QMap<QUrl, QString> urls = viewer->historyUrls();
         QSet<QString> entries;
 
-        foreach ( const QWebHistoryItem& item, viewer->history()->items() )
+        foreach ( const QUrl& url, urls.keys() )
         {
-            if ( !entries.contains( item.url().toString() ) )
+            if ( !entries.contains( url.toString() ) )
             {
-                entries << item.url().toString();
-                cbUrl->addItem( item.title(), item.url() );
-                cbUrl->setItemData( cbUrl->count() -1, item.url().toString(), Qt::ToolTipRole );
+                entries << url.toString();
+                cbUrl->addItem( urls[ url ], url );
+                cbUrl->setItemData( cbUrl->count() -1, url.toString(), Qt::ToolTipRole );
             }
         }
 
-        cbUrl->setCurrentIndex( cbUrl->findData( viewer->history()->currentItem().url() ) );
+        cbUrl->setCurrentIndex( cbUrl->findData( viewer->source() ) );
     }
 
     cbUrl->blockSignals( locked );
@@ -672,10 +695,10 @@ void QtAssistantChild::viewer_actionsChanged()
 {
     QtAssistantViewer* viewer = qobject_cast<QtAssistantViewer*>( sender() );
 
-    emit undoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Undo )->isEnabled() : false );
-    emit redoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Redo )->isEnabled() : false );
-    emit pasteAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Paste )->isEnabled() : false );
-    emit copyAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Copy )->isEnabled() : false );
+    emit undoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->isUndoAvailable() : false );
+    emit redoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->isRedoAvailable() : false );
+    emit pasteAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->isPasteAvailable() : false );
+    emit copyAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->isCopyAvailable() : false );
 }
 
 void QtAssistantChild::cbUrl_currentIndexChanged( int index )
