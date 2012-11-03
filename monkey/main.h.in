@@ -1,12 +1,12 @@
 /*
     /!\ WARNING:
-		
-		THIS FILE IS AUTO GENERATED
+        
+        THIS FILE IS AUTO GENERATED
         DO NOT EDIT, CONTENT WILL BE LOST
         INSTEAD EDIT main.h.in FILE
-		
-		MAKE SURE YOU DO NOT USE DOUBLE QUOTE UNLESS THEY
-		ARE BY PAIR ELSE THIS WILL NOT WORKS ON WINDOWS OS
+        
+        MAKE SURE YOU DO NOT USE DOUBLE QUOTE UNLESS THEY
+        ARE BY PAIR ELSE THIS WILL NOT WORKS ON WINDOWS OS
 */
 /****************************************************************************
     Copyright (C) 2005 - 2011  Filipe AZEVEDO & The Monkey Studio Team

@@ -22,10 +22,10 @@ typedef bool (*PFNIsCommentLeader)(Accessor &styler, int pos, int len);
 
 class Accessor : public LexAccessor {
 public:
-	PropSetSimple *pprops;
-	Accessor(IDocument *pAccess_, PropSetSimple *pprops_);
-	int GetPropertyInt(const char *, int defaultValue=0);
-	int IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader = 0);
+    PropSetSimple *pprops;
+    Accessor(IDocument *pAccess_, PropSetSimple *pprops_);
+    int GetPropertyInt(const char *, int defaultValue=0);
+    int IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader = 0);
 };
 
 #ifdef SCI_NAMESPACE

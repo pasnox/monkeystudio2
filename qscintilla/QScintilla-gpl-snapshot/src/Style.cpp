@@ -20,85 +20,85 @@ FontAlias::FontAlias() {
 }
 
 FontAlias::~FontAlias() {
-	SetID(0);
-	// ~Font will not release the actual font resource sine it is now 0
+    SetID(0);
+    // ~Font will not release the actual font resource sine it is now 0
 }
 
 void FontAlias::MakeAlias(Font &fontOrigin) {
-	SetID(fontOrigin.GetID());
+    SetID(fontOrigin.GetID());
 }
 
 void FontAlias::ClearFont() {
-	SetID(0);
+    SetID(0);
 }
 
 bool FontSpecification::EqualTo(const FontSpecification &other) const {
-	return bold == other.bold &&
-	       italic == other.italic &&
-	       size == other.size &&
-	       characterSet == other.characterSet &&
-	       fontName == other.fontName;
+    return bold == other.bold &&
+           italic == other.italic &&
+           size == other.size &&
+           characterSet == other.characterSet &&
+           fontName == other.fontName;
 }
 
 FontMeasurements::FontMeasurements() {
-	Clear();
+    Clear();
 }
 
 void FontMeasurements::Clear() {
-	lineHeight = 2;
-	ascent = 1;
-	descent = 1;
-	externalLeading = 0;
-	aveCharWidth = 1;
-	spaceWidth = 1;
-	sizeZoomed = 2;
+    lineHeight = 2;
+    ascent = 1;
+    descent = 1;
+    externalLeading = 0;
+    aveCharWidth = 1;
+    spaceWidth = 1;
+    sizeZoomed = 2;
 }
 
 Style::Style() : FontSpecification() {
-	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
-	      Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true, false);
+    Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
+          Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
+          false, false, false, false, caseMixed, true, true, false);
 }
 
 Style::Style(const Style &source) : FontSpecification(), FontMeasurements() {
-	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
-	      0, 0, 0,
-	      false, false, false, false, caseMixed, true, true, false);
-	fore.desired = source.fore.desired;
-	back.desired = source.back.desired;
-	characterSet = source.characterSet;
-	bold = source.bold;
-	italic = source.italic;
-	size = source.size;
-	eolFilled = source.eolFilled;
-	underline = source.underline;
-	caseForce = source.caseForce;
-	visible = source.visible;
-	changeable = source.changeable;
-	hotspot = source.hotspot;
+    Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
+          0, 0, 0,
+          false, false, false, false, caseMixed, true, true, false);
+    fore.desired = source.fore.desired;
+    back.desired = source.back.desired;
+    characterSet = source.characterSet;
+    bold = source.bold;
+    italic = source.italic;
+    size = source.size;
+    eolFilled = source.eolFilled;
+    underline = source.underline;
+    caseForce = source.caseForce;
+    visible = source.visible;
+    changeable = source.changeable;
+    hotspot = source.hotspot;
 }
 
 Style::~Style() {
 }
 
 Style &Style::operator=(const Style &source) {
-	if (this == &source)
-		return * this;
-	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
-	      0, 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true, false);
-	fore.desired = source.fore.desired;
-	back.desired = source.back.desired;
-	characterSet = source.characterSet;
-	bold = source.bold;
-	italic = source.italic;
-	size = source.size;
-	eolFilled = source.eolFilled;
-	underline = source.underline;
-	caseForce = source.caseForce;
-	visible = source.visible;
-	changeable = source.changeable;
-	return *this;
+    if (this == &source)
+        return * this;
+    Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
+          0, 0, SC_CHARSET_DEFAULT,
+          false, false, false, false, caseMixed, true, true, false);
+    fore.desired = source.fore.desired;
+    back.desired = source.back.desired;
+    characterSet = source.characterSet;
+    bold = source.bold;
+    italic = source.italic;
+    size = source.size;
+    eolFilled = source.eolFilled;
+    underline = source.underline;
+    caseForce = source.caseForce;
+    visible = source.visible;
+    changeable = source.changeable;
+    return *this;
 }
 
 void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
@@ -106,44 +106,44 @@ void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
         bool bold_, bool italic_, bool eolFilled_,
         bool underline_, ecaseForced caseForce_,
         bool visible_, bool changeable_, bool hotspot_) {
-	fore.desired = fore_;
-	back.desired = back_;
-	characterSet = characterSet_;
-	bold = bold_;
-	italic = italic_;
-	size = size_;
-	fontName = fontName_;
-	eolFilled = eolFilled_;
-	underline = underline_;
-	caseForce = caseForce_;
-	visible = visible_;
-	changeable = changeable_;
-	hotspot = hotspot_;
-	font.ClearFont();
-	FontMeasurements::Clear();
+    fore.desired = fore_;
+    back.desired = back_;
+    characterSet = characterSet_;
+    bold = bold_;
+    italic = italic_;
+    size = size_;
+    fontName = fontName_;
+    eolFilled = eolFilled_;
+    underline = underline_;
+    caseForce = caseForce_;
+    visible = visible_;
+    changeable = changeable_;
+    hotspot = hotspot_;
+    font.ClearFont();
+    FontMeasurements::Clear();
 }
 
 void Style::ClearTo(const Style &source) {
-	Clear(
-	    source.fore.desired,
-	    source.back.desired,
-	    source.size,
-	    source.fontName,
-	    source.characterSet,
-	    source.bold,
-	    source.italic,
-	    source.eolFilled,
-	    source.underline,
-	    source.caseForce,
-	    source.visible,
-	    source.changeable,
-	    source.hotspot);
+    Clear(
+        source.fore.desired,
+        source.back.desired,
+        source.size,
+        source.fontName,
+        source.characterSet,
+        source.bold,
+        source.italic,
+        source.eolFilled,
+        source.underline,
+        source.caseForce,
+        source.visible,
+        source.changeable,
+        source.hotspot);
 }
 
 void Style::Copy(Font &font_, const FontMeasurements &fm_) {
-	font.MakeAlias(font_);
+    font.MakeAlias(font_);
 #if PLAT_WX
-	font.SetAscent(fm_.ascent);
+    font.SetAscent(fm_.ascent);
 #endif
-	(FontMeasurements &)(*this) = fm_;
+    (FontMeasurements &)(*this) = fm_;
 }
