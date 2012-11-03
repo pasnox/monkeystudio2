@@ -3,7 +3,7 @@
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/
 **
-** This file is part of the Qt Assistant of the Qt Toolkit.
+** This file is part of the Qt Designer of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** GNU Lesser General Public License Usage
@@ -39,63 +39,61 @@
 **
 ****************************************************************************/
 
-#ifndef INSTALLDIALOG_H
-#define INSTALLDIALOG_H
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists for the convenience
+// of Qt Designer.  This header
+// file may change from version to version without notice, or even be removed.
+//
+// We mean it.
+//
 
-#include <QQueue>
-#include <QDialog>
-#include "ui_installdialog.h"
+#ifndef SHAREDENUMS_H
+#define SHAREDENUMS_H
 
-#ifndef QT_NO_HTTP
+#include "shared_global_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QNetworkReply;
-class QNetworkAccessManager;
-class QBuffer;
-class QFile;
-class QHelpEngineCore;
+namespace qdesigner_internal {
 
-class InstallDialog : public QDialog
-{
-    Q_OBJECT
+    // Validation mode of text property line edits
+    enum TextPropertyValidationMode {
+        // Allow for multiline editing using literal "\n".
+        ValidationMultiLine,
+        // Allow for HTML rich text including multiline editing using literal "\n".
+        ValidationRichText,
+        // Validate a stylesheet
+        ValidationStyleSheet,
+        // Single line mode, suppresses newlines
+        ValidationSingleLine,
+        // Allow only for identifier characters
+        ValidationObjectName,
+        // Allow only for identifier characters and colons
+        ValidationObjectNameScope,
+        // URL
+        ValidationURL
+        };
 
-public:
-    explicit InstallDialog(QHelpEngineCore *helpEngine, QWidget *parent = 0,
-        const QString &host = QString(), int port = -1);
-    ~InstallDialog();
+    // Container types
+    enum ContainerType {
+        // A container with pages, at least one of which one must always be present (for example, QTabWidget)
+        PageContainer,
+        // Mdi type container. All pages may be deleted, no concept of page order
+        MdiContainer,
+        // Wizard container
+        WizardContainer
+        };
 
-    QStringList installedDocumentations() const;
+    enum AuxiliaryItemDataRoles {
+        // item->flags while being edited
+        ItemFlagsShadowRole = 0x13370551
+    };
 
-private slots:
-    void init();
-    void cancelDownload();
-    void install();
-    void httpRequestFinished(QNetworkReply *);
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
-    void updateInstallButton();
-    void browseDirectories();
-
-private:
-    void downloadNextFile();
-    void updateDocItemList();
-    void installFile(const QString &fileName);
-
-    Ui::InstallDialog m_ui;
-    QHelpEngineCore *m_helpEngine;
-    QNetworkAccessManager *m_networkAccessManager;
-    QNetworkReply *m_networkReply;
-    bool m_httpAborted;
-    QQueue<QListWidgetItem*> m_itemsToInstall;
-    QString m_currentCheckSum;
-    QString m_windowTitle;
-    QStringList m_installedDocumentations;
-    QString m_host;
-    int m_port;
-};
+}
 
 QT_END_NAMESPACE
 
-#endif
-
-#endif // INSTALLDIALOG_H
+#endif // SHAREDENUMS_H

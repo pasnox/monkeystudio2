@@ -19,55 +19,64 @@
 #ifndef QTASSISTANTVIEWER_H
 #define QTASSISTANTVIEWER_H
 
-#include <QWebView>
+#include <QTextBrowser>
 #include <QAction>
 
 class QHelpEngine;
 class QtAssistantChild;
 
-class QtAssistantViewer : public QWebView
+class QtAssistantViewer : public QTextBrowser
 {
     Q_OBJECT
     
 public:
     QtAssistantViewer( QHelpEngine* engine, QtAssistantChild* child, const QUrl& homeUrl = QUrl() );
     
-    void setSource( const QUrl& url );
-
-    inline QUrl source() const
-    { return url(); }
-
-    inline QString documentTitle() const
-    { return title(); }
+    virtual void setSource( const QUrl& url );
 
     inline bool hasSelection() const
-    { return !selectedText().isEmpty(); }
+    { return textCursor().hasSelection(); }
+    
+    inline bool isUndoAvailable() const
+    { return document()->isUndoAvailable(); }
+    
+    inline bool isRedoAvailable() const
+    { return document()->isRedoAvailable(); }
+    
+    inline bool isCopyAvailable() const
+    { return hasSelection(); }
+    
+    inline bool isPasteAvailable() const
+    { return canPaste(); }
+    
+    inline QMap<QUrl, QString> historyUrls() const {
+        QMap<QUrl, QString> urls;
+        
+        for ( int i = backwardHistoryCount(); i < forwardHistoryCount(); i++ ) {
+            if ( i == 0 ) {
+                urls[ source() ] = documentTitle();
+            }
+            else {
+                urls[ historyUrl( i ) ] = historyTitle( i );
+            }
+        }
+        
+        for ( int i = 1; i < forwardHistoryCount(); i++ ) {
+            urls[ historyUrl( i ) ] = historyTitle( i );
+        }
+        
+        return urls;
+    }
 
+    int zoom() const;
+    void setZoom( int zoom );
     void resetZoom();
-    void zoomIn( int range = 1 );
-    void zoomOut( int range = 1 );
-
-    inline void copy()
-    { triggerPageAction( QWebPage::Copy ); }
-
-    inline bool isForwardAvailable() const
-    { return pageAction( QWebPage::Forward )->isEnabled(); }
-
-    inline bool isBackwardAvailable() const
-    { return pageAction( QWebPage::Back )->isEnabled(); }
-
-public slots:
-    void home();
-    void backward()
-    { back(); }
+    
+    virtual QVariant loadResource( int type, const QUrl& name );
 
 protected:
     virtual void wheelEvent( QWheelEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
-
-private slots:
-    void actionChanged();
-    void loadFinished( bool ok );
 
 private:
     QHelpEngine* mEngine;
@@ -75,16 +84,9 @@ private:
     QUrl mHomeUrl;
 
 signals:
-    void copyAvailable( bool enabled );
     void cutAvailable( bool enabled );
     void pasteAvailable( bool enabled );
-    void undoAvailable( bool enabled );
-    void redoAvailable( bool enabled );
-    void forwardAvailable( bool enabled );
-    void backwardAvailable( bool enabled );
     void actionsChanged();
-    void highlighted( const QString& );
-    void sourceChanged( const QUrl& );
 };
 
 #endif // QTASSISTANTVIEWER_H

@@ -1,50 +1,49 @@
+Q_HOST_OS = $${QMAKE_HOST.os}
+Q_LOWER_HOST_OS = $$lower( $${Q_HOST_OS} )
+
+win32 {
+    !isEqual(  Q_LOWER_HOST_OS, "windows" ) {
+        # we are cross building for windows
+        CONFIG *= cb_win32
+    }
+}
+
+macx {
+    !isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
+        # we are cross building for mac os x
+        CONFIG *= cb_mac
+    }
+}
+
+# the build target os
+Q_TARGET = $${Q_HOST_OS}
+# the build target arch
+Q_ARCH = $${QT_ARCH}
+
+cb_win32 {
+  Q_TARGET = Windows
+}
+
+cb_mac {
+  Q_TARGET = Darwin
+}
+
+Q_TARGET_ARCH = "$${Q_TARGET}-$${Q_ARCH}"
+
+# Some useful variables that can't be easily added in variable values directly
+Q_NULL =
+Q_BACK_SLASH = "\\"
+Q_SLASH = "/"
+Q_QUOTE = "\""
+Q_DOLLAR = "\\$"
+Q_OPENING_BRACE = "\\{"
+Q_CLOSING_BRACE = "\\}"
+
 # Mimic an auto generated file where the content is replaced with qmake variable values
 # $$1 = Template source file path
 # $$2 = Generated target file path
 defineTest( autoGenerateFile ) {
-    Q_HOST_OS = $${QMAKE_HOST.os}
-    Q_LOWER_HOST_OS = $$lower( $${Q_HOST_OS} )
-
-    win32 {
-        !isEqual(  Q_LOWER_HOST_OS, "windows" ) {
-            # we are cross building for windows
-            CONFIG *= cb_win32
-        }
-    }
-
-    macx {
-        !isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
-            # we are cross building for mac os x
-            CONFIG *= cb_mac
-        }
-    }
-
-    # the build target os
-    Q_TARGET = $${Q_HOST_OS}
-    # the build target arch
-    Q_ARCH = $${QT_ARCH}
-
-    cb_win32 {
-    Q_TARGET = Windows
-    }
-
-    cb_mac {
-    Q_TARGET = Darwin
-    }
-
-    Q_TARGET_ARCH = "$${Q_TARGET}-$${Q_ARCH}"
-
-    # Some useful variables that can't be easily added in variable values directly
-    Q_NULL =
-    Q_BACK_SLASH = "\\"
-    Q_SLASH = "/"
-    Q_QUOTE = "\""
-    Q_DOLLAR = "\\$"
-    Q_OPENING_BRACE = "\\{"
-    Q_CLOSING_BRACE = "\\}"
-    
-    
-    !build_pass:isEmpty( translations_pass ) {
+    !build_pass {
         generator.source = $${1}
         generator.target = $${2}
         
@@ -63,6 +62,17 @@ defineTest( autoGenerateFile ) {
             }
         }
         
+        # create target path if needed
+        path = $$dirname( generator.target )
+        
+        !isEmpty( path ):!exists( $${path} ) {
+            win32:!cb_win32 {
+                system( "mkdir $${path}" )
+            } else {
+                system( "mkdir -p $${path}" )
+            }
+        }
+        
         # Get template content
         generator.content = $$cat( $${generator.source}, false )
         
@@ -70,7 +80,7 @@ defineTest( autoGenerateFile ) {
         #generator.variables = $$find( generator.content, "\\$\\$[^\s\$]+" )
         
         # Generate the find variables command
-        generator.commands = "grep -E -i -o '\\$\\$[$${Q_OPENING_BRACE}]?[^ $${Q_QUOTE}$]+[$${Q_OPENING_BRACE}]?' $${generator.source}"
+        generator.commands = "grep -E -i -o '\\$\\$[$${Q_OPENING_BRACE}]?[[:alnum:]_-]+[$${Q_CLOSING_BRACE}]?' $${generator.source}"
         win32:!cb_win32:generator.commands = "grep command not available."
         
         # Get template variables name

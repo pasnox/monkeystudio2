@@ -33,8 +33,8 @@
 
 #include "widgethostconstants.h"
 
-#include <QtGui/QWidget>
-#include <QtCore/QPoint>
+#include <QWidget>
+#include <QPoint>
 
 namespace SharedTools {
 namespace Internal {

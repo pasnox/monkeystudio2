@@ -37,7 +37,8 @@ win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildM
 mac:*-g++*:LIBS *= -Wl,-noall_load # stop importing all symbols
 else:*-g++*:LIBS    *= -Wl,--no-whole-archive # stop importing all symbols
 
-include( auto_main_h.pri )
+include( autoGenerateFile.pri )
+autoGenerateFile( "main.h.in", "src/main.h" )
 
 mac:ICON    = src/resources/icons/application/monkey2.icns
 win32:RC_FILE   *= monkey.rc

@@ -75,7 +75,9 @@ QtAssistantInlineSearch::QtAssistantInlineSearch( QWidget* parent )
 
     checkWholeWords = new QCheckBox( tr( "Whole words" ), this );
     hboxLayout->addWidget( checkWholeWords );
+#if defined( WEBKIT_VIEWER )
     checkWholeWords->hide();
+#endif
 
     updateButtons();
 }

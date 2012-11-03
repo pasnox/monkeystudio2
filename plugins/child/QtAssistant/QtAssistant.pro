@@ -15,8 +15,14 @@
 TARGET  = QtAssistant
 include( ../../plugins.pri )
 DESTDIR = $$MONKEY_PLUGINS_DIR/child
-CONFIG  *= help
-QT  *= network webkit
+greaterThan(QT_MAJOR_VERSION, 4):QT *= help
+else:CONFIG  *= help
+QT  *= network
+
+contains(QT_CONFIG, webkit) {
+    QT *= webkit
+    DEFINES *= WEBKIT_VIEWER
+}
 
 INCLUDEPATH *= src \
     src/3rdparty
@@ -39,7 +45,6 @@ HEADERS = src/QtAssistant.h \
     src/3rdparty/qtdocinstaller.h \
     src/3rdparty/topicchooser.h \
     src/QtAssistantChild.h \
-    src/QtAssistantViewer.h \
     src/QtAssistantInlineSearch.h
 
 SOURCES = src/QtAssistant.cpp \
@@ -52,7 +57,20 @@ SOURCES = src/QtAssistant.cpp \
     src/3rdparty/qtdocinstaller.cpp \
     src/3rdparty/topicchooser.cpp \
     src/QtAssistantChild.cpp \
-    src/QtAssistantViewer.cpp \
     src/QtAssistantInlineSearch.cpp
+
+contains(DEFINES, WEBKIT_VIEWER) {
+    INCLUDEPATH *= src/viewers/webkit
+    
+    HEADERS *= src/viewers/webkit/QtAssistantViewer.h
+    SOURCES *= src/viewers/webkit/QtAssistantViewer.cpp
+} else {
+    INCLUDEPATH *= src/viewers/textbrowser
+    
+    HEADERS *= src/viewers/textbrowser/QtAssistantViewer.h
+    SOURCES *= src/viewers/textbrowser/QtAssistantViewer.cpp
+    
+    message( "Building QtAssistant plugin using QTextBrowser, it's recommanded to use QtWebKit for better performance and rendering." )
+}
 
 include( src/3rdparty/fontpanel/fontpanel.pri )

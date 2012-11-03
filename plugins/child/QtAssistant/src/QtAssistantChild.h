@@ -53,7 +53,7 @@ public:
     virtual bool isPrintAvailable() const;
 
     class QtAssistantViewer* viewer( int index = -1 ) const;
-    QtAssistantViewer* newEmptyViewer( qreal zoom = 1.0 );
+    QtAssistantViewer* newEmptyViewer( int zoom = 1 );
 
 protected:
     QHelpEngine* mEngine;

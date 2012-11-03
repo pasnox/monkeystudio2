@@ -3,7 +3,7 @@
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/
 **
-** This file is part of the Qt Assistant of the Qt Toolkit.
+** This file is part of the Qt Designer of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** GNU Lesser General Public License Usage
@@ -39,63 +39,38 @@
 **
 ****************************************************************************/
 
-#ifndef INSTALLDIALOG_H
-#define INSTALLDIALOG_H
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists for the convenience
+// of Qt Designer.  This header
+// file may change from version to version without notice, or even be removed.
+//
+// We mean it.
+//
 
-#include <QQueue>
-#include <QDialog>
-#include "ui_installdialog.h"
+#ifndef SHARED_GLOBAL_H
+#define SHARED_GLOBAL_H
 
-#ifndef QT_NO_HTTP
+#include <QtCore/qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
-class QNetworkReply;
-class QNetworkAccessManager;
-class QBuffer;
-class QFile;
-class QHelpEngineCore;
-
-class InstallDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    explicit InstallDialog(QHelpEngineCore *helpEngine, QWidget *parent = 0,
-        const QString &host = QString(), int port = -1);
-    ~InstallDialog();
-
-    QStringList installedDocumentations() const;
-
-private slots:
-    void init();
-    void cancelDownload();
-    void install();
-    void httpRequestFinished(QNetworkReply *);
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
-    void updateInstallButton();
-    void browseDirectories();
-
-private:
-    void downloadNextFile();
-    void updateDocItemList();
-    void installFile(const QString &fileName);
-
-    Ui::InstallDialog m_ui;
-    QHelpEngineCore *m_helpEngine;
-    QNetworkAccessManager *m_networkAccessManager;
-    QNetworkReply *m_networkReply;
-    bool m_httpAborted;
-    QQueue<QListWidgetItem*> m_itemsToInstall;
-    QString m_currentCheckSum;
-    QString m_windowTitle;
-    QStringList m_installedDocumentations;
-    QString m_host;
-    int m_port;
-};
-
-QT_END_NAMESPACE
-
+#ifdef QT_DESIGNER_STATIC
+#define QDESIGNER_SHARED_EXTERN
+#define QDESIGNER_SHARED_IMPORT
+#else
+#define QDESIGNER_SHARED_EXTERN Q_DECL_EXPORT
+#define QDESIGNER_SHARED_IMPORT Q_DECL_IMPORT
 #endif
 
-#endif // INSTALLDIALOG_H
+#ifndef QT_NO_SHARED_EXPORT
+#  ifdef QDESIGNER_SHARED_LIBRARY
+#    define QDESIGNER_SHARED_EXPORT QDESIGNER_SHARED_EXTERN
+#  else
+#    define QDESIGNER_SHARED_EXPORT QDESIGNER_SHARED_IMPORT
+#  endif
+#else
+#  define QDESIGNER_SHARED_EXPORT
+#endif
+
+#endif // SHARED_GLOBAL_H
