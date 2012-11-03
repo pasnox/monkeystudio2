@@ -42,8 +42,8 @@
 #ifndef INSTALLDIALOG_H
 #define INSTALLDIALOG_H
 
-#include <QtCore/QQueue>
-#include <QtWidgets/QDialog>
+#include <QQueue>
+#include <QDialog>
 #include "ui_installdialog.h"
 
 #ifndef QT_NO_HTTP

@@ -42,22 +42,22 @@
 
 #include "installdialog.h"
 
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QCryptographicHash>
-#include <QtCore/QDebug>
+#include <QTimer>
+#include <QUrl>
+#include <QDir>
+#include <QFile>
+#include <QCryptographicHash>
+#include <QDebug>
 
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkProxy>
-#include <QtNetwork/QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QNetworkProxy>
+#include <QNetworkAccessManager>
 
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QFileDialog>
+#include <QMessageBox>
+#include <QFileDialog>
 
-#include <QtHelp/QHelpEngineCore>
+#include <QHelpEngineCore>
 
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_HTTP
@@ -220,7 +220,7 @@ void InstallDialog::downloadNextFile()
     m_ui.statusLabel->setText(tr("Downloading %1...").arg(fileName));
     m_ui.progressBar->show();
 
-    const QUrl url(QStringLiteral("http://qt.nokia.com/doc/assistantdocs/") + fileName);
+    const QUrl url(QString("http://qt.nokia.com/doc/assistantdocs/") + fileName);
     
     m_httpAborted = false;
     m_networkReply = m_networkAccessManager->get(QNetworkRequest(url));
