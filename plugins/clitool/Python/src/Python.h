@@ -34,6 +34,8 @@ protected:
     virtual bool install();
     virtual bool uninstall();
     
+    QString findPythonInstallation() const;
+    
 public:
     // CLIToolPlugin
     virtual pCommand defaultCommand() const;

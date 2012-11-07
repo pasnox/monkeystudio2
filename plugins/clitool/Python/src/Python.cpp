@@ -18,6 +18,9 @@
 ****************************************************************************/
 #include "Python.h"
 
+#include <QSettings>
+#include <QDir>
+
 void Python::fillPluginInfos()
 {
     mPluginInfos.Caption = tr( "Python" );
@@ -41,9 +44,27 @@ bool Python::uninstall()
     return true;
 }
 
+QString Python::findPythonInstallation() const
+{
+    const QSettings settings( "Python", "PythonCore" );
+    const QStringList versions = settings.childGroups();
+    
+    foreach ( const QString& version, versions ) {
+        const QString installPath = settings.value( QString( "%1/InstallPath/." ).arg( version ) ).toString();
+        
+        if ( !installPath.isEmpty() && QFile::exists( installPath ) ) {
+            return QDir::toNativeSeparators( QDir::cleanPath(
+                QString( "%1/pythonw.exe" ).arg( installPath )
+            ) );
+        }
+    }
+    
+    return "python";
+}
+
 pCommand Python::defaultCommand() const
 {
-    const QString python = "python";
+    const QString python = findPythonInstallation();
     pCommand cmd( "Interpret", python, false, availableParsers(), "$cpp$" );
     cmd.setName( PLUGIN_NAME );
     return cmd;
