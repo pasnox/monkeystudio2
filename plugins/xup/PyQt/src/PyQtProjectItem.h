@@ -34,7 +34,18 @@ public:
     virtual void installCommands();
     
 protected:
+    enum Binary {
+        Python,
+        LRelease,
+        LUpdate,
+        Rcc,
+        Uic
+    };
+    
     CLIToolPlugin* interpreter() const;
+    
+    QString pyQtFilePath() const;
+    QString pyQtBinaryFilePath( PyQtProjectItem::Binary binary ) const;
 };
 
 #endif // PYQTPROJECTITEM_H
