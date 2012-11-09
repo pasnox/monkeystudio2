@@ -46,25 +46,51 @@ bool Python::uninstall()
 
 QString Python::findPythonInstallation() const
 {
-    const QSettings settings( "Python", "PythonCore" );
-    const QStringList versions = settings.childGroups();
-    
-    foreach ( const QString& version, versions ) {
-        const QString installPath = settings.value( QString( "%1/InstallPath/." ).arg( version ) ).toString();
+#if defined( Q_OS_WIN )
+    // system scope
+    {
+        const QSettings settings( QSettings::SystemScope, "Python", "PythonCore" );
+        const QStringList versions = settings.childGroups();
         
-        if ( !installPath.isEmpty() && QFile::exists( installPath ) ) {
-            return QDir::toNativeSeparators( QDir::cleanPath(
-                QString( "%1/pythonw.exe" ).arg( installPath )
-            ) );
+        foreach ( const QString& version, versions ) {
+            const QString installPath = settings.value( QString( "%1/InstallPath/." ).arg( version ) ).toString();
+            
+            if ( !installPath.isEmpty() && QFile::exists( installPath ) ) {
+                return QDir::toNativeSeparators( QDir::cleanPath(
+                    QString( "%1/pythonw.exe" ).arg( installPath )
+                ) );
+            }
         }
     }
+    
+    // user scope
+    {
+        const QSettings settings( QSettings::UserScope, "Python", "PythonCore" );
+        const QStringList versions = settings.childGroups();
+        
+        foreach ( const QString& version, versions ) {
+            const QString installPath = settings.value( QString( "%1/InstallPath/." ).arg( version ) ).toString();
+            
+            if ( !installPath.isEmpty() && QFile::exists( installPath ) ) {
+                return QDir::toNativeSeparators( QDir::cleanPath(
+                    QString( "%1/pythonw.exe" ).arg( installPath )
+                ) );
+            }
+        }
+    }
+#endif
     
     return "python";
 }
 
 pCommand Python::defaultCommand() const
 {
-    const QString python = findPythonInstallation();
+    QString python = findPythonInstallation();
+    
+    if ( python.contains( " " ) && !python.startsWith( "\"" ) && !python.endsWith( "\"" ) ) {
+        python.prepend( "\"" ).append( "\"" );
+    }
+    
     pCommand cmd( "Interpret", python, false, availableParsers(), "$cpp$" );
     cmd.setName( PLUGIN_NAME );
     return cmd;
