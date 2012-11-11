@@ -1,3 +1,15 @@
+2012-11-11 23:06  pasnox
+
+	* [r4514] config.pri:
+	  
+	  Increase version.
+
+2012-11-11 23:01  pasnox
+
+	* [r4513] ChangeLog:
+	  
+	  Update changelog.
+
 2012-11-11 22:53  pasnox
 
 	* [r4512] datas/templates/PHP/PHP-Qt Console/$Project Name$.xphpqt,
