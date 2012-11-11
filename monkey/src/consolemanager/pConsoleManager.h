@@ -39,6 +39,7 @@
 
 class AbstractCommandParser;
 class QAction;
+class QTimer;
 
 /*!
     Console Manager provides support of running commands and parsing it's output
@@ -73,7 +74,7 @@ public:
     static QString variablesHelp();
 
 protected:
-    int mTimerId;
+    QTimer* mTimer;
     QBuffer mBuffer; //All output comming to this buffer
     pCommand::List mCommands;
     QStringList mCurrentParsers;
@@ -84,7 +85,6 @@ protected:
 
     pConsoleManager( QObject* = 0 );
     ~pConsoleManager();
-    void timerEvent( QTimerEvent* );
 
     /*
     Parse output, that are in the mBuffer.   
@@ -101,6 +101,7 @@ public slots:
     void removeCommands( const pCommand::List& );
 
 private slots:
+    void timeout();
     void executeProcess();
     void error( QProcess::ProcessError );
     void finished( int, QProcess::ExitStatus );

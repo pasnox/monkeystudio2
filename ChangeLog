@@ -1,3 +1,87 @@
+2012-11-11 23:06  pasnox
+
+	* [r4514] config.pri:
+	  
+	  Increase version.
+
+2012-11-11 23:01  pasnox
+
+	* [r4513] ChangeLog:
+	  
+	  Update changelog.
+
+2012-11-11 22:53  pasnox
+
+	* [r4512] datas/templates/PHP/PHP-Qt Console/$Project Name$.xphpqt,
+	  datas/templates/PHP/PHP-Qt Gui/$Project Name$.xphpqt,
+	  datas/templates/Python/PyQt Console/$Project Name$.xpyqt,
+	  datas/templates/Python/PyQt Gui/$Project Name$.xpyqt:
+	  
+	  Fix main files for interpreted proejct.
+	  Now run should works out of the box !
+
+2012-11-11 22:09  pasnox
+
+	* [r4511] plugins/debugger/BeaverDebugger/BeaverDebugger.cpp:
+	  
+	  Simplify the code.
+
+2012-11-11 12:10  pasnox
+
+	* [r4510] plugins/base/ClassBrowser/src/ClassBrowser.cpp,
+	  plugins/base/ClassBrowser/src/ClassBrowser.h:
+	  
+	  Fix a bug that cause a possible crash when closing the
+	  application.
+	  In fact on closing, each document closed was stil lbeing used /
+	  indexed by the class browser leading to possible null / already
+	  free object.
+
+2012-11-09 23:10  pasnox
+
+	* [r4509] monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h:
+	  
+	  Fix a possible bug that make console manager to loop infinitly.
+	  Repalce timerEvent() by a single shot QTimer.
+	  Fix regressions / bugs.
+
+2012-11-09 23:06  pasnox
+
+	* [r4508] plugins/xup/PyQt/src/PyQtProjectItem.cpp,
+	  plugins/xup/PyQt/src/PyQtProjectItem.h:
+	  
+	  Check for system then user pyqt installation.
+	  Handle if needed quote for the file path.
+	  Better handling of python / pyqt on windows.
+
+2012-11-09 23:04  pasnox
+
+	* [r4507] plugins/clitool/Python/src/Python.cpp:
+	  
+	  Check for system then user python installation.
+	  Handle if needed quote for the file path.
+
+2012-11-07 22:53  pasnox
+
+	* [r4506] plugins/clitool/Python/src/Python.cpp,
+	  plugins/clitool/Python/src/Python.h:
+	  
+	  Add support for python installation discovery on windows.
+	  If none is found, default 'python' is returned.
+
+2012-11-07 22:52  pasnox
+
+	* [r4505] plugins/child/QtDesigner/QtDesigner.pro:
+	  
+	  Fix build in release/debug for qt4/qt5
+
+2012-11-03 17:34  pasnox
+
+	* [r4501] ChangeLog:
+	  
+	  Update changelog
+
 2012-11-03 17:26  pasnox
 
 	* [r4499] functions.pri, installs.pri, monkey/main.h.in,

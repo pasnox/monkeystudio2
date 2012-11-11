@@ -55,6 +55,7 @@ bool ClassBrowser::install()
     // create menu action for the dock
     pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
     // connections
+    connect( MonkeyCore::mainWindow(), SIGNAL( aboutToClose() ), this, SLOT( applicationAboutToClose() ) );
     connect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
     connect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
     connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
@@ -74,6 +75,7 @@ bool ClassBrowser::install()
 bool ClassBrowser::uninstall()
 {
     // disconnections
+    disconnect( MonkeyCore::mainWindow(), SIGNAL( aboutToClose() ), this, SLOT( applicationAboutToClose() ) );
     disconnect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
     disconnect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
     disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
@@ -200,6 +202,15 @@ void ClassBrowser::opened( XUPProjectItem* project )
 void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 {
     mDock->browser()->tagEntries( entries );
+}
+
+void ClassBrowser::applicationAboutToClose()
+{
+    MonkeyCore::fileManager()->disconnect( this );
+    
+    if ( mDock ) {
+        mDock->browser()->disconnect( this );
+    }
 }
 
 void ClassBrowser::entryActivated( const qCtagsSenseEntry& entry )

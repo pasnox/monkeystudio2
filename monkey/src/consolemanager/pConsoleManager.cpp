@@ -28,6 +28,7 @@
 #include <QLibrary>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QTimer>
 #include <QDebug>
 
 #include "pConsoleManager.h"
@@ -69,15 +70,17 @@ pConsoleManager::pConsoleManager( QObject* o )
     setReadChannelMode( QProcess::MergedChannels );
     
     // connections
-    connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
-
-    connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
-    connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
-    connect( this, SIGNAL( started() ), this, SLOT( started() ) );
     connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
+    connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
+    connect( this, SIGNAL( started() ), this, SLOT( started() ) );
+    connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
+    connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
     connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
-    // start timerEvent
-    mTimerId = startTimer( 100 );
+    // start timer
+    mTimer = new QTimer( this );
+    mTimer->setInterval( 100 );
+    mTimer->setSingleShot( true );
+    connect( mTimer, SIGNAL( timeout() ), this, SLOT( timeout() ) );
     mStopAttempt = 0;
     
     CommandParser::installParserCommand();
@@ -243,23 +246,30 @@ QString pConsoleManager::variablesHelp()
     );
 }
 
-/*!
-    Handler of timer event
-
-    Exucutes next command, if there is available in the list, and no currently running commands
-    FIXME Check, if it's realy nessesery to use timer
-    \param e Timer event
-*/
-void pConsoleManager::timerEvent( QTimerEvent* e )
+void pConsoleManager::timeout()
 {
-    if ( e->timerId() == mTimerId )
-    {
-        // if running continue
-        if ( state() != QProcess::NotRunning )
-            return;
-        // execute next task is available
-        if ( !mCommands.isEmpty() )
-            executeProcess();
+    // if running continue
+    if ( state() != QProcess::NotRunning ) {
+        return;
+    }
+    
+    // execute next task is available
+    if ( !mCommands.isEmpty() ) {
+        executeProcess();
+    }
+}
+
+/*!
+    Handler of changing status of child process
+    \param e New process state
+*/
+void pConsoleManager::stateChanged( QProcess::ProcessState e )
+{
+    // emit signal state changed
+    emit commandStateChanged( currentCommand(), e );
+    // remove command if crashed and state 0
+    if ( QProcess::error() == QProcess::FailedToStart && e == QProcess::NotRunning ) {
+        removeCommand( currentCommand() );
     }
 }
 
@@ -272,31 +282,24 @@ void pConsoleManager::error( QProcess::ProcessError e )
     // emit signal error
     emit commandError( currentCommand(), e );
     // need emulate state 0 for linux
+    if ( e == QProcess::FailedToStart ) {
 #ifndef Q_WS_WIN
-    if ( e == QProcess::FailedToStart )
         stateChanged( QProcess::NotRunning );
+#else
+        removeCommand( currentCommand() );
 #endif
+    }
 }
 
 /*!
-    Handler of finishing of execution of command
-
-    \param i Ask PasNox, what is it
-    \param e Exit status of process
+    Handler of 'started' event from child process
 */
-void pConsoleManager::finished( int i, QProcess::ExitStatus e )
+void pConsoleManager::started()
 {
-    const pCommand command = currentCommand();
-    // parse output
-    parseOutput( true );
-    // emit signal finished
-    emit commandFinished( command, i, e );
-    // remove command from list
-    removeCommand( command );
-    // disable stop action
-    mStopAction->setEnabled( false );
-    // clear buffer
-    mBuffer.buffer().clear();
+    // enable stop action
+    mStopAction->setEnabled( true );
+    // emit signal
+    emit commandStarted( currentCommand() );
 }
 
 /*!
@@ -329,27 +332,24 @@ void pConsoleManager::readyRead()
 }
 
 /*!
-    Handler of 'started' event from child process
-*/
-void pConsoleManager::started()
-{
-    // enable stop action
-    mStopAction->setEnabled( true );
-    // emit signal
-    emit commandStarted( currentCommand() );
-}
+    Handler of finishing of execution of command
 
-/*!
-    Handler of changing status of child process
-    \param e New process state
+    \param i Ask PasNox, what is it
+    \param e Exit status of process
 */
-void pConsoleManager::stateChanged( QProcess::ProcessState e )
+void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
-    // emit signal state changed
-    emit commandStateChanged( currentCommand(), e );
-    // remove command if crashed and state 0
-    if ( QProcess::error() == QProcess::FailedToStart && e == QProcess::NotRunning )
-        removeCommand( currentCommand() );
+    const pCommand command = currentCommand();
+    // parse output
+    parseOutput( true );
+    // emit signal finished
+    emit commandFinished( command, i, e );
+    // remove command from list
+    removeCommand( command );
+    // disable stop action
+    mStopAction->setEnabled( false );
+    // clear buffer
+    mBuffer.buffer().clear();
 }
 
 /*!
@@ -401,8 +401,13 @@ void pConsoleManager::stopCurrentCommand()
 */
 void pConsoleManager::addCommand( const pCommand& c )
 {
-    if ( c.isValid() )
+    if ( c.isValid() ) {
         mCommands << c;
+    }
+    
+    if ( !mCommands.isEmpty() ) {
+        mTimer->start();
+    }
 }
 
 /*!
@@ -422,8 +427,15 @@ void pConsoleManager::addCommands( const pCommand::List& l )
 */
 void pConsoleManager::removeCommand( const pCommand& c )
 {
-    if ( mCommands.contains( c ) )
-        mCommands.removeAt( mCommands.indexOf ( c ) );
+    const int index = mCommands.indexOf ( c );
+    
+    if ( index != -1 ) {
+        mCommands.removeAt( index );
+    }
+    
+    if ( !mCommands.isEmpty() ) {
+        mTimer->start();
+    }
 }
 
 /*!
@@ -441,130 +453,133 @@ void pConsoleManager::removeCommands( const pCommand::List& l )
 */
 void pConsoleManager::executeProcess()
 {
-    foreach ( pCommand c, mCommands )
+    mTimer->stop();
+    
+    if ( mCommands.isEmpty() ) {
+        return;
+    }
+    
+    pCommand c = mCommands.first();
+    
+    // if last was error, cancel this one if it want to
+    if ( c.skipOnError() && QProcess::error() != QProcess::UnknownError )
     {
-        // if last was error, cancel this one if it want to
-        if ( c.skipOnError() && QProcess::error() != QProcess::UnknownError )
-        {
-            emit commandSkipped( c );
-            removeCommand( c );
-            continue;
+        emit commandSkipped( c );
+        removeCommand( c );
+        return;
+    }
+    
+    switch ( c.executableCheckingType() ) {
+        case XUPProjectItem::NoTarget: {
+            break;
         }
-        
-        switch ( c.executableCheckingType() ) {
-            case XUPProjectItem::NoTarget: {
-                break;
+        case XUPProjectItem::ServicesTarget: {
+            if ( QDesktopServices::openUrl( QUrl( c.command() ) ) ) {
+                finished( 0, QProcess::NormalExit );
+                removeCommand( c );
+                return;
             }
-            case XUPProjectItem::ServicesTarget: {
-                if ( QDesktopServices::openUrl( QUrl( c.command() ) ) ) {
-                    finished( 0, QProcess::NormalExit );
+            
+            break;
+        }
+        case XUPProjectItem::DesktopTarget: {
+#if defined( Q_OS_WIN )
+            c.setCommand( QString( "start %1" ).arg( c.command() ) );
+#elif defined( Q_OS_MAC )
+            c.setCommand( QString( "open %1" ).arg( c.command() ) );
+#elif defined( Q_OS_UNIX )
+            c.setCommand( QString( "xdg-open %1" ).arg( c.command() ) );
+#endif
+            break;
+        }
+        case XUPProjectItem::DefaultTarget:
+        case XUPProjectItem::DebugTarget:
+        case XUPProjectItem::ReleaseTarget: {
+            if ( !c.project() /*&& !c.command().contains( "$target$" )*/ ) {
+                emit commandSkipped( c );
+                removeCommand( c );
+                return;
+            }
+            
+            /*if ( c.command().contains( "$target$" ) )*/ {
+                const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
+                
+                if ( filePath.isEmpty() ) {
+                    emit commandSkipped( c );
+                    removeCommand( c );
                     return;
                 }
                 
-                break;
-            }
-            case XUPProjectItem::DesktopTarget: {
+                QString commandLine = c.command().replace( "$target$", quotedFilePath( filePath ) );
+                const QFileInfo fi( c.project()->filePath( filePath ) );
+                
+                if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
 #if defined( Q_OS_WIN )
-                c.setCommand( QString( "start %1" ).arg( c.command() ) );
+                    commandLine = QString( "start %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_MAC )
-                c.setCommand( QString( "open %1" ).arg( c.command() ) );
+                    commandLine = QString( "open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #elif defined( Q_OS_UNIX )
-                c.setCommand( QString( "xdg-open %1" ).arg( c.command() ) );
+                    commandLine = QString( "xdg-open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
 #endif
-                break;
-            }
-            case XUPProjectItem::DefaultTarget:
-            case XUPProjectItem::DebugTarget:
-            case XUPProjectItem::ReleaseTarget: {
-                if ( !c.project() /*&& !c.command().contains( "$target$" )*/ ) {
-                    emit commandSkipped( c );
-                    removeCommand( c );
-                    continue;
                 }
                 
-                /*if ( c.command().contains( "$target$" ) )*/ {
-                    const QString filePath = c.project()->targetFilePath( XUPProjectItem::TargetType( c.executableCheckingType() ) );
-                    
-                    if ( filePath.isEmpty() ) {
-                        emit commandSkipped( c );
-                        removeCommand( c );
-                        continue;
-                    }
-                    
-                    QString commandLine = c.command().replace( "$target$", quotedFilePath( filePath ) );
-                    const QFileInfo fi( c.project()->filePath( filePath ) );
-                    
-                    if ( fi.exists() && !fi.isExecutable() && !QLibrary::isLibrary( fi.absoluteFilePath() ) ) {
-#if defined( Q_OS_WIN )
-                        commandLine = QString( "start %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
-#elif defined( Q_OS_MAC )
-                        commandLine = QString( "open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
-#elif defined( Q_OS_UNIX )
-                        commandLine = QString( "xdg-open %1" ).arg( quotedFilePath( c.project()->filePath( filePath ) ) );
-#endif
-                    }
-                    
-                    c.setCommand( commandLine );
-                    
-                    if ( c.workingDirectory().isEmpty() ) {
-                        c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
-                    }
-                }
-                break;
-            }
-            default: {
-                Q_ASSERT( 0 );
-                break;
-            }
-        }
-
-        if ( c.tryAllParsers() ) {
-            mCurrentParsers = parsersName();
-        }
-        else {
-            mCurrentParsers = c.parsers();
-        }
-        
-        // execute command
-        mStopAttempt = 0;
-        setWorkingDirectory( c.workingDirectory() );
-        
-        QStringList variables = mEnvironmentVariablesManager.variables( false );
-        
-        // unset some variables environments when parsers is defined
-        if ( !mCurrentParsers.isEmpty() )
-        {
-            const QStringList names = QStringList() << "LANG" << "LANGUAGE" << "LC_MESSAGES" << "LC_ALL";
-            
-            foreach ( const QString& name, names ) {
-                const int index = variables.indexOf( QRegExp( QString( "^%1=.*$" ).arg( name ) ) );
+                c.setCommand( commandLine );
                 
-                if ( index != -1 )
-                {
-                    variables.removeAt( index );
+                if ( c.workingDirectory().isEmpty() ) {
+                    c.setWorkingDirectory( QFileInfo( filePath ).absolutePath() );
                 }
             }
+            break;
         }
-        
-        // define PWD variable as it looks it's not automatically defined by QProcess even when explicitly using working directory
-        const int index = variables.indexOf( QRegExp( QString( "^PWD=.*$" ) ) );
-        
-        if ( index != -1 ) {
-            variables.removeAt( index );
+        default: {
+            Q_ASSERT( 0 );
+            removeCommand( c );
+            return;
         }
-        
-        variables.prepend( QString( "PWD=%1" ).arg( workingDirectory().isEmpty() ? QDir::homePath() : workingDirectory() ) );
-        
-        setEnvironment( variables );
-        
-        mCommands.first() = c;
-
-        start( c.command().trimmed() );
-
-        mBuffer.open( QBuffer::ReadOnly );
-        
-        return;
     }
+
+    if ( c.tryAllParsers() ) {
+        mCurrentParsers = parsersName();
+    }
+    else {
+        mCurrentParsers = c.parsers();
+    }
+    
+    // execute command
+    mStopAttempt = 0;
+    setWorkingDirectory( c.workingDirectory() );
+    
+    QStringList variables = mEnvironmentVariablesManager.variables( false );
+    
+    // unset some variables environments when parsers is defined
+    if ( !mCurrentParsers.isEmpty() )
+    {
+        const QStringList names = QStringList() << "LANG" << "LANGUAGE" << "LC_MESSAGES" << "LC_ALL";
+        
+        foreach ( const QString& name, names ) {
+            const int index = variables.indexOf( QRegExp( QString( "^%1=.*$" ).arg( name ) ) );
+            
+            if ( index != -1 )
+            {
+                variables.removeAt( index );
+            }
+        }
+    }
+    
+    // define PWD variable as it looks it's not automatically defined by QProcess even when explicitly using working directory
+    const int index = variables.indexOf( QRegExp( QString( "^PWD=.*$" ) ) );
+    
+    if ( index != -1 ) {
+        variables.removeAt( index );
+    }
+    
+    variables.prepend( QString( "PWD=%1" ).arg( workingDirectory().isEmpty() ? QDir::homePath() : workingDirectory() ) );
+    
+    mCommands.first() = c;
+    mBuffer.open( QBuffer::ReadOnly );
+    
+    setEnvironment( variables );
+    start( c.command().trimmed() );
 }
 
 /*!
