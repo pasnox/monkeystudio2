@@ -298,33 +298,17 @@ void BeaverDebugger::beaverStateChanged(QProcess::ProcessState state)
 
 BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 {
-    QProcess beaver(NULL);
-    beaver.start(mBeaverPath, QStringList() << "--version");
-    beaver.waitForFinished(3000);
-    if (beaver.state() != QProcess::NotRunning) // hmm, strange
-    {
-        beaver.close();
-        return NOT_FINISHED;
-    }
-    
-    switch (beaver.error())
-    {
-        case QProcess::FailedToStart:
+    switch ( QProcess::execute( mBeaverPath, QStringList( "--version" ) ) ) {
+        // QProcess::FailedToStart
+        case -2:
             return FAILED_TO_START;
-        case QProcess::Crashed:
+        // QProcess::Crashed
+        case -1:
             return CRASHED;
-        case QProcess::UnknownError: // It's OK
-        break;
+        // Ok
         default:
-            return UNKNOWN_ERROR;
+            return OK;
     }
-    
-#if 0
-    do something
-        return NOT_BEAVER;
-#endif
-    
-    return OK;
 }
 
 void BeaverDebugger::updateRunAction()
