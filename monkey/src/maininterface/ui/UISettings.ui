@@ -336,7 +336,7 @@ You can quickly change it using the dock context menu.</string>
              <string>Add a combobox in the context toolbar that allow quick file change</string>
             </property>
             <property name="text">
-             <string>Show Quick File Acess</string>
+             <string>Show Quick File Access</string>
             </property>
            </widget>
           </item>

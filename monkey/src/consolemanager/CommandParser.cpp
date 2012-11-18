@@ -139,7 +139,7 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 
 void CommandParser::installParserCommand()
 {
-    QString help = tr( "This command allows to add and remove console output parsing patterns. Usage:\n"
+    QString help = tr( "This command allows one to add and remove console output parsing patterns. Usage:\n"
                         "\tparser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>\n"
                         "\tparser list\n" );
     

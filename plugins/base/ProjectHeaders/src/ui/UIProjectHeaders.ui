@@ -38,7 +38,7 @@
        </rect>
       </property>
       <attribute name="title" >
-       <string>Project Informations</string>
+       <string>Project Information</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >

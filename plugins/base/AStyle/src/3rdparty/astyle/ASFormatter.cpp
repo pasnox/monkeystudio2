@@ -319,7 +319,7 @@ string ASFormatter::nextLine()
         {
             appendCurrentChar();
 
-            // explicitely break a line when a line comment's end is found.
+            // explicitly break a line when a line comment's end is found.
             if ( /* bracketFormatMode == ATTACH_MODE && */ charNum + 1 == currentLine.size())
             {
                 isInLineBreak = true;
