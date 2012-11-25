@@ -17,7 +17,7 @@ This guide gives hint, how to develop own parsers. As base, used MkS revison 351
 There are two ways for create own parser.
 
 \subsection subclassabstraceparser "Subclass AbstractCommandParser"
-The most powerfull way.
+The most powerful way.
 
 Subclass AbstractCommandParser, implement own 
 	\code

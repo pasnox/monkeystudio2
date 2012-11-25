@@ -217,7 +217,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Informations</string>
+      <string>Information</string>
      </property>
      <layout class="QVBoxLayout">
       <property name="spacing">

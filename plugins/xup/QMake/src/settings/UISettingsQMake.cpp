@@ -140,7 +140,7 @@ void UISettingsQMake::loadSettings()
     
     ui->pteQtVersionsHelp->appendHtml( 
         tr( "You can register one or more Qt Version to use in your Qt projects, so you can easily select the one to use in project settings.<br /><br />"
-            "The colored item is the default Qt Version used. if there is no colored item, the default Qt Version used will be the first one available. You can explicitely set the default Qt Version selecting an item and clicking the set default button.<br /><br />"
+            "The colored item is the default Qt Version used. if there is no colored item, the default Qt Version used will be the first one available. You can explicitly set the default Qt Version selecting an item and clicking the set default button.<br /><br />"
             "To add a new Qt version, simply click the <b>Add a new Qt Version</b> button at top and fill needed fields.<br /><br />"
             "The minimum required fields are:<br />"
             "- <b>Version</b>: it define a human label across a Qt version.<br />"

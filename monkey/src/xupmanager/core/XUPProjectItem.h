@@ -90,7 +90,7 @@ public:
     QStringList autoActivatePlugins() const;
     
     /* Add files to the project. 
-     * Optional argument 'scope' allows to add files to the particular part of the project, 
+     * Optional argument 'scope' allows one to add files to the particular part of the project, 
      * not to the project root.
      * It allows, for example, to add files to the particular scope in the QMake projects (win32, !unix ...)
      */

@@ -108,10 +108,10 @@
         <UML:Generalization xmi.idref="oZpJFPlZnCja" />
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
-        <UML:Attribute comment="structure representing plugins informations" isSpecification="false" visibility="protected" xmi.id="ekv2Oqh6HUuq" type="WCvO12EUSPiu" name="mPluginInfos" />
+        <UML:Attribute comment="structure representing plugins information" isSpecification="false" visibility="protected" xmi.id="ekv2Oqh6HUuq" type="WCvO12EUSPiu" name="mPluginInfos" />
         <UML:Operation stereotype="constructor" comment="Default ctor" isSpecification="false" isLeaf="false" visibility="public" xmi.id="dEK4Tcal3kIv" isRoot="false" isAbstract="false" isQuery="false" name="BasePlugin" />
         <UML:Operation comment="default dtor" isSpecification="false" isLeaf="false" visibility="public" xmi.id="Q6qNpTHPdk3U" isRoot="false" isAbstract="false" isQuery="false" name="~ BasePlugin" />
-        <UML:Operation comment="return plugin informations" isSpecification="false" isLeaf="false" visibility="public" xmi.id="0GvwdHsHTCLw" isRoot="false" isAbstract="false" isQuery="false" name="infos" >
+        <UML:Operation comment="return plugin information" isSpecification="false" isLeaf="false" visibility="public" xmi.id="0GvwdHsHTCLw" isRoot="false" isAbstract="false" isQuery="false" name="infos" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="c7WX0XPUvvEB" type="WCvO12EUSPiu" />
          </UML:BehavioralFeature.parameter>

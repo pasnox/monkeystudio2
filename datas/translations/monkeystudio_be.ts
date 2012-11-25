@@ -58,7 +58,7 @@
     <name>CommandParser</name>
     <message>
         <location filename="../../monkey/src/consolemanager/CommandParser.cpp" line="142"/>
-        <source>This command allows to add and remove console output parsing patterns. Usage:
+        <source>This command allows one to add and remove console output parsing patterns. Usage:
 	parser add &lt;name&gt; &lt;regular expression&gt; &lt;file name&gt; &lt;column&gt; &lt;row&gt; &lt;pattern type&gt; &lt;pattern text&gt; &lt;full text&gt;
 	parser list
 </source>
@@ -1190,7 +1190,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="87"/>
-        <source>The Free, Fast and Powerfull cross-platform Open Source IDE</source>
+        <source>The Free, Fast and Powerful cross-platform Open Source IDE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2397,7 +2397,7 @@ You can quickly change it using the dock context menu.</source>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="339"/>
-        <source>Show Quick File Acess</source>
+        <source>Show Quick File Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2896,7 +2896,7 @@ You can quickly change it using the dock context menu.</source>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="220"/>
-        <source>Informations</source>
+        <source>Information</source>
         <translation>Інфармацыя</translation>
     </message>
     <message>
