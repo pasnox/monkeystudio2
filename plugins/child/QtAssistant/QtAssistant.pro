@@ -19,7 +19,7 @@ greaterThan(QT_MAJOR_VERSION, 4):QT *= help
 else:CONFIG  *= help
 QT  *= network
 
-contains(QT_CONFIG, webkit) {
+contains(QT_CONFIG, webkit)|greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(webkit) {
     QT *= webkit
     DEFINES *= WEBKIT_VIEWER
 }

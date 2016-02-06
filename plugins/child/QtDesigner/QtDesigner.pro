@@ -4,11 +4,12 @@ DESTDIR = $$MONKEY_PLUGINS_DIR/child
 INCLUDEPATH *= src/3rdparty/designer/$${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT *= designer
+    CONFIG *= designercomponents
 } else {
     CONFIG  *= designer
+    qtAddLibrary( QtDesignerComponents )
 }
 
-qtAddLibrary( QtDesignerComponents )
 
 RESOURCES   *= src/resources/QtDesigner.qrc
 

@@ -5,12 +5,18 @@ QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
 mac {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
-    #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
-    CONFIG  *= x86
+    greaterThan(QT_MAJOR_VERSION, 4) {
+        QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.7
+        QMAKE_MAC_SDK = macosx
+    } else {
+        QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
+        #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
+        #CONFIG  *= ppc
+        #CONFIG  *= ppc64
+    }
+
+    #CONFIG  *= x86
     #CONFIG  *= x86_64
-    #CONFIG  *= ppc
-    #CONFIG  *= ppc64
     # this link is required for building the ppc port to avoid the undefined __Unwind_Resume symbol
     CONFIG( ppc ):LIBS *= -lgcc_eh
 }
@@ -28,10 +34,12 @@ TARGET = $$targetForMode( $${TARGET} )
 
 # package destdir
 PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
+greaterThan(QT_MAJOR_VERSION, 4):PACKAGE_DESTDIR = $${OUT_PWD}/bin
 
 # temporary path for building
 #PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
 PACKAGE_BUILD_PATH  = $$(PWD)/build
+greaterThan(QT_MAJOR_VERSION, 4):PACKAGE_BUILD_PATH = $${OUT_PWD}
 RAMDISK_PATH = /media/ramdisk
 
 exists( $${RAMDISK_PATH} ) {
