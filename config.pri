@@ -1,5 +1,5 @@
 isEmpty( PACKAGE_DESTDIR_SHADOWED ) {
-    error("Something went bad, this variable should not be empty.")
+    #error("Something went bad, this variable should not be empty.")
 } else {
     # build mode
     CONFIG  *= qt warn_on thread x11 windows rtti debug
