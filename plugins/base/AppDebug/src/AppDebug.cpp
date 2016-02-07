@@ -48,7 +48,7 @@ bool AppDebug::install()
     qInstallMsgHandler( AppDebug::qtMessageHandler );
 #endif
     MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock.data(), infos().Caption, pIconManager::icon( "AppDebug.png", ":/icons" ) );
-    
+
     return true;
 }
 
@@ -60,7 +60,7 @@ bool AppDebug::uninstall()
     qInstallMsgHandler( 0 );
 #endif
     mDock.data()->deleteLater();
-    
+
     return true;
 }
 
@@ -71,11 +71,13 @@ void AppDebug::qtMessageHandler( QtMsgType type, const char* msg )
 #endif
 {
     if ( mDock ) {
+        mDock.data()->qtMessageHandler( type,
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-        mDock.data()->qtMessageHandler( type, context, msg );
+                                        msg
 #else
-        mDock.data()->qtMessageHandler( type, msg );
+                                        QString::fromLocal8Bit( msg )
 #endif
+                                        );
     }
 }
 

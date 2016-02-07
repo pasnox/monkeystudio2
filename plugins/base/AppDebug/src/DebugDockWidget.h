@@ -26,17 +26,13 @@ class XUPItem;
 class DebugDockWidget : public pDockWidget, public Ui::DebugDockWidget
 {
     Q_OBJECT
-    
+
 public:
     DebugDockWidget( QWidget* parent = 0 );
     virtual ~DebugDockWidget();
 
 public slots:
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    void qtMessageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg );
-#else
-    void qtMessageHandler( QtMsgType type, const char* msg );
-#endif
+    void qtMessageHandler( QtMsgType type, const QString& msg );
 
 protected:
     void createAllScopes( XUPItem* parent );
