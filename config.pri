@@ -49,10 +49,6 @@ isEmpty( PACKAGE_DESTDIR_SHADOWED ) {
         PACKAGE_BUILD_PATH = $${PWD}/build
     }
 
-    message(0- $$PACKAGE_DESTDIR_SHADOWED)
-    message(1- $$PACKAGE_DESTDIR)
-    message(2- $$PACKAGE_BUILD_PATH)
-
     setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
 
     # define config mode paths
