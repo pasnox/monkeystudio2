@@ -22,6 +22,7 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 
 QSCINTILLA_TARGET   = qscintilla2
 greaterThan(QT_MAJOR_VERSION, 4) {
+    isEqual( SYSTEM_QSCINTILLA, 1 ):QSCINTILLA_TARGET   = qt5scintilla2
     QT *= widgets printsupport
     # MacExtras is Qt 5.2 & up
     greaterThan(QT_MINOR_VERSION, 1) {
