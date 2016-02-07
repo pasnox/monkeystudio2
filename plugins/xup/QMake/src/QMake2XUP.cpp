@@ -711,7 +711,13 @@ QString QMake2XUP::convertToPro( const QDomDocument& document )
 
 QString QMake2XUP::escape( const QString& string )
 {
-    return Qt::escape( string ).replace( "\"" , "&quot;" );
+    return
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+            string.toHtmlEscaped()
+#else
+            Qt::escape( string )
+#endif
+            .replace( "\"" , "&quot;" );
 }
 
 QString QMake2XUP::convertNodeToPro( const QDomNode& node, int weight, bool multiline, bool nested, const QString& EOL )

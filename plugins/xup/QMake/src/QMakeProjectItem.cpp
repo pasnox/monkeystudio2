@@ -671,7 +671,7 @@ QList<QByteArray> QMakeProjectItem::makefileRules( const QString& filePath ) con
     while ( !file.atEnd() ) {
         const QByteArray line = file.readLine();
         const int pos = targetRex.indexIn( line );
-        const QByteArray rule = pos != -1 ? targetRex.cap( 1 ).toAscii() : QByteArray();
+        const QByteArray rule = pos != -1 ? targetRex.cap( 1 ).toLocal8Bit() : QByteArray();
         const int id = orderedKeepRules.value( rule, -1 );
         
         if ( id != -1 ) {
@@ -711,7 +711,7 @@ QString QMakeProjectItem::actionTypeToString( QMakeProjectItem::ActionType type 
     const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
     const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
     const QMetaEnum me = mo->enumerator( index );
-    return QString::fromAscii( me.valueToKeys( type ) ).replace( "|", "_" );
+    return QString::fromLocal8Bit( me.valueToKeys( type ) ).replace( "|", "_" );
 }
 
 QString QMakeProjectItem::defaultActionTypeToString( QMakeProjectItem::DefaultActionType type ) const
@@ -724,7 +724,7 @@ QMakeProjectItem::ActionType QMakeProjectItem::stringToActionType( const QString
     const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
     const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
     const QMetaEnum me = mo->enumerator( index );
-    return QMakeProjectItem::ActionType( me.keysToValue( QString( string ).replace( "_", "|" ).toAscii() ) );
+    return QMakeProjectItem::ActionType( me.keysToValue( QString( string ).replace( "_", "|" ).toLocal8Bit() ) );
 }
 
 QString QMakeProjectItem::actionTypeToText( QMakeProjectItem::ActionType type ) const
@@ -797,7 +797,7 @@ QString QMakeProjectItem::actionTypeToText( QMakeProjectItem::ActionType type ) 
     const QMetaObject* mo = &QMakeProjectItem::staticMetaObject;
     const int index = mo->indexOfEnumerator( "ActionTypeFlag" );
     const QMetaEnum me = mo->enumerator( index );
-    return QString::fromAscii( me.valueToKeys( type ) ).replace( "|", "_" );
+    return QString::fromLocal8Bit( me.valueToKeys( type ) ).replace( "|", "_" );
 }
 
 QString QMakeProjectItem::defaultActionTypeToText( QMakeProjectItem::DefaultActionType type ) const
@@ -1003,7 +1003,7 @@ void QMakeProjectItem::installCommandsV2()
                 
                 cmd.setName( actionTypeToString( actionType ) );
                 cmd.setText( actionTypeToText( actionType ) );
-                cmd.setCommand( QString( "%1 -f %2 %3" ).arg( cmd.command() ).arg( filePath ).arg( QString::fromAscii( rule ) ) );
+                cmd.setCommand( QString( "%1 -f %2 %3" ).arg( cmd.command() ).arg( filePath ).arg( QString::fromLocal8Bit( rule ) ) );
                 addCommand( "mBuilder", cmd );
             }
         }

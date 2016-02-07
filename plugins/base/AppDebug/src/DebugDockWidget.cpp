@@ -54,24 +54,34 @@ DebugDockWidget::~DebugDockWidget()
 {
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+void DebugDockWidget::qtMessageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg )
+#else
 void DebugDockWidget::qtMessageHandler( QtMsgType type, const char* msg )
+#endif
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    Q_UNUSED( context );
+    const QString string = msg;
+#else
+    const QString string = QString::fromLocal8Bit( msg );
+#endif
     switch ( type ) {
         case QtDebugMsg:
-            pteDebug->appendPlainText( QString::fromLocal8Bit( msg ) );
-            printf( "*** Debug: %s\n", msg );
+            pteDebug->appendPlainText( string );
+            printf( "*** Debug: %s\n", qPrintable( string ) );
             break;
         case QtWarningMsg:
-            pteWarning->appendPlainText( QString::fromLocal8Bit( msg ) );
-            printf( "*** Warning: %s\n", msg );
+            pteWarning->appendPlainText( string );
+            printf( "*** Warning: %s\n", qPrintable( string ) );
             break;
         case QtCriticalMsg:
-            pteCritical->appendPlainText( QString::fromLocal8Bit( msg ) );
-            printf( "*** Critical: %s\n", msg );
+            pteCritical->appendPlainText( string );
+            printf( "*** Critical: %s\n", qPrintable( string ) );
             break;
         case QtFatalMsg:
-            pteFatal->appendPlainText( QString::fromLocal8Bit( msg ) );
-            printf( "*** Fatal: %s\n", msg );
+            pteFatal->appendPlainText( string );
+            printf( "*** Fatal: %s\n", qPrintable( string ) );
             abort();
     }
     

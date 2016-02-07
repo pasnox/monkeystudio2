@@ -31,7 +31,11 @@ pEnvironmentVariablesEditor::pEnvironmentVariablesEditor( QWidget* parent )
 
     mModel = new pEnvironmentVariablesModel( this );
     tvVariables->setModel( mModel );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    tvVariables->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
+#else
     tvVariables->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+#endif
 
     model_view_changed();
 

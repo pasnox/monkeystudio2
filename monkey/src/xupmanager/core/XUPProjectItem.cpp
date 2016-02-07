@@ -495,7 +495,7 @@ bool XUPProjectItem::save()
     setAttribute( "version", XUP_VERSION );
 
     // encode content
-    QTextCodec* codecObj = QTextCodec::codecForName( codec().toAscii ()  );
+    QTextCodec* codecObj = QTextCodec::codecForName( codec().toLocal8Bit()  );
     QByteArray content = codecObj->fromUnicode( toNativeString() );
 
     // write content

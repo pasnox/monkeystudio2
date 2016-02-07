@@ -85,7 +85,8 @@ void XUPProjectModelProxy::setShowDisabled( bool showDisabled )
 {
     if ( mShowDisabled != showDisabled )
     {
+        beginResetModel();
         mShowDisabled = showDisabled;
-        reset();
+        endResetModel();
     }
 }

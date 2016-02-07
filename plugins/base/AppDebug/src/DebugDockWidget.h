@@ -32,7 +32,11 @@ public:
     virtual ~DebugDockWidget();
 
 public slots:
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    void qtMessageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg );
+#else
     void qtMessageHandler( QtMsgType type, const char* msg );
+#endif
 
 protected:
     void createAllScopes( XUPItem* parent );

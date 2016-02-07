@@ -180,7 +180,7 @@ QStringList pMonkeyStudio::availableTextCodecs()
 
     if ( codecs.isEmpty() ) {
         foreach ( const QByteArray& codec, QTextCodec::availableCodecs() ) {
-            codecs << QString::fromAscii( codec );
+            codecs << QString::fromLocal8Bit( codec );
         }
         
         qSort( codecs.begin(), codecs.end(), insensitiveStringLesserThan );

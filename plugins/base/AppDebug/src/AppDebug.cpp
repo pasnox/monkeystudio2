@@ -40,8 +40,13 @@ void AppDebug::fillPluginInfos()
 
 bool AppDebug::install()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    mDock = QSharedPointer<DebugDockWidget>( new DebugDockWidget );
+    qInstallMessageHandler( AppDebug::qtMessageHandler );
+#else
     mDock = new DebugDockWidget;
     qInstallMsgHandler( AppDebug::qtMessageHandler );
+#endif
     MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock.data(), infos().Caption, pIconManager::icon( "AppDebug.png", ":/icons" ) );
     
     return true;
@@ -49,16 +54,28 @@ bool AppDebug::install()
 
 bool AppDebug::uninstall()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    qInstallMessageHandler( 0 );
+#else
     qInstallMsgHandler( 0 );
+#endif
     mDock.data()->deleteLater();
     
     return true;
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+void AppDebug::qtMessageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg )
+#else
 void AppDebug::qtMessageHandler( QtMsgType type, const char* msg )
+#endif
 {
     if ( mDock ) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        mDock.data()->qtMessageHandler( type, context, msg );
+#else
         mDock.data()->qtMessageHandler( type, msg );
+#endif
     }
 }
 

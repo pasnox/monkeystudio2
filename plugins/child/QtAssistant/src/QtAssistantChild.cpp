@@ -209,7 +209,7 @@ QtAssistantViewer* QtAssistantChild::newEmptyViewer( int zoom )
 
     if ( mEngine->customValue( QLatin1String( "useBrowserFont" ) ).toBool() )
     {
-        QFont font = qVariantValue<QFont>( mEngine->customValue( QLatin1String( "browserFont" ) ) );
+        QFont font = mEngine->customValue( QLatin1String( "browserFont" ) ).value<QFont>();
         viewer->setFont( font );
     }
 

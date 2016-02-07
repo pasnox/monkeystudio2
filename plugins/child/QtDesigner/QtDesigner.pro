@@ -3,13 +3,12 @@ include( ../../plugins.pri )
 DESTDIR = $$MONKEY_PLUGINS_DIR/child
 INCLUDEPATH *= src/3rdparty/designer/$${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}
 greaterThan(QT_MAJOR_VERSION, 4) {
-    QT *= designer
-    CONFIG *= designercomponents
+    QT *= designer designercomponents-private
+
 } else {
     CONFIG  *= designer
     qtAddLibrary( QtDesignerComponents )
 }
-
 
 RESOURCES   *= src/resources/QtDesigner.qrc
 

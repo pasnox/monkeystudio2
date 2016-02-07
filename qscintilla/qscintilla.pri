@@ -23,7 +23,10 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 QSCINTILLA_TARGET   = qscintilla2
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT *= widgets printsupport
-    mac:QT *= macextras
+    # MacExtras is Qt 5.2 & up
+    greaterThan(QT_MINOR_VERSION, 1) {
+        mac:QT *= macextras
+    }
 }
 
 contains( TEMPLATE, .*app ) {

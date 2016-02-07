@@ -21,6 +21,7 @@
 
 #include "MonkeyExport.h"
 
+#include <QObject>
 #include <QPair>
 #include <QStringList>
 #include <QMap>

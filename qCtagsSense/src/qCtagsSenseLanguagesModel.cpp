@@ -219,6 +219,7 @@ bool qCtagsSenseLanguagesModel::isRunning() const
 
 void qCtagsSenseLanguagesModel::refresh()
 {
+    beginResetModel();
     const QString sql = QString(
         "SELECT DISTINCT( language ) FROM files"
     );
@@ -226,15 +227,16 @@ void qCtagsSenseLanguagesModel::refresh()
     QStringList* languages = mLanguages;
     mLanguages = 0;
     
-    reset();
+    endResetModel();
     mThread->executeQuery( sql, languages );
 }
 
 void qCtagsSenseLanguagesModel::queryFinished( const QStringList& languages )
 {
+    beginResetModel();
     mLanguages = new QStringList( languages );
-    
-    reset();
+
+    endResetModel();
     emit ready();
 }
 

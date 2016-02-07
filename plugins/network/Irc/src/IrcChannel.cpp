@@ -82,7 +82,13 @@ void IrcChannel::keyPressEvent ( QKeyEvent * event )
     {
         // PRIVMSG #testmonkeystudio :coucou de monkey
         QString m = mLineEdit->text();
-        mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" + Qt::escape(m) + "</font>");
+        mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" +
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+                              m.toHtmlEscaped()
+#else
+                              Qt::escape(m)
+#endif
+                              + "</font>");
 
         emit sendData("PRIVMSG " + name() + " :" + m );
         mLineEdit->clear();
@@ -241,7 +247,13 @@ void IrcChannel::message(QString l)
         QStringList t = r.capturedTexts();
         if(t.at(2).toLower() == name())
 //          if( !userAction(t.at(3)))
-                mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" + Qt::escape(t.at(3)) + "</font>");
+                mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" +
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+                            t.at(3).toHtmlEscaped()
+#else
+                            Qt::escape(t.at(3))
+#endif
+                                      + "</font>");
 //          else
 //              mTextEdit->append("<font color=\"#ffff00\">* " + t.at(1) + " " + t.at(3).remove(".ACTION ") + "</font>");
     }

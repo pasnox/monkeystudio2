@@ -343,10 +343,11 @@ void XUPFilteredProjectModel::setSourceModel( XUPProjectModel* model )
         disconnect( mSourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( internal_dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     }
     
+    beginResetModel();
     mSourceModel = 0;
     
     clearMapping();
-    reset();
+    endResetModel();
     
     if ( model )
     {

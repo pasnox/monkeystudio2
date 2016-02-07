@@ -21,6 +21,7 @@ QT  *= network
 
 contains(QT_CONFIG, webkit)|greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(webkit) {
     QT *= webkit
+    greaterThan(QT_MAJOR_VERSION, 4):QT *= webkitwidgets
     DEFINES *= WEBKIT_VIEWER
 }
 

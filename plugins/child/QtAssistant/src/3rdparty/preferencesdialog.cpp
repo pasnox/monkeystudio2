@@ -413,7 +413,11 @@ void PreferencesDialog::updateFontSettingsPage()
     m_appFontPanel->setTitle(customSettings);
 
     QLatin1String key = QLatin1String("appFont");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    QFont font = m_helpEngine->customValue(key).value<QFont>();
+#else
     QFont font = qVariantValue<QFont>(m_helpEngine->customValue(key));
+#endif
     m_appFontPanel->setSelectedFont(font);
 
     key = QLatin1String("appWritingSystem");
@@ -427,7 +431,11 @@ void PreferencesDialog::updateFontSettingsPage()
     m_browserFontPanel->setTitle(customSettings);
 
     key = QLatin1String("browserFont");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    font = m_helpEngine->customValue(key).value<QFont>();
+#else
     font = qVariantValue<QFont>(m_helpEngine->customValue(key));
+#endif
     m_browserFontPanel->setSelectedFont(font);
 
     key = QLatin1String("browserWritingSystem");
@@ -443,13 +451,21 @@ void PreferencesDialog::updateFontSettingsPage()
     connect(m_browserFontPanel, SIGNAL(toggled(bool)), this,
         SLOT(browserFontSettingToggled(bool)));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    QList<QComboBox*> allCombos = m_appFontPanel->findChildren<QComboBox*>();
+#else
     QList<QComboBox*> allCombos = qFindChildren<QComboBox*>(m_appFontPanel);
+#endif
     foreach (QComboBox* box, allCombos) {
         connect(box, SIGNAL(currentIndexChanged(int)), this,
             SLOT(appFontSettingChanged(int)));
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    allCombos = m_browserFontPanel->findChildren<QComboBox*>();
+#else
     allCombos = qFindChildren<QComboBox*>(m_browserFontPanel);
+#endif
     foreach (QComboBox* box, allCombos) {
         connect(box, SIGNAL(currentIndexChanged(int)), this,
             SLOT(browserFontSettingChanged(int)));

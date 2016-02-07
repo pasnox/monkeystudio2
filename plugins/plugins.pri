@@ -35,7 +35,13 @@ include( $${PACKAGE_PWD}/qCtagsSense/qCtagsSense.pri )
 mac:MONKEY_PLUGINS_DIR  = $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents/plugins
 else:unix|win32:MONKEY_PLUGINS_DIR  = $${PACKAGE_DESTDIR}/plugins
 
-mac:*-g++*:LIBS *= -Wl,-undefined,dynamic_lookup
+mac {
+    *-*g++* {
+        LIBS *= -Wl,-undefined,dynamic_lookup
+    } else:*-*clang* {
+        LIBS *= -Wl,-undefined,dynamic_lookup
+    }
+}
 
 # ubuntu hardy/debian fix
 unix:!mac:QMAKE_LFLAGS  -= -Wl,--no-undefined
