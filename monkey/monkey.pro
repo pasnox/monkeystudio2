@@ -17,10 +17,23 @@ INCLUDEPATH *= src
 DEPENDPATH  *= $${MONKEY_SOURCES_PATHS}
 
 LIBS    *= -L$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()
-mac:*-g++*:LIBS *= -Wl,-all_load # import all symbols as the not used ones too
-else:*-g++*:LIBS    *= -Wl,--whole-archive # import all symbols as the not used ones too
-mac:*-g++*:LIBS *= -dynamic
-else:unix:*-g++*:LIBS   *= -rdynamic
+mac {
+    *-*g++* {
+        LIBS *= -Wl,-all_load # import all symbols as the not used ones too
+        LIBS *= -dynamic
+    } else:*-*clang* {
+        LIBS *= -Wl,-all_load # import all symbols as the not used ones too
+        LIBS *= -dynamic
+    }
+} else {
+    *-*g++* {
+        LIBS    *= -Wl,--whole-archive # import all symbols as the not used ones too
+        unix:LIBS   *= -rdynamic
+    } else:*-*clang* {
+        LIBS    *= -Wl,--whole-archive # import all symbols as the not used ones too
+        unix:LIBS   *= -rdynamic
+    }
+}
 
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
@@ -31,11 +44,29 @@ include( ../fresh/fresh.pri )
 # include qCtagsSense framework
 include( ../qCtagsSense/qCtagsSense.pri )
 
-win32-*g++*:LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib
-win32-msvc*:LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib -lshell32
+win32 {
+    *-*g++* {
+        LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib
+    } else:*-*clang* {
+        LIBS    *= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib
+    } else:*-*msvc* {
+        LIBS    *= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${Q_TARGET_ARCH}/$$buildMode()/$${TARGET}.lib -lshell32
+    }
+}
 
-mac:*-g++*:LIBS *= -Wl,-noall_load # stop importing all symbols
-else:*-g++*:LIBS    *= -Wl,--no-whole-archive # stop importing all symbols
+mac {
+    *-*g++* {
+        LIBS *= -Wl,-noall_load # stop importing all symbols
+    } else:*-*clang* {
+        LIBS *= -Wl,-noall_load # stop importing all symbols
+    }
+} else {
+    *-*g++* {
+        LIBS    *= -Wl,--no-whole-archive # stop importing all symbols
+    } else:*-*clang* {
+        LIBS    *= -Wl,--no-whole-archive # stop importing all symbols
+    }
+}
 
 include( autoGenerateFile.pri )
 autoGenerateFile( "main.h.in", "src/main.h" )

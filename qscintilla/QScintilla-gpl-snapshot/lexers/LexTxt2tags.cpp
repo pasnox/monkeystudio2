@@ -78,10 +78,11 @@ static bool HasPrevLineContent(StyleContext &sc) {
 
 // Separator line
 static bool IsValidHrule(const unsigned int endPos, StyleContext &sc) {
-    int c, count = 1;
+    int count = 1;
     unsigned int i = 0;
-    while (++i) {
-        c = sc.GetRelative(i);
+    for (;;) {
+        ++i;
+        int c = sc.GetRelative(i);
         if (c == sc.ch)
             ++count;
         // hit a terminating character
@@ -96,11 +97,10 @@ static bool IsValidHrule(const unsigned int endPos, StyleContext &sc) {
             }
             else {
                 sc.SetState(SCE_TXT2TAGS_DEFAULT);
-        return false;
+		return false;
             }
         }
     }
-    return false;
 }
 
 static void ColorizeTxt2tagsDoc(unsigned int startPos, int length, int initStyle,
@@ -277,17 +277,17 @@ static void ColorizeTxt2tagsDoc(unsigned int startPos, int length, int initStyle
                 // Catch the special case of an unordered list
                 if (sc.chNext == ' ' && IsASpaceOrTab(sc.GetRelative(1))) {
                  //    if (IsNewline(sc.ch)) {
-                        //precharCount = 0;
-                //      sc.SetState(SCE_TXT2TAGS_LINE_BEGIN);
-                        //sc.SetState(SCE_TXT2TAGS_PRECHAR);
-                //  }
+                     	//precharCount = 0;
+                //		sc.SetState(SCE_TXT2TAGS_LINE_BEGIN);
+                		//sc.SetState(SCE_TXT2TAGS_PRECHAR);
+				//	}
                 //    else {
                 //    precharCount = 0;
                     sc.SetState(SCE_TXT2TAGS_OLIST_ITEM);
                     sc.Forward(2);
                     sc.SetState(SCE_TXT2TAGS_DEFAULT);
                //     sc.SetState(SCE_TXT2TAGS_PRECHAR);
-                //  }
+				//	}
                 }
                 else
                     {

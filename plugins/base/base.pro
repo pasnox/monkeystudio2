@@ -1,4 +1,5 @@
 TEMPLATE    = subdirs
+include("../../sdk.pri")
 SUBDIRS = FileBrowser \
     MessageBox \
     AStyle \

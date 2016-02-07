@@ -19,9 +19,14 @@ greaterThan(QT_MAJOR_VERSION, 4):QT *= help
 else:CONFIG  *= help
 QT  *= network
 
-contains(QT_CONFIG, webkit) {
-    QT *= webkit
-    DEFINES *= WEBKIT_VIEWER
+greaterThan(QT_MAJOR_VERSION, 4) {
+    qtHaveModule(webkit) {
+        DEFINES *= WEBKIT_VIEWER
+    }
+} else {
+    contains(QT_CONFIG, webkit)|exists("$$[QT_INSTALL_HEADERS]/*QtWebKit*") {
+        DEFINES *= WEBKIT_VIEWER
+    }
 }
 
 INCLUDEPATH *= src \
@@ -34,7 +39,7 @@ FORMS   = src/3rdparty/bookmarkdialog.ui \
     src/3rdparty/installdialog.ui \
     src/3rdparty/preferencesdialog.ui \
     src/3rdparty/topicchooser.ui
-    
+
 HEADERS = src/QtAssistant.h \
     src/QtAssistantDock.h \
     src/MkSQtDocInstaller.h \
@@ -60,16 +65,19 @@ SOURCES = src/QtAssistant.cpp \
     src/QtAssistantInlineSearch.cpp
 
 contains(DEFINES, WEBKIT_VIEWER) {
+    QT *= webkit
+    greaterThan(QT_MAJOR_VERSION, 4):QT *= webkitwidgets
+
     INCLUDEPATH *= src/viewers/webkit
-    
+
     HEADERS *= src/viewers/webkit/QtAssistantViewer.h
     SOURCES *= src/viewers/webkit/QtAssistantViewer.cpp
 } else {
     INCLUDEPATH *= src/viewers/textbrowser
-    
+
     HEADERS *= src/viewers/textbrowser/QtAssistantViewer.h
     SOURCES *= src/viewers/textbrowser/QtAssistantViewer.cpp
-    
+
     message( "Building QtAssistant plugin using QTextBrowser, it's recommanded to use QtWebKit for better performance and rendering." )
 }
 

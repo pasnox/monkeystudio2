@@ -32,7 +32,11 @@
 #include <pActionsManager.h>
 #include <pDockToolBar.h>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QStandardPaths>
+#else
 #include <QDesktopServices>
+#endif
 #include <QDebug>
 
 void ClassBrowser::fillPluginInfos()
@@ -168,7 +172,13 @@ void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
 
 QString ClassBrowser::defaultDatabase()
 {
-    return QDir::cleanPath( QString( "%1/MkS_qCtagsSense.sqlite3" ).arg( QDesktopServices::storageLocation( QDesktopServices::TempLocation ) ) );
+    return QDir::cleanPath( QString( "%1/MkS_qCtagsSense.sqlite3" ).arg(
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+                                QStandardPaths::writableLocation( QStandardPaths::TempLocation )
+#else
+                                QDesktopServices::storageLocation( QDesktopServices::TempLocation )
+#endif
+                                ) );
 }
 
 void ClassBrowser::documentOpened( pAbstractChild* document )

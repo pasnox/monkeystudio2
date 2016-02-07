@@ -39,7 +39,11 @@ protected:
     virtual bool install();
     virtual bool uninstall();
     
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    static void qtMessageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg );
+#else
     static void qtMessageHandler( QtMsgType type, const char* msg );
+#endif
 };
 
 #endif // APPDEBUG_H

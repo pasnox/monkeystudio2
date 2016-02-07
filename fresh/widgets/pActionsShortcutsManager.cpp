@@ -46,7 +46,11 @@ pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QW
     twShortcuts->setObjectName( "twShortcuts" );
     twShortcuts->setColumnCount( 2 );   
     twShortcuts->setHeaderLabels( QStringList() << tr( "Action" ) << tr( "Shortcut" ) );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    twShortcuts->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
+#else
     twShortcuts->header()->setResizeMode( QHeaderView::ResizeToContents );
+#endif
     //twShortcuts->setHeaderHidden( true );
     twShortcuts->setRootIsDecorated( false );
     twShortcuts->setItemsExpandable( false );

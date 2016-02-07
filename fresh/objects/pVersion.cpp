@@ -28,7 +28,7 @@ pVersion::pVersion( const QString& version )
 
 pVersion::pVersion( const char* version )
 {
-    mVersion = QString::fromAscii( version ).trimmed();
+    mVersion = QString::fromLocal8Bit( version ).trimmed();
     init();
 }
 

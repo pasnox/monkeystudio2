@@ -186,12 +186,16 @@ void UIMain::initMenuBar()
         mb->action( "aPrint", tr( "Print..." ), QIcon( ":/file/icons/file/print.png" ), tr( "Ctrl+P" ), tr( "Print the current file" ) )->setEnabled( false );
         mb->action( "aSeparator6" );
         mb->action( "aQuit", tr( "Quit" ), QIcon( ":/file/icons/file/quit.png" ), tr( "Ctrl+Q" ), tr( "Quit the application" ) );
+        mb->action( "aQuit" )->setMenuRole( QAction::QuitRole );
     mb->endGroup();
     mb->menu( "mEdit", tr( "Edit" ) );
     mb->beginGroup( "mEdit" );
         mb->action( "aSettings", tr( "Settings..." ), QIcon( ":/edit/icons/edit/settings.png" ), "", tr( "Edit the application settings" ) );
+        mb->action( "aSettings" )->setMenuRole( QAction::PreferencesRole );
         mb->action( "aShortcutsEditor", tr( "Shortcuts Editor..." ), QIcon( ":/edit/icons/edit/shortcuts.png" ), tr( "Ctrl+Shift+E" ), tr( "Edit the application shortcuts" ) );
+        mb->action( "aShortcutsEditor" )->setMenuRole( QAction::ApplicationSpecificRole );
         mb->action( "aTranslations", tr( "Translations..." ), QIcon( ":/edit/icons/edit/translations.png" ), tr( "Ctrl+T" ), tr( "Change the application translations files" ) );
+        mb->action( "aTranslations" )->setMenuRole( QAction::ApplicationSpecificRole );
         mb->action( "aSeparator1" );
         mb->action( "aUndo", tr( "Undo" ), QIcon( ":/edit/icons/edit/undo.png" ), tr( "Ctrl+Z" ), tr( "Undo" ) )->setEnabled( false );
         mb->action( "aRedo", tr( "Redo" ), QIcon( ":/edit/icons/edit/redo.png" ), tr( "Ctrl+Y" ), tr( "Redo" ) )->setEnabled( false );
@@ -255,7 +259,9 @@ void UIMain::initMenuBar()
     mb->menu( "mHelp", tr( "Help" ) );
     mb->beginGroup( "mHelp" );
         mb->action( "aAbout", tr( "About..." ), QIcon( ":/application/icons/application/monkey2.png" ), QString::null, tr( "About application..." ) );
+        mb->action( "aAbout" )->setMenuRole( QAction::AboutRole );
         mb->action( "aAboutQt", tr( "About Qt..." ), QIcon( ":/help/icons/help/qt.png" ), QString::null, tr( "About Qt..." ) );
+        mb->action( "aAboutQt" )->setMenuRole( QAction::AboutQtRole );
         mb->action( "aSeparator1" );
 #ifdef __COVERAGESCANNER__
         mb->action( "aTestReport", tr( "Test Report" ), QIcon( ) , tr( "Pause" ), tr( "Coverage Meter Test Report..." ) );

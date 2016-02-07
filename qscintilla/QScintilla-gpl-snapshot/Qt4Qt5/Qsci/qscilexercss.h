@@ -1,23 +1,18 @@
 // This defines the interface to the QsciLexerCSS class.
 //
-// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2015 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
-// This file may be used under the terms of the GNU General Public
-// License versions 2.0 or 3.0 as published by the Free Software
-// Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
-// included in the packaging of this file.  Alternatively you may (at
-// your option) use any later version of the GNU General Public
-// License if such license has been publicly approved by Riverbank
-// Computing Limited (or its successors, if any) and the KDE Free Qt
-// Foundation. In addition, as a special exception, Riverbank gives you
-// certain additional rights. These rights are described in the Riverbank
-// GPL Exception version 1.1, which can be found in the file
-// GPL_EXCEPTION.txt in this package.
+// This file may be used under the terms of the GNU General Public License
+// version 3.0 as published by the Free Software Foundation and appearing in
+// the file LICENSE included in the packaging of this file.  Please review the
+// following information to ensure the GNU General Public License version 3.0
+// requirements will be met: http://www.gnu.org/copyleft/gpl.html.
 // 
-// If you are unsure which license is appropriate for your use, please
-// contact the sales department at sales@riverbankcomputing.com.
+// If you do not wish to use this file under the terms of the GPL version 3.0
+// then you may purchase a commercial license.  For more information contact
+// info@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -30,7 +25,7 @@
 extern "C++" {
 #endif
 
-#include <qobject.h>
+#include <QObject>
 
 #include <Qsci/qsciglobal.h>
 #include <Qsci/qscilexer.h>
@@ -120,7 +115,10 @@ public:
         ExtendedPseudoElement = 21,
 
         //! A media rule.
-        MediaRule = 22
+        MediaRule = 22,
+
+        //! A variable.
+        Variable = 23,
     };
 
     //! Construct a QsciLexerCSS with parent \a parent.  \a parent is typically
@@ -179,6 +177,39 @@ public:
     //! \sa setFoldCompact()
     bool foldCompact() const;
 
+    //! If \a enabled is true then support for HSS is enabled.  The default is
+    //! false.
+    //!
+    //! \sa HSSLanguage()
+    void setHSSLanguage(bool enabled);
+
+    //! Returns true if support for HSS is enabled.
+    //!
+    //! \sa setHSSLanguage()
+    bool HSSLanguage() const {return hss_language;}
+
+    //! If \a enabled is true then support for Less CSS is enabled.  The
+    //! default is false.
+    //!
+    //! \sa LessLanguage()
+    void setLessLanguage(bool enabled);
+
+    //! Returns true if support for Less CSS is enabled.
+    //!
+    //! \sa setLessLanguage()
+    bool LessLanguage() const {return less_language;}
+
+    //! If \a enabled is true then support for Sassy CSS is enabled.  The
+    //! default is false.
+    //!
+    //! \sa SCSSLanguage()
+    void setSCSSLanguage(bool enabled);
+
+    //! Returns true if support for Sassy CSS is enabled.
+    //!
+    //! \sa setSCSSLanguage()
+    bool SCSSLanguage() const {return scss_language;}
+
 public slots:
     //! If \a fold is true then multi-line comment blocks can be folded.
     //! The default is false.
@@ -208,9 +239,15 @@ protected:
 private:
     void setCommentProp();
     void setCompactProp();
+    void setHSSProp();
+    void setLessProp();
+    void setSCSSProp();
 
     bool fold_comments;
     bool fold_compact;
+    bool hss_language;
+    bool less_language;
+    bool scss_language;
 
     QsciLexerCSS(const QsciLexerCSS &);
     QsciLexerCSS &operator=(const QsciLexerCSS &);

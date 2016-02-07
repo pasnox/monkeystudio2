@@ -16,29 +16,29 @@ extern "C" {
 #endif
 
 #define SCINTILLA(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, scintilla_get_type (), ScintillaObject)
-#define SCINTILLA_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, scintilla_get_type (), ScintillaClass)
-#define IS_SCINTILLA(obj)       GTK_CHECK_TYPE (obj, scintilla_get_type ())
+#define SCINTILLA_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, scintilla_get_type (), ScintillaClass)
+#define IS_SCINTILLA(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, scintilla_get_type ())
 
 typedef struct _ScintillaObject ScintillaObject;
 typedef struct _ScintillaClass  ScintillaClass;
 
 struct _ScintillaObject {
-    GtkContainer cont;
-    void *pscin;
+	GtkContainer cont;
+	void *pscin;
 };
 
 struct _ScintillaClass {
-    GtkContainerClass parent_class;
+	GtkContainerClass parent_class;
 
-    void (* command) (ScintillaObject *ttt);
-    void (* notify) (ScintillaObject *ttt);
+	void (* command) (ScintillaObject *ttt);
+	void (* notify) (ScintillaObject *ttt);
 };
 
-GType       scintilla_get_type  (void);
-GtkWidget*  scintilla_new       (void);
-void        scintilla_set_id    (ScintillaObject *sci, uptr_t id);
-sptr_t      scintilla_send_message  (ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-void        scintilla_release_resources(void);
+GType		scintilla_get_type	(void);
+GtkWidget*	scintilla_new		(void);
+void		scintilla_set_id	(ScintillaObject *sci, uptr_t id);
+sptr_t		scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+void		scintilla_release_resources(void);
 
 #define SCINTILLA_NOTIFY "sci-notify"
 

@@ -222,6 +222,7 @@ bool qCtagsSenseFilesModel::isRunning() const
 
 void qCtagsSenseFilesModel::refresh( const QString& language  )
 {
+    beginResetModel();
     const QString sql = QString(
         "SELECT filename FROM files WHERE LOWER( language ) = LOWER( '%1' )"
     ).arg( language );
@@ -229,15 +230,16 @@ void qCtagsSenseFilesModel::refresh( const QString& language  )
     QStringList* files = mFiles;
     mFiles = 0;
     
-    reset();
+    endResetModel();
     mThread->executeQuery( sql, files );
 }
 
 void qCtagsSenseFilesModel::queryFinished( const QStringList& files )
 {
+    beginResetModel();
     mFiles = new QStringList( files );
     
-    reset();
+    endResetModel();
     emit ready();
 }
 

@@ -5,12 +5,22 @@ QT  *= xml sql
 
 # Mac universal build from 10.4 to up to 10.5
 mac {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
-    #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
-    CONFIG  *= x86
+    greaterThan(QT_MAJOR_VERSION, 4) {
+        QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.7
+        greaterThan(QT_MINOR_VERSION, 0) {
+            QMAKE_MAC_SDK = macosx
+        } else {
+            QMAKE_MAC_SDK = $$system("xcrun --show-sdk-path")
+        }
+    } else {
+        QMAKE_MACOSX_DEPLOYMENT_TARGET  = 10.4
+        #QMAKE_MAC_SDK   = /Developer/SDKs/MacOSX10.4u.sdk
+        #CONFIG  *= ppc
+        #CONFIG  *= ppc64
+    }
+
+    #CONFIG  *= x86
     #CONFIG  *= x86_64
-    #CONFIG  *= ppc
-    #CONFIG  *= ppc64
     # this link is required for building the ppc port to avoid the undefined __Unwind_Resume symbol
     CONFIG( ppc ):LIBS *= -lgcc_eh
 }
@@ -26,19 +36,19 @@ PACKAGE_TARGET  = $$targetForMode( monkeystudio )
 mac:PACKAGE_TARGET  = $$targetForMode( "MonkeyStudio" )
 TARGET = $$targetForMode( $${TARGET} )
 
-# package destdir
-PACKAGE_DESTDIR = $${PACKAGE_PWD}/bin
+# package destdir and build dir
 
-# temporary path for building
-#PACKAGE_BUILD_PATH  = $${PACKAGE_PWD}/build
-PACKAGE_BUILD_PATH  = $$(PWD)/build
-RAMDISK_PATH = /media/ramdisk
-
-exists( $${RAMDISK_PATH} ) {
-    PACKAGE_BUILD_PATH  = $${RAMDISK_PATH}/monkeystudio
+isEqual(IS_SHADOWED_BUILD, 1) {
+    PACKAGE_DESTDIR = $${PACKAGE_DESTDIR_SHADOWED}
+    PACKAGE_BUILD_PATH = $${PACKAGE_BUILD_PATH_SHADOWED}
+} else {
+    PACKAGE_DESTDIR = $${PWD}/bin
+    PACKAGE_BUILD_PATH = $${PWD}/build
 }
 
-setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
+greaterThan( QT_MAJOR_VERSION, 4 )|!isEmpty( top_srcdir ) {
+    setTemporaryDirectories( $${PACKAGE_BUILD_PATH} )
+}
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
@@ -54,9 +64,10 @@ INCLUDEPATH *= $${UI_DIR} # some qmake versions has bug and do not do it automat
 QMAKE_TARGET_COMPANY    = "The Monkey Studio Team"
 QMAKE_TARGET_PRODUCT    = "Monkey Studio IDE"
 QMAKE_TARGET_DESCRIPTION    = "Crossplatform Integrated Development Environment"
-QMAKE_TARGET_COPYRIGHT  = "\\251 2005 - 2012 Filipe AZEVEDO and $$QMAKE_TARGET_COMPANY"
+greaterThan(QT_MAJOR_VERSION, 4):QMAKE_TARGET_COPYRIGHT  = "© 2005 - 2016 Filipe Azevedo and $$QMAKE_TARGET_COMPANY"
+else:QMAKE_TARGET_COPYRIGHT  = "\\251 2005 - 2016 Filipe Azevedo and $$QMAKE_TARGET_COMPANY"
 QMAKE_TARGET_DOMAIN  = "monkeystudio.org"
-QMAKE_TARGET_VERSION = 1.9.0.4
+QMAKE_TARGET_VERSION = 1.9.1.0
 
 CONFIG( debug, debug|release ) {
     QMAKE_TARGET_VERSION_STR = $${QMAKE_TARGET_VERSION}svn_debug
@@ -86,7 +97,7 @@ unix:!mac {
         isEmpty( datas ) {
             datas   = $${prefix}/share
         }
-        
+
         # docs path
         isEmpty( docs ) {
             docs = $${datas}/doc

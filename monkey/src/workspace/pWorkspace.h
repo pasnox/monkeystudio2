@@ -25,6 +25,7 @@
 #include "consolemanager/pConsoleManager.h"
 
 #include <QFrame>
+#include <QUrl>
 
 class pAbstractChild;
 class pChild;

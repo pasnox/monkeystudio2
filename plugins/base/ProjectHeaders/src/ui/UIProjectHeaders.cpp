@@ -219,8 +219,8 @@ void UIProjectHeaders::accept()
             if ( !filters.contains( e ) )
                 filters << e;
     // encodings
-    QTextCodec* sourceCodec = QTextCodec::codecForName( mPlugin->settingsValue( "SourceEncoding", "UTF-8" ).toString().toAscii() );
-    QTextCodec* targetCodec = QTextCodec::codecForName( mPlugin->settingsValue( "SourceEncoding", "UTF-8" ).toString().toAscii() );
+    QTextCodec* sourceCodec = QTextCodec::codecForName( mPlugin->settingsValue( "SourceEncoding", "UTF-8" ).toString().toLocal8Bit() );
+    QTextCodec* targetCodec = QTextCodec::codecForName( mPlugin->settingsValue( "SourceEncoding", "UTF-8" ).toString().toLocal8Bit() );
     // set dictionnary
     VariablesManager::Dictionary v;
     v[ "authors" ] = leAuthors->text();

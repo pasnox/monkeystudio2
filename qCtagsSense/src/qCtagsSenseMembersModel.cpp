@@ -413,6 +413,7 @@ bool qCtagsSenseMembersModel::hasChildren( const QModelIndex& parent ) const
 
 void qCtagsSenseMembersModel::refresh( const QString& fileName )
 {
+    beginResetModel();
     const QString sql = QString(
         "SELECT entries.*, language FROM entries "
         "INNER JOIN files ON files.id = entries.file_id "
@@ -422,15 +423,15 @@ void qCtagsSenseMembersModel::refresh( const QString& fileName )
     qCtagsSenseEntry* root = mRootEntry;
     mRootEntry = 0;
     
-    reset();
+    endResetModel();
     mThread->executeQuery( sql, fileName, root );
 }
 
 void qCtagsSenseMembersModel::queryFinished( qCtagsSenseEntry* rootEntry )
 {
+    beginResetModel();
     mRootEntry = rootEntry;
-    
-    reset();
+    endResetModel();
     emit ready();
 }
 

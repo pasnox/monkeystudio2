@@ -65,7 +65,11 @@ qint64 HelpNetworkReply::readData( char* buffer, qint64 maxlen )
     qint64 len = qMin( qint64( data.length() ), maxlen );
     if ( len )
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        memcpy( buffer, data.constData(), len );
+#else
         qMemCopy( buffer, data.constData(), len );
+#endif
         data.remove( 0, len );
     }
     if ( !data.length() )

@@ -62,8 +62,16 @@ isEmpty( translations_pass ) {
                     !isEmpty( result ):filtered = true
                 }
 
+                greaterThan(QT_MAJOR_VERSION, 4) {
+                    q_folder = $$replace(q_folder,\",)
+                }
+
                 isEqual( filtered, false ):exists( $$q_folder ) {
-                    q_folders   *= $$q_folder
+                    greaterThan(QT_MAJOR_VERSION, 4) {
+                        q_folders   *= "$$q_folder"
+                    } else {
+                        q_folders   *= $$q_folder
+                    }
                 }
             }
         }

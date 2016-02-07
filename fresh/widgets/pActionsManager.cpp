@@ -190,7 +190,7 @@ bool pActionsManager::setShortcut( QAction* action, const QKeySequence& shortcut
         if ( shortcut == dShortcut )
         {
             settings->remove( key );
-            qWarning( "remove key: %s", key.toAscii().constData() );
+            qWarning( "remove key: %s", key.toLocal8Bit().constData() );
         }
         else
         {
@@ -210,7 +210,7 @@ void pActionsManager::updateShortcut( QAction* action ) const
     if ( mSettings )
     {
         const QString key = QString( "%1/%2/%3/%4" ).arg( mSettingsScope ).arg( mName ).arg( actionPath( action ) ).arg( action->objectName() );
-        QString shortcutText = defaultShortcut( action );
+        QString shortcutText = defaultShortcut( action ).toString(QKeySequence::PortableText);
         shortcutText = mSettings->value( key, shortcutText ).toString();
         const QKeySequence shortcut = QKeySequence( shortcutText );
         

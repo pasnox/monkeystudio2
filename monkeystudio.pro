@@ -16,13 +16,37 @@ TEMPLATE = subdirs
 
 CONFIG *= ordered
 
-SUBDIRS = fresh \
+qt4_initvars.file = qt4-initvars.pro
+qt4_initvars.depends =
+
+fresh.subdir = fresh
+fresh.depends = qt4_initvars
+
+ctags.subdir = ctags
+ctags.depends = qt4_initvars
+
+qCtagsSense.subdir = qCtagsSense
+qCtagsSense.depends = qt4_initvars
+
+monkey.subdir = monkey
+monkey.depends = qt4_initvars
+
+plugins.subdir = plugins
+plugins.depends = qt4_initvars
+
+qscintilla.subdir = qscintilla
+qscintilla.depends = qt4_initvars
+
+isEqual( QT_MAJOR_VERSION, 4 ) {
+    SUBDIRS *= qt4_initvars
+}
+
+isEqual( SYSTEM_QSCINTILLA, 0 ) {
+    SUBDIRS *= qscintilla
+}
+
+SUBDIRS *= fresh \
     ctags \
     qCtagsSense \
     monkey \
     plugins
-
-!isEqual( SYSTEM_QSCINTILLA, 1 ) {
-    SUBDIRS = qscintilla \
-        $$SUBDIRS
-}

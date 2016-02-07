@@ -344,11 +344,12 @@ bool qCtagsSenseSearchModel::caseInsensitiveFileNameLessThan( const QString& s1,
 
 void qCtagsSenseSearchModel::clear()
 {
+    beginResetModel();
     mThread->addMapToDelete( mEntries );
     mEntries = 0;
     mCacheKeys.clear();
     mCacheCount = 0;
-    reset();
+    endResetModel();
     emit ready();
 }
 
@@ -366,6 +367,7 @@ void qCtagsSenseSearchModel::refresh( const QString& search )
 
 void qCtagsSenseSearchModel::queryFinished( SearchMapEntries* entries )
 {
+    beginResetModel();
     // get datas
     mEntries = entries;
     
@@ -381,7 +383,7 @@ void qCtagsSenseSearchModel::queryFinished( SearchMapEntries* entries )
     }
     
     // inform finish
-    reset();
+    endResetModel();
     emit ready();
 }
 

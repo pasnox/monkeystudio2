@@ -198,7 +198,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
                     {
                         // cancel because internal member
                         curDef.clear();
-                        //qWarning( QString( curDef ).replace( QRegExp( "^Q_PRIVATE_SLOT\\(.*,(.*)\\)" ), "\\1" ).toAscii() );
+                        //qWarning( QString( curDef ).replace( QRegExp( "^Q_PRIVATE_SLOT\\(.*,(.*)\\)" ), "\\1" ).toLocal8Bit() );
                     }
                     // Remove space around the '('.
                     curDef.replace( " (", "(" ).replace( "( ", "(" );
@@ -253,24 +253,24 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
                 else if ( c == "d" )
                 {
                     if ( !cbWindowsMode->isChecked() || ( !e.getName().endsWith( "A" ) && !e.getName().endsWith( "W" ) ) )
-                        curDef = e.getName().toAscii();
+                        curDef = e.getName().toLocal8Bit();
                 }
                 else
-                    curDef = e.getName().toAscii();
+                    curDef = e.getName().toLocal8Bit();
                 // prepend context if available
                 if ( !e.getFieldValue( "class" ).isEmpty() )
-                    curDef.prepend( e.getFieldValue( "class" ).append( "::" ).toAscii() );
+                    curDef.prepend( e.getFieldValue( "class" ).append( "::" ).toLocal8Bit() );
                 else if ( !e.getFieldValue( "struct" ).isEmpty() )
-                    curDef.prepend( e.getFieldValue( "struct" ).append( "::" ).toAscii() );
+                    curDef.prepend( e.getFieldValue( "struct" ).append( "::" ).toLocal8Bit() );
                 else if ( !e.getFieldValue( "namespace" ).isEmpty() )
-                    curDef.prepend( e.getFieldValue( "namespace" ).append( "::" ).toAscii() );
+                    curDef.prepend( e.getFieldValue( "namespace" ).append( "::" ).toLocal8Bit() );
                 else if ( !e.getFieldValue( "enum" ).isEmpty() )
-                    curDef.prepend( e.getFieldValue( "enum" ).append( "::" ).toAscii() );
+                    curDef.prepend( e.getFieldValue( "enum" ).append( "::" ).toLocal8Bit() );
                 // check return type
                 if ( !rt.isEmpty() )
                 {
                     // remove Qt export macro
-                    rt = QString( rt ).replace( QRegExp( "Q_.*_EXPORT" ), "" ).replace( QRegExp( "QT_.*" ), "" ).trimmed().toAscii();
+                    rt = QString( rt ).replace( QRegExp( "Q_.*_EXPORT" ), "" ).replace( QRegExp( "QT_.*" ), "" ).trimmed().toLocal8Bit();
                     // append return type
                     curDef.append( " (" +rt +")" );
                 }

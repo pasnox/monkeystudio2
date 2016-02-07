@@ -682,7 +682,11 @@ void pEditor::invokeGoToLine()
     int line, column, gotoLine;
     
     getCursorPosition( &line, &column );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    gotoLine = QInputDialog::getInt( this, tr( "Go To Line..." ), tr( "Enter the line you want to go:" ), line +1, 1, lines(), 1, &ok );
+#else
     gotoLine = QInputDialog::getInteger( this, tr( "Go To Line..." ), tr( "Enter the line you want to go:" ), line +1, 1, lines(), 1, &ok );
+#endif
     
     if ( ok )
     {
