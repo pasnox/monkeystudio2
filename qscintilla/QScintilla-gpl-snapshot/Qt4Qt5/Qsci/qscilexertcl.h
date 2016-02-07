@@ -1,23 +1,18 @@
 // This defines the interface to the QsciLexerTCL class.
 //
-// Copyright (c) 2012 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2015 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
-// This file may be used under the terms of the GNU General Public
-// License versions 2.0 or 3.0 as published by the Free Software
-// Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
-// included in the packaging of this file.  Alternatively you may (at
-// your option) use any later version of the GNU General Public
-// License if such license has been publicly approved by Riverbank
-// Computing Limited (or its successors, if any) and the KDE Free Qt
-// Foundation. In addition, as a special exception, Riverbank gives you
-// certain additional rights. These rights are described in the Riverbank
-// GPL Exception version 1.1, which can be found in the file
-// GPL_EXCEPTION.txt in this package.
+// This file may be used under the terms of the GNU General Public License
+// version 3.0 as published by the Free Software Foundation and appearing in
+// the file LICENSE included in the packaging of this file.  Please review the
+// following information to ensure the GNU General Public License version 3.0
+// requirements will be met: http://www.gnu.org/copyleft/gpl.html.
 // 
-// If you are unsure which license is appropriate for your use, please
-// contact the sales department at sales@riverbankcomputing.com.
+// If you do not wish to use this file under the terms of the GPL version 3.0
+// then you may purchase a commercial license.  For more information contact
+// info@riverbankcomputing.com.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -30,7 +25,7 @@
 extern "C++" {
 #endif
 
-#include <qobject.h>
+#include <QObject>
 
 #include <Qsci/qsciglobal.h>
 #include <Qsci/qscilexer.h>
@@ -39,47 +34,47 @@ extern "C++" {
 //! \brief The QsciLexerTCL class encapsulates the Scintilla TCL lexer.
 class QSCINTILLA_EXPORT QsciLexerTCL : public QsciLexer
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    //! This enum defines the meanings of the different styles used by the TCL
-    //! lexer.
-    enum {
-        //! The default.
-        Default = 0,
+	//! This enum defines the meanings of the different styles used by the TCL
+	//! lexer.
+	enum {
+		//! The default.
+		Default = 0,
 
-        //! A comment.
-        Comment = 1,
+		//! A comment.
+		Comment = 1,
 
-        //! A comment line.
-        CommentLine = 2,
+		//! A comment line.
+		CommentLine = 2,
 
-        //! A number.
-        Number = 3,
+		//! A number.
+		Number = 3,
 
-        //! A quoted keyword.
-        QuotedKeyword = 4,
+		//! A quoted keyword.
+		QuotedKeyword = 4,
 
-        //! A quoted string.
-        QuotedString = 5,
+		//! A quoted string.
+		QuotedString = 5,
 
-        //! An operator.
-        Operator = 6,
+		//! An operator.
+		Operator = 6,
 
-        //! An identifier
-        Identifier = 7,
+		//! An identifier
+		Identifier = 7,
 
-        //! A substitution.
-        Substitution = 8,
+		//! A substitution.
+		Substitution = 8,
 
-        //! A substitution starting with a brace.
-        SubstitutionBrace = 9,
+		//! A substitution starting with a brace.
+		SubstitutionBrace = 9,
 
-        //! A modifier.
-        Modifier = 10,
+		//! A modifier.
+		Modifier = 10,
 
-        //! Expand keyword (defined in keyword set number 5).
-        ExpandKeyword = 11,
+		//! Expand keyword (defined in keyword set number 5).
+		ExpandKeyword = 11,
 
         //! A TCL keyword (defined in keyword set number 1).
         TCLKeyword = 12,
@@ -114,85 +109,85 @@ public:
 
         //! A comment block.
         CommentBlock = 21
-    };
+	};
 
-    //! Construct a QsciLexerTCL with parent \a parent.  \a parent is
+	//! Construct a QsciLexerTCL with parent \a parent.  \a parent is
     //! typically the QsciScintilla instance.
-    QsciLexerTCL(QObject *parent = 0);
+	QsciLexerTCL(QObject *parent = 0);
 
-    //! Destroys the QsciLexerTCL instance.
-    virtual ~QsciLexerTCL();
+	//! Destroys the QsciLexerTCL instance.
+	virtual ~QsciLexerTCL();
 
-    //! Returns the name of the language.
-    const char *language() const;
+	//! Returns the name of the language.
+	const char *language() const;
 
-    //! Returns the name of the lexer.  Some lexers support a number of
-    //! languages.
-    const char *lexer() const;
+	//! Returns the name of the lexer.  Some lexers support a number of
+	//! languages.
+	const char *lexer() const;
 
-    //! \internal Returns the style used for braces for brace matching.
-    int braceStyle() const;
+	//! \internal Returns the style used for braces for brace matching.
+	int braceStyle() const;
 
-    //! Returns the foreground colour of the text for style number \a style.
-    //!
-    //! \sa defaultPaper()
-    QColor defaultColor(int style) const;
+	//! Returns the foreground colour of the text for style number \a style.
+	//!
+	//! \sa defaultPaper()
+	QColor defaultColor(int style) const;
 
-    //! Returns the end-of-line fill for style number \a style.
-    bool defaultEolFill(int style) const;
+	//! Returns the end-of-line fill for style number \a style.
+	bool defaultEolFill(int style) const;
 
-    //! Returns the font for style number \a style.
-    QFont defaultFont(int style) const;
+	//! Returns the font for style number \a style.
+	QFont defaultFont(int style) const;
 
-    //! Returns the background colour of the text for style number \a style.
-    //!
-    //! \sa defaultColor()
-    QColor defaultPaper(int style) const;
+	//! Returns the background colour of the text for style number \a style.
+	//!
+	//! \sa defaultColor()
+	QColor defaultPaper(int style) const;
 
-    //! Returns the set of keywords for the keyword set \a set recognised
-    //! by the lexer as a space separated string.
-    const char *keywords(int set) const;
+	//! Returns the set of keywords for the keyword set \a set recognised
+	//! by the lexer as a space separated string.
+	const char *keywords(int set) const;
 
-    //! Returns the descriptive name for style number \a style.  If the style
-    //! is invalid for this language then an empty QString is returned.  This
-    //! is intended to be used in user preference dialogs.
-    QString description(int style) const;
+	//! Returns the descriptive name for style number \a style.  If the style
+	//! is invalid for this language then an empty QString is returned.  This
+	//! is intended to be used in user preference dialogs.
+	QString description(int style) const;
 
-    //! Causes all properties to be refreshed by emitting the
-    //! propertyChanged() signal as required.
-    void refreshProperties();
+	//! Causes all properties to be refreshed by emitting the
+	//! propertyChanged() signal as required.
+	void refreshProperties();
 
-    //! If \a fold is true then multi-line comment blocks can be folded.  The
+	//! If \a fold is true then multi-line comment blocks can be folded.  The
     //! default is false.
-    //!
-    //! \sa foldComments()
-    void setFoldComments(bool fold);
+	//!
+	//! \sa foldComments()
+	void setFoldComments(bool fold);
 
     //! Returns true if multi-line comment blocks can be folded.
-    //!
-    //! \sa setFoldComments()
-    bool foldComments() const {return fold_comments;}
+	//!
+	//! \sa setFoldComments()
+	bool foldComments() const {return fold_comments;}
 
 protected:
-    //! The lexer's properties are read from the settings \a qs.  \a prefix
-    //! (which has a trailing '/') should be used as a prefix to the key of
-    //! each setting.  true is returned if there is no error.
-    //!
-    bool readProperties(QSettings &qs,const QString &prefix);
+	//! The lexer's properties are read from the settings \a qs.  \a prefix
+	//! (which has a trailing '/') should be used as a prefix to the key of
+	//! each setting.  true is returned if there is no error.
+	//!
+	bool readProperties(QSettings &qs,const QString &prefix);
 
-    //! The lexer's properties are written to the settings \a qs.
-    //! \a prefix (which has a trailing '/') should be used as a prefix to
-    //! the key of each setting.  true is returned if there is no error.
-    //!
-    bool writeProperties(QSettings &qs,const QString &prefix) const;
+	//! The lexer's properties are written to the settings \a qs.
+	//! \a prefix (which has a trailing '/') should be used as a prefix to
+	//! the key of each setting.  true is returned if there is no error.
+	//!
+	bool writeProperties(QSettings &qs,const QString &prefix) const;
 
 private:
-    void setCommentProp();
+	void setCommentProp();
 
-    bool fold_comments;
+	bool fold_comments;
 
-    QsciLexerTCL(const QsciLexerTCL &);
-    QsciLexerTCL &operator=(const QsciLexerTCL &);
+	QsciLexerTCL(const QsciLexerTCL &);
+	QsciLexerTCL &operator=(const QsciLexerTCL &);
 };
 
 #ifdef __APPLE__

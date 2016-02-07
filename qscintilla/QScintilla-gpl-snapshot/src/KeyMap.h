@@ -5,8 +5,8 @@
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#ifndef KEYTOCOMMAND_H
-#define KEYTOCOMMAND_H
+#ifndef KEYMAP_H
+#define KEYMAP_H
 
 #ifdef SCI_NAMESPACE
 namespace Scintilla {
@@ -22,27 +22,41 @@ namespace Scintilla {
 
 /**
  */
+class KeyModifiers {
+public:
+	int key;
+	int modifiers;
+	KeyModifiers(int key_, int modifiers_) : key(key_), modifiers(modifiers_) {
+	}
+	bool operator<(const KeyModifiers &other) const {
+		if (key == other.key)
+			return modifiers < other.modifiers;
+		else
+			return key < other.key;
+	}
+};
+
+/**
+ */
 class KeyToCommand {
 public:
-    int key;
-    int modifiers;
-    unsigned int msg;
+	int key;
+	int modifiers;
+	unsigned int msg;
 };
 
 /**
  */
 class KeyMap {
-    KeyToCommand *kmap;
-    int len;
-    int alloc;
-    static const KeyToCommand MapDefault[];
+	std::map<KeyModifiers, unsigned int> kmap;
+	static const KeyToCommand MapDefault[];
 
 public:
-    KeyMap();
-    ~KeyMap();
-    void Clear();
-    void AssignCmdKey(int key, int modifiers, unsigned int msg);
-    unsigned int Find(int key, int modifiers);  // 0 returned on failure
+	KeyMap();
+	~KeyMap();
+	void Clear();
+	void AssignCmdKey(int key, int modifiers, unsigned int msg);
+	unsigned int Find(int key, int modifiers) const;	// 0 returned on failure
 };
 
 #ifdef SCI_NAMESPACE

@@ -224,87 +224,87 @@ static void FoldPBDoc(unsigned int startPos, int length, int, WordList *[], Acce
             case 'F':
             case 'f':
                 {
-                    switch (chNext)
-                    {
+					switch (chNext)
+					{
                     case 'U':
                     case 'u':
-                        {
-                            if( MatchUpperCase(styler,i,"FUNCTION") )
-                            {
-                                styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                                levelNext=SC_FOLDLEVELBASE+1;
-                            }
-                            break;
-                        }
-                    }
+						{
+							if( MatchUpperCase(styler,i,"FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
                 break;
                 }
             case 'S':
             case 's':
                 {
-                    switch (chNext)
-                    {
+					switch (chNext)
+					{
                     case 'U':
                     case 'u':
-                        {
-                            if( MatchUpperCase(styler,i,"SUB") )
-                            {
-                                styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                                levelNext=SC_FOLDLEVELBASE+1;
-                            }
-                            break;
-                        }
+						{
+							if( MatchUpperCase(styler,i,"SUB") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
                     case 'T':
                     case 't':
-                        {
-                            if( MatchUpperCase(styler,i,"STATIC FUNCTION") )
-                            {
-                                styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                                levelNext=SC_FOLDLEVELBASE+1;
-                            }
-                            else if( MatchUpperCase(styler,i,"STATIC SUB") )
-                            {
-                                styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                                levelNext=SC_FOLDLEVELBASE+1;
-                            }
-                            break;
-                        }
-                    }
+						{
+							if( MatchUpperCase(styler,i,"STATIC FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							else if( MatchUpperCase(styler,i,"STATIC SUB") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
                 break;
                 }
             case 'C':
             case 'c':
                 {
-                    switch (chNext)
-                    {
+					switch (chNext)
+					{
                     case 'A':
                     case 'a':
-                        {
-                            if( MatchUpperCase(styler,i,"CALLBACK FUNCTION") )
-                            {
-                                styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
-                                levelNext=SC_FOLDLEVELBASE+1;
-                            }
-                            break;
-                        }
-                    }
+						{
+							if( MatchUpperCase(styler,i,"CALLBACK FUNCTION") )
+							{
+								styler.SetLevel(lineCurrent, (SC_FOLDLEVELBASE << 16) | SC_FOLDLEVELHEADERFLAG);
+								levelNext=SC_FOLDLEVELBASE+1;
+							}
+							break;
+						}
+					}
                 break;
                 }
             case 'M':
             case 'm':
                 {
-                    switch (chNext)
-                    {
+					switch (chNext)
+					{
                     case 'A':
                     case 'a':
-                        {
-                            if( MatchUpperCase(styler,i,"MACRO") )
-                            {
-                                fMightBeMultiLineMacro=true;  //Set folder level at end of line, we have to check for single line macro
-                            }
-                            break;
-                        }
-                    }
+						{
+							if( MatchUpperCase(styler,i,"MACRO") )
+							{
+								fMightBeMultiLineMacro=true;  //Set folder level at end of line, we have to check for single line macro
+							}
+							break;
+						}
+					}
                 break;
                 }
             default:
