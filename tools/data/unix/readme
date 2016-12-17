@@ -1,0 +1,5 @@
+Currently under unix  
+	'monkeystudio.desktop' must be stored in the '/usr/share/applications'
+	'monkeystudio.png' in the '/usr/share/icons'
+
+Validate the file using desktop-file-validate (desktop-file-utils)

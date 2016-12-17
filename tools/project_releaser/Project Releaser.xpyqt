@@ -1,0 +1,28 @@
+<!DOCTYPE XUPProject>
+<!--
+###########################################################################################
+##      Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
+##
+##  Author    : Filipe Azevedo aka Nox P@sNpx <pasnox@gmail.com>
+##  Project   : Project Releaser
+##  FileName  : Project Releaser.xpythonqt
+##  Date      : 2011-12-10T11:22:40
+##  License   : GPL
+##  Comment   : Creating using Monkey Studio IDE
+##  Home Page : http://monkeystudio.org
+##
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+###########################################################################################
+-->
+<project version="1.1.0" name="Project Releaser">
+    <variable name="XUP.MAIN_FILE">
+        <value>src/main.py</value>
+    </variable>
+    <variable name="XUP.DynamicFolder.Settings">
+        <value>1</value>
+        <value>/home/pasnox/Developpement/C++/Qt4/mks/v2/tools/project_releaser/src</value>
+        <value>*.py;*.pyw;*.pyx</value>
+    </variable>
+</project>
