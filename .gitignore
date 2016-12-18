@@ -1,0 +1,7 @@
+build/
+bin/
+.*
+*.pro.user*
+*.json
+main.h
+Makefile*
